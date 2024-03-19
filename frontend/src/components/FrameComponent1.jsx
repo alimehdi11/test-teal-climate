@@ -17,8 +17,11 @@ const FrameComponent1 = ({
   const [unitOfMeasurementValue, setUnitOfMeasurementValue] = useState("");
   const [fuelNameValue, setFuelNameValue] = useState("");
   const [quantityValue, setQuantityValue] = useState("");
+  const [level4Value, setLevel4Value] = useState("");
+  const [level5Value, setLevel5Value] = useState("");
 
   const [activitesData, setActivitesData] = useState(null);
+
   const [businessUnits, setBusinessUnits] = useState([]);
   const [scopeCategoriesData, setScopeCategoriesData] = useState(null);
 
@@ -26,6 +29,8 @@ const FrameComponent1 = ({
   const [scopeCategories, setScopeCategories] = useState([]);
   const [fuelTypes, setFuelTypes] = useState([]);
   const [fuelNames, setFuelNames] = useState([]);
+  const [level4Options, setLevel4Options] = useState([]);
+  const [level5Options, setLevel5Options] = useState([]);
 
   const { id } = useParams();
   const navigation = useNavigate();
@@ -91,7 +96,7 @@ const FrameComponent1 = ({
     }
   };
 
-  const filterScopeCategories = (selectedLevel) => {
+  const filterScopeCategories = () => {
     let level2 = [];
     scopeCategoriesData.forEach((item) => {
       if (item.type === selectedLevel) {
@@ -118,7 +123,7 @@ const FrameComponent1 = ({
     return unitsOfMeasurement;
   };
 
-  const filterFuelTypes = (selectedLevel) => {
+  const filterFuelTypes = () => {
     let fuelTypes = [];
     activitesData.datas.forEach((item) => {
       if (item.scope === selectedScope && item.level1 === selectedLevel) {
@@ -234,6 +239,7 @@ const FrameComponent1 = ({
   };
 
   const handleFormSubmit = () => {
+    // all value should be false
     if (
       !userId ||
       !scopeCategoryValue ||
@@ -243,7 +249,9 @@ const FrameComponent1 = ({
       !businessUnitValue ||
       !quantityValue ||
       !selectedScope ||
-      !selectedLevel
+      !selectedLevel ||
+      (level4Options.length > 0 && !level4Value) ||
+      (level5Options.length > 0 && !level5Value)
     ) {
       toast.warn("Please fill all fields");
       return;
@@ -255,18 +263,20 @@ const FrameComponent1 = ({
       businessunit: businessUnitValue,
       quantity: quantityValue,
       fuel_category: fuelNameValue,
-      level3: fuelTypeValue,
-      level2: scopeCategoryValue,
-      level1: selectedLevel,
       scope: selectedScope,
+      level1: selectedLevel,
+      level2: scopeCategoryValue,
+      level3: fuelTypeValue,
+      level4: level4Value || null,
+      level5: level5Value || null,
       ...ghgconversions,
     });
-
     fetch("http://localhost:5000/companiesdata", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      // TODO : fuel_category value should be corrected
       body: JSON.stringify({
         ids: userId,
         uom: unitOfMeasurementValue,
@@ -277,6 +287,8 @@ const FrameComponent1 = ({
         level2: scopeCategoryValue,
         level1: selectedLevel,
         scope: selectedScope,
+        level4: level4Value || null,
+        level5: level5Value || null,
         ...ghgconversions,
       }),
     })
@@ -294,7 +306,6 @@ const FrameComponent1 = ({
         toast.error("Error adding data");
         console.error("Couldn't submit data", error);
       });
-    // updateData();
   };
 
   const handleUpdateData = () => {
@@ -307,7 +318,9 @@ const FrameComponent1 = ({
       !businessUnitValue ||
       !quantityValue ||
       !selectedScope ||
-      !selectedLevel
+      !selectedLevel ||
+      (level4Options.length > 0 && !level4Value) ||
+      (level5Options.length > 0 && !level5Value)
     ) {
       toast.warn("Please fill all fields");
       return;
@@ -324,6 +337,8 @@ const FrameComponent1 = ({
     //   level2: scopeCategoryValue,
     //   level1: selectedLevel,
     //   scope: selectedScope,
+    //   level4: level4Value || null,
+    //   level5: level5Value || null,
     //   ...ghgconversions,
     // });
     // return;
@@ -339,10 +354,12 @@ const FrameComponent1 = ({
         businessunit: businessUnitValue,
         quantity: quantityValue,
         fuel_category: fuelNameValue,
-        level3: fuelTypeValue,
-        level2: scopeCategoryValue,
-        level1: selectedLevel,
         scope: selectedScope,
+        level1: selectedLevel,
+        level2: scopeCategoryValue,
+        level3: fuelTypeValue,
+        level4: level4Value || null,
+        level5: level5Value || null,
         ...ghgconversions,
       }),
     })
@@ -366,6 +383,43 @@ const FrameComponent1 = ({
   const handleCancel = () => {
     resetForm();
     navigation("/activites");
+  };
+
+  const filterLevel4Options = () => {
+    let level4Options = [];
+    activitesData.datas.forEach((item) => {
+      if (
+        item.scope === selectedScope &&
+        item.level1 === selectedLevel &&
+        item.level2 === fuelTypeValue &&
+        item.level3 === fuelNameValue &&
+        item.level4 !== "null" &&
+        item.level4
+      ) {
+        level4Options.push(item.level4);
+      }
+    });
+    level4Options = [...new Set(level4Options)];
+    console.table(level4Options);
+    return level4Options;
+  };
+
+  const filterLevel5Options = () => {
+    let level5 = [];
+    activitesData.datas.forEach((item) => {
+      if (
+        item.scope === selectedScope &&
+        item.level1 === selectedLevel &&
+        item.level2 === fuelTypeValue &&
+        item.level3 === fuelNameValue &&
+        item.level5 !== "null" &&
+        item.level5
+      ) {
+        level5.push(item.level5);
+      }
+    });
+    level5 = [...new Set(level5)];
+    return level5;
   };
 
   useEffect(() => {
@@ -434,11 +488,19 @@ const FrameComponent1 = ({
     if (!id) {
       setUnitOfMeasurements([]);
       setUnitOfMeasurementValue("");
+      setLevel4Value("");
+      setLevel4Options([]);
+      setLevel5Value("");
+      setLevel5Options([]);
     }
 
     if (fuelNameValue !== "") {
       const unitsOfMeasurement = filterUnitOfMeasurements();
       setUnitOfMeasurements(unitsOfMeasurement);
+      const level4Options = filterLevel4Options();
+      setLevel4Options(level4Options);
+      const level5Options = filterLevel5Options();
+      setLevel5Options(level5Options);
     }
   }, [fuelNameValue]);
 
@@ -454,6 +516,8 @@ const FrameComponent1 = ({
           setBusinessUnitValue(companyDataOfGivenId[0].businessunit);
           setUnitOfMeasurementValue(companyDataOfGivenId[0].uom);
           setQuantityValue(companyDataOfGivenId[0].quantity);
+          setLevel4Value(companyDataOfGivenId[0].level4 || "");
+          setLevel5Value(companyDataOfGivenId[0].level5 || "");
         })
         .catch((error) => {
           console.error("Failed to get company data", error);
@@ -514,7 +578,29 @@ const FrameComponent1 = ({
                   })}
                 </select>
               </div>
-
+              {/* level4 */}
+              {/* if fuelNameValue is selected and level4Options are available then only render this part*/}
+              {level4Options.length > 0 && (
+                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+                  <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                    Level 4
+                  </h3>
+                  <select
+                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
+                    onChange={(e) => setLevel4Value(e.target.value)}
+                    value={level4Value}
+                  >
+                    <option value="">Select Option</option>
+                    {level4Options.map((option, index) => {
+                      return (
+                        <option key={index} value={option}>
+                          {option}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              )}
               {/*  Unit of Measurement  */}
               <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                 <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
@@ -578,6 +664,29 @@ const FrameComponent1 = ({
                   })}
                 </select>
               </div>
+              {/* level5 */}
+              {/* if level4Value is selected and level5Options are available then only render this part*/}
+              {level5Options.length > 0 && (
+                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+                  <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                    Level 5
+                  </h3>
+                  <select
+                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
+                    onChange={(e) => setLevel5Value(e.target.value)}
+                    value={level5Value}
+                  >
+                    <option value="">Select Option</option>
+                    {level5Options.map((option, index) => {
+                      return (
+                        <option key={index} value={option}>
+                          {option}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              )}
               {/* Quantity */}
               <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                 <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">

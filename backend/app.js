@@ -300,36 +300,41 @@ app.post("/companiesdata", (req, res) => {
     uom,
     businessunit,
     quantity,
-    level3,
-    level2,
-    level1,
     scope,
+    level1,
+    level2,
+    level3,
+    level4,
+    level5,
     co2e,
     co2eofco2,
     co2eofch4,
     co2eofn2o,
     fuel_category,
   } = req.body;
-  console.log({
+  console.table({
     ids,
     uom,
     businessunit,
     quantity,
-    level3,
-    level2,
-    level1,
     scope,
+    level1,
+    level2,
+    level3,
+    level4,
+    level5,
     co2e,
     co2eofco2,
     co2eofch4,
     co2eofn2o,
     fuel_category,
   });
+
   if (!ids) {
-    return res.status(401).json({ error: "User ID is required" });
+    return res.status(401).json({ error: "User id is required" });
   }
-  const insertQuery =
-    "INSERT INTO companiesdata (ids,scope, businessunit,level1,level2,level3,co2e,co2eofco2,co2eofch4,co2eofn2o,uom,quantity,fuel_category) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12,$13) RETURNING *";
+  const query =
+    "INSERT INTO companiesdata (ids, scope, businessunit, level1, level2, level3, level4, level5, co2e, co2eofco2, co2eofch4, co2eofn2o, uom, quantity, fuel_category) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);";
   const values = [
     ids,
     scope,
@@ -337,6 +342,8 @@ app.post("/companiesdata", (req, res) => {
     level1,
     level2,
     level3,
+    level4,
+    level5,
     co2e * quantity,
     co2eofco2 * quantity,
     co2eofch4 * quantity,
@@ -345,14 +352,13 @@ app.post("/companiesdata", (req, res) => {
     quantity,
     fuel_category,
   ];
-  pool.query(insertQuery, values, (err, result) => {
+  pool.query(query, values, (err, result) => {
     if (err) {
       console.error("Error inserting data:", err);
       res.status(500).json({ error: "Error inserting data" });
     } else {
       console.log("Data inserted successfully");
       res.status(200).json({ message: "Companiesdata inserted succesfully" });
-      // res.redirect("/profiles");
     }
   });
 });
@@ -360,14 +366,16 @@ app.post("/companiesdata", (req, res) => {
 app.put("/companiesdata/:id", (req, res) => {
   const { id } = req.params;
   const {
-    ids,
+    ids /* userId */,
     uom,
     businessunit,
     quantity,
-    level3,
-    level2,
-    level1,
     scope,
+    level1,
+    level2,
+    level3,
+    level4,
+    level5,
     co2e,
     co2eofco2,
     co2eofch4,
@@ -376,14 +384,16 @@ app.put("/companiesdata/:id", (req, res) => {
   } = req.body;
   console.log("====UPDATE QUERY====");
   console.table({
-    ids,
+    ids /* userId */,
     uom,
     businessunit,
     quantity,
-    level3,
-    level2,
-    level1,
     scope,
+    level1,
+    level2,
+    level3,
+    level4,
+    level5,
     co2e,
     co2eofco2,
     co2eofch4,
@@ -400,13 +410,15 @@ app.put("/companiesdata/:id", (req, res) => {
       level1 = $4, 
       level2 = $5, 
       level3 = $6, 
-      co2e = $7, 
-      co2eofco2 = $8, 
-      co2eofch4 = $9, 
-      co2eofn2o = $10, 
-      uom = $11, 
-      quantity = $12, 
-      fuel_category = $13
+      level4 = $7, 
+      level5 = $8, 
+      co2e = $9, 
+      co2eofco2 = $10, 
+      co2eofch4 = $11, 
+      co2eofn2o = $12, 
+      uom = $13, 
+      quantity = $14, 
+      fuel_category = $15
   WHERE id = $1;`;
 
   const values = [
@@ -416,6 +428,8 @@ app.put("/companiesdata/:id", (req, res) => {
     level1,
     level2,
     level3,
+    level4,
+    level5,
     co2e * quantity,
     co2eofco2 * quantity,
     co2eofch4 * quantity,
@@ -431,7 +445,6 @@ app.put("/companiesdata/:id", (req, res) => {
     } else {
       console.log("Data updated successfully");
       res.status(200).json({ message: "Data updated successfully" });
-      // res.redirect("/profiles");
     }
   });
 });
