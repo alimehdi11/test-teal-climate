@@ -113,8 +113,9 @@ const FrameComponent1 = ({
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
-        item.level2 === fuelTypeValue &&
-        item.level3 === fuelNameValue
+        item.level2 === fuelTypeValue
+        // &&
+        // item.level3 === fuelNameValue
       ) {
         unitsOfMeasurement.push(item.uom);
       }
@@ -169,10 +170,8 @@ const FrameComponent1 = ({
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
-        // item.level2 === scopeCategoryValue &&
-        // item.level3 === fuelTypeValue &&
         item.level2 === fuelTypeValue &&
-        item.level3 === fuelNameValue &&
+        // item.level3 === fuelNameValue &&
         item.uom === unitOfMeasurementValue
       ) {
         if (item.ghg === ghgValues[0]) {
@@ -470,33 +469,40 @@ const FrameComponent1 = ({
   }, [scopeCategoryValue]);
 
   useEffect(() => {
-    // console.log("=====>>>", 3);
     if (!id) {
       setFuelNames([]);
       setUnitOfMeasurements([]);
       setFuelNameValue("");
       setUnitOfMeasurementValue("");
     }
-
     if (fuelTypeValue !== "") {
-      const fuelNames = filterFuelNames();
-      setFuelNames(fuelNames);
+      if (selectedLevel !== "Electricity") {
+        // For Level1 !== "Electricity" then only we will filter fuelNames
+        const fuelNames = filterFuelNames();
+        setFuelNames(fuelNames);
+      }
+      const unitsOfMeasurement = filterUnitOfMeasurements();
+      setUnitOfMeasurements(unitsOfMeasurement);
+    }
+
+    if (selectedLevel === "Electricity") {
+      setFuelNameValue("-");
     }
   }, [fuelTypeValue]);
 
   useEffect(() => {
     if (!id) {
-      setUnitOfMeasurements([]);
-      setUnitOfMeasurementValue("");
+      // setUnitOfMeasurements([]);
+      // setUnitOfMeasurementValue("");
       setLevel4Value("");
       setLevel4Options([]);
       setLevel5Value("");
       setLevel5Options([]);
     }
 
-    if (fuelNameValue !== "") {
-      const unitsOfMeasurement = filterUnitOfMeasurements();
-      setUnitOfMeasurements(unitsOfMeasurement);
+    if (fuelNameValue !== "" && selectedLevel !== "Electricity") {
+      // const unitsOfMeasurement = filterUnitOfMeasurements();
+      // setUnitOfMeasurements(unitsOfMeasurement);
       const level4Options = filterLevel4Options();
       setLevel4Options(level4Options);
       const level5Options = filterLevel5Options();
@@ -623,10 +629,10 @@ const FrameComponent1 = ({
               </div>
             </div>
             <div className="flex-1 flex flex-col items-start justify-start gap-[32px] min-w-[269px] max-w-full mq450:gap-[32px]">
-              {/* Bussiness Unit */}
+              {/* Business Unit */}
               <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                 <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Bussiness Unit
+                  Business Unit
                 </h3>
                 <select
                   className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
@@ -645,25 +651,28 @@ const FrameComponent1 = ({
                 </select>
               </div>
               {/* Fuel Name */}
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  {selectedLevel || "Fuel"} Name
-                </h3>
-                <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
-                  onChange={(e) => setFuelNameValue(e.target.value)}
-                  value={fuelNameValue}
-                >
-                  <option value="">Select Option</option>
-                  {fuelNames.map((option, index) => {
-                    return (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
+              {fuelNames.length > 0 && (
+                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+                  <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                    {selectedLevel || "Fuel"} Name
+                  </h3>
+                  <select
+                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
+                    onChange={(e) => setFuelNameValue(e.target.value)}
+                    value={fuelNameValue}
+                  >
+                    <option value="">Select Option</option>
+                    {fuelNames.map((option, index) => {
+                      return (
+                        <option key={index} value={option}>
+                          {option}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              )}
+
               {/* level5 */}
               {/* if level4Value is selected and level5Options are available then only render this part*/}
               {level5Options.length > 0 && (
@@ -704,16 +713,6 @@ const FrameComponent1 = ({
           </div>
         </div>
         {/* Add Button */}
-        {/* <div className="w-[220px] flex flex-row items-start justify-start gap-[8px] max-w-full mq450:flex-wrap">
-          <button
-            className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-01 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[133px] z-[1] hover:bg-mediumseagreen"
-            onClick={handleFormSubmit}
-          >
-            <div className="h-6 relative text-base capitalize font-medium font-poppins text-white text-center inline-block z-[2]">
-              Add
-            </div>
-          </button>
-        </div> */}
         <div className="w-[220px] flex flex-row items-start justify-start gap-[8px] max-w-full mq450:flex-wrap">
           {id ? (
             <>
