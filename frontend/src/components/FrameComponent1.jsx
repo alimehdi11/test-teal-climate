@@ -32,6 +32,10 @@ const FrameComponent1 = ({
   const [level4Options, setLevel4Options] = useState([]);
   const [level5Options, setLevel5Options] = useState([]);
 
+  const [showFuelNamesField, setShowFuelNamesField] = useState(false);
+  const [showLevel4Field, setShowLevel4Field] = useState(false);
+  const [showLevel5Field, setShowLevel5Field] = useState(false);
+
   const { id } = useParams();
   const navigation = useNavigate();
 
@@ -171,7 +175,7 @@ const FrameComponent1 = ({
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
         item.level2 === fuelTypeValue &&
-        // item.level3 === fuelNameValue &&
+        item.level3 === fuelNameValue &&
         item.uom === unitOfMeasurementValue
       ) {
         if (item.ghg === ghgValues[0]) {
@@ -196,6 +200,50 @@ const FrameComponent1 = ({
     };
   };
 
+  const calculateConversionGHGForElectricity = (payload) => {
+    let co2e = null;
+    let co2eofco2 = null;
+    let co2eofch4 = null;
+    let co2eofn2o = null;
+
+    const ghgValues = [
+      "kg CO2e",
+      "kg CO2e of CO2 per unit",
+      "kg CO2e of CH4 per unit",
+      "kg CO2e of N2O per unit",
+    ];
+
+    for (let i = 0; i < activitesData.datas.length; i++) {
+      const item = activitesData.datas[i];
+
+      if (
+        item.scope === selectedScope &&
+        item.level1 === selectedLevel &&
+        item.level2 === payload.level2 &&
+        // item.level3 === payload.level3 &&
+        // item.level4 === payload.level4 &&
+        item.uom === unitOfMeasurementValue
+      ) {
+        if (item.ghg === ghgValues[0]) {
+          co2e = item.ghgconversion;
+        } else if (item.ghg === ghgValues[1]) {
+          co2eofco2 = item.ghgconversion;
+        } else if (item.ghg === ghgValues[2]) {
+          co2eofch4 = item.ghgconversion;
+        } else if (item.ghg === ghgValues[3]) {
+          co2eofn2o = item.ghgconversion;
+        }
+      }
+    }
+
+    return {
+      co2e,
+      co2eofco2,
+      co2eofch4,
+      co2eofn2o,
+    };
+  };
+
   const resetForm = () => {
     // setSelectedScope(null);
     // setSelectedLevel(null);
@@ -205,6 +253,8 @@ const FrameComponent1 = ({
     setBusinessUnitValue("");
     setFuelNameValue("");
     setQuantityValue("");
+    setLevel4Value("");
+    setLevel5Value("");
   };
 
   const fetchCompanyData = async () => {
@@ -237,59 +287,119 @@ const FrameComponent1 = ({
     }
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async () => {
     // all value should be false
     if (
       !userId ||
-      !scopeCategoryValue ||
-      !fuelTypeValue ||
-      !fuelNameValue ||
-      !unitOfMeasurementValue ||
-      !businessUnitValue ||
-      !quantityValue ||
       !selectedScope ||
       !selectedLevel ||
+      !scopeCategoryValue ||
+      !businessUnitValue ||
+      (fuelNames.length > 0 && !fuelTypeValue) ||
+      (fuelNames.length > 0 && !fuelNameValue) ||
       (level4Options.length > 0 && !level4Value) ||
-      (level5Options.length > 0 && !level5Value)
+      (level5Options.length > 0 && !level5Value) ||
+      !unitOfMeasurementValue ||
+      !quantityValue
     ) {
       toast.warn("Please fill all fields");
       return;
     }
-    const ghgconversions = calculateConversionGHG();
-    console.table({
-      ids: userId,
-      uom: unitOfMeasurementValue,
-      businessunit: businessUnitValue,
-      quantity: quantityValue,
-      fuel_category: fuelNameValue,
-      scope: selectedScope,
-      level1: selectedLevel,
-      level2: scopeCategoryValue,
-      level3: fuelTypeValue,
-      level4: level4Value || null,
-      level5: level5Value || null,
-      ...ghgconversions,
-    });
+
+    let payload, ghgconversions;
+
+    if (selectedLevel === "Electricity") {
+      //  fetching companies data and filtering country from that based on business unit is selected
+      const fetchCompanyDataAndFilterCountryAndRegion = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:5000/companies/${userId}`
+          );
+          if (!response.ok) {
+            throw new Error(`Failed to fetch data: ${response.statusText}`);
+          }
+          const jsonData = await response.json();
+          let country, region;
+          for (let i = 0; i < jsonData.length; i++) {
+            if (jsonData[i].unitname === businessUnitValue) {
+              country = jsonData[i].countries;
+              region = jsonData[i].region;
+              break;
+            }
+          }
+          return { country, region };
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+
+      // const filterLevel2 = () => {
+      //   let level2 = [];
+      //   activitesData.datas.forEach((item) => {
+      //     if (
+      //       item.scope === selectedScope &&
+      //       item.level1 === selectedLevel
+      //       // &&
+      //       // item.level3 === payload.country &&
+      //       // item.level4 === payload.region
+      //     ) {
+      //       level2.push(item.level2);
+      //     }
+      //   });
+      //   console.log(new Set(level2));
+      //   return [...new Set(level2)][0];
+      // };
+
+      payload = {
+        ids: userId,
+        uom: unitOfMeasurementValue,
+        businessunit: businessUnitValue,
+        quantity: quantityValue,
+        fuel_category: scopeCategoryValue,
+        scope: selectedScope,
+        level1: selectedLevel,
+        level2: null,
+        level3: null,
+        level4: null,
+        // level5: null,
+      };
+
+      // find country and region and then calculate ghgconversions and then update payload
+      const { country, region } =
+        await fetchCompanyDataAndFilterCountryAndRegion();
+      payload.level2 = "Electricity generated";
+      payload.level3 = country;
+      payload.level4 = region;
+      // payload.level2 = filterLevel2();
+      ghgconversions = calculateConversionGHGForElectricity(payload);
+      payload = { ...payload, ...ghgconversions };
+    } else {
+      ghgconversions = calculateConversionGHG();
+
+      payload = {
+        ids: userId,
+        uom: unitOfMeasurementValue,
+        businessunit: businessUnitValue,
+        quantity: quantityValue,
+        fuel_category: scopeCategoryValue,
+        level1: selectedLevel,
+        level2: fuelTypeValue,
+        level3: fuelNameValue,
+        scope: selectedScope,
+        level4: level4Value || null,
+        level5: level5Value || null,
+        ...ghgconversions,
+      };
+    }
+
+    // console.table(payload);
+    // return;
     fetch("http://localhost:5000/companiesdata", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      // TODO : fuel_category value should be corrected
-      body: JSON.stringify({
-        ids: userId,
-        uom: unitOfMeasurementValue,
-        businessunit: businessUnitValue,
-        quantity: quantityValue,
-        fuel_category: fuelNameValue,
-        level3: fuelTypeValue,
-        level2: scopeCategoryValue,
-        level1: selectedLevel,
-        scope: selectedScope,
-        level4: level4Value || null,
-        level5: level5Value || null,
-        ...ghgconversions,
-      }),
+      body: JSON.stringify(payload),
     })
       .then((response) => {
         if (!response.ok) {
@@ -310,36 +420,43 @@ const FrameComponent1 = ({
   const handleUpdateData = () => {
     if (
       !userId ||
-      !scopeCategoryValue ||
-      !fuelTypeValue ||
-      !fuelNameValue ||
-      !unitOfMeasurementValue ||
-      !businessUnitValue ||
-      !quantityValue ||
       !selectedScope ||
       !selectedLevel ||
+      !scopeCategoryValue ||
+      !businessUnitValue ||
+      !fuelTypeValue ||
+      !fuelNameValue ||
       (level4Options.length > 0 && !level4Value) ||
-      (level5Options.length > 0 && !level5Value)
+      (level5Options.length > 0 && !level5Value) ||
+      !unitOfMeasurementValue ||
+      !quantityValue
     ) {
       toast.warn("Please fill all fields");
       return;
     }
 
-    const ghgconversions = calculateConversionGHG();
-    // console.table({
-    //   ids: userId,
-    //   uom: unitOfMeasurementValue,
-    //   businessunit: businessUnitValue,
-    //   quantity: quantityValue,
-    //   fuel_category: fuelNameValue,
-    //   level3: fuelTypeValue,
-    //   level2: scopeCategoryValue,
-    //   level1: selectedLevel,
-    //   scope: selectedScope,
-    //   level4: level4Value || null,
-    //   level5: level5Value || null,
-    //   ...ghgconversions,
-    // });
+    let payload = {
+      ids: userId,
+      uom: unitOfMeasurementValue,
+      businessunit: businessUnitValue,
+      quantity: quantityValue,
+      fuel_category: scopeCategoryValue,
+      scope: selectedScope,
+      level1: selectedLevel,
+      level2: fuelTypeValue,
+      level3: fuelNameValue,
+      level4: level4Value || null,
+      level5: level5Value || null,
+    };
+    if (selectedLevel !== "Electricity") {
+      const ghgconversions = calculateConversionGHG();
+      payload = { ...payload, ...ghgconversions };
+    } else {
+      const ghgconversions = calculateConversionGHGForElectricity(payload);
+      payload = { ...payload, ...ghgconversions };
+    }
+
+    // console.table(payload);
     // return;
     fetch(`http://localhost:5000/companiesdata/${id}`, {
       method: "PUT",
@@ -347,20 +464,7 @@ const FrameComponent1 = ({
         "Content-Type": "application/json",
         accept: "application/json",
       },
-      body: JSON.stringify({
-        ids: userId,
-        uom: unitOfMeasurementValue,
-        businessunit: businessUnitValue,
-        quantity: quantityValue,
-        fuel_category: fuelNameValue,
-        scope: selectedScope,
-        level1: selectedLevel,
-        level2: scopeCategoryValue,
-        level3: fuelTypeValue,
-        level4: level4Value || null,
-        level5: level5Value || null,
-        ...ghgconversions,
-      }),
+      body: JSON.stringify(payload),
     })
       .then((response) => {
         if (!response.ok) {
@@ -421,6 +525,76 @@ const FrameComponent1 = ({
     return level5;
   };
 
+  const isFuelNamesAvaialble = () => {
+    let fuelNames = [];
+    activitesData.datas.forEach((item) => {
+      if (
+        item.scope === selectedScope &&
+        item.level1 === selectedLevel
+        // item.level2 === fuelTypeValue &&
+        // &&
+        // item.level3
+      ) {
+        fuelNames.push(item.level3);
+      }
+    });
+    fuelNames = [...new Set(fuelNames)];
+    return fuelNames.length > 0 ? true : false;
+  };
+
+  const isLevel4Available = () => {
+    let level4 = [];
+    activitesData.datas.forEach((item) => {
+      if (
+        item.scope === selectedScope &&
+        item.level1 === selectedLevel
+        // item.level2 === fuelTypeValue &&
+        // &&
+        // item.level3
+      ) {
+        if (item.level4 !== "null") {
+          level4.push(item.level4);
+        }
+      }
+    });
+    level4 = [...new Set(level4)];
+    return level4.length > 0 ? true : false;
+  };
+
+  const isLevel5Available = () => {
+    let level5 = [];
+    activitesData.datas.forEach((item) => {
+      if (
+        item.scope === selectedScope &&
+        item.level1 === selectedLevel
+        // item.level2 === fuelTypeValue &&
+        // &&
+        // item.level3
+      ) {
+        if (item.level5 !== "null") {
+          level5.push(item.level5);
+        }
+      }
+    });
+    level5 = [...new Set(level5)];
+    return level5.length > 0 ? true : false;
+  };
+
+  const filterUnitOfMeasurementsForElectricity = () => {
+    let unitsOfMeasurement = [];
+    activitesData.datas.forEach((item) => {
+      if (
+        item.scope === selectedScope &&
+        // here selectedLevel === Electricity
+        item.level1 === selectedLevel
+      ) {
+        unitsOfMeasurement.push(item.uom);
+      }
+    });
+    unitsOfMeasurement = [...new Set(unitsOfMeasurement)];
+    return unitsOfMeasurement;
+  };
+
   useEffect(() => {
     // data comes on second render because userId is coming from parent component
     if (userId) {
@@ -438,23 +612,32 @@ const FrameComponent1 = ({
   }, [userId]);
 
   useEffect(() => {
-    // console.log("=====>>>", 1);
-    // console.log("=====>>>", selectedLevel);
     if (!id) {
-      // console.log("=====>>>", 1.1);
-      // console.log("=====>>>", selectedLevel);
       setScopeCategoryValue("");
+      setShowFuelNamesField(false);
+      setShowLevel4Field(false);
+      setShowLevel5Field(false);
+      setUnitOfMeasurementValue("");
+      setUnitOfMeasurements([]);
     }
+    // initialialy blocking not to filter if scopeCategoriesData
     if (scopeCategoriesData !== null) {
-      // console.log("=====>>>", 1.2);
-      // console.log("=====>>>", selectedLevel);
-      const level2 = filterScopeCategories(selectedLevel);
+      const level2 = filterScopeCategories();
       setScopeCategories(level2);
+      // show fields that are available
+      if (selectedLevel !== "Electricity") {
+        setShowFuelNamesField(isFuelNamesAvaialble());
+        setShowLevel4Field(isLevel4Available());
+        setShowLevel5Field(isLevel5Available());
+      }
+      if (selectedLevel === "Electricity") {
+        const unitOfMeasurements = filterUnitOfMeasurementsForElectricity();
+        setUnitOfMeasurements(unitOfMeasurements);
+      }
     }
   }, [selectedLevel]);
 
   useEffect(() => {
-    // console.log("=====>>>", 2);
     if (!id) {
       setFuelTypes([]);
       setFuelTypeValue("");
@@ -462,31 +645,27 @@ const FrameComponent1 = ({
       setFuelNameValue("");
     }
 
-    if (scopeCategoryValue !== "") {
-      const fuelTypes = filterFuelTypes(selectedLevel);
+    if (scopeCategoryValue !== "" && selectedLevel !== "Electricity") {
+      const fuelTypes = filterFuelTypes();
       setFuelTypes(fuelTypes);
     }
   }, [scopeCategoryValue]);
 
   useEffect(() => {
     if (!id) {
-      setFuelNames([]);
-      setUnitOfMeasurements([]);
       setFuelNameValue("");
+      setFuelNames([]);
       setUnitOfMeasurementValue("");
+      setUnitOfMeasurements([]);
     }
     if (fuelTypeValue !== "") {
+      const unitsOfMeasurement = filterUnitOfMeasurements();
+      setUnitOfMeasurements(unitsOfMeasurement);
       if (selectedLevel !== "Electricity") {
         // For Level1 !== "Electricity" then only we will filter fuelNames
         const fuelNames = filterFuelNames();
         setFuelNames(fuelNames);
       }
-      const unitsOfMeasurement = filterUnitOfMeasurements();
-      setUnitOfMeasurements(unitsOfMeasurement);
-    }
-
-    if (selectedLevel === "Electricity") {
-      setFuelNameValue("-");
     }
   }, [fuelTypeValue]);
 
@@ -500,7 +679,7 @@ const FrameComponent1 = ({
       setLevel5Options([]);
     }
 
-    if (fuelNameValue !== "" && selectedLevel !== "Electricity") {
+    if (fuelNameValue !== "") {
       // const unitsOfMeasurement = filterUnitOfMeasurements();
       // setUnitOfMeasurements(unitsOfMeasurement);
       const level4Options = filterLevel4Options();
@@ -516,10 +695,10 @@ const FrameComponent1 = ({
         .then((companyDataOfGivenId) => {
           setSelectedScope(companyDataOfGivenId[0].scope);
           setSelectedLevel(companyDataOfGivenId[0].level1);
-          setScopeCategoryValue(companyDataOfGivenId[0].level2);
-          setFuelTypeValue(companyDataOfGivenId[0].level3);
-          setFuelNameValue(companyDataOfGivenId[0].fuel_category);
+          setScopeCategoryValue(companyDataOfGivenId[0].fuel_category);
           setBusinessUnitValue(companyDataOfGivenId[0].businessunit);
+          setFuelTypeValue(companyDataOfGivenId[0].level2);
+          setFuelNameValue(companyDataOfGivenId[0].level3);
           setUnitOfMeasurementValue(companyDataOfGivenId[0].uom);
           setQuantityValue(companyDataOfGivenId[0].quantity);
           setLevel4Value(companyDataOfGivenId[0].level4 || "");
@@ -565,28 +744,29 @@ const FrameComponent1 = ({
                 </select>
               </div>
               {/* Fuel Type */}
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  {selectedLevel || "Fuel"} Type
-                </h3>
-                <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
-                  onChange={(e) => setFuelTypeValue(e.target.value)}
-                  value={fuelTypeValue}
-                >
-                  <option value="">Select Option</option>
-                  {fuelTypes.map((option, index) => {
-                    return (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
+              {selectedLevel !== "Electricity" && (
+                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+                  <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                    {selectedLevel || "Fuel"} Type
+                  </h3>
+                  <select
+                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
+                    onChange={(e) => setFuelTypeValue(e.target.value)}
+                    value={fuelTypeValue}
+                  >
+                    <option value="">Select Option</option>
+                    {fuelTypes.map((option, index) => {
+                      return (
+                        <option key={index} value={option}>
+                          {option}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              )}
               {/* level4 */}
-              {/* if fuelNameValue is selected and level4Options are available then only render this part*/}
-              {level4Options.length > 0 && (
+              {showLevel4Field && (
                 <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                   <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
                     Level 4
@@ -651,7 +831,7 @@ const FrameComponent1 = ({
                 </select>
               </div>
               {/* Fuel Name */}
-              {fuelNames.length > 0 && (
+              {showFuelNamesField && (
                 <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                   <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
                     {selectedLevel || "Fuel"} Name
@@ -674,8 +854,7 @@ const FrameComponent1 = ({
               )}
 
               {/* level5 */}
-              {/* if level4Value is selected and level5Options are available then only render this part*/}
-              {level5Options.length > 0 && (
+              {showLevel5Field && (
                 <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                   <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
                     Level 5

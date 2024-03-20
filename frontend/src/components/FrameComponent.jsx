@@ -50,12 +50,6 @@ const FrameComponent = ({
     };
   };
 
-  const handleEdit = (id) => {
-    return () => {
-      // setEdit(true);
-      // setIdOfDataToEdit(id);
-    };
-  };
   return (
     <section className="rounded-lg font-poppins overflow-x-auto mx-4 mb-40 shadow-black shadow-sm">
       <div
@@ -173,7 +167,7 @@ const FrameComponent = ({
               style={{ flexBasis: "205px" }}
               className="flex-1 flex-shrink-0 flex justify-center items-center"
             >
-              {item.level2 || "-"}
+              {item.fuel_category || "-"}
             </div>
             <div
               style={{ flexBasis: "205px" }}
@@ -185,13 +179,13 @@ const FrameComponent = ({
               style={{ flexBasis: "205px" }}
               className="flex-1 flex-shrink-0 flex justify-center items-center"
             >
-              {item.level3 || "-"}
+              {item.level2 || "-"}
             </div>
             <div
               style={{ flexBasis: "205px" }}
               className="flex-1 flex-shrink-0 flex justify-center items-center"
             >
-              {item.fuel_category || "-"}
+              {item.level3 || "-"}
             </div>
             <div
               style={{ flexBasis: "205px" }}
@@ -252,7 +246,6 @@ const FrameComponent = ({
                 <img
                   src={editIcon}
                   className="p-1 rounded hover:bg-slate-300"
-                  onClick={handleEdit(item.id)}
                 />
               </Link>
               <img

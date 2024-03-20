@@ -8,14 +8,14 @@ import { useParams } from "react-router-dom";
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
-  const [userID, setUserID] = useState("");
+  const [userId, setUserId] = useState("");
   const [companyData, setCompanyData] = useState([]);
   const { id } = useParams();
 
   const fetchCompanyData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/companiesdata/${userID}`
+        `http://localhost:5000/companiesdata/${userId}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -31,15 +31,15 @@ const Activities = () => {
     // Fetch userId from localStorage
     const storedUserID = localStorage.getItem("userId");
     if (storedUserID) {
-      setUserID(storedUserID);
+      setUserId(storedUserID);
     }
   }, []);
 
   useEffect(() => {
-    if (userID) {
+    if (userId) {
       fetchCompanyData();
     }
-  }, [userID]);
+  }, [userId]);
 
   useEffect(() => {
     if (!id) {
@@ -67,7 +67,7 @@ const Activities = () => {
           selectedLevel={selectedLevel}
           setSelectedScope={setSelectedScope}
           setSelectedLevel={setSelectedLevel}
-          userId={userID}
+          userId={userId}
           setCompanyData={setCompanyData}
         />
       </section>
@@ -75,7 +75,7 @@ const Activities = () => {
       <FrameComponent
         companyData={companyData}
         setCompanyData={setCompanyData}
-        userId={userID}
+        userId={userId}
       />
     </>
   );
