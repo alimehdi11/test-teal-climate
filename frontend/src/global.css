@@ -16,3 +16,44 @@ body {
 .font-sf-pro-display {
   font-family: "SF Pro Display", sans-serif;
 }
+
+/* ------------------------ */
+/*        Custom css       */
+/* ------------------------ */
+@layer utilities {
+  /* Hide the scrollbar */
+  .hide-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Set scrollbar width and track color */
+  .hide-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(155, 155, 155, 1) rgba(255, 255, 255, 0.1);
+  }
+
+  /* Set scrollbar thumb color */
+  .hide-scroll::-webkit-scrollbar-thumb {
+    scrollbar-width: thin;
+    background-color: rgba(155, 155, 155, 0.5);
+    border-radius: 6px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Set scrollbar thumb hover color */
+  .hide-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(155, 155, 155, 0.8);
+  }
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid black;
+  width: 100%; /* Set table width to 100% */
+}
+th,
+td {
+  border: 1px solid black;
+  padding: 8px;
+  white-space: nowrap; /* Prevent text wrapping */
+}

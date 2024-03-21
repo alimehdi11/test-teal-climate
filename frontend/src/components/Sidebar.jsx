@@ -86,7 +86,7 @@ const Sidebar = ({
   }, [selectedScope]);
 
   return (
-    <div className="bg-white absolute w-[300px] max-h-[656px] top-[1px] left-[40px] rounded-[8px] font-poppins">
+    <div className="bg-white absolute min-w-[300px] max-h-[656px] top-[1px] left-[40px] rounded-[8px] font-poppin">
       <h1 className="text-2xl self-stretch rounded-lg ">Select Scope</h1>
       {scopesData.map((scope) => (
         <div
@@ -134,7 +134,7 @@ const Sidebar = ({
       {/* List */}
       <div className="flex flex-col gap-6 py-4">
         <ul
-          className="w-[280px] rounded-lg p-8 space-y-6 overflow-y-auto"
+          className="min-w-[280px] rounded-lg p-8 space-y-6 overflow-y-auto"
           style={{ listStyleType: "none", padding: 0, overflowY: "hidden" }}
         >
           {filteredScopes.map((level, index) => (
