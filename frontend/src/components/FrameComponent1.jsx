@@ -671,8 +671,6 @@ const FrameComponent1 = ({
 
   useEffect(() => {
     if (!id) {
-      // setUnitOfMeasurements([]);
-      // setUnitOfMeasurementValue("");
       setLevel4Value("");
       setLevel4Options([]);
       setLevel5Value("");
@@ -680,8 +678,7 @@ const FrameComponent1 = ({
     }
 
     if (fuelNameValue !== "") {
-      // const unitsOfMeasurement = filterUnitOfMeasurements();
-      // setUnitOfMeasurements(unitsOfMeasurement);
+      surements(unitsOfMeasurement);
       const level4Options = filterLevel4Options();
       setLevel4Options(level4Options);
       const level5Options = filterLevel5Options();
@@ -717,211 +714,210 @@ const FrameComponent1 = ({
           <h1 className="m-0 h-9 relative text-inherit font-semibold font-inherit inline-block z-[1] mq450:text-lgi">
             Insert activity data here
           </h1>
-          <div className="self-stretch flex flex-row items-start justify-start gap-[30px] max-w-full text-base mq800:flex-wrap">
-            <div className="flex-1 flex flex-col items-start justify-start gap-[32px] min-w-[269px] max-w-full mq450:gap-[32px]">
-              {/* Scope Category */}
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Scope Category
-                </h3>
-                <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
-                  onChange={(e) => setScopeCategoryValue(e.target.value)}
-                  value={scopeCategoryValue}
-                >
-                  <option value="">Select Option</option>
-                  {scopeCategories.map((option, index) => {
-                    // TODO: This if block should be removed once database data is corrected
-                    // if (!option) {
-                    //   return;
-                    // }
-                    return (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-              {/* Fuel Type */}
-              {selectedLevel !== "Electricity" && (
-                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                  <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                    {selectedLevel || "Fuel"} Type
-                  </h3>
-                  <select
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
-                    onChange={(e) => setFuelTypeValue(e.target.value)}
-                    value={fuelTypeValue}
-                  >
-                    <option value="">Select Option</option>
-                    {fuelTypes.map((option, index) => {
-                      return (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-              )}
-              {/* level4 */}
-              {showLevel4Field && (
-                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                  <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                    Level 4
-                  </h3>
-                  <select
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
-                    onChange={(e) => setLevel4Value(e.target.value)}
-                    value={level4Value}
-                  >
-                    <option value="">Select Option</option>
-                    {level4Options.map((option, index) => {
-                      return (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-              )}
-              {/*  Unit of Measurement  */}
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Unit of measurement
-                </h3>
-                <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
-                  onChange={(e) => setUnitOfMeasurementValue(e.target.value)}
-                  value={unitOfMeasurementValue}
-                >
-                  <option value="">Select Option</option>
-                  {unitOfMeasurements.map((option, index) => {
-                    return (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
+          <div className="w-full grid grid-cols-2 text-base gap-5">
+            {/* Scope Category */}
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Scope Category
+              </h3>
+              <select
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                onChange={(e) => setScopeCategoryValue(e.target.value)}
+                value={scopeCategoryValue}
+              >
+                <option value="">Select Option</option>
+                {scopeCategories.map((option, index) => {
+                  return (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
-            <div className="flex-1 flex flex-col items-start justify-start gap-[32px] min-w-[269px] max-w-full mq450:gap-[32px]">
-              {/* Business Unit */}
+
+            {/* Business Unit */}
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Business Unit
+              </h3>
+              <select
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                onChange={(e) => setBusinessUnitValue(e.target.value)}
+                value={businessUnitValue}
+              >
+                <option value="">Select option</option>
+                {businessUnits &&
+                  businessUnits.map((option, index) => {
+                    return (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
+              </select>
+            </div>
+
+            {/* Fuel Type */}
+            {selectedLevel !== "Electricity" && (
               <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                 <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Business Unit
+                  {selectedLevel || "Fuel"} Type
                 </h3>
                 <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
-                  onChange={(e) => setBusinessUnitValue(e.target.value)}
-                  value={businessUnitValue}
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                  onChange={(e) => setFuelTypeValue(e.target.value)}
+                  value={fuelTypeValue}
                 >
-                  <option value="">Select option</option>
-                  {businessUnits &&
-                    businessUnits.map((option, index) => {
-                      return (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      );
-                    })}
+                  <option value="">Select Option</option>
+                  {fuelTypes.map((option, index) => {
+                    return (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
-              {/* Fuel Name */}
-              {showFuelNamesField && (
-                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                  <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                    {selectedLevel || "Fuel"} Name
-                  </h3>
-                  <select
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
-                    onChange={(e) => setFuelNameValue(e.target.value)}
-                    value={fuelNameValue}
-                  >
-                    <option value="">Select Option</option>
-                    {fuelNames.map((option, index) => {
-                      return (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-              )}
+            )}
 
-              {/* level5 */}
-              {showLevel5Field && (
-                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                  <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                    Level 5
-                  </h3>
-                  <select
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
-                    onChange={(e) => setLevel5Value(e.target.value)}
-                    value={level5Value}
-                  >
-                    <option value="">Select Option</option>
-                    {level5Options.map((option, index) => {
-                      return (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-              )}
-              {/* Quantity */}
+            {/* Fuel Name */}
+            {showFuelNamesField && (
               <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                 <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Quantity
+                  {selectedLevel || "Fuel"} Name
                 </h3>
-                <input
-                  type="number"
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1]"
-                  value={quantityValue}
-                  onChange={(e) => setQuantityValue(e.target.value)}
-                  placeholder="Enter Quantity"
-                />
+                <select
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                  onChange={(e) => setFuelNameValue(e.target.value)}
+                  value={fuelNameValue}
+                >
+                  <option value="">Select Option</option>
+                  {fuelNames.map((option, index) => {
+                    return (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
+            )}
+
+            {/* level4 */}
+            {showLevel4Field && (
+              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                  Level 4
+                </h3>
+                <select
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                  onChange={(e) => setLevel4Value(e.target.value)}
+                  value={level4Value}
+                >
+                  <option value="">Select Option</option>
+                  {level4Options.map((option, index) => {
+                    return (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            )}
+
+            {/* level5 */}
+            {showLevel5Field && (
+              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                  Level 5
+                </h3>
+                <select
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                  onChange={(e) => setLevel5Value(e.target.value)}
+                  value={level5Value}
+                >
+                  <option value="">Select Option</option>
+                  {level5Options.map((option, index) => {
+                    return (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            )}
+
+            {/*  Unit of Measurement  */}
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Unit of measurement
+              </h3>
+              <select
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                onChange={(e) => setUnitOfMeasurementValue(e.target.value)}
+                value={unitOfMeasurementValue}
+              >
+                <option value="">Select Option</option>
+                {unitOfMeasurements.map((option, index) => {
+                  return (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+
+            {/* Quantity */}
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Quantity
+              </h3>
+              <input
+                type="number"
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                value={quantityValue}
+                onChange={(e) => setQuantityValue(e.target.value)}
+                placeholder="Enter Quantity"
+              />
             </div>
           </div>
-        </div>
-        {/* Add Button */}
-        <div className="w-[220px] flex flex-row items-start justify-start gap-[8px] max-w-full mq450:flex-wrap">
-          {id ? (
-            <>
+
+          {/* Add, Edit, Cancel Buttons */}
+          <div className="flex flex-row items-start justify-start gap-[8px] max-w-full mq450:flex-wrap ms-auto">
+            {id ? (
+              <>
+                <button
+                  className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-2 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[220px] z-[1] hover:bg-mediumseagreen"
+                  onClick={handleCancel}
+                >
+                  <div className="h-6 relative text-base capitalize font-medium font-poppins text-white text-center inline-block z-[2]">
+                    Cancel
+                  </div>
+                </button>
+                <button
+                  className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-2 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[220px] z-[1] hover:bg-mediumseagreen"
+                  onClick={handleUpdateData}
+                >
+                  <div className="h-6 relative text-base capitalize font-medium font-poppins text-white text-center inline-block z-[2]">
+                    Edit
+                  </div>
+                </button>
+              </>
+            ) : (
               <button
-                className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-2 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[133px] z-[1] hover:bg-mediumseagreen"
-                onClick={handleCancel}
+                className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-01 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[220px] z-[1] hover:bg-mediumseagreen"
+                onClick={handleFormSubmit}
               >
                 <div className="h-6 relative text-base capitalize font-medium font-poppins text-white text-center inline-block z-[2]">
-                  Cancel
+                  Add
                 </div>
               </button>
-              <button
-                className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-2 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[133px] z-[1] hover:bg-mediumseagreen"
-                onClick={handleUpdateData}
-              >
-                <div className="h-6 relative text-base capitalize font-medium font-poppins text-white text-center inline-block z-[2]">
-                  Edit
-                </div>
-              </button>
-            </>
-          ) : (
-            <button
-              className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-01 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[133px] z-[1] hover:bg-mediumseagreen"
-              onClick={handleFormSubmit}
-            >
-              <div className="h-6 relative text-base capitalize font-medium font-poppins text-white text-center inline-block z-[2]">
-                Add
-              </div>
-            </button>
-          )}
+            )}
+          </div>
         </div>
       </div>
       <ToastContainer

@@ -46,7 +46,7 @@ const FrameComponent = ({ companyData, setCompanyData, userId }) => {
   };
 
   return (
-    <div className="mx-5 my-10 hide-scroll border-[1px] border-black border-solid rounded-md overflow-x-auto max-w-full font-poppins">
+    <div className="mx-5 my-10 hide-scroll border-[1px] border-gray-300 border-solid rounded-md overflow-x-auto max-w-full font-poppins shadow-2xl">
       <table className="border-0">
         <thead>
           <tr className="bg-brand-color-2 text-white">
@@ -93,12 +93,12 @@ const FrameComponent = ({ companyData, setCompanyData, userId }) => {
                     >
                       <img
                         src={editIcon}
-                        className="p-1 rounded hover:bg-slate-300"
+                        className="p-1 rounded hover:bg-slate-300 w-5"
                       />
                     </Link>
                     <img
                       src={trashIcon}
-                      className="p-1 rounded hover:bg-slate-300"
+                      className="p-1 rounded hover:bg-slate-300 w-5"
                       onClick={handleDelete(item.id)}
                     />
                   </div>
