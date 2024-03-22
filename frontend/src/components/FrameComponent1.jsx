@@ -220,8 +220,8 @@ const FrameComponent1 = ({
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
         item.level2 === payload.level2 &&
-        // item.level3 === payload.level3 &&
-        // item.level4 === payload.level4 &&
+        item.level3 === payload.level3 &&
+        item.level4 === payload.level4 &&
         item.uom === unitOfMeasurementValue
       ) {
         if (item.ghg === ghgValues[0]) {
@@ -245,8 +245,6 @@ const FrameComponent1 = ({
   };
 
   const resetForm = () => {
-    // setSelectedScope(null);
-    // setSelectedLevel(null);
     setScopeCategoryValue("");
     setFuelTypeValue("");
     setUnitOfMeasurementValue("");
@@ -255,6 +253,20 @@ const FrameComponent1 = ({
     setQuantityValue("");
     setLevel4Value("");
     setLevel5Value("");
+
+    // setUnitOfMeasurements([]);
+    // setScopeCategories([]);
+    // setFuelTypes([]);
+    // setFuelNames([]);
+    // setLevel4Options([]);
+    // setLevel5Options([]);
+
+    // setShowFuelNamesField(false);
+    // setShowLevel4Field(false);
+    // setShowLevel5Field(false);
+
+    // setSelectedScope(selectedScope || null);
+    // setSelectedLevel(selectedLevel || null);
   };
 
   const fetchCompanyData = async () => {
@@ -295,7 +307,7 @@ const FrameComponent1 = ({
       !selectedLevel ||
       !scopeCategoryValue ||
       !businessUnitValue ||
-      (fuelNames.length > 0 && !fuelTypeValue) ||
+      (fuelTypes.length > 0 && !fuelTypeValue) ||
       (fuelNames.length > 0 && !fuelNameValue) ||
       (level4Options.length > 0 && !level4Value) ||
       (level5Options.length > 0 && !level5Value) ||
@@ -308,7 +320,13 @@ const FrameComponent1 = ({
 
     let payload, ghgconversions;
 
-    if (selectedLevel === "Electricity") {
+    if (
+      selectedLevel === "Electricity" ||
+      selectedLevel === "Electricity TandD" ||
+      selectedLevel === "WTT- electricity (generation)" ||
+      selectedLevel === "WTT- electricity (TandD)" ||
+      selectedLevel === "WTT- electricity"
+    ) {
       //  fetching companies data and filtering country from that based on business unit is selected
       const fetchCompanyDataAndFilterCountryAndRegion = async () => {
         try {
@@ -327,28 +345,42 @@ const FrameComponent1 = ({
               break;
             }
           }
+          console.log(`Country: ${country} and Region: ${region}`);
           return { country, region };
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       };
 
-      // const filterLevel2 = () => {
-      //   let level2 = [];
-      //   activitesData.datas.forEach((item) => {
-      //     if (
-      //       item.scope === selectedScope &&
-      //       item.level1 === selectedLevel
-      //       // &&
-      //       // item.level3 === payload.country &&
-      //       // item.level4 === payload.region
-      //     ) {
-      //       level2.push(item.level2);
-      //     }
-      //   });
-      //   console.log(new Set(level2));
-      //   return [...new Set(level2)][0];
-      // };
+      const filterLevel2 = (payload) => {
+        for (let index = 0; index < activitesData.datas.length; index++) {
+          const item = activitesData.datas[index];
+          if (
+            item.scope === selectedScope &&
+            item.level1 === selectedLevel &&
+            // item.level3 === payload.level3 &&
+            // item.level4 === payload.level4 &&
+            item.level2
+          ) {
+            return item.level2;
+          }
+        }
+        // let level2 = [];
+        // activitesData.datas.forEach((item) => {
+        //   if (
+        //     item.scope === selectedScope &&
+        //     item.level1 === selectedLevel &&
+        //     item.level3 === payload.country &&
+        //     item.level4 === payload.region &&
+        //     item.level2
+        //   ) {
+        // level2.push(item.level2);
+        //     return item.level2;
+        //   }
+        // });
+        // console.log(new Set(level2));
+        // return [...new Set(level2)][0];
+      };
 
       payload = {
         ids: userId,
@@ -358,7 +390,7 @@ const FrameComponent1 = ({
         fuel_category: scopeCategoryValue,
         scope: selectedScope,
         level1: selectedLevel,
-        level2: null,
+        level2: fuelTypeValue || null,
         level3: null,
         level4: null,
         // level5: null,
@@ -367,10 +399,12 @@ const FrameComponent1 = ({
       // find country and region and then calculate ghgconversions and then update payload
       const { country, region } =
         await fetchCompanyDataAndFilterCountryAndRegion();
-      payload.level2 = "Electricity generated";
+      // payload.level2 = "Electricity generated";
       payload.level3 = country;
       payload.level4 = region;
-      // payload.level2 = filterLevel2();
+      if (selectedLevel !== "WTT- electricity") {
+        payload.level2 = filterLevel2(payload);
+      }
       ghgconversions = calculateConversionGHGForElectricity(payload);
       payload = { ...payload, ...ghgconversions };
     } else {
@@ -448,7 +482,13 @@ const FrameComponent1 = ({
       level4: level4Value || null,
       level5: level5Value || null,
     };
-    if (selectedLevel !== "Electricity") {
+    if (
+      selectedLevel !== "Electricity" &&
+      selectedLevel !== "Electricity TandD" &&
+      selectedLevel !== "WTT- electricity (generation)" &&
+      selectedLevel !== "WTT- electricity (TandD)"
+      // selectedLevel !== "WTT- electricity"
+    ) {
       const ghgconversions = calculateConversionGHG();
       payload = { ...payload, ...ghgconversions };
     } else {
@@ -526,58 +566,85 @@ const FrameComponent1 = ({
   };
 
   const isFuelNamesAvaialble = () => {
-    let fuelNames = [];
-    activitesData.datas.forEach((item) => {
+    // let fuelNames = [];
+    for (let i = 0; i < activitesData.datas.length; i++) {
+      const item = activitesData.datas[i];
       if (
         item.scope === selectedScope &&
-        item.level1 === selectedLevel
-        // item.level2 === fuelTypeValue &&
+        item.level1 === selectedLevel &&
+        item.level2
         // &&
         // item.level3
       ) {
-        fuelNames.push(item.level3);
+        // fuelNames.push(item.level3);
+        return true;
       }
-    });
-    fuelNames = [...new Set(fuelNames)];
-    return fuelNames.length > 0 ? true : false;
+    }
+    // fuelNames = [...new Set(fuelNames)];
+    // return fuelNames.length > 0 ? true : false;
+    return false;
   };
 
   const isLevel4Available = () => {
-    let level4 = [];
-    activitesData.datas.forEach((item) => {
+    for (let i = 0; i < activitesData.datas.length; i++) {
+      const item = activitesData.datas[i];
       if (
         item.scope === selectedScope &&
-        item.level1 === selectedLevel
-        // item.level2 === fuelTypeValue &&
-        // &&
-        // item.level3
+        item.level1 === selectedLevel &&
+        item.level4 &&
+        item.level4 !== "null"
       ) {
-        if (item.level4 !== "null") {
-          level4.push(item.level4);
-        }
+        return true;
       }
-    });
-    level4 = [...new Set(level4)];
-    return level4.length > 0 ? true : false;
+    }
+    // let level4 = [];
+    // activitesData.datas.forEach((item) => {
+    //   if (
+    //     item.scope === selectedScope &&
+    //     item.level1 === selectedLevel
+    //     // item.level2 === fuelTypeValue &&
+    //     // &&
+    //     // item.level3
+    //   ) {
+    //     if (item.level4 !== "null") {
+    //       level4.push(item.level4);
+    //     }
+    //   }
+    // });
+    // level4 = [...new Set(level4)];
+    // return level4.length > 0 ? true : false;
+    return false;
   };
 
   const isLevel5Available = () => {
-    let level5 = [];
-    activitesData.datas.forEach((item) => {
+    for (let i = 0; i < activitesData.datas.length; i++) {
+      const item = activitesData.datas[i];
       if (
         item.scope === selectedScope &&
-        item.level1 === selectedLevel
-        // item.level2 === fuelTypeValue &&
-        // &&
-        // item.level3
+        item.level1 === selectedLevel &&
+        item.level5 &&
+        item.level5 !== "null"
       ) {
-        if (item.level5 !== "null") {
-          level5.push(item.level5);
-        }
+        return true;
       }
-    });
-    level5 = [...new Set(level5)];
-    return level5.length > 0 ? true : false;
+    }
+    return false;
+    // let level5 = [];
+    // activitesData.datas.forEach((item) => {
+    //   if (
+    //     item.scope === selectedScope &&
+    //     item.level1 === selectedLevel
+    //     // item.level2 === fuelTypeValue &&
+    //     // &&
+    //     // item.level3
+    //   ) {
+    //     if (item.level5 !== "null") {
+    //       level5.push(item.level5);
+    //     }
+    //   }
+    // });
+    // level5 = [...new Set(level5)];
+    // return level5.length > 0 ? true : false;
   };
 
   const filterUnitOfMeasurementsForElectricity = () => {
@@ -625,12 +692,24 @@ const FrameComponent1 = ({
       const level2 = filterScopeCategories();
       setScopeCategories(level2);
       // show fields that are available
-      if (selectedLevel !== "Electricity") {
+      if (
+        selectedLevel !== "Electricity" &&
+        selectedLevel !== "Electricity TandD" &&
+        selectedLevel !== "WTT- electricity (generation)" &&
+        selectedLevel !== "WTT- electricity (TandD)" &&
+        selectedLevel !== "WTT- electricity"
+      ) {
         setShowFuelNamesField(isFuelNamesAvaialble());
         setShowLevel4Field(isLevel4Available());
         setShowLevel5Field(isLevel5Available());
       }
-      if (selectedLevel === "Electricity") {
+      if (
+        selectedLevel === "Electricity" ||
+        selectedLevel === "Electricity TandD" ||
+        selectedLevel === "WTT- electricity (generation)" ||
+        selectedLevel === "WTT- electricity (TandD)" ||
+        selectedLevel === "WTT- electricity"
+      ) {
         const unitOfMeasurements = filterUnitOfMeasurementsForElectricity();
         setUnitOfMeasurements(unitOfMeasurements);
       }
@@ -645,7 +724,15 @@ const FrameComponent1 = ({
       setFuelNameValue("");
     }
 
-    if (scopeCategoryValue !== "" && selectedLevel !== "Electricity") {
+    if (
+      scopeCategoryValue !== "" &&
+      selectedLevel !== "Electricity" &&
+      selectedLevel !== "Electricity TandD" &&
+      selectedLevel !== "WTT- electricity (generation)" &&
+      selectedLevel !== "WTT- electricity (TandD)"
+      // &&
+      // selectedLevel !== "WTT- electricity"
+    ) {
       const fuelTypes = filterFuelTypes();
       setFuelTypes(fuelTypes);
     }
@@ -661,8 +748,13 @@ const FrameComponent1 = ({
     if (fuelTypeValue !== "") {
       const unitsOfMeasurement = filterUnitOfMeasurements();
       setUnitOfMeasurements(unitsOfMeasurement);
-      if (selectedLevel !== "Electricity") {
-        // For Level1 !== "Electricity" then only we will filter fuelNames
+      if (
+        selectedLevel !== "Electricity" &&
+        selectedLevel !== "Electricity TandD" &&
+        selectedLevel !== "WTT- electricity (generation)" &&
+        selectedLevel !== "WTT- electricity (TandD)" &&
+        selectedLevel !== "WTT- electricity"
+      ) {
         const fuelNames = filterFuelNames();
         setFuelNames(fuelNames);
       }
@@ -678,7 +770,8 @@ const FrameComponent1 = ({
     }
 
     if (fuelNameValue !== "") {
-      surements(unitsOfMeasurement);
+      // const unitsOfMeasurements = filterUnitOfMeasurements;
+      // setUnitOfMeasurements(unitsOfMeasurements);
       const level4Options = filterLevel4Options();
       setLevel4Options(level4Options);
       const level5Options = filterLevel5Options();
@@ -759,27 +852,31 @@ const FrameComponent1 = ({
             </div>
 
             {/* Fuel Type */}
-            {selectedLevel !== "Electricity" && (
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  {selectedLevel || "Fuel"} Type
-                </h3>
-                <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
-                  onChange={(e) => setFuelTypeValue(e.target.value)}
-                  value={fuelTypeValue}
-                >
-                  <option value="">Select Option</option>
-                  {fuelTypes.map((option, index) => {
-                    return (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-            )}
+            {/* selectedLevel !== "WTT- electricity" && */}
+            {selectedLevel !== "Electricity" &&
+              selectedLevel !== "Electricity TandD" &&
+              selectedLevel !== "WTT- electricity (generation)" &&
+              selectedLevel !== "WTT- electricity (TandD)" && (
+                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+                  <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                    {selectedLevel || "Fuel"} Type
+                  </h3>
+                  <select
+                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                    onChange={(e) => setFuelTypeValue(e.target.value)}
+                    value={fuelTypeValue}
+                  >
+                    <option value="">Select Option</option>
+                    {fuelTypes.map((option, index) => {
+                      return (
+                        <option key={index} value={option}>
+                          {option}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              )}
 
             {/* Fuel Name */}
             {showFuelNamesField && (
