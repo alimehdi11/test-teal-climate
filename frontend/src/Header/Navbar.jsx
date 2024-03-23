@@ -1,6 +1,6 @@
 // Navbar.js
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = ({ userName }) => {
   const location = useLocation();
@@ -25,7 +25,15 @@ const Navbar = ({ userName }) => {
       <div className="flex flex-col items-start justify-start py-0 pr-3.5 pl-0 box-border max-w-full">
         <div className="flex flex-row items-start justify-start gap-[8px] z-[2]">
           {/* Dashboard Link */}
-          <Link to="/dashboard" className={`flex items-center ${location.pathname === '/dashboard' ? 'bg-brand-color-01 rounded-lg text-white' : ''}`} style={{ textDecoration: 'none'}}>
+          <Link
+            to="/dashboard"
+            className={`text-black flex items-center ${
+              location.pathname === "/dashboard"
+                ? "bg-brand-color-01 rounded-lg text-white"
+                : ""
+            }`}
+            style={{ textDecoration: "none" }}
+          >
             <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
               <div className="flex flex-row items-center justify-start py-0 pr-px pl-0 gap-[8px]">
                 <img
@@ -39,7 +47,15 @@ const Navbar = ({ userName }) => {
             </div>
           </Link>
           {/* Profile Link */}
-          <Link to="/profile" className={`flex items-center ${location.pathname === '/profile' ? 'bg-brand-color-01 rounded-lg text-white' : ''}`} style={{ textDecoration: 'none'}}>
+          <Link
+            to="/profile"
+            className={`text-black flex items-center ${
+              location.pathname === "/profile"
+                ? "bg-brand-color-01 rounded-lg text-white"
+                : ""
+            }`}
+            style={{ textDecoration: "none" }}
+          >
             <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
               <div className="flex flex-row items-center justify-start py-0 pr-[13px] pl-3 gap-[8px]">
                 <img
@@ -52,7 +68,15 @@ const Navbar = ({ userName }) => {
             </div>
           </Link>
           {/* Activities Link */}
-          <Link to="/activites" className={`flex items-center gap-[8px] ${location.pathname === '/activites' ? 'bg-brand-color-01 rounded-lg text-white' : ''}`} style={{ textDecoration: 'none'}}>
+          <Link
+            to="/activites"
+            className={`text-black flex items-center gap-[8px] ${
+              location.pathname === "/activites"
+                ? "bg-brand-color-01 rounded-lg text-white"
+                : ""
+            }`}
+            style={{ textDecoration: "none" }}
+          >
             <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
               <div className="flex flex-row items-center justify-center py-0 px-1.5 gap-[8px]">
                 <img
@@ -60,9 +84,7 @@ const Navbar = ({ userName }) => {
                   alt=""
                   src="/icons-2.svg"
                 />
-                <div className="relative text-xs font-semibold">
-                  Activities
-                </div>
+                <div className="relative text-xs font-semibold">Activities</div>
               </div>
             </div>
           </Link>
@@ -104,7 +126,7 @@ const Navbar = ({ userName }) => {
         {/* Profile Link */}
         <Link to="/">
           <div className="h-10 w-10 relative rounded-81xl object-contain min-h-[40px] z-[1] bg-gray-100 flex items-center justify-center text-black font-semibold">
-            {userName ? userName.charAt(0).toUpperCase() : 'A'}
+            {userName ? userName.charAt(0).toUpperCase() : "A"}
           </div>
         </Link>
       </div>
