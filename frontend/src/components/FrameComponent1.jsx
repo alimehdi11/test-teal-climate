@@ -221,7 +221,7 @@ const FrameComponent1 = ({
         item.level1 === selectedLevel &&
         item.level2 === payload.level2 &&
         item.level3 === payload.level3 &&
-        item.level4 === payload.level4 &&
+        (item.level4 === payload.level4 || item.level4 === "null") &&
         item.uom === unitOfMeasurementValue
       ) {
         if (item.ghg === ghgValues[0]) {
@@ -325,7 +325,9 @@ const FrameComponent1 = ({
       selectedLevel === "Electricity TandD" ||
       selectedLevel === "WTT- electricity (generation)" ||
       selectedLevel === "WTT- electricity (TandD)" ||
-      selectedLevel === "WTT- electricity"
+      selectedLevel === "WTT- electricity" ||
+      selectedLevel === "Water supply" ||
+      selectedLevel === "Water treatment"
     ) {
       //  fetching companies data and filtering country from that based on business unit is selected
       const fetchCompanyDataAndFilterCountryAndRegion = async () => {
@@ -345,7 +347,6 @@ const FrameComponent1 = ({
               break;
             }
           }
-          console.log(`Country: ${country} and Region: ${region}`);
           return { country, region };
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -393,17 +394,27 @@ const FrameComponent1 = ({
         level2: fuelTypeValue || null,
         level3: null,
         level4: null,
-        // level5: null,
+        level5: null,
       };
 
-      // find country and region and then calculate ghgconversions and then update payload
-      const { country, region } =
-        await fetchCompanyDataAndFilterCountryAndRegion();
-      // payload.level2 = "Electricity generated";
-      payload.level3 = country;
-      payload.level4 = region;
-      if (selectedLevel !== "WTT- electricity") {
-        payload.level2 = filterLevel2(payload);
+      // for Water supply and Water treatment we do not have to fetch country and region based on businessunit
+      if (
+        selectedLevel !== "Water supply" &&
+        selectedLevel !== "Water treatment"
+      ) {
+        // find country and region and then calculate ghgconversions and then update payload
+        const { country, region } =
+          await fetchCompanyDataAndFilterCountryAndRegion();
+        // payload.level2 = "Electricity generated";
+        payload.level3 = country;
+        payload.level4 = region;
+        if (selectedLevel !== "WTT- electricity") {
+          payload.level2 = filterLevel2(payload);
+        }
+      } else {
+        // level 4 and 5 are null for "Water supply" and "Water treatment"
+        payload.level2 = selectedLevel;
+        payload.level3 = selectedLevel;
       }
       ghgconversions = calculateConversionGHGForElectricity(payload);
       payload = { ...payload, ...ghgconversions };
@@ -482,17 +493,20 @@ const FrameComponent1 = ({
       level4: level4Value || null,
       level5: level5Value || null,
     };
+
     if (
-      selectedLevel !== "Electricity" &&
-      selectedLevel !== "Electricity TandD" &&
-      selectedLevel !== "WTT- electricity (generation)" &&
-      selectedLevel !== "WTT- electricity (TandD)"
-      // selectedLevel !== "WTT- electricity"
+      selectedLevel === "Electricity" ||
+      selectedLevel === "Electricity TandD" ||
+      selectedLevel === "WTT- electricity (generation)" ||
+      selectedLevel === "WTT- electricity (TandD)" ||
+      selectedLevel === "WTT- electricity" ||
+      selectedLevel === "Water supply" ||
+      selectedLevel === "Water treatment"
     ) {
-      const ghgconversions = calculateConversionGHG();
+      const ghgconversions = calculateConversionGHGForElectricity(payload);
       payload = { ...payload, ...ghgconversions };
     } else {
-      const ghgconversions = calculateConversionGHGForElectricity(payload);
+      const ghgconversions = calculateConversionGHG();
       payload = { ...payload, ...ghgconversions };
     }
 
@@ -697,7 +711,9 @@ const FrameComponent1 = ({
         selectedLevel !== "Electricity TandD" &&
         selectedLevel !== "WTT- electricity (generation)" &&
         selectedLevel !== "WTT- electricity (TandD)" &&
-        selectedLevel !== "WTT- electricity"
+        selectedLevel !== "WTT- electricity" &&
+        selectedLevel !== "Water supply" &&
+        selectedLevel !== "Water treatment"
       ) {
         setShowFuelNamesField(isFuelNamesAvaialble());
         setShowLevel4Field(isLevel4Available());
@@ -708,7 +724,9 @@ const FrameComponent1 = ({
         selectedLevel === "Electricity TandD" ||
         selectedLevel === "WTT- electricity (generation)" ||
         selectedLevel === "WTT- electricity (TandD)" ||
-        selectedLevel === "WTT- electricity"
+        selectedLevel === "WTT- electricity" ||
+        selectedLevel === "Water supply" ||
+        selectedLevel === "Water treatment"
       ) {
         const unitOfMeasurements = filterUnitOfMeasurementsForElectricity();
         setUnitOfMeasurements(unitOfMeasurements);
@@ -729,7 +747,9 @@ const FrameComponent1 = ({
       selectedLevel !== "Electricity" &&
       selectedLevel !== "Electricity TandD" &&
       selectedLevel !== "WTT- electricity (generation)" &&
-      selectedLevel !== "WTT- electricity (TandD)"
+      selectedLevel !== "WTT- electricity (TandD)" &&
+      selectedLevel !== "Water supply" &&
+      selectedLevel !== "Water treatment"
       // &&
       // selectedLevel !== "WTT- electricity"
     ) {
@@ -753,7 +773,9 @@ const FrameComponent1 = ({
         selectedLevel !== "Electricity TandD" &&
         selectedLevel !== "WTT- electricity (generation)" &&
         selectedLevel !== "WTT- electricity (TandD)" &&
-        selectedLevel !== "WTT- electricity"
+        selectedLevel !== "WTT- electricity" &&
+        selectedLevel !== "Water supply" &&
+        selectedLevel !== "Water treatment"
       ) {
         const fuelNames = filterFuelNames();
         setFuelNames(fuelNames);
@@ -807,14 +829,14 @@ const FrameComponent1 = ({
           <h1 className="m-0 h-9 relative text-inherit font-semibold font-inherit inline-block z-[1] mq450:text-lgi">
             Insert activity data here
           </h1>
-          <div className="w-full grid grid-cols-2 text-base gap-5">
+          <div className="w-full grid grid-cols-2 text-base gap-5 ">
             {/* Scope Category */}
             <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
               <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
                 Scope Category
               </h3>
               <select
-                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                 onChange={(e) => setScopeCategoryValue(e.target.value)}
                 value={scopeCategoryValue}
               >
@@ -835,7 +857,7 @@ const FrameComponent1 = ({
                 Business Unit
               </h3>
               <select
-                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                 onChange={(e) => setBusinessUnitValue(e.target.value)}
                 value={businessUnitValue}
               >
@@ -856,13 +878,15 @@ const FrameComponent1 = ({
             {selectedLevel !== "Electricity" &&
               selectedLevel !== "Electricity TandD" &&
               selectedLevel !== "WTT- electricity (generation)" &&
-              selectedLevel !== "WTT- electricity (TandD)" && (
+              selectedLevel !== "WTT- electricity (TandD)" &&
+              selectedLevel !== "Water supply" &&
+              selectedLevel !== "Water treatment" && (
                 <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                   <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
                     {selectedLevel || "Fuel"} Type
                   </h3>
                   <select
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                     onChange={(e) => setFuelTypeValue(e.target.value)}
                     value={fuelTypeValue}
                   >
@@ -885,7 +909,7 @@ const FrameComponent1 = ({
                   {selectedLevel || "Fuel"} Name
                 </h3>
                 <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                   onChange={(e) => setFuelNameValue(e.target.value)}
                   value={fuelNameValue}
                 >
@@ -908,7 +932,7 @@ const FrameComponent1 = ({
                   Level 4
                 </h3>
                 <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                   onChange={(e) => setLevel4Value(e.target.value)}
                   value={level4Value}
                 >
@@ -931,7 +955,7 @@ const FrameComponent1 = ({
                   Level 5
                 </h3>
                 <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                   onChange={(e) => setLevel5Value(e.target.value)}
                   value={level5Value}
                 >
@@ -953,7 +977,7 @@ const FrameComponent1 = ({
                 Unit of measurement
               </h3>
               <select
-                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                 onChange={(e) => setUnitOfMeasurementValue(e.target.value)}
                 value={unitOfMeasurementValue}
               >
@@ -975,7 +999,7 @@ const FrameComponent1 = ({
               </h3>
               <input
                 type="number"
-                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm text-gray-300 min-w-[248px] z-[1] border-[1px] border-solid border-slate-400"
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                 value={quantityValue}
                 onChange={(e) => setQuantityValue(e.target.value)}
                 placeholder="Enter Quantity"

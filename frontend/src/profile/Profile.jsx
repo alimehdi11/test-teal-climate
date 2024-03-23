@@ -337,7 +337,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
                 <div className="relative w-full">
                   <input
                     type="text"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1]"
+                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                     value={selectedBusinessUnit}
                     onChange={(e) => setSelectedBusinessUnit(e.target.value)}
                   />
@@ -349,7 +349,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
                   Country
                 </h3>
                 <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1]"
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                   value={selectedCountry}
                   onChange={(e) => setSelectedCountry(e.target.value)}
                 >
@@ -370,7 +370,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
                 <div className="relative w-full">
                   <input
                     type="number"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1]"
+                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                     value={revenue}
                     min="0"
                     onChange={(e) => setRevenue(e.target.value)}
@@ -385,7 +385,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
                 <div className="relative w-full">
                   <input
                     type="number"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1]"
+                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                     value={employees}
                     min={0}
                     onChange={(e) => setEmployees(e.target.value)}
@@ -399,7 +399,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
                 <div className="relative w-full">
                   <input
                     type="text"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1]"
+                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                   />
@@ -413,7 +413,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
                   Continent
                 </h3>
                 <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1]"
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                   value={selectedContinent}
                   onChange={(e) => setSelectedContinent(e.target.value)}
                 >
@@ -431,7 +431,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
                   Region
                 </h3>
                 <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1]"
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                   value={selectedRegion}
                   onChange={(e) => setSelectedRegion(e.target.value)}
                 >
@@ -449,7 +449,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
                 </h3>
                 <input
                   type="number"
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1]"
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                   value={productionClients}
                   min={0}
                   onChange={(e) => setProductionClients(e.target.value)}
@@ -463,7 +463,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
                 <div className="relative w-full">
                   <input
                     type="number"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1]"
+                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                     value={
                       ownershipPercentage || ownershipPercentage === 0
                         ? ownershipPercentage

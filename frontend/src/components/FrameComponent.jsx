@@ -60,10 +60,21 @@ const FrameComponent = ({ companyData, setCompanyData, userId }) => {
             <th className="border-t-0">Level 5</th>
             <th className="border-t-0">uom</th>
             <th className="border-t-0">Quantity</th>
-            <th className="border-t-0">kg CO₂e</th>
-            <th className="border-t-0">kg CO₂e of CO₂</th>
-            <th className="border-t-0">kg CO₂e of CH₄</th>
-            <th className="border-t-0">kg CO₂e of N₂O</th>
+            <th className="border-t-0">
+              kg CO<span style={{ fontSize: "0.6em" }}>2</span>e
+            </th>
+            <th className="border-t-0">
+              kg CO<span style={{ fontSize: "0.6em" }}>2</span>e of CO
+              <span style={{ fontSize: "0.6em" }}>2</span>
+            </th>
+            <th className="border-t-0">
+              kg CO<span style={{ fontSize: "0.6em" }}>2</span>e of CH
+              <span style={{ fontSize: "0.6em" }}>4</span>
+            </th>
+            <th className="border-t-0">
+              kg CO<span style={{ fontSize: "0.6em" }}>2</span>e of N
+              <span style={{ fontSize: "0.6em" }}>2</span>O
+            </th>
             <th className="border-t-0 border-e-0">Actions</th>
           </tr>
         </thead>
@@ -81,10 +92,10 @@ const FrameComponent = ({ companyData, setCompanyData, userId }) => {
                 <td>{item.level5 || "-"}</td>
                 <td>{item.uom || "-"}</td>
                 <td>{item.quantity || "-"}</td>
-                <td>{item.co2e || "-"}</td>
-                <td>{item.co2eofco2 || "-"}</td>
-                <td>{item.co2eofch4 || "-"}</td>
-                <td>{item.co2eofn2o || "-"}</td>
+                <td>{item.co2e.toFixed(2) || "-"}</td>
+                <td>{item.co2eofco2.toFixed(2) || "-"}</td>
+                <td>{item.co2eofch4.toFixed(2) || "-"}</td>
+                <td>{item.co2eofn2o.toFixed(2) || "-"}</td>
                 <td className="border-e-0">
                   <div className="flex justify-center items-center">
                     <Link

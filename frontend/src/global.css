@@ -57,3 +57,7 @@ td {
   padding: 8px;
   white-space: nowrap; /* Prevent text wrapping */
 }
+
+html {
+  font-family: Poppins;
+}

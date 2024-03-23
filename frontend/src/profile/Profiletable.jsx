@@ -43,88 +43,58 @@ const Profiletable = ({ profileData, setProfileData, userId }) => {
   };
 
   return (
-    <section className="rounded-lg flex flex-col items-start justify-center pt-0 px-0 pb-6 box-border gap-[20px] max-w-full text-left text-sm text-white font-poppins font-medium mq1325:w-[calc(100%_-_40px)] overflow-x-auto m-4 mb-40 shadow-black shadow-sm">
-      <div
-        className="flex justify-start max-w-full bg-brand-color-2 py-2"
-        style={{ width: "100%" }}
-      >
-        <div className="flex-1 flex justify-center items-center">
-          Busniess Unit
-        </div>
-        <div className="flex-1 flex justify-center items-center">Continent</div>
-        <div className="flex-1 flex justify-center items-center">Country</div>
-        <div className="flex-1 flex justify-center items-center">Region</div>
-        <div className="flex-1 flex justify-center items-center">Revenue</div>
-        <div className="flex-1 flex justify-center items-center">
-          Production / Clients
-        </div>
-        <div className="flex-1 flex justify-center items-center">
-          No. Of Employees
-        </div>
-        <div className="flex-1 flex justify-center items-center">
-          Ownership / <br />
-          Partnership %
-        </div>
-        <div className="flex-1 flex justify-center items-center">Notes</div>
-        <div className="flex-1 flex justify-center items-center">Actions</div>
-      </div>
-      <div
-        className="flex flex-col justify-start max-w-full text-dark"
-        style={{ width: "100%", gap: "20px" }}
-      >
-        {
-          // on initial render data will be empty array
-          profileData.length > 0 &&
+    <div className="mx-5 my-10 hide-scroll border-[1px] border-gray-300 border-solid rounded-md overflow-x-auto max-w-full font-poppins shadow-2xl">
+      <table className="border-0">
+        <thead>
+          <tr className="bg-brand-color-2 text-white">
+            <th className="border-t-0">Busniess Unit</th>
+            <th className="border-t-0">Continent</th>
+            <th className="border-t-0">Country</th>
+            <th className="border-t-0">Region</th>
+            <th className="border-t-0">Revenue</th>
+            <th className="border-t-0">Production / Clients</th>
+            <th className="border-t-0">No. Of Employees</th>
+            <th className="border-t-0">Ownership Partnership %</th>
+            <th className="border-t-0">Notes</th>
+            <th className="border-t-0 border-e-0">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {profileData.length > 0 &&
             profileData.map((rowData, index) => (
-              <div key={index} className="flex flex-row gap-4">
-                <div className="flex-1 flex justify-center items-center">
-                  {rowData.unitname || "-"}
-                </div>
-                <div className="flex-1 flex justify-center items-center">
-                  {rowData.continent || "-"}
-                </div>
-                <div className="flex-1 flex justify-center items-center">
-                  {rowData.countries || "-"}
-                </div>
-                <div className="flex-1 flex justify-center items-center">
-                  {rowData.region || "-"}
-                </div>
-                <div className="flex-1 flex justify-center items-center">
-                  {rowData.revenue || "-"}
-                </div>
-                <div className="flex-1 flex justify-center items-center">
-                  {rowData.production || "-"}
-                </div>
-                <div className="flex-1 flex justify-center items-center">
-                  {rowData.employees || "-"}
-                </div>
-                <div className="flex-1 flex justify-center items-center">
-                  {rowData.partnership || "-"}
-                </div>
-                <div className="flex-1 flex justify-center items-center">
-                  {rowData.notes || "-"}
-                </div>
-                <div className="flex-1 flex justify-center items-center gap-4 text-base">
-                  <Link
-                    to={`/profile/${rowData.id}/edit`}
-                    style={{ textDecoration: "none" }}
-                  >
+              <tr>
+                <td className="border-s-0">{rowData.unitname || "-"}</td>
+                <td>{rowData.continent || "-"}</td>
+                <td> {rowData.countries || "-"}</td>
+                <td>{rowData.region || "-"}</td>
+                <td>{rowData.revenue || "-"}</td>
+                <td>{rowData.production || "-"}</td>
+                <td>{rowData.employees || "-"}</td>
+                <td>{rowData.partnership || "-"}</td>
+                <td>{rowData.notes || "-"}</td>
+                <td className="border-e-0">
+                  <div className="flex justify-center items-center">
+                    <Link
+                      className="h-[23px]"
+                      to={`/profile/${rowData.id}/edit`}
+                    >
+                      <img
+                        src={editIcon}
+                        className="p-1 rounded hover:bg-slate-300 w-5"
+                      />
+                    </Link>
                     <img
-                      src={editIcon}
-                      className="p-1 rounded hover:bg-slate-300"
+                      src={trashIcon}
+                      className="p-1 rounded hover:bg-slate-300 w-5"
+                      onClick={handleDelete(rowData.id)}
                     />
-                  </Link>
-                  <img
-                    src={trashIcon}
-                    className="p-1 rounded hover:bg-slate-300"
-                    onClick={handleDelete(rowData.id)}
-                  />
-                </div>
-              </div>
-            ))
-        }
-      </div>
-    </section>
+                  </div>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
