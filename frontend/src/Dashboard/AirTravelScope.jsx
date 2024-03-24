@@ -1,7 +1,94 @@
 import ApexChart from "./ApexChart";
 import ApexChart1 from "./ApexChart1";
 import Circule from "./Circule";
+import { useState, useEffect } from "react";
 const AirTravelScope = () => {
+  const [userId, setUserId] = useState("");
+  const [companyData, setCompanyData] = useState([]);
+  const [totalCO2e, setTotalCO2e] = useState(0);
+  const [totalScope1CO2e, setTotalScope1CO2e] = useState(0);
+  const [totalScope2CO2e, setTotalScope2CO2e] = useState(0);
+  const [totalScope3CO2e, setTotalScope3CO2e] = useState(0);
+
+  const fetchCompanyData = async (userId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/companiesdata/${userId}`
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data:`);
+      }
+      const jsonData = await response.json();
+      return jsonData;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const calculateTotalC02e = () => {
+    const totalCO2e = companyData.reduce(
+      (accumulator, obj) => accumulator + obj.co2e,
+      0
+    );
+    return totalCO2e / 1000; // kg CO2e
+  };
+
+  const calculateTotalC02eOfGivenScope = (scope) => {
+    const totalC02eOfGivenScope = companyData.reduce((accumulator, obj) => {
+      if (obj.scope === scope) {
+        return accumulator + obj.co2e;
+      }
+      return accumulator;
+    }, 0);
+    return totalC02eOfGivenScope / 1000; // kg CO2e of given scope
+  };
+
+  const calculateC02ePercentageOfGivenScope = (scopeCO2e) => {
+    return ((scopeCO2e * 1000) / (totalCO2e * 1000)) * 100;
+  };
+
+  const calculateC02ePercentageOfGivenScopeCategory = (scopeCategory) => {
+    const totalC02eOfGivenScopeCategory = companyData.reduce(
+      (accumulator, obj) => {
+        if (obj.fuel_category === scopeCategory) {
+          return accumulator + obj.co2e;
+        }
+        return accumulator;
+      },
+      0
+    );
+    return (totalC02eOfGivenScopeCategory / (totalCO2e * 1000)) * 100;
+  };
+
+  useEffect(() => {
+    // Fetch userId from localStorage
+    const storedUserID = localStorage.getItem("userId");
+    if (storedUserID) {
+      setUserId(storedUserID);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      fetchCompanyData(userId).then((companyData) =>
+        setCompanyData(companyData)
+      );
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (companyData.length > 0) {
+      const totalCO2e = calculateTotalC02e();
+      const totalScope1CO2e = calculateTotalC02eOfGivenScope("Scope 1");
+      const totalScope2CO2e = calculateTotalC02eOfGivenScope("Scope 2");
+      const totalScope3CO2e = calculateTotalC02eOfGivenScope("Scope 3");
+      setTotalCO2e(totalCO2e);
+      setTotalScope1CO2e(totalScope1CO2e);
+      setTotalScope2CO2e(totalScope2CO2e);
+      setTotalScope3CO2e(totalScope3CO2e);
+    }
+  }, [companyData]);
+
   const scopes1 = [49, 85, 40];
   const scopes2 = [85, 50];
 
@@ -39,13 +126,13 @@ const AirTravelScope = () => {
                   <div className="h-6 relative capitalize font-medium inline-block">
                     Total GHG Emissions
                   </div>
-                  <div className="rounded-81xl bg-green-1 overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
+                  {/* <div className="rounded-81xl bg-green-1 overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
                     <div className="relative capitalize font-semibold">
                       <span>{total}</span>
                       <span className="text-7xs">{` `}</span>
                       <span>%</span>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="h-5 w-5 relative">
                   <div className="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[50%] bg-gray-6" />
@@ -57,11 +144,11 @@ const AirTravelScope = () => {
               </div>
               <div className="flex flex-col items-start justify-start text-13xl font-sf-pro-display">
                 <div className="h-[38px] relative font-medium inline-block mq450:text-lgi mq1050:text-7xl">
-                  2564.92
+                  {totalCO2e.toFixed(2)}
                 </div>
                 <div className="relative capitalize font-medium font-poppins text-gray-3 text-xs">
-                  <span>Metric Tones CO</span>
-                  <span className="text-6xs">2e</span>
+                  <span>Metric Tonnes CO</span>
+                  <span className="text-6xs">2</span>e
                 </div>
               </div>
             </div>
@@ -76,7 +163,9 @@ const AirTravelScope = () => {
                     </div>
                   </div>
                   <div className="relative capitalize font-medium text-right">
-                    {scope1}%
+                    {calculateC02ePercentageOfGivenScope(
+                      totalScope1CO2e
+                    ).toFixed(2)}
                   </div>
                 </div>
                 <div className="self-stretch flex flex-row items-end justify-start gap-[6px] z-[1]">
@@ -87,7 +176,10 @@ const AirTravelScope = () => {
                     </div>
                   </div>
                   <div className="relative capitalize font-medium text-right">
-                    {scope2}%
+                    {calculateC02ePercentageOfGivenScope(
+                      totalScope2CO2e
+                    ).toFixed(2)}
+                    %
                   </div>
                 </div>
                 <div className="self-stretch flex flex-row items-end justify-start gap-[6px] z-[1]">
@@ -98,12 +190,21 @@ const AirTravelScope = () => {
                     </div>
                   </div>
                   <div className="relative capitalize font-medium text-right">
-                    {scope3}%
+                    {calculateC02ePercentageOfGivenScope(
+                      totalScope3CO2e
+                    ).toFixed(2)}
+                    %
                   </div>
                 </div>
               </div>
               <div className="h-[130px] w-[130px] relative z-[1] mq450:flex-1">
-                <ApexChart scopes={scopes1} />
+                <ApexChart
+                  scopes={[
+                    calculateC02ePercentageOfGivenScope(totalScope1CO2e),
+                    calculateC02ePercentageOfGivenScope(totalScope2CO2e),
+                    calculateC02ePercentageOfGivenScope(totalScope3CO2e),
+                  ]}
+                />
               </div>
             </div>
           </div>
@@ -115,13 +216,13 @@ const AirTravelScope = () => {
                   <div className="relative capitalize font-medium">
                     Scope 1 Emissions
                   </div>
-                  <div className="rounded-81xl bg-brand-color-2 overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
+                  {/* <div className="rounded-81xl bg-brand-color-2 overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
                     <div className="relative capitalize font-semibold">
                       <span>{total}</span>
                       <span className="text-7xs">{` `}</span>
                       <span>%</span>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="h-5 w-5 relative">
                   <div className="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[50%] bg-gray-6" />
@@ -133,11 +234,11 @@ const AirTravelScope = () => {
               </div>
               <div className="flex flex-col items-start justify-start text-13xl font-sf-pro-display">
                 <div className="h-[38px] relative font-medium inline-block mq450:text-lgi mq1050:text-7xl">
-                  2564.92
+                  {totalScope1CO2e.toFixed(2)}
                 </div>
                 <div className="relative capitalize font-medium font-poppins text-gray-3 text-xs">
-                  <span>Metric Tones CO</span>
-                  <span className="text-6xs">2e</span>
+                  <span>Metric Tonnes CO</span>
+                  <span className="text-6xs">2</span>e
                 </div>
               </div>
             </div>
@@ -147,7 +248,7 @@ const AirTravelScope = () => {
                 <div className="flex flex-row items-end justify-start gap-[6px]">
                   <div className="h-3 w-3 relative rounded-[50%] bg-brand-color-2 z-[1]" />
                   <div className="relative capitalize font-medium z-[1]">
-                    Stationary
+                    Stationary Combustion
                   </div>
                 </div>
                 <div className="flex flex-row items-end justify-start gap-[6px]">
@@ -165,17 +266,39 @@ const AirTravelScope = () => {
               </div>
               <div className="flex flex-col items-start justify-start py-5 px-0 gap-[10px] text-right">
                 <div className="relative capitalize font-medium z-[1]">
-                  {scope1}%
+                  {calculateC02ePercentageOfGivenScopeCategory(
+                    "Stationary combustion"
+                  ).toFixed(2)}
+                  %
                 </div>
                 <div className="relative capitalize font-medium z-[1]">
-                  {scope2}%
+                  {calculateC02ePercentageOfGivenScopeCategory(
+                    "Mobile combustion"
+                  ).toFixed(2)}
+                  %
                 </div>
                 <div className="relative capitalize font-medium z-[1]">
-                  {scope3}%
+                  {calculateC02ePercentageOfGivenScopeCategory(
+                    "Fugitive emissions"
+                  ).toFixed(2)}
+                  %
                 </div>
               </div>
               <div className="h-[130px] w-[130px] relative z-[1] mq450:flex-1">
-                <ApexChart scopes={scopes1} labels={labels2} />
+                <ApexChart
+                  scopes={[
+                    calculateC02ePercentageOfGivenScopeCategory(
+                      "Stationary combustion"
+                    ),
+                    calculateC02ePercentageOfGivenScopeCategory(
+                      "Mobile combustion"
+                    ),
+                    calculateC02ePercentageOfGivenScopeCategory(
+                      "Fugitive emissions"
+                    ),
+                  ]}
+                  labels={labels2}
+                />
               </div>
             </div>
           </div>
@@ -188,13 +311,13 @@ const AirTravelScope = () => {
                 <div className="relative capitalize font-medium">
                   Scope 2 Emissions
                 </div>
-                <div className="rounded-81xl bg-orange overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
+                {/* <div className="rounded-81xl bg-orange overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
                   <div className="relative capitalize font-semibold">
                     <span>35</span>
                     <span className="text-7xs">{` `}</span>
                     <span>%</span>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="h-5 w-5 relative">
                 <div className="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[50%] bg-gray-6" />
@@ -206,11 +329,11 @@ const AirTravelScope = () => {
             </div>
             <div className="flex flex-col items-start justify-start text-13xl font-sf-pro-display">
               <div className="h-[38px] relative font-medium inline-block mq450:text-lgi mq1050:text-7xl">
-                2564.92
+                {totalScope2CO2e.toFixed(2)}
               </div>
               <div className="relative capitalize font-medium font-poppins text-gray-3 text-xs">
-                <span>Metric Tones CO</span>
-                <span className="text-6xs">2e</span>
+                <span>Metric Tonnes CO</span>
+                <span className="text-6xs">2</span>e
               </div>
             </div>
           </div>
@@ -289,13 +412,13 @@ const AirTravelScope = () => {
             <div className="relative capitalize font-medium z-[1]">
               Scope 3 Emissions
             </div>
-            <div className="rounded-81xl bg-brand-color-01 overflow-hidden flex flex-row items-center justify-center py-0.5 pr-0.5 pl-1.5 whitespace-nowrap z-[1] text-right text-3xs text-white">
+            {/* <div className="rounded-81xl bg-brand-color-01 overflow-hidden flex flex-row items-center justify-center py-0.5 pr-0.5 pl-1.5 whitespace-nowrap z-[1] text-right text-3xs text-white">
               <div className="relative capitalize font-semibold">
                 <span>{total}</span>
                 <span className="text-7xs">{` `}</span>
                 <span>%</span>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="h-5 w-5 relative z-[1]">
             <div className="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[50%] bg-gray-6" />
@@ -306,11 +429,11 @@ const AirTravelScope = () => {
         <div className="self-stretch flex flex-row items-start justify-between pt-0 px-6 pb-[7px] gap-[20px] text-13xl font-sf-pro-display mq450:flex-wrap">
           <div className="flex flex-col items-start justify-start">
             <div className="h-[38px] relative font-medium inline-block z-[1] mq450:text-lgi mq1050:text-7xl">
-              2564.92
+              {totalScope3CO2e.toFixed(2)}
             </div>
             <div className="relative capitalize font-medium font-poppins text-gray-3 z-[2] text-xs">
-              <span>Metric Tones CO</span>
-              <span className="text-6xs">2e</span>
+              <span>Metric Tonnes CO</span>
+              <span className="text-6xs">2</span>e
             </div>
           </div>
           <Circule data={seriesData} />

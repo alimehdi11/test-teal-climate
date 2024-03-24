@@ -14,13 +14,13 @@ const Dashboard = () => {
           </h2>
         </div>
         <div className="rounded-lg bg-white flex flex-row items-center justify-start py-3 pr-[15px] pl-3.5 gap-[6px] whitespace-nowrap text-sm font-sf-pro-display">
-          <img
+          {/* <img
             className="h-6 w-6 relative overflow-hidden shrink-0"
             loading="eager"
             alt=""
             src="/phcalendar.svg"
-          />
-          <div className="relative tracking-[-0.25px] font-medium">
+          /> */}
+          <div className="relative tracking-[-0.25px]">
             Jan 01, 2024 - Jan 11, 2024
           </div>
         </div>
