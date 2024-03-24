@@ -450,7 +450,10 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory(
+                "Purchased Goods and Services"
+              )}
+              %
             </div>
           </div>
         </div>
@@ -463,7 +466,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory("Capital Goods")}%
             </div>
           </div>
         </div>
@@ -471,10 +474,15 @@ const AirTravelScope = () => {
           <div className="flex-1 flex flex-row items-end justify-start gap-[6px] max-w-full z-[1] mq450:flex-wrap">
             <div className="h-3 w-3 relative rounded-[50%] bg-mediumslateblue mq450:w-full" />
             <div className="flex-1 flex flex-col items-start justify-start min-w-[213px] max-w-full">
-              <div className="relative capitalize font-medium">{`Fuel & Energy Related Activities`}</div>
+              <div className="relative capitalize font-medium">
+                Fuel & Energy Related Activities
+              </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory(
+                "Fuel & Energy Related Activities"
+              )}
+              %
             </div>
           </div>
         </div>
@@ -487,7 +495,10 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory(
+                "Upstream Transportation and Distribution"
+              )}
+              %
             </div>
           </div>
         </div>
@@ -500,7 +511,10 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory(
+                "Waste Generated in Operations"
+              )}
+              %
             </div>
           </div>
         </div>
@@ -513,7 +527,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory("Business Travel")}%
             </div>
           </div>
         </div>
@@ -526,7 +540,10 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory(
+                "Employee Commuting"
+              )}
+              %
             </div>
           </div>
         </div>
@@ -539,7 +556,10 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory(
+                "Upstream Leased Assets"
+              )}
+              %
             </div>
           </div>
         </div>
@@ -552,7 +572,10 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory(
+                "Downstream Transportation and Distribution"
+              )}
+              %
             </div>
           </div>
         </div>
@@ -565,7 +588,10 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory(
+                "Processing of Sold Products"
+              )}
+              %
             </div>
           </div>
         </div>
@@ -578,7 +604,10 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory(
+                "Use of Sold Products"
+              )}
+              %
             </div>
           </div>
         </div>
@@ -591,7 +620,10 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory(
+                "End-of-Life Treatment of Sold Products"
+              )}
+              %
             </div>
           </div>
         </div>
@@ -604,7 +636,10 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory(
+                "Downstream Leased Assets"
+              )}
+              %
             </div>
           </div>
         </div>
@@ -615,7 +650,7 @@ const AirTravelScope = () => {
               <div className="relative capitalize font-medium">Franchises</div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              10%
+              {calculateC02ePercentageOfGivenScopeCategory("Franchises")}%
             </div>
           </div>
         </div>
@@ -625,7 +660,7 @@ const AirTravelScope = () => {
             <div className="relative capitalize font-medium">Investments</div>
           </div>
           <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-            10%
+            {calculateC02ePercentageOfGivenScopeCategory("Investments")}%
           </div>
         </div>
       </div>
