@@ -2,6 +2,7 @@ import GroupComponent from "./GroupComponent";
 import AirTravelScope from "./AirTravelScope";
 import ScopePurchasedServices from "./ScopePurchasedServices";
 import Navbar from "../Header/Navbar";
+import Top10EmissionsTable from "./Top10EmissionsTable.jsx";
 
 const Dashboard = () => {
   return (
@@ -29,7 +30,8 @@ const Dashboard = () => {
         <AirTravelScope />
         <section className="self-stretch flex flex-col items-start justify-start gap-[26px] max-w-full">
           {/* <ScopeUnitedStateofAmerica /> */}
-          <ScopePurchasedServices />
+          {/* <ScopePurchasedServices /> */}
+          <Top10EmissionsTable />
         </section>
       </main>
     </div>

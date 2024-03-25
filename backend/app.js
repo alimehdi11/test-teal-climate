@@ -577,6 +577,22 @@ app.put("/companies/:id", (req, res) => {
     }
   });
 });
+
+app.get("/companiesdata/top10/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const column = "co2e";
+  const query = `SELECT * FROM companiesdata WHERE ids = $1 ORDER BY ${column} DESC LIMIT 10`;
+  const values = [userId];
+  pool.query(query, values, (error, result) => {
+    if (error) {
+      console.error("Error :", error);
+      res.status(500).json({ error: "Something went wrong" });
+    } else {
+      res.status(200).json(result.rows);
+    }
+  });
+});
+
 // Register endpoint
 app.use("/auth", authRoutes);
 
