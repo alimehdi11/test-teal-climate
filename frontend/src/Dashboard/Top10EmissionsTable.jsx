@@ -18,12 +18,14 @@ const Top10EmissionsTable = () => {
       console.error("Error fetching data:", error);
     }
   };
+
   useEffect(() => {
     const storedUserID = localStorage.getItem("userId");
     if (storedUserID) {
       setUserId(storedUserID);
     }
   }, []);
+
   useEffect(() => {
     if (userId) {
       fetchTop10Emissions(userId).then((top10Emissions) =>
@@ -31,6 +33,7 @@ const Top10EmissionsTable = () => {
       );
     }
   }, [userId]);
+
   return (
     <div
       className="mx-5 my-10 hide-scroll border-[1px] border-gray-300 border-solid rounded-md overflow-x-auto max-w-full font-poppins shadow-2xl"

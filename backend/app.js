@@ -242,11 +242,9 @@ app.post("/submit", (req, res) => {
 
 // Fetching data Profile
 app.get("/companies/:userId", (req, res) => {
-  const userId = req.params.userId;
+  const { userId } = req.params;
   const { column } = req.query;
-
   const query = `SELECT ${column || "*"} FROM companies WHERE userid = $1`;
-  console.log(query);
   pool.query(query, [userId], (err, result) => {
     if (err) {
       console.error("Error fetching data:", err);
@@ -583,6 +581,25 @@ app.get("/companiesdata/top10/:userId", async (req, res) => {
   const column = "co2e";
   const query = `SELECT * FROM companiesdata WHERE ids = $1 ORDER BY ${column} DESC LIMIT 10`;
   const values = [userId];
+  pool.query(query, values, (error, result) => {
+    if (error) {
+      console.error("Error :", error);
+      res.status(500).json({ error: "Something went wrong" });
+    } else {
+      res.status(200).json(result.rows);
+    }
+  });
+});
+
+app.get("/worldHeatMap/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const query = `SELECT cd.co2e, c.countries
+  FROM companiesdata cd
+  JOIN companies c ON cd.businessunit = c.unitname
+  WHERE cd.ids = $1
+  AND c.userId = $2;
+  `;
+  const values = [userId, userId];
   pool.query(query, values, (error, result) => {
     if (error) {
       console.error("Error :", error);

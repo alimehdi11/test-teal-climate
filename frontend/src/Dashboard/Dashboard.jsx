@@ -3,10 +3,11 @@ import AirTravelScope from "./AirTravelScope";
 import ScopePurchasedServices from "./ScopePurchasedServices";
 import Navbar from "../Header/Navbar";
 import Top10EmissionsTable from "./Top10EmissionsTable.jsx";
+import Map from "./Map";
 
 const Dashboard = () => {
   return (
-    <div className="w-full relative bg-gray-50 overflow-hidden flex flex-col items-center justify-start pt-0 px-0 pb-[123px] box-border gap-[24px] tracking-[normal] text-left text-[24px] text-dark font-poppins">
+    <div className="relative bg-gray-50 overflow-hidden flex flex-col items-center justify-start pt-0 px-0 pb-[123px] box-border gap-[24px] tracking-[normal] text-left text-[24px] text-dark font-poppins">
       <Navbar />
       <div className="w-[1326px] flex flex-row items-end justify-between py-0 px-5 box-border gap-[20px] max-w-full mq450:flex-wrap">
         <div className="flex flex-col items-start justify-start pt-0 px-0 pb-[3px]">
@@ -28,12 +29,13 @@ const Dashboard = () => {
       </div>
       <main className="w-[1326px] flex flex-col items-start justify-start py-0 px-5 box-border gap-[16px] max-w-full">
         <AirTravelScope />
-        <section className="self-stretch flex flex-col items-start justify-start gap-[26px] max-w-full">
-          {/* <ScopeUnitedStateofAmerica /> */}
-          {/* <ScopePurchasedServices /> */}
-          <Top10EmissionsTable />
-        </section>
+        {/* <section className="self-stretch flex flex-col items-start justify-start gap-[26px] max-w-full"> */}
+        {/* <ScopeUnitedStateofAmerica /> */}
+        {/* <ScopePurchasedServices /> */}
+        {/* </section> */}
       </main>
+      <Top10EmissionsTable />
+      <Map />
     </div>
   );
 };
