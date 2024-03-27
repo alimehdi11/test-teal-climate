@@ -4,7 +4,6 @@ import "leaflet/dist/leaflet.css";
 import worldGeoJSON from "./data.json"; // Ensure the path to your GeoJSON data is correct
 import "./App.css"; // Ensure this CSS file includes the necessary styles
 const Map = () => {
-  // State to store fetched emissions data
   const [emissionsData, setEmissionsData] = useState({});
   const [userId, setUserId] = useState("");
 
@@ -15,6 +14,7 @@ const Map = () => {
       setUserId(storedUserID);
     }
   }, []);
+
   // Fetch emissions data from backend upon component mount
   useEffect(() => {
     if (userId) {
@@ -101,9 +101,9 @@ const Map = () => {
   return (
     <div className="w-full h-[664px] bg-[#ffffff]">
       <MapContainer
+        className="w-full h-full"
         center={[25, 10]}
         zoom={1}
-        className="w-full h-full"
         zoomControl={false}
         scrollWheelZoom={true}
         doubleClickZoom={false}
