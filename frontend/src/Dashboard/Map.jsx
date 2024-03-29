@@ -18,13 +18,8 @@ const Map = () => {
   // Fetch emissions data from backend upon component mount
   useEffect(() => {
     if (userId) {
-      console.log(`2nd - http://localhost:5000/worldHeatMap/${userId}`);
       fetch(`http://localhost:5000/worldHeatMap/${userId}`)
         .then((response) => response.json())
-        // .then((data) => {
-        //   console.table(data);
-        //   return data;
-        // })
         .then((data) => {
           const countriesEmissions = data.reduce((acc, current) => {
             if (acc[current.countries]) {
@@ -45,8 +40,6 @@ const Map = () => {
 
   // Function to determine the style of each country based on emissions data
   const geoJsonStyle = (feature) => {
-    // const name = feature.properties.name;
-    // const name = feature.properties.formal_en || feature.properties.name;
     let country;
     if (emissionsData[feature.properties.formal_en]) {
       country = feature.properties.formal_en;
@@ -55,15 +48,17 @@ const Map = () => {
     }
     const emissionsValue = emissionsData[country];
 
-    let fillColor = "#AAAAAA"; // Default color for countries with no data or not matching
+    let fillColor = "#E0E0E0"; // Default color for countries with no data or not matching
 
     // Example logic to determine fillColor based on emissionsValue
     // You should adjust this logic based on your actual data and requirements
     if (emissionsValue) {
       if (emissionsValue > 1000) {
-        fillColor = "#ff0000"; // High emissions
+        fillColor = "#FF7100"; // High emissions
+      } else if (emissionsValue > 500) {
+        fillColor = "#FFCB13"; // Medium emissions
       } else {
-        fillColor = "#00ff00"; // Low emissions
+        fillColor = "#FFE99E"; // Low emissions
       }
     }
 
@@ -78,39 +73,49 @@ const Map = () => {
 
   // Function to handle tooltip content for each country
   const onEachFeature = (feature, layer) => {
-    // if (feature.properties && feature.properties.name) {
+    // console.log("onEachFeature");
     let country;
     if (emissionsData[feature.properties.formal_en]) {
-      console.log("===> 1");
       country = feature.properties.formal_en;
     } else if (emissionsData[feature.properties.name]) {
-      console.log("===> 2");
       country = feature.properties.name;
     } else {
-      console.log("===> 3");
-      console.log(emissionsData);
+      // for those countries whose data is not available in "emissionsData"
+      country = feature.properties.name;
     }
     const emissionsValue = emissionsData[country];
     const tooltipContent = `<strong>${country}</strong>: ${
       emissionsValue || "Data not available"
     }`;
     layer.bindTooltip(tooltipContent);
-    // }
   };
 
   return (
-    <div className="w-full h-[664px] bg-[#ffffff]">
+    <div className="h-[400px] bg-[#ffffff] mx-auto overflow-hidden mt-10 px-4 flex gap-2">
+      <div className="flex-[1]">
+        <h3>Location wise Emissions</h3>
+        <div
+          className="h-[30px] rounded-[100px]"
+          style={{
+            background:
+              "linear-gradient(90deg, #FFECAA 0%, #FFC700 32.07%, #FFA400 64.04%, #FF6B00 100%)",
+          }}
+        ></div>
+        <div className="flex justify-between">
+          <span>0 %</span>
+          <span>100 %</span>
+        </div>
+      </div>
       <MapContainer
-        className="w-full h-full"
+        className="w-full h-full bg-white flex-[2]"
         center={[25, 10]}
-        zoom={1}
+        zoom={2}
         zoomControl={false}
         scrollWheelZoom={true}
         doubleClickZoom={false}
         touchZoom={false}
         dragging={true}
         attributionControl={false}
-        style={{ background: "white" }}
       >
         <GeoJSON
           data={worldGeoJSON}

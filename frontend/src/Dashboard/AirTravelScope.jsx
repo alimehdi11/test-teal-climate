@@ -9,6 +9,7 @@ const AirTravelScope = () => {
   const [totalScope1CO2e, setTotalScope1CO2e] = useState(0);
   const [totalScope2CO2e, setTotalScope2CO2e] = useState(0);
   const [totalScope3CO2e, setTotalScope3CO2e] = useState(0);
+  const [scopeCategoriesCO2e, setScopeCategoriesCO2e] = useState([]);
 
   const fetchCompanyData = async (userId) => {
     try {
@@ -40,11 +41,11 @@ const AirTravelScope = () => {
       }
       return accumulator;
     }, 0);
-    return totalC02eOfGivenScope / 1000; // kg CO2e of given scope
+    return (totalC02eOfGivenScope / 1000).toFixed(2); // kg CO2e of given scope
   };
 
   const calculateC02ePercentageOfGivenScope = (scopeCO2e) => {
-    return ((scopeCO2e * 1000) / (totalCO2e * 1000)) * 100;
+    return (((scopeCO2e * 1000) / (totalCO2e * 1000)) * 100).toFixed(2);
   };
 
   const calculateC02ePercentageOfGivenScopeCategory = (scopeCategory) => {
@@ -57,8 +58,34 @@ const AirTravelScope = () => {
       },
       0
     );
-    return (totalC02eOfGivenScopeCategory / (totalCO2e * 1000)) * 100;
+
+    if (totalC02eOfGivenScopeCategory === 0) {
+      return totalC02eOfGivenScopeCategory;
+    } else {
+      return (
+        (totalC02eOfGivenScopeCategory / (totalCO2e * 1000)) *
+        100
+      ).toFixed(2);
+    }
   };
+
+  const scopeCategories = [
+    "Purchased Goods And Services",
+    "Capital Goods",
+    "Fuel & Energy Related Activities",
+    "Upstream Transportation And Distribution",
+    "Waste Generated In Operations",
+    "Business Travel",
+    "Employee Commuting",
+    "Upstream Leased Assets",
+    "Downstream Transportation And Distribution",
+    "Processing Of Sold Products",
+    "Use Of Sold Products",
+    "End-Of-Life Treatment Of Sold Products",
+    "Downstream Leased Assets",
+    "Franchises",
+    "Investments",
+  ];
 
   useEffect(() => {
     // Fetch userId from localStorage
@@ -82,10 +109,14 @@ const AirTravelScope = () => {
       const totalScope1CO2e = calculateTotalC02eOfGivenScope("Scope 1");
       const totalScope2CO2e = calculateTotalC02eOfGivenScope("Scope 2");
       const totalScope3CO2e = calculateTotalC02eOfGivenScope("Scope 3");
+      const scopeCategoriesCO2e = scopeCategories.map((scopeCategory) =>
+        calculateC02ePercentageOfGivenScopeCategory(scopeCategory)
+      );
       setTotalCO2e(totalCO2e);
       setTotalScope1CO2e(totalScope1CO2e);
       setTotalScope2CO2e(totalScope2CO2e);
       setTotalScope3CO2e(totalScope3CO2e);
+      setScopeCategoriesCO2e(scopeCategoriesCO2e);
     }
   }, [companyData]);
 
@@ -163,9 +194,7 @@ const AirTravelScope = () => {
                     </div>
                   </div>
                   <div className="relative capitalize font-medium text-right">
-                    {calculateC02ePercentageOfGivenScope(
-                      totalScope1CO2e
-                    ).toFixed(2)}
+                    {calculateC02ePercentageOfGivenScope(totalScope1CO2e)}%
                   </div>
                 </div>
                 <div className="self-stretch flex flex-row items-end justify-start gap-[6px] z-[1]">
@@ -176,10 +205,7 @@ const AirTravelScope = () => {
                     </div>
                   </div>
                   <div className="relative capitalize font-medium text-right">
-                    {calculateC02ePercentageOfGivenScope(
-                      totalScope2CO2e
-                    ).toFixed(2)}
-                    %
+                    {calculateC02ePercentageOfGivenScope(totalScope2CO2e)}%
                   </div>
                 </div>
                 <div className="self-stretch flex flex-row items-end justify-start gap-[6px] z-[1]">
@@ -190,10 +216,7 @@ const AirTravelScope = () => {
                     </div>
                   </div>
                   <div className="relative capitalize font-medium text-right">
-                    {calculateC02ePercentageOfGivenScope(
-                      totalScope3CO2e
-                    ).toFixed(2)}
-                    %
+                    {calculateC02ePercentageOfGivenScope(totalScope3CO2e)}%
                   </div>
                 </div>
               </div>
@@ -234,7 +257,7 @@ const AirTravelScope = () => {
               </div>
               <div className="flex flex-col items-start justify-start text-13xl font-sf-pro-display">
                 <div className="h-[38px] relative font-medium inline-block mq450:text-lgi mq1050:text-7xl">
-                  {totalScope1CO2e.toFixed(2)}
+                  {totalScope1CO2e}
                 </div>
                 <div className="relative capitalize font-medium font-poppins text-gray-3 text-xs">
                   <span>Metric Tonnes CO</span>
@@ -268,19 +291,19 @@ const AirTravelScope = () => {
                 <div className="relative capitalize font-medium z-[1]">
                   {calculateC02ePercentageOfGivenScopeCategory(
                     "Stationary combustion"
-                  ).toFixed(2)}
+                  )}
                   %
                 </div>
                 <div className="relative capitalize font-medium z-[1]">
                   {calculateC02ePercentageOfGivenScopeCategory(
                     "Mobile combustion"
-                  ).toFixed(2)}
+                  )}
                   %
                 </div>
                 <div className="relative capitalize font-medium z-[1]">
                   {calculateC02ePercentageOfGivenScopeCategory(
                     "Fugitive emissions"
-                  ).toFixed(2)}
+                  )}
                   %
                 </div>
               </div>
@@ -329,7 +352,7 @@ const AirTravelScope = () => {
             </div>
             <div className="flex flex-col items-start justify-start text-13xl font-sf-pro-display">
               <div className="h-[38px] relative font-medium inline-block mq450:text-lgi mq1050:text-7xl">
-                {totalScope2CO2e.toFixed(2)}
+                {totalScope2CO2e}
               </div>
               <div className="relative capitalize font-medium font-poppins text-gray-3 text-xs">
                 <span>Metric Tonnes CO</span>
@@ -429,14 +452,17 @@ const AirTravelScope = () => {
         <div className="self-stretch flex flex-row items-start justify-between pt-0 px-6 pb-[7px] gap-[20px] text-13xl font-sf-pro-display mq450:flex-wrap">
           <div className="flex flex-col items-start justify-start">
             <div className="h-[38px] relative font-medium inline-block z-[1] mq450:text-lgi mq1050:text-7xl">
-              {totalScope3CO2e.toFixed(2)}
+              {totalScope3CO2e}
             </div>
             <div className="relative capitalize font-medium font-poppins text-gray-3 z-[2] text-xs">
               <span>Metric Tonnes CO</span>
               <span className="text-6xs">2</span>e
             </div>
           </div>
-          <Circule data={seriesData} />
+          <Circule
+            data={scopeCategoriesCO2e}
+            // data={seriesData}
+          />
         </div>
         <div className="self-stretch h-3 flex flex-row items-start justify-start pt-0 px-0 pb-3 box-border max-w-full">
           <div className="h-px flex-1 relative box-border max-w-full z-[1] border-t-[1px] border-solid border-gray-5" />
@@ -450,10 +476,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Purchased Goods and Services"
-              )}
-              %
+              {scopeCategoriesCO2e[0]}%
             </div>
           </div>
         </div>
@@ -466,7 +489,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              {calculateC02ePercentageOfGivenScopeCategory("Capital Goods")}%
+              {scopeCategoriesCO2e[1]}%
             </div>
           </div>
         </div>
@@ -479,10 +502,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Fuel & Energy Related Activities"
-              )}
-              %
+              {scopeCategoriesCO2e[2]}%
             </div>
           </div>
         </div>
@@ -495,10 +515,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Upstream Transportation and Distribution"
-              )}
-              %
+              {scopeCategoriesCO2e[3]}%
             </div>
           </div>
         </div>
@@ -511,10 +528,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Waste Generated in Operations"
-              )}
-              %
+              {scopeCategoriesCO2e[4]}%
             </div>
           </div>
         </div>
@@ -527,7 +541,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              {calculateC02ePercentageOfGivenScopeCategory("Business Travel")}%
+              {scopeCategoriesCO2e[5]}%
             </div>
           </div>
         </div>
@@ -540,10 +554,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Employee Commuting"
-              )}
-              %
+              {scopeCategoriesCO2e[6]}%
             </div>
           </div>
         </div>
@@ -556,10 +567,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Upstream Leased Assets"
-              )}
-              %
+              {scopeCategoriesCO2e[7]}%
             </div>
           </div>
         </div>
@@ -572,10 +580,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Downstream Transportation and Distribution"
-              )}
-              %
+              {scopeCategoriesCO2e[8]}%
             </div>
           </div>
         </div>
@@ -588,10 +593,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Processing of Sold Products"
-              )}
-              %
+              {scopeCategoriesCO2e[9]}%
             </div>
           </div>
         </div>
@@ -604,10 +606,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Use of Sold Products"
-              )}
-              %
+              {scopeCategoriesCO2e[10]}%
             </div>
           </div>
         </div>
@@ -620,10 +619,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "End-of-Life Treatment of Sold Products"
-              )}
-              %
+              {scopeCategoriesCO2e[11]}%
             </div>
           </div>
         </div>
@@ -636,10 +632,7 @@ const AirTravelScope = () => {
               </div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Downstream Leased Assets"
-              )}
-              %
+              {scopeCategoriesCO2e[12]}%
             </div>
           </div>
         </div>
@@ -650,7 +643,7 @@ const AirTravelScope = () => {
               <div className="relative capitalize font-medium">Franchises</div>
             </div>
             <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-              {calculateC02ePercentageOfGivenScopeCategory("Franchises")}%
+              {scopeCategoriesCO2e[13]}%
             </div>
           </div>
         </div>
@@ -660,7 +653,7 @@ const AirTravelScope = () => {
             <div className="relative capitalize font-medium">Investments</div>
           </div>
           <div className="relative capitalize font-medium text-right mq450:w-full mq450:h-[18px]">
-            {calculateC02ePercentageOfGivenScopeCategory("Investments")}%
+            {scopeCategoriesCO2e[14]}%
           </div>
         </div>
       </div>
