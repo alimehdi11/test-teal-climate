@@ -12,6 +12,7 @@
     "@types/react-dom": "^18.0.11",
     "apexcharts": "^3.45.2",
     "axios": "^1.6.7",
+    "env-cmd": "^10.1.0",
     "formik": "^2.4.5",
     "radial-progress-chart": "^0.0.4",
     "react": "^18.2.0",
@@ -31,7 +32,7 @@
     "tailwindcss": "^3.1.8"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "env-cmd react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

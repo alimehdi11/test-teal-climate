@@ -22,6 +22,8 @@ import "./global.css";
 function App() {
   const [userId, setUserId] = useState("");
 
+  console.log(process.env);
+
   const handleLogin = (id) => {
     setUserId(id);
   };

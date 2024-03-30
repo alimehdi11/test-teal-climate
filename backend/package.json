@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "start:db-teal-climate": "set DATABASE_NAME=teal-climate&&nodemon app.js"
   },
   "author": "",
   "license": "ISC",

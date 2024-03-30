@@ -95,7 +95,7 @@ const Map = () => {
       <div className="flex-[1]">
         <h3>Location wise Emissions</h3>
         <div
-          className="h-[30px] rounded-[100px]"
+          className="h-[15px] rounded-[100px]"
           style={{
             background:
               "linear-gradient(90deg, #FFECAA 0%, #FFC700 32.07%, #FFA400 64.04%, #FF6B00 100%)",
@@ -107,9 +107,9 @@ const Map = () => {
         </div>
       </div>
       <MapContainer
-        className="w-full h-full bg-white flex-[2]"
-        center={[25, 10]}
-        zoom={2}
+        className="w-full h-full bg-white flex-[3]"
+        center={[25, 20]}
+        zoom={1}
         zoomControl={false}
         scrollWheelZoom={true}
         doubleClickZoom={false}

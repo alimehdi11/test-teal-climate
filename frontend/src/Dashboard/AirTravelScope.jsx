@@ -120,30 +120,30 @@ const AirTravelScope = () => {
     }
   }, [companyData]);
 
-  const scopes1 = [49, 85, 40];
+  // const scopes1 = [49, 85, 40];
   const scopes2 = [85, 50];
 
-  const labels1 = ["Scope 1", "Scope 2", "Scope 3"];
-  const labels2 = [
-    "Stationary Combustion",
-    "Mobile Combustion",
-    "Fugitive Emissions",
-  ];
-  const labels3 = ["Purchased Electricity", "Heat & Steam"];
-  const labels4 = ["Electricity", "Heat & Steam"];
+  // const labels1 = ["Scope 1", "Scope 2", "Scope 3"];
+  // const labels2 = [
+  //   "Stationary Combustion",
+  //   "Mobile Combustion",
+  //   "Fugitive Emissions",
+  // ];
+  // const labels3 = ["Purchased Electricity", "Heat & Steam"];
+  // const labels4 = ["Electricity", "Heat & Steam"];
 
-  const [scope1, scope2, scope3] = scopes1;
-  const [PurchasedElectricity, HeaSteam] = scopes2;
-  const total = scope1 + scope2 + scope3;
+  // const [scope1, scope2, scope3] = scopes1;
+  // const [PurchasedElectricity, HeaSteam] = scopes2;
+  // const total = scope1 + scope2 + scope3;
 
-  const seriesData = [
-    { value: 10 },
-    { value: 20 },
-    { value: 30 },
-    { value: 40 },
-    { value: 40 },
-    { value: 10 },
-  ];
+  // const seriesData = [
+  //   { value: 10 },
+  //   { value: 20 },
+  //   { value: 30 },
+  //   { value: 40 },
+  //   { value: 40 },
+  //   { value: 10 },
+  // ];
 
   return (
     <section className="self-stretch flex flex-row items-start justify-start gap-[16px] max-w-full text-left text-base text-dark font-poppins lg:flex-wrap ">
@@ -239,13 +239,15 @@ const AirTravelScope = () => {
                   <div className="relative capitalize font-medium">
                     Scope 1 Emissions
                   </div>
-                  {/* <div className="rounded-81xl bg-brand-color-2 overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
+                  <div className="rounded-81xl bg-brand-color-2 overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
                     <div className="relative capitalize font-semibold">
-                      <span>{total}</span>
+                      <span>
+                        {calculateC02ePercentageOfGivenScope(totalScope1CO2e)}
+                      </span>
                       <span className="text-7xs">{` `}</span>
                       <span>%</span>
                     </div>
-                  </div> */}
+                  </div>
                 </div>
                 <div className="h-5 w-5 relative">
                   <div className="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[50%] bg-gray-6" />
@@ -320,7 +322,7 @@ const AirTravelScope = () => {
                       "Fugitive emissions"
                     ),
                   ]}
-                  labels={labels2}
+                  // labels={labels2}
                 />
               </div>
             </div>
@@ -334,13 +336,15 @@ const AirTravelScope = () => {
                 <div className="relative capitalize font-medium">
                   Scope 2 Emissions
                 </div>
-                {/* <div className="rounded-81xl bg-orange overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
+                <div className="rounded-81xl bg-orange overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
                   <div className="relative capitalize font-semibold">
-                    <span>35</span>
+                    <span>
+                      {calculateC02ePercentageOfGivenScope(totalScope2CO2e)}
+                    </span>
                     <span className="text-7xs">{` `}</span>
                     <span>%</span>
                   </div>
-                </div> */}
+                </div>
               </div>
               <div className="h-5 w-5 relative">
                 <div className="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[50%] bg-gray-6" />
@@ -376,22 +380,38 @@ const AirTravelScope = () => {
                       </div>
                     </div>
                     <div className="relative capitalize font-medium text-right">
-                      {PurchasedElectricity}%
+                      {calculateC02ePercentageOfGivenScopeCategory(
+                        "Purchased Electricity"
+                      )}
+                      %
                     </div>
                   </div>
                   <div className="self-stretch flex flex-row items-end justify-start gap-[6px] z-[1]">
                     <div className="h-3 w-3 relative rounded-[50%] bg-orange" />
                     <div className="flex-1 flex flex-col items-start justify-start">
-                      <div className="relative capitalize font-medium">{`Heat & Steam`}</div>
+                      <div className="relative capitalize font-medium">
+                        Heat & Steam
+                      </div>
                     </div>
                     <div className="relative capitalize font-medium text-right">
-                      {HeaSteam}%
+                      {calculateC02ePercentageOfGivenScopeCategory(
+                        "Heat & Steam"
+                      )}
+                      %
                     </div>
                   </div>
                 </div>
               </div>
               <div className="h-[130px] w-[130px] relative z-[1] mq450:flex-1">
-                <ApexChart1 scopes={scopes2} labels={labels3} />
+                <ApexChart1
+                  scopes={[
+                    calculateC02ePercentageOfGivenScopeCategory(
+                      "Purchased Electricity"
+                    ),
+                    calculateC02ePercentageOfGivenScopeCategory("Heat & Steam"),
+                  ]}
+                  // labels={labels3}
+                />
               </div>
               <div className="h-[162px] w-px relative box-border z-[1] border-r-[1px] border-solid border-gray-5 mq750:w-full mq750:h-px" />
               <div className="flex-1 flex flex-col items-start justify-start py-5 px-0 box-border gap-[24px] min-w-[138px]">
@@ -422,7 +442,10 @@ const AirTravelScope = () => {
                 </div>
               </div>
               <div className="h-[130px] w-[130px] relative z-[1] mq450:flex-1">
-                <ApexChart1 scopes={scopes2} labels={labels4} />
+                <ApexChart1
+                  scopes={scopes2}
+                  //  labels={labels4}
+                />
               </div>
             </div>
           </div>
@@ -435,13 +458,15 @@ const AirTravelScope = () => {
             <div className="relative capitalize font-medium z-[1]">
               Scope 3 Emissions
             </div>
-            {/* <div className="rounded-81xl bg-brand-color-01 overflow-hidden flex flex-row items-center justify-center py-0.5 pr-0.5 pl-1.5 whitespace-nowrap z-[1] text-right text-3xs text-white">
+            <div className="rounded-81xl bg-brand-color-01 overflow-hidden flex flex-row items-center justify-center py-0.5 pr-1.5 pl-1.5 whitespace-nowrap z-[1] text-right text-3xs text-white">
               <div className="relative capitalize font-semibold">
-                <span>{total}</span>
+                <span>
+                  {calculateC02ePercentageOfGivenScope(totalScope3CO2e)}
+                </span>
                 <span className="text-7xs">{` `}</span>
                 <span>%</span>
               </div>
-            </div> */}
+            </div>
           </div>
           <div className="h-5 w-5 relative z-[1]">
             <div className="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[50%] bg-gray-6" />

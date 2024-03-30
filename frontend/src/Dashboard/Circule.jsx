@@ -35,33 +35,73 @@ const Circule = ({ data }) => {
       show: false, // Hide legend by default
     },
     tooltip: {
-      enabled: true, // Disable tooltip
+      enabled: true, // Enabled tooltip
     },
   };
 
   // Render a gradient donut chart if no data is provided
   if (seriesData.length === 0) {
+    // default color
+    options.colors = ["#E9E9E9"];
+    options.tooltip = {
+      enabled: false, // Disable tooltip
+    };
+
     return (
       <ReactApexChart
         options={options}
-        series={[1, 1, 1, 1, 1]} // Provide a dummy series to render the chart initially
+        series={[1]} // Provide a dummy series to render the chart initially
+        type="donut"
+        height={150}
+        width={150}
+      />
+    );
+  } else {
+    // color representing data
+    options.colors = [
+      "#197EC6",
+      "#A5A6F6",
+      "#5D5FEF",
+      "#EB5757",
+      "#85E0AB",
+      "#219653",
+      "#56CCF2",
+      "#BB6BD9",
+      "#FD8BFF",
+      "#E6BA1F",
+      "#32B950",
+      "#1F8A7D",
+      "#00CC9C",
+      "#FFCA2A",
+      "#FFA400",
+    ];
+    options.labels = [
+      "Purchased Goods And Services",
+      "Capital Goods",
+      "Fuel & Energy Related Activities",
+      "Upstream Transportation And Distribution",
+      "Waste Generated In Operations",
+      "Business Travel",
+      "Employee Commuting",
+      "Upstream Leased Assets",
+      "Downstream Transportation And Distribution",
+      "Processing Of Sold Products",
+      "Use Of Sold Products",
+      "End-Of-Life Treatment Of Sold Products",
+      "Downstream Leased Assets",
+      "Franchises",
+      "Investments",
+    ];
+    return (
+      <ReactApexChart
+        options={options}
+        series={seriesData} // Render the chart with actual data
         type="donut"
         height={150}
         width={150}
       />
     );
   }
-
-  // Render the chart with actual data
-  return (
-    <ReactApexChart
-      options={options}
-      series={seriesData}
-      type="donut"
-      height={150}
-      width={150}
-    />
-  );
 };
 
 export default Circule;
