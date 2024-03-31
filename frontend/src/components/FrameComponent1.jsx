@@ -829,7 +829,7 @@ const FrameComponent1 = ({
           <h1 className="m-0 h-9 relative text-inherit font-semibold font-inherit inline-block z-[1] mq450:text-lgi">
             Insert activity data here
           </h1>
-          <div className="w-full grid grid-cols-2 text-base gap-5 ">
+          <div className="w-full grid grid-cols-2 text-base gap-5">
             {/* Scope Category */}
             <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
               <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
@@ -906,7 +906,11 @@ const FrameComponent1 = ({
             {showFuelNamesField && (
               <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                 <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  {selectedLevel || "Fuel"} Name
+                  {selectedLevel
+                    ? selectedLevel === "Bioenergy"
+                      ? "Bioenergy Fuel Name"
+                      : `${selectedLevel} Name`
+                    : "Fuel Name"}
                 </h3>
                 <select
                   className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
@@ -999,7 +1003,7 @@ const FrameComponent1 = ({
               </h3>
               <input
                 type="number"
-                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600 placeholder-dark"
                 value={quantityValue}
                 onChange={(e) => setQuantityValue(e.target.value)}
                 placeholder="Enter Quantity"
@@ -1050,6 +1054,7 @@ const FrameComponent1 = ({
         style={{
           "--toastify-font-family": "Poppins",
           "--toastify-color-success": "#00CC9CFF",
+          "--toastify-color-warning": "#e74c3c",
         }}
       />
     </>

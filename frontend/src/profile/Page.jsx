@@ -4,10 +4,12 @@ import Profile from "./Profile";
 import Navbar from "../Header/Navbar";
 import Profiletable from "./Profiletable";
 import { useState } from "react";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 const Page = () => {
   const [userId, setUserId] = useState("");
   const [profileData, setProfileData] = useState([]);
+  const [selectedForm, setSelectedForm] = useState("");
 
   useEffect(() => {
     // Fetch userID from localStorage
@@ -36,6 +38,34 @@ const Page = () => {
     }
   }, [userId]);
 
+  let form = null;
+  if (selectedForm) {
+    if (selectedForm === "Basic") {
+      form = (
+        <Profile
+          userId={userId}
+          profileData={profileData}
+          setProfileData={setProfileData}
+        />
+      );
+    } else if (selectedForm === "Portfolio") {
+      form = (
+        <Profile
+          userId={userId}
+          profileData={profileData}
+          setProfileData={setProfileData}
+        />
+      );
+    }
+  } else {
+    form = (
+      <div className="w-full h-[656px] bg-gray-200 rounded-md flex justify-center items-center font-bold text-gray-500">
+        <FaArrowLeftLong className="text-[20px] me-2" /> Please select option
+        from the sidebar
+      </div>
+    );
+  }
+
   return (
     <>
       <Navbar />
@@ -43,14 +73,11 @@ const Page = () => {
         <div className="w-[362px] rounded-lg bg-white shadow-[0px_4px_60px_rgba(0,_0,_0,_0.02)] overflow-x-auto shrink-0 flex flex-row items-center justify-center min-w-[362px] max-w-full mq450:min-w-full mq1125:flex-1">
           {/* <div className="self-stretch w-[362px] relative rounded-lg bg-white shadow-[0px_4px_60px_rgba(0,_0,_0,_0.02)] shrink-0 hidden" /> */}
           <div className="h-[656px] w-[326px] relative shrink-0 z-[1] flex ">
-            <Sidebar />
+            <Sidebar setSelectedForm={setSelectedForm} />
           </div>
         </div>
-        <Profile
-          userId={userId}
-          profileData={profileData}
-          setProfileData={setProfileData}
-        />
+        {/* form */}
+        {form}
       </section>
       <Profiletable
         profileData={profileData}

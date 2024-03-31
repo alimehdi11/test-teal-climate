@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const Sidebar = ({
   selectedScope,
@@ -88,34 +88,33 @@ const Sidebar = ({
   return (
     <div className="bg-white absolute min-w-[300px] max-h-[656px] top-[1px] left-[40px] rounded-[8px] font-poppin">
       <h1 className="text-2xl self-stretch rounded-lg ">Select Scope</h1>
-      {scopesData.map((scope) => (
-        <div
-          key={scope}
-          className="self-stretch rounded-lg bg-white  flex flex-row items-end justify-between py-4 gap-[20px] whitespace-nowrap z-[1] text-sm text-gray-200"
-        >
-          {/* Buttons */}
-          <div className="flex gap-5 justify-center">
-            <button
-              className={`px-4 py-2 rounded-md ${
-                scope === selectedScope
-                  ? "bg-brand-color-01 rounded-lg text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-              onClick={(e) => {
-                if (e.target.innerText === selectedScope) {
-                  // parent
-                  setSelectedScope(null);
-                } else {
-                  // parent
-                  setSelectedScope(scope);
-                }
-              }}
-            >
-              {scope}
-            </button>
-          </div>
-        </div>
-      ))}
+      <div className="flex flex-col items-start gap-4">
+        {scopesData.map((scope) => (
+          <button
+            key={scope}
+            className={`w-[150px] p-3 rounded-md bg-gray-200 text-gray-700 hover:bg-brand-color-01 hover:text-white${
+              scope === selectedScope ? " bg-[#00CC9C] text-white" : ""
+            }`}
+            onClick={(e) => {
+              if (e.target.innerText === selectedScope) {
+                // parent
+                setSelectedScope(null);
+              } else {
+                // parent
+                setSelectedScope(scope);
+              }
+            }}
+          >
+            {scope}
+          </button>
+        ))}
+      </div>
+
+      <hr className="w-full h-[2px] bg-slate-300" />
+
+      <button className="w-[150px] p-3 rounded-md bg-gray-200 text-gray-700 hover:bg-brand-color-01 hover:text-white">
+        Spend Base Scope 3
+      </button>
 
       <div className="mt-[20px]">
         <h1 className="text-2xl self-stretch rounded-lg">Select Activity</h1>
@@ -124,7 +123,7 @@ const Sidebar = ({
           <input
             type="text"
             placeholder="Search..."
-            className="bg-gray-50 mt-[18px] pl-8 pr-4 py-2 w-[240px] h-[40px] rounded-[8px] border border-gray-300 focus:outline-none focus:border-blue-500"
+            className="text-[15px] bg-gray-50 px-2 w-[240px] h-10 rounded-[8px] border border-gray-300 focus:outline-none focus:border-blue-500"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

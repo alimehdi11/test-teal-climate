@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 const Navbar = ({ userName }) => {
   const location = useLocation();
   return (
-    <header className="self-stretch bg-white shadow-[0px_4px_50px_rgba(0,_0,_0,_0.05)] flex flex-row items-start justify-between py-3 px-6 box-border gap-[20px] top-[0] z-[99] sticky max-w-full text-left text-xs text-dark font-poppins">
+    <header className="self-stretch bg-white shadow-[0px_4px_50px_rgba(0,_0,_0,_0.05)] flex flex-row items-start justify-between py-3 px-6 box-border gap-[20px] top-[0] z-[9999] sticky max-w-full text-left text-xs text-dark font-poppins">
       {/* Logo and Brand */}
       <div className="flex flex-row items-center justify-start gap-[4px]">
         <img
@@ -90,7 +90,7 @@ const Navbar = ({ userName }) => {
           </Link>
 
           {/* EEIO Link */}
-          <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
+          {/* <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
             <div className="flex flex-row items-center justify-center py-0 px-[9px] gap-[8px]">
               <img
                 className="h-5 w-5 relative min-h-[20px]"
@@ -106,7 +106,7 @@ const Navbar = ({ userName }) => {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       {/* Profile and Notification Icons */}

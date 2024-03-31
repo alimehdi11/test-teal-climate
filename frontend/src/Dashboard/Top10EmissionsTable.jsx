@@ -50,13 +50,13 @@ const Top10EmissionsTable = () => {
             <th className="border-t-0">Level 2</th>
             <th className="border-t-0">Level 3</th>
             <th className="border-t-0">Level 4</th>
-            <th className="border-t-0">Level 5</th>
+            {/* <th className="border-t-0">Level 5</th> */}
             <th className="border-t-0">uom</th>
             <th className="border-t-0">Quantity</th>
             <th className="border-t-0">
               kg CO<span style={{ fontSize: "0.6em" }}>2</span>e
             </th>
-            <th className="border-t-0">
+            {/* <th className="border-t-0">
               kg CO<span style={{ fontSize: "0.6em" }}>2</span>e of CO
               <span style={{ fontSize: "0.6em" }}>2</span>
             </th>
@@ -67,7 +67,7 @@ const Top10EmissionsTable = () => {
             <th className="border-t-0">
               kg CO<span style={{ fontSize: "0.6em" }}>2</span>e of N
               <span style={{ fontSize: "0.6em" }}>2</span>O
-            </th>
+            </th> */}
           </tr>
         </thead>
         <tbody>
@@ -82,15 +82,15 @@ const Top10EmissionsTable = () => {
                 <td>{item.level2 || "-"}</td>
                 <td>{item.level3 || "-"}</td>
                 <td>{item.level4 || "-"}</td>
-                <td>{item.level5 || "-"}</td>
+                {/* <td>{item.level5 || "-"}</td> */}
                 <td>{item.uom || "-"}</td>
                 <td>{item.quantity || "-"}</td>
-                <td>{item.co2e.toFixed(2) || "-"}</td>
-                <td>{item.co2eofco2.toFixed(2) || "-"}</td>
+                <td className="border-e-0">{item.co2e.toFixed(2) || "-"}</td>
+                {/* <td>{item.co2eofco2.toFixed(2) || "-"}</td>
                 <td>{item.co2eofch4.toFixed(2) || "-"}</td>
                 <td className="border-e-0">
                   {item.co2eofn2o.toFixed(2) || "-"}
-                </td>
+                </td> */}
               </tr>
             ))}
         </tbody>

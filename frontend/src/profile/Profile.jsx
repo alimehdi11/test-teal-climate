@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
-import { ToastContainer, toast } from "react-toastify";
+import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -321,173 +321,177 @@ const Profile = ({ userId, profileData, setProfileData }) => {
 
   return (
     <>
-      <div className="flex-1 rounded-lg bg-white shadow-[0px_4px_60px_rgba(0,_0,_0,_0.02)] flex flex-col items-end justify-start py-[18px] pr-[18px] pl-6 box-border gap-[216px] min-w-[585px] max-w-full text-left text-5xl text-dark font-poppins mq450:gap-[216px] mq800:min-w-full mq1125:gap-[216px]">
-        <div className="w-[900px] h-[656px] relative rounded-lg bg-white shadow-[0px_4px_60px_rgba(0,_0,_0,_0.02)] hidden max-w-full" />
+      <div className="flex-1 rounded-lg bg-white shadow-[0px_4px_60px_rgba(0,_0,_0,_0.02)] flex flex-col items-end justify-start py-[18px] pr-[18px] pl-6 box-border gap-[30px] min-w-[585px] max-w-full text-left text-5xl text-dark font-poppins mq450:gap-[216px] mq800:min-w-full mq1125:gap-[216px]">
+        {/* <div className="w-[900px] h-[656px] relative rounded-lg bg-white shadow-[0px_4px_60px_rgba(0,_0,_0,_0.02)] hidden max-w-full" /> */}
         <div className="self-stretch flex flex-col items-start justify-start gap-[32px] max-w-full mq450:gap-[32px]">
           <h1 className="m-0 h-9 relative text-inherit font-semibold font-inherit inline-block z-[1] mq450:text-lgi">
             Create Your Profile
           </h1>
-          <div className="self-stretch flex flex-row items-start justify-start gap-[30px] max-w-full text-base mq800:flex-wrap">
-            <div className="flex-1 flex flex-col items-start justify-start gap-[32px] min-w-[269px] max-w-full mq450:gap-[32px]">
-              {/* Fuel Category Dropdown */}
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Business Unit
-                </h3>
-                <div className="relative w-full">
-                  <input
-                    type="text"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                    value={selectedBusinessUnit}
-                    onChange={(e) => setSelectedBusinessUnit(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Country
-                </h3>
-                <select
+          <div className="w-full grid grid-cols-2 text-base gap-5">
+            {/* <div className="self-stretch flex flex-row items-start justify-start gap-[30px] max-w-full text-base mq800:flex-wrap"> */}
+            {/* <div className="flex-1 flex flex-col items-start justify-start gap-[32px] min-w-[269px] max-w-full mq450:gap-[32px]"> */}
+            {/* Fuel Category Dropdown */}
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Business Unit
+              </h3>
+              <div className="relative w-full">
+                <input
+                  type="text"
                   className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                  value={selectedCountry}
-                  onChange={(e) => setSelectedCountry(e.target.value)}
-                >
-                  <option value="">Select Country</option>
-                  {countries.map((country, index) => (
-                    <option key={index} value={country}>
-                      {country}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Revenu */}
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Revenue (optional)
-                </h3>
-                <div className="relative w-full">
-                  <input
-                    type="number"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                    value={revenue}
-                    min="0"
-                    onChange={(e) => setRevenue(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  No. of employees (optional)
-                </h3>
-                <div className="relative w-full">
-                  <input
-                    type="number"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                    value={employees}
-                    min={0}
-                    onChange={(e) => setEmployees(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Notes (optional)
-                </h3>
-                <div className="relative w-full">
-                  <input
-                    type="text"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                  />
-                </div>
+                  value={selectedBusinessUnit}
+                  onChange={(e) => setSelectedBusinessUnit(e.target.value)}
+                />
               </div>
             </div>
-            <div className="flex-1 flex flex-col items-start justify-start gap-[32px] min-w-[269px] max-w-full mq450:gap-[32px]">
-              {/* Level Unit Dropdown */}
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Continent
-                </h3>
-                <select
+
+            {/* Continent */}
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Continent
+              </h3>
+              <select
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
+                value={selectedContinent}
+                onChange={(e) => setSelectedContinent(e.target.value)}
+              >
+                <option value="">Select Continent</option>
+                {continents.map((continent, index) => (
+                  <option key={index} value={continent}>
+                    {continent}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Country */}
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Country
+              </h3>
+              <select
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
+                value={selectedCountry}
+                onChange={(e) => setSelectedCountry(e.target.value)}
+              >
+                <option value="">Select Country</option>
+                {countries.map((country, index) => (
+                  <option key={index} value={country}>
+                    {country}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Region */}
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Region
+              </h3>
+              <select
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
+                value={selectedRegion}
+                onChange={(e) => setSelectedRegion(e.target.value)}
+              >
+                <option value="">Select Region</option>
+                {regions.map((region, index) => (
+                  <option key={index} value={region}>
+                    {region}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Revenu */}
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Revenue (optional)
+              </h3>
+              <div className="relative w-full">
+                <input
+                  type="number"
                   className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                  value={selectedContinent}
-                  onChange={(e) => setSelectedContinent(e.target.value)}
-                >
-                  <option value="">Select Continent</option>
-                  {continents.map((continent, index) => (
-                    <option key={index} value={continent}>
-                      {continent}
-                    </option>
-                  ))}
-                </select>
+                  value={revenue}
+                  min="0"
+                  onChange={(e) => setRevenue(e.target.value)}
+                />
               </div>
-              {/* Fuel Name Dropdown */}
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Region
-                </h3>
-                <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                  value={selectedRegion}
-                  onChange={(e) => setSelectedRegion(e.target.value)}
-                >
-                  <option value="">Select Region</option>
-                  {regions.map((region, index) => (
-                    <option key={index} value={region}>
-                      {region}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Production / Clients (optional)
-                </h3>
+            </div>
+
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                No. of employees (optional)
+              </h3>
+              <div className="relative w-full">
                 <input
                   type="number"
                   className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                  value={productionClients}
+                  value={employees}
                   min={0}
-                  onChange={(e) => setProductionClients(e.target.value)}
+                  onChange={(e) => setEmployees(e.target.value)}
                 />
               </div>
-              {/* Quantity Dropdown */}
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Ownership / Partnership %
-                </h3>
-                <div className="relative w-full">
-                  <input
-                    type="number"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                    value={
-                      ownershipPercentage || ownershipPercentage === 0
-                        ? ownershipPercentage
-                        : 100
-                    }
-                    min={0}
-                    max={100}
-                    onChange={(e) =>
-                      setOwnershipPercentage(
-                        Math.min(100, Math.max(0, e.target.value))
-                      )
-                    }
-                  />
-                </div>
+            </div>
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Notes (optional)
+              </h3>
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm  min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                />
               </div>
             </div>
+            {/* </div> */}
+            {/* <div className="flex-1 flex flex-col items-start justify-start gap-[32px] min-w-[269px] max-w-full mq450:gap-[32px]"> */}
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Production / Clients (optional)
+              </h3>
+              <input
+                type="number"
+                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
+                value={productionClients}
+                min={0}
+                onChange={(e) => setProductionClients(e.target.value)}
+              />
+            </div>
+            {/* Quantity Dropdown */}
+            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                Ownership / Partnership %
+              </h3>
+              <div className="relative w-full">
+                <input
+                  type="number"
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
+                  value={
+                    ownershipPercentage || ownershipPercentage === 0
+                      ? ownershipPercentage
+                      : 100
+                  }
+                  min={0}
+                  max={100}
+                  onChange={(e) =>
+                    setOwnershipPercentage(
+                      Math.min(100, Math.max(0, e.target.value))
+                    )
+                  }
+                />
+              </div>
+            </div>
+            {/* </div> */}
           </div>
         </div>
         {/* Buttons */}
-        <div className="w-[416px] flex flex-row items-start justify-start gap-[8px] max-w-full mq450:flex-wrap">
+        <div className="w-[250px] flex flex-row items-start justify-end gap-[8px] max-w-full mq450:flex-wrap">
           {id ? (
             <>
               <button
-                className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-2 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[133px] z-[1] hover:bg-mediumseagreen"
+                className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-2 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[220px] z-[1] hover:bg-mediumseagreen"
                 onClick={handleCancel}
               >
                 <div className="h-6 relative text-base capitalize font-medium font-poppins text-white text-center inline-block z-[2]">
@@ -515,7 +519,18 @@ const Profile = ({ userId, profileData, setProfileData }) => {
           )}
         </div>
       </div>
-      <ToastContainer theme={"colored"} />
+      <ToastContainer
+        theme={"colored"}
+        hideProgressBar={true}
+        transition={Slide}
+        autoClose={1500}
+        pauseOnFocusLoss={false}
+        style={{
+          "--toastify-font-family": "Poppins",
+          "--toastify-color-success": "#00CC9CFF",
+          "--toastify-color-warning": "#e74c3c",
+        }}
+      />
     </>
   );
 };
