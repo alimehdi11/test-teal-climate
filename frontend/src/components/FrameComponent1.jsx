@@ -244,6 +244,50 @@ const FrameComponent1 = ({
     };
   };
 
+  const calculateConversionGHGForDeliveryEvs = (payload) => {
+    let co2e = null;
+    let co2eofco2 = null;
+    let co2eofch4 = null;
+    let co2eofn2o = null;
+
+    const ghgValues = [
+      "kg CO2e",
+      "kg CO2e of CO2 per unit",
+      "kg CO2e of CH4 per unit",
+      "kg CO2e of N2O per unit",
+    ];
+
+    for (let i = 0; i < activitesData.datas.length; i++) {
+      const item = activitesData.datas[i];
+
+      if (
+        item.scope === selectedScope &&
+        item.level1 === selectedLevel &&
+        item.level2 === payload.level2 &&
+        item.level3 === payload.level3 &&
+        item.level5 === payload.level5 &&
+        item.uom === unitOfMeasurementValue
+      ) {
+        if (item.ghg === ghgValues[0]) {
+          co2e = item.ghgconversion;
+        } else if (item.ghg === ghgValues[1]) {
+          co2eofco2 = item.ghgconversion;
+        } else if (item.ghg === ghgValues[2]) {
+          co2eofch4 = item.ghgconversion;
+        } else if (item.ghg === ghgValues[3]) {
+          co2eofn2o = item.ghgconversion;
+        }
+      }
+    }
+
+    return {
+      co2e,
+      co2eofco2,
+      co2eofch4,
+      co2eofn2o,
+    };
+  };
+
   const resetForm = () => {
     setScopeCategoryValue("");
     setFuelTypeValue("");
@@ -299,7 +343,52 @@ const FrameComponent1 = ({
     }
   };
 
+  const filterLevel5BasedOnScopeAndLevel1 = () => {
+    let level5 = [];
+    activitesData.datas.forEach((item) => {
+      if (
+        item.scope === selectedScope &&
+        // here selectedLevel === Electricity
+        item.level1 === selectedLevel
+      ) {
+        level5.push(item.level5);
+      }
+    });
+    level5 = [...new Set(level5)];
+    return level5;
+  };
+
   const handleFormSubmit = async () => {
+    // console.log(
+    //   userId,
+    //   selectedScope,
+    //   selectedLevel,
+    //   scopeCategoryValue,
+    //   businessUnitValue,
+    //   fuelTypes,
+    //   fuelTypeValue,
+    //   fuelNames,
+    //   fuelNameValue,
+    //   level4Options,
+    //   level4Value,
+    //   level5Options,
+    //   level5Value,
+    //   unitOfMeasurementValue,
+    //   quantityValue
+    // );
+    // console.log(
+    //   !userId ||
+    //     !selectedScope ||
+    //     !selectedLevel ||
+    //     !scopeCategoryValue ||
+    //     !businessUnitValue ||
+    //     (fuelTypes.length > 0 && !fuelTypeValue) ||
+    //     (fuelNames.length > 0 && !fuelNameValue) ||
+    //     (level4Options.length > 0 && !level4Value) ||
+    //     (level5Options.length > 0 && !level5Value) ||
+    //     !unitOfMeasurementValue ||
+    //     !quantityValue
+    // );
     // all value should be false
     if (
       !userId ||
@@ -327,7 +416,10 @@ const FrameComponent1 = ({
       selectedLevel === "WTT- electricity (TandD)" ||
       selectedLevel === "WTT- electricity" ||
       selectedLevel === "Water supply" ||
-      selectedLevel === "Water treatment"
+      selectedLevel === "Water treatment" ||
+      selectedLevel === "Managed assets- electricity" ||
+      selectedLevel === "WTT- electricity (T&D)" ||
+      selectedLevel === "Electricity T&D"
     ) {
       //  fetching companies data and filtering country from that based on business unit is selected
       const fetchCompanyDataAndFilterCountryAndRegion = async () => {
@@ -418,6 +510,67 @@ const FrameComponent1 = ({
       }
       ghgconversions = calculateConversionGHGForElectricity(payload);
       payload = { ...payload, ...ghgconversions };
+      // console.table(payload);
+      // return;
+    } else if (
+      selectedLevel === "Delivery Evs" ||
+      selectedLevel === "Heat and steam" ||
+      selectedLevel === "Electricity TandD for delivery Evs" ||
+      selectedLevel === "District heat and steam TandD" ||
+      selectedLevel === "WTT- heat and steam" ||
+      selectedLevel === "WTT- district heat and steam distribution" ||
+      selectedLevel === "Hotel stay" ||
+      selectedLevel === "Business travel- air" ||
+      selectedLevel === "WTT- business travel- air"
+    ) {
+      payload = {
+        ids: userId,
+        uom: unitOfMeasurementValue,
+        businessunit: businessUnitValue,
+        quantity: quantityValue,
+        fuel_category: scopeCategoryValue,
+        scope: selectedScope,
+        level1: selectedLevel,
+        level2: null, // filter out
+        level3: fuelNameValue || null, // from form / not available
+        level4: level4Value || null, // from form / not available
+        level5: null, // filter out
+      };
+      // find level2 and level5 and then calculate ghgconversions and then update payload
+      payload.level2 = filterFuelTypes()[0];
+
+      if (selectedLevel === "WTT- district heat and steam distribution") {
+        payload.level3 = ((payload) => {
+          let level3 = [];
+          activitesData.datas.forEach((item) => {
+            if (
+              item.scope === payload.scope &&
+              item.level1 === payload.level1 &&
+              item.level2 === payload.level2 &&
+              item.level3
+            ) {
+              level3.push(item.level3);
+            }
+          });
+          level3 = [...new Set(level3)];
+          return level3;
+        })(payload)[0];
+      }
+
+      if (
+        selectedLevel !== "District heat and steam TandD" ||
+        selectedLevel !== "WTT- heat and steam" ||
+        selectedLevel !== "WTT- district heat and steam distribution" ||
+        selectedLevel !== "Hotel stay" ||
+        selectedLevel !== "Business travel- air" ||
+        selectedLevel !== "WTT- business travel- air"
+      ) {
+        payload.level5 = filterLevel5BasedOnScopeAndLevel1()[0];
+      }
+      ghgconversions = calculateConversionGHGForDeliveryEvs(payload);
+      payload = { ...payload, ...ghgconversions };
+      // console.table(payload);
+      // return;
     } else {
       ghgconversions = calculateConversionGHG();
 
@@ -469,8 +622,8 @@ const FrameComponent1 = ({
       !selectedLevel ||
       !scopeCategoryValue ||
       !businessUnitValue ||
-      !fuelTypeValue ||
-      !fuelNameValue ||
+      (fuelTypes.length > 0 && !fuelTypeValue) ||
+      (fuelNames.length > 0 && !fuelNameValue) ||
       (level4Options.length > 0 && !level4Value) ||
       (level5Options.length > 0 && !level5Value) ||
       !unitOfMeasurementValue ||
@@ -557,7 +710,6 @@ const FrameComponent1 = ({
       }
     });
     level4Options = [...new Set(level4Options)];
-    console.table(level4Options);
     return level4Options;
   };
 
@@ -586,9 +738,10 @@ const FrameComponent1 = ({
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
-        item.level2
-        // &&
-        // item.level3
+        // item.level2 &&
+        // item.level2 !== "null"
+        item.level3 &&
+        item.level3 !== "null"
       ) {
         // fuelNames.push(item.level3);
         return true;
@@ -661,7 +814,7 @@ const FrameComponent1 = ({
     // return level5.length > 0 ? true : false;
   };
 
-  const filterUnitOfMeasurementsForElectricity = () => {
+  const filterUnitOfMeasurementsBasedOnScopeAndLevel1 = () => {
     let unitsOfMeasurement = [];
     activitesData.datas.forEach((item) => {
       if (
@@ -674,6 +827,21 @@ const FrameComponent1 = ({
     });
     unitsOfMeasurement = [...new Set(unitsOfMeasurement)];
     return unitsOfMeasurement;
+  };
+
+  const filterLevel3BasedOnScopeAndLevel1 = () => {
+    let level3 = [];
+    activitesData.datas.forEach((item) => {
+      if (
+        item.scope === selectedScope &&
+        // here selectedLevel === Electricity
+        item.level1 === selectedLevel
+      ) {
+        level3.push(item.level3);
+      }
+    });
+    level3 = [...new Set(level3)];
+    return level3;
   };
 
   useEffect(() => {
@@ -701,10 +869,14 @@ const FrameComponent1 = ({
       setUnitOfMeasurementValue("");
       setUnitOfMeasurements([]);
     }
-    // initialialy blocking not to filter if scopeCategoriesData
-    if (scopeCategoriesData !== null) {
-      const level2 = filterScopeCategories();
-      setScopeCategories(level2);
+    // initialialy blocking not to filter if scopeCategoriesData is empty
+    if (
+      scopeCategoriesData !== null &&
+      activitesData !== null &&
+      businessUnits.length > 0
+    ) {
+      const scopeCategories = filterScopeCategories();
+      setScopeCategories(scopeCategories);
       // show fields that are available
       if (
         selectedLevel !== "Electricity" &&
@@ -713,12 +885,26 @@ const FrameComponent1 = ({
         selectedLevel !== "WTT- electricity (TandD)" &&
         selectedLevel !== "WTT- electricity" &&
         selectedLevel !== "Water supply" &&
-        selectedLevel !== "Water treatment"
+        selectedLevel !== "Water treatment" &&
+        selectedLevel !== "WTT- district heat and steam distribution" &&
+        selectedLevel !== "Managed assets- electricity" &&
+        selectedLevel !== "WTT- electricity (T&D)" &&
+        selectedLevel !== "Electricity T&D"
       ) {
+        // This is only to show inputs. There options will be filtered when its previous value input is selected
         setShowFuelNamesField(isFuelNamesAvaialble());
-        setShowLevel4Field(isLevel4Available());
-        setShowLevel5Field(isLevel5Available());
+        if (
+          selectedLevel !== "Delivery Evs" &&
+          selectedLevel !== "Heat and steam" &&
+          selectedLevel !== "Electricity TandD for delivery Evs" &&
+          selectedLevel !== "WTT- heat and steam" &&
+          selectedLevel !== "Hotel stay"
+        ) {
+          setShowLevel4Field(isLevel4Available());
+          setShowLevel5Field(isLevel5Available());
+        }
       }
+
       if (
         selectedLevel === "Electricity" ||
         selectedLevel === "Electricity TandD" ||
@@ -726,13 +912,57 @@ const FrameComponent1 = ({
         selectedLevel === "WTT- electricity (TandD)" ||
         selectedLevel === "WTT- electricity" ||
         selectedLevel === "Water supply" ||
-        selectedLevel === "Water treatment"
+        selectedLevel === "Water treatment" ||
+        selectedLevel === "District heat and steam TandD" ||
+        selectedLevel === "WTT- district heat and steam distribution" ||
+        selectedLevel === "Managed assets- electricity" ||
+        selectedLevel === "WTT- electricity (T&D)" ||
+        selectedLevel === "Electricity T&D"
       ) {
-        const unitOfMeasurements = filterUnitOfMeasurementsForElectricity();
+        const unitOfMeasurements =
+          filterUnitOfMeasurementsBasedOnScopeAndLevel1();
         setUnitOfMeasurements(unitOfMeasurements);
       }
+
+      if (
+        selectedLevel === "Delivery Evs" ||
+        selectedLevel === "Heat and steam" ||
+        selectedLevel === "Electricity TandD for delivery Evs" ||
+        selectedLevel === "WTT- heat and steam" ||
+        selectedLevel === "Hotel stay" ||
+        selectedLevel === "Business travel- air" ||
+        selectedLevel === "WTT- business travel- air"
+      ) {
+        const unitOfMeasurements =
+          filterUnitOfMeasurementsBasedOnScopeAndLevel1();
+        setUnitOfMeasurements(unitOfMeasurements);
+        const level3 = filterLevel3BasedOnScopeAndLevel1();
+        setFuelNames(level3);
+
+        if (
+          selectedLevel === "Business travel- air" ||
+          selectedLevel === "WTT- business travel- air"
+        ) {
+          const level4Options = (() => {
+            let level4Options = [];
+            activitesData.datas.forEach((item) => {
+              if (
+                item.scope === selectedScope &&
+                item.level1 === selectedLevel &&
+                item.level4 !== "null" &&
+                item.level4
+              ) {
+                level4Options.push(item.level4);
+              }
+            });
+            level4Options = [...new Set(level4Options)];
+            return level4Options;
+          })();
+          setLevel4Options(level4Options);
+        }
+      }
     }
-  }, [selectedLevel]);
+  }, [selectedLevel, scopeCategoriesData, activitesData, businessUnits]);
 
   useEffect(() => {
     if (!id) {
@@ -749,9 +979,19 @@ const FrameComponent1 = ({
       selectedLevel !== "WTT- electricity (generation)" &&
       selectedLevel !== "WTT- electricity (TandD)" &&
       selectedLevel !== "Water supply" &&
-      selectedLevel !== "Water treatment"
-      // &&
-      // selectedLevel !== "WTT- electricity"
+      selectedLevel !== "Water treatment" &&
+      selectedLevel !== "Delivery Evs" &&
+      selectedLevel !== "Heat and steam" &&
+      selectedLevel !== "District heat and steam TandD" &&
+      selectedLevel !== "Electricity TandD for delivery Evs" &&
+      selectedLevel !== "WTT- heat and steam" &&
+      selectedLevel !== "WTT- district heat and steam distribution" &&
+      selectedLevel !== "Hotel stay" &&
+      selectedLevel !== "Managed assets- electricity" &&
+      selectedLevel !== "Business travel- air" &&
+      selectedLevel !== "WTT- business travel- air" &&
+      selectedLevel !== "WTT- electricity (T&D)" &&
+      selectedLevel !== "Electricity T&D"
     ) {
       const fuelTypes = filterFuelTypes();
       setFuelTypes(fuelTypes);
@@ -785,15 +1025,22 @@ const FrameComponent1 = ({
 
   useEffect(() => {
     if (!id) {
+      if (
+        selectedLevel !== "Business travel- air" &&
+        selectedLevel !== "WTT- business travel- air"
+      ) {
+        setLevel4Options([]);
+      }
       setLevel4Value("");
-      setLevel4Options([]);
       setLevel5Value("");
       setLevel5Options([]);
     }
 
-    if (fuelNameValue !== "") {
-      // const unitsOfMeasurements = filterUnitOfMeasurements;
-      // setUnitOfMeasurements(unitsOfMeasurements);
+    if (
+      fuelNameValue !== "" &&
+      selectedLevel !== "Business travel- air" &&
+      selectedLevel !== "WTT- business travel- air"
+    ) {
       const level4Options = filterLevel4Options();
       setLevel4Options(level4Options);
       const level5Options = filterLevel5Options();
@@ -809,7 +1056,9 @@ const FrameComponent1 = ({
           setSelectedLevel(companyDataOfGivenId[0].level1);
           setScopeCategoryValue(companyDataOfGivenId[0].fuel_category);
           setBusinessUnitValue(companyDataOfGivenId[0].businessunit);
-          setFuelTypeValue(companyDataOfGivenId[0].level2);
+          if (selectedLevel !== "District heat and steam TandD") {
+            setFuelTypeValue(companyDataOfGivenId[0].level2);
+          }
           setFuelNameValue(companyDataOfGivenId[0].level3);
           setUnitOfMeasurementValue(companyDataOfGivenId[0].uom);
           setQuantityValue(companyDataOfGivenId[0].quantity);
@@ -880,7 +1129,19 @@ const FrameComponent1 = ({
               selectedLevel !== "WTT- electricity (generation)" &&
               selectedLevel !== "WTT- electricity (TandD)" &&
               selectedLevel !== "Water supply" &&
-              selectedLevel !== "Water treatment" && (
+              selectedLevel !== "Water treatment" &&
+              selectedLevel !== "Delivery Evs" &&
+              selectedLevel !== "Heat and steam" &&
+              selectedLevel !== "District heat and steam TandD" &&
+              selectedLevel !== "Electricity TandD for delivery Evs" &&
+              selectedLevel !== "WTT- heat and steam" &&
+              selectedLevel !== "WTT- district heat and steam distribution" &&
+              selectedLevel !== "Hotel stay" &&
+              selectedLevel !== "Managed assets- electricity" &&
+              selectedLevel !== "Business travel- air" &&
+              selectedLevel !== "WTT- business travel- air" &&
+              selectedLevel !== "WTT- electricity (T&D)" &&
+              selectedLevel !== "Electricity T&D" && (
                 <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                   <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
                     {selectedLevel

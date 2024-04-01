@@ -4,6 +4,7 @@ import FrameComponent from "../components/FrameComponent";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../Header/Navbar";
 import { useParams } from "react-router-dom";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState(null);
@@ -61,15 +62,23 @@ const Activities = () => {
             />
           </div>
         </div>
+
         {/* FORM */}
-        <FrameComponent1
-          selectedScope={selectedScope}
-          selectedLevel={selectedLevel}
-          setSelectedScope={setSelectedScope}
-          setSelectedLevel={setSelectedLevel}
-          userId={userId}
-          setCompanyData={setCompanyData}
-        />
+        {selectedScope && selectedLevel ? (
+          <FrameComponent1
+            selectedScope={selectedScope}
+            selectedLevel={selectedLevel}
+            setSelectedScope={setSelectedScope}
+            setSelectedLevel={setSelectedLevel}
+            userId={userId}
+            setCompanyData={setCompanyData}
+          />
+        ) : (
+          <div className="w-full h-[656px] bg-gray-200 rounded-md flex justify-center items-center font-bold text-gray-500">
+            <FaArrowLeftLong className="text-[20px] me-2" /> Please select scope
+            and activity from the sidebar
+          </div>
+        )}
       </section>
       {/* TABLE */}
       <FrameComponent
