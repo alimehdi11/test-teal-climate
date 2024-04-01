@@ -883,7 +883,44 @@ const FrameComponent1 = ({
               selectedLevel !== "Water treatment" && (
                 <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                   <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                    {selectedLevel || "Fuel"} Type
+                    {selectedLevel
+                      ? selectedLevel === "Refrigerant and other"
+                        ? "Refrigerant and other gas category"
+                        : selectedLevel === "Passenger vehicles"
+                        ? "Passenger Vehicle Category"
+                        : selectedLevel === "Delivery vehicles"
+                        ? "Delivery Vehicle Category"
+                        : selectedLevel === "Passenger Evs"
+                        ? "Passenger EV Category"
+                        : selectedLevel === "Delivery Evs"
+                        ? "Delivery Vehicle Category"
+                        : selectedLevel === "WTT- fuels"
+                        ? "Fuel Type"
+                        : selectedLevel === "WTT- bioenergy"
+                        ? "Bioenergy Type"
+                        : selectedLevel ===
+                          "Electricity TandD for passenger EVs"
+                        ? "Passenger EV Category"
+                        : selectedLevel === "Business travel- land"
+                        ? "Passenger Vehicle Category"
+                        : selectedLevel === "Material use"
+                        ? "Material Type"
+                        : selectedLevel === "Waste disposal"
+                        ? "Waste Type"
+                        : selectedLevel === "Business travel- sea"
+                        ? "Boat / Ship Type"
+                        : selectedLevel === "WTT- business travel- sea"
+                        ? "Boat / Ship Type"
+                        : selectedLevel === "WTT- pass vehs and travel- land"
+                        ? "Passenger Vehicle Category"
+                        : selectedLevel === "Freighting goods"
+                        ? "Freighting medium"
+                        : selectedLevel === "WTT- delivery vehs and freight"
+                        ? "Freighting medium"
+                        : selectedLevel === "Managed assets- vehicles"
+                        ? "Vehicle Category"
+                        : `${selectedLevel} Type`
+                      : "Fuel Type"}
                   </h3>
                   <select
                     className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
@@ -909,6 +946,50 @@ const FrameComponent1 = ({
                   {selectedLevel
                     ? selectedLevel === "Bioenergy"
                       ? "Bioenergy Fuel Name"
+                      : selectedLevel === "Refrigerant and other"
+                      ? "Refrigerant and other gas name"
+                      : selectedLevel === "Passenger vehicles"
+                      ? "Passenger Vehicle Segment / Size"
+                      : selectedLevel === "Delivery vehicles"
+                      ? "Delivery Vehicle Class / Category"
+                      : selectedLevel === "Passenger Evs"
+                      ? "Passenger EV Segment / Size"
+                      : selectedLevel === "Delivery Evs"
+                      ? "Delivery Vehicle Segment / Size"
+                      : selectedLevel === "Heat and steam"
+                      ? "Onsite / Offsite"
+                      : selectedLevel === "WTT- fuels"
+                      ? "Fuel Name"
+                      : selectedLevel === "WTT- bioenergy"
+                      ? "Bioenergy Fuel Name"
+                      : selectedLevel === "Electricity TandD for passenger EVs"
+                      ? "Passenger EV Segment /Size"
+                      : selectedLevel === "Business travel- land"
+                      ? "Passenger Vehicle Segment /Size"
+                      : selectedLevel === "WTT- heat and steam"
+                      ? "Onsite / Offsite"
+                      : selectedLevel === "Material use"
+                      ? "Material Name"
+                      : selectedLevel === "Waste disposal"
+                      ? "Waste Name"
+                      : selectedLevel === "Business travel- sea"
+                      ? "Passenger Type"
+                      : selectedLevel === "WTT- business travel- sea"
+                      ? "Passenger Type"
+                      : selectedLevel === "WTT- pass vehs and travel- land"
+                      ? "Passenger Vehicle Segment / Size"
+                      : selectedLevel === "Freighting goods"
+                      ? "Class / Type / Haul"
+                      : selectedLevel === "WTT- delivery vehs and freight"
+                      ? "Class / Type / Haul"
+                      : selectedLevel === "Hotel stay"
+                      ? "Name of Country"
+                      : selectedLevel === "Managed assets- vehicles"
+                      ? "Vehicle Segment / Size"
+                      : selectedLevel === "Business travel- air"
+                      ? "Distance type"
+                      : selectedLevel === "WTT- business travel- air"
+                      ? "Distance type"
                       : `${selectedLevel} Name`
                     : "Fuel Name"}
                 </h3>
@@ -933,7 +1014,17 @@ const FrameComponent1 = ({
             {showLevel4Field && (
               <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                 <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Level 4
+                  {selectedLevel
+                    ? selectedLevel === "Freighting goods"
+                      ? "Capacity"
+                      : selectedLevel === "WTT- delivery vehs and freight"
+                      ? "Capacity"
+                      : selectedLevel === "Business travel- air"
+                      ? "Class"
+                      : selectedLevel === "WTT- business travel- air"
+                      ? "Class"
+                      : "Level 4"
+                    : "Level 4"}
                 </h3>
                 <select
                   className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
@@ -956,7 +1047,33 @@ const FrameComponent1 = ({
             {showLevel5Field && (
               <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                 <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                  Level 5
+                  {selectedLevel
+                    ? selectedLevel === "Passenger vehicles"
+                      ? "Fuel Type"
+                      : selectedLevel === "Delivery vehicles"
+                      ? "Fuel Type / Laden Percent"
+                      : selectedLevel === "Passenger Evs"
+                      ? "EV Type"
+                      : selectedLevel === "Delivery Evs"
+                      ? "Fuel Type"
+                      : selectedLevel === "Electricity TandD for passenger EVs"
+                      ? "EV Type"
+                      : selectedLevel === "Business travel- land"
+                      ? "Fuel Type"
+                      : selectedLevel === "Material use"
+                      ? "Source of material"
+                      : selectedLevel === "Waste disposal"
+                      ? "Waste Treatment Type"
+                      : selectedLevel === "WTT- pass vehs and travel- land"
+                      ? "Fuel Type"
+                      : selectedLevel === "Freighting goods"
+                      ? "Fuel / Laden"
+                      : selectedLevel === "WTT- delivery vehs and freight"
+                      ? "Fuel / Laden"
+                      : selectedLevel === "Managed assets- vehicles"
+                      ? "Fuel Type / Laden"
+                      : "Level 5"
+                    : "Level 5"}
                 </h3>
                 <select
                   className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
@@ -999,7 +1116,24 @@ const FrameComponent1 = ({
             {/* Quantity */}
             <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
               <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                Quantity
+                {selectedLevel
+                  ? selectedLevel === "Passenger vehicles" ||
+                    selectedLevel === "Delivery vehicles" ||
+                    selectedLevel === "Passenger Evs" ||
+                    selectedLevel === "Delivery Evs" ||
+                    selectedLevel === "Electricity TandD for passenger EVs" ||
+                    selectedLevel === "Business travel- land" ||
+                    selectedLevel === "Business travel- sea" ||
+                    selectedLevel === "WTT- business travel- sea" ||
+                    selectedLevel === "WTT- pass vehs and travel- land" ||
+                    selectedLevel === "Managed assets- vehicles" ||
+                    selectedLevel === "Business travel- air" ||
+                    selectedLevel === "WTT- business travel- air"
+                    ? "Distance Travelled"
+                    : selectedLevel === "Hotel stay"
+                    ? "Number of Nights"
+                    : "Quantity"
+                  : "Quantity"}
               </h3>
               <input
                 type="number"
