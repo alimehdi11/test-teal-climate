@@ -36,7 +36,9 @@ const Profile = ({ userId, profileData, setProfileData }) => {
   // Fetch continents from API
   const fetchContinents = async () => {
     try {
-      const response = await fetch("http://localhost:5000/Profiles");
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/Profiles`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
@@ -55,7 +57,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
   const fetchCountries = async (continent) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/Profiles?continent=${continent}`
+        `${process.env.REACT_APP_API_BASE_URL}/Profiles?continent=${continent}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -77,7 +79,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
   const fetchRegions = async (country) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/Profiles?country=${country}`
+        `${process.env.REACT_APP_API_BASE_URL}/Profiles?country=${country}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -95,7 +97,9 @@ const Profile = ({ userId, profileData, setProfileData }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/companies/${userId}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch data: ${response.statusText}`);
       }
@@ -148,7 +152,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
       return;
     }
 
-    fetch("http://localhost:5000/submit", {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/submit`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -185,7 +189,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
   const fetchProfileOfGivenId = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/companies/profile/${id}`
+        `${process.env.REACT_APP_API_BASE_URL}/companies/profile/${id}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -235,7 +239,7 @@ const Profile = ({ userId, profileData, setProfileData }) => {
     //   notes: notes,
     // });
     // return;
-    fetch(`http://localhost:5000/companies/${id}`, {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/companies/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

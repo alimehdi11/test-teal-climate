@@ -14,7 +14,7 @@ const AirTravelScope = () => {
   const fetchCompanyData = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/companiesdata/${userId}`
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);

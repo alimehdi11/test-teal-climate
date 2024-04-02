@@ -21,8 +21,11 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/companies/${userId}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`
+      );
       if (!response.ok) {
+        console.log(response);
         throw new Error(`Failed to fetch data: ${response.statusText}`);
       }
       const jsonData = await response.json();

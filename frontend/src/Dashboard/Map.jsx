@@ -18,7 +18,7 @@ const Map = () => {
   // Fetch emissions data from backend upon component mount
   useEffect(() => {
     if (userId) {
-      fetch(`http://localhost:5000/worldHeatMap/${userId}`)
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/worldHeatMap/${userId}`)
         .then((response) => response.json())
         .then((data) => {
           const countriesEmissions = data.reduce((acc, current) => {

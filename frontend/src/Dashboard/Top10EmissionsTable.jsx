@@ -7,7 +7,7 @@ const Top10EmissionsTable = () => {
   const fetchTop10Emissions = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/companiesdata/top10/${userId}`
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/top10/${userId}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);

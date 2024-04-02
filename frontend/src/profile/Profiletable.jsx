@@ -7,7 +7,9 @@ import { Link } from "react-router-dom";
 const Profiletable = ({ profileData, setProfileData, userId }) => {
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/companies/${userId}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch data: ${response.statusText}`);
       }
@@ -20,7 +22,7 @@ const Profiletable = ({ profileData, setProfileData, userId }) => {
 
   const handleDelete = (id) => {
     return () => {
-      fetch(`http://localhost:5000/companies/${id}`, {
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/companies/${id}`, {
         method: "DELETE",
         headers: {
           accept: "application/json",

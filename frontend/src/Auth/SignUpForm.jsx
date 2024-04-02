@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import Nav from './Nav';
-import axios from 'axios';
+import React, { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import Nav from "./Nav";
+import axios from "axios";
 
 const SignUpForm = () => {
   const [registrationStatus, setRegistrationStatus] = useState(null);
@@ -12,21 +12,26 @@ const SignUpForm = () => {
       const { name, email, password, confirmPassword } = values;
 
       if (password !== confirmPassword) {
-        throw new Error('Passwords do not match. Please make sure the passwords match.');
+        throw new Error(
+          "Passwords do not match. Please make sure the passwords match."
+        );
       }
 
       const userData = { name, email, password };
 
-      const response = await axios.post('http://localhost:5000/auth/register', userData);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/auth/register`,
+        userData
+      );
 
       if (response.status === 200) {
-        setRegistrationStatus('Registration successful');
+        setRegistrationStatus("Registration successful");
         resetForm();
       } else {
         throw new Error(response.data.message); // Assuming server returns an error message
       }
     } catch (error) {
-      console.error('Error registering user:', error.message);
+      console.error("Error registering user:", error.message);
       setRegistrationStatus(error.message);
     } finally {
       setSubmitting(false);
@@ -39,23 +44,32 @@ const SignUpForm = () => {
       <div className="flex justify-center items-center h-screen">
         <Formik
           initialValues={{
-            name: '',
-            email: '',
-            password: '',
-            confirmPassword: ''
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
           }}
           validationSchema={Yup.object({
-            name: Yup.string().required('Required'),
-            email: Yup.string().email('Invalid email address').required('Required'),
-            password: Yup.string().required('Required').min(6, 'Password must be at least 6 characters'),
-            confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required')
+            name: Yup.string().required("Required"),
+            email: Yup.string()
+              .email("Invalid email address")
+              .required("Required"),
+            password: Yup.string()
+              .required("Required")
+              .min(6, "Password must be at least 6 characters"),
+            confirmPassword: Yup.string()
+              .oneOf([Yup.ref("password"), null], "Passwords must match")
+              .required("Required"),
           })}
           onSubmit={handleSubmit}
         >
           {({ errors, touched, isSubmitting }) => (
             <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:w-1/2 lg:w-1/3">
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="name"
+                >
                   Name
                 </label>
                 <Field
@@ -65,10 +79,17 @@ const SignUpForm = () => {
                   type="text"
                   placeholder="Name"
                 />
-                <ErrorMessage name="name" component="div" className="text-red-500 text-xs italic" />
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className="text-red-500 text-xs italic"
+                />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="email"
+                >
                   Email
                 </label>
                 <Field
@@ -79,12 +100,17 @@ const SignUpForm = () => {
                   placeholder="Email"
                 />
                 {errors.email && touched.email && (
-                  <div className="text-red-500 text-xs italic">{errors.email}</div>
+                  <div className="text-red-500 text-xs italic">
+                    {errors.email}
+                  </div>
                 )}
               </div>
               <div className="flex mb-4 gap-4">
                 <div className="w-1/2 mr-2">
-                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+                  <label
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="password"
+                  >
                     Password
                   </label>
                   <Field
@@ -95,11 +121,16 @@ const SignUpForm = () => {
                     placeholder="Password"
                   />
                   {errors.password && touched.password && (
-                    <div className="text-red-500 text-xs italic">{errors.password}</div>
+                    <div className="text-red-500 text-xs italic">
+                      {errors.password}
+                    </div>
                   )}
                 </div>
                 <div className="w-1/2 ml-2">
-                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
+                  <label
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="confirmPassword"
+                  >
                     Confirm Password
                   </label>
                   <Field
@@ -110,7 +141,9 @@ const SignUpForm = () => {
                     placeholder="Confirm Password"
                   />
                   {errors.confirmPassword && touched.confirmPassword && (
-                    <div className="text-red-500 text-xs italic">{errors.confirmPassword}</div>
+                    <div className="text-red-500 text-xs italic">
+                      {errors.confirmPassword}
+                    </div>
                   )}
                 </div>
               </div>

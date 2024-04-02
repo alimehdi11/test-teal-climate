@@ -13,7 +13,9 @@ const Sidebar = ({
 
   const fetchScopes = async () => {
     try {
-      const response = await fetch("http://localhost:5000/activitydata");
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/activitydata`
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -31,7 +33,7 @@ const Sidebar = ({
   const fetchLevel1Data = async (scope) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/activitydata?scope=${scope}`
+        `${process.env.REACT_APP_API_BASE_URL}/activitydata?scope=${scope}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch level1 data for ${scope}`);

@@ -42,7 +42,7 @@ const FrameComponent1 = ({
   const fetchBusinessUnit = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/companies/${userId}?column=unitname`
+        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}?column=unitname`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -55,7 +55,9 @@ const FrameComponent1 = ({
 
   const fetchActivitesData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/activitydata");
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/activitydata`
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -88,7 +90,9 @@ const FrameComponent1 = ({
 
   const fetchScopeCategoriesData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/categories");
+      const response = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/categories`
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -316,7 +320,7 @@ const FrameComponent1 = ({
   const fetchCompanyData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/companiesdata/${userId}`
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -331,7 +335,7 @@ const FrameComponent1 = ({
   const fetchCompanyDataOfGivenId = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/companiesdata/activites/${id}`
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/activites/${id}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -425,7 +429,7 @@ const FrameComponent1 = ({
       const fetchCompanyDataAndFilterCountryAndRegion = async () => {
         try {
           const response = await fetch(
-            `http://localhost:5000/companies/${userId}`
+            `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`
           );
           if (!response.ok) {
             throw new Error(`Failed to fetch data: ${response.statusText}`);
@@ -592,7 +596,7 @@ const FrameComponent1 = ({
 
     // console.table(payload);
     // return;
-    fetch("http://localhost:5000/companiesdata", {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/companiesdata`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -665,7 +669,7 @@ const FrameComponent1 = ({
 
     // console.table(payload);
     // return;
-    fetch(`http://localhost:5000/companiesdata/${id}`, {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/companiesdata/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

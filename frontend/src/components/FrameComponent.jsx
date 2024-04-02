@@ -8,7 +8,7 @@ const FrameComponent = ({ companyData, setCompanyData, userId }) => {
   const fetchCompanyData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/companiesdata/${userId}`
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -22,7 +22,7 @@ const FrameComponent = ({ companyData, setCompanyData, userId }) => {
 
   const handleDelete = (id) => {
     return () => {
-      fetch(`http://localhost:5000/companiesdata/${id}`, {
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/companiesdata/${id}`, {
         method: "DELETE",
         headers: {
           accept: "application/json",

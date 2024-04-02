@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -5,7 +6,7 @@ const pool = require("./db");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const authRoutes = require("./authRoutes");
-require("dotenv").config();
+const path = require("path");
 
 //middleware
 app.use(cors());
@@ -18,6 +19,10 @@ app.use(
     saveUninitialized: false,
   })
 );
+/**
+ * public folder
+ */
+app.use(express.static(path.join(process.cwd(), "/public")));
 
 //ROUTES//
 
@@ -613,6 +618,6 @@ app.get("/worldHeatMap/:userId", async (req, res) => {
 // Register endpoint
 app.use("/auth", authRoutes);
 
-app.listen(5000, () => {
-  console.log("server has started on port 5000");
+app.listen(process.env.PORT, () => {
+  console.log(`server has started on port ${process.env.PORT}`);
 });
