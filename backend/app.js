@@ -22,7 +22,7 @@ app.use(
 /**
  * public folder
  */
-app.use(express.static(path.join(process.cwd(), "/public")));
+app.use(express.static(path.join(process.cwd(), "public")));
 
 //ROUTES//
 
@@ -617,6 +617,11 @@ app.get("/worldHeatMap/:userId", async (req, res) => {
 
 // Register endpoint
 app.use("/auth", authRoutes);
+
+// Handle other routes by serving the index.html file
+app.get('*', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`server has started on port ${process.env.PORT}`);
