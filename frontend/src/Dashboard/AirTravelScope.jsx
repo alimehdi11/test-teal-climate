@@ -433,7 +433,9 @@ const AirTravelScope = () => {
                   <div className="self-stretch flex flex-row items-end justify-start gap-[6px] z-[1]">
                     <div className="h-3 w-3 relative rounded-[50%] bg-orange" />
                     <div className="flex-1 flex flex-col items-start justify-start">
-                      <div className="relative capitalize font-medium">{`Heat & Steam`}</div>
+                      <div className="relative capitalize font-medium">
+                        Heat & Steam
+                      </div>
                     </div>
                     <div className="relative capitalize font-medium text-right">
                       10%

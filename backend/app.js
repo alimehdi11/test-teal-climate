@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -7,6 +6,16 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const authRoutes = require("./authRoutes");
 const path = require("path");
+
+// Log environment variables
+// console.table([
+//   ["NODE_ENV", process.env.NODE_ENV],
+//   ["DATABASE_NAME", process.env.DATABASE_NAME],
+//   ["DATABASE_USER", process.env.DATABASE_USER],
+//   ["DATABASE_PASSWORD", process.env.DATABASE_PASSWORD],
+//   ["DATABASE_HOST", process.env.DATABASE_HOST],
+//   ["DATABASE_PORT", process.env.DATABASE_PORT],
+// ]);
 
 //middleware
 app.use(cors());
@@ -619,8 +628,8 @@ app.get("/worldHeatMap/:userId", async (req, res) => {
 app.use("/auth", authRoutes);
 
 // Handle other routes by serving the index.html file
-app.get('*', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });
 
 app.listen(process.env.PORT, () => {

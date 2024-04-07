@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js",
-    "start:db-teal-climate": "cross-env DATABASE_NAME=teal-climate nodemon app.js"
+    "dev": "env-cmd -f ./.env env-cmd -f ./.env.development nodemon app.js",
+    "prod": "env-cmd -f ./.env env-cmd -f ./.env.production node app.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,8 +13,7 @@
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "cross-env": "^7.0.3",
-    "dotenv": "^16.4.5",
+    "env-cmd": "^10.1.0",
     "express": "^4.18.2",
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",

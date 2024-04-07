@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const pool = require("./db");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-require("dotenv").config();
+// require("dotenv").config();
 
 // Register Route
 router.post("/register", async (req, res) => {
