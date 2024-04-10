@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Sidebar from "./Sidebar";
-import Profile from "./Profile";
+import PortfolioForm from "./PortfolioForm";
+import BasicForm from "./BasicForm";
 import Navbar from "../Header/Navbar";
 import Profiletable from "./Profiletable";
 import { useState } from "react";
@@ -41,34 +42,6 @@ const Page = () => {
     }
   }, [userId]);
 
-  let form = null;
-  if (selectedForm) {
-    if (selectedForm === "Basic") {
-      form = (
-        <Profile
-          userId={userId}
-          profileData={profileData}
-          setProfileData={setProfileData}
-        />
-      );
-    } else if (selectedForm === "Portfolio") {
-      form = (
-        <Profile
-          userId={userId}
-          profileData={profileData}
-          setProfileData={setProfileData}
-        />
-      );
-    }
-  } else {
-    form = (
-      <div className="w-full h-[656px] bg-gray-200 rounded-md flex justify-center items-center font-bold text-gray-500">
-        <FaArrowLeftLong className="text-[20px] me-2" /> Please select option
-        from the sidebar
-      </div>
-    );
-  }
-
   return (
     <>
       <Navbar />
@@ -80,7 +53,21 @@ const Page = () => {
           </div>
         </div>
         {/* form */}
-        {form}
+        {selectedForm ? (
+          (selectedForm === "Basic" && <BasicForm />) || // Or
+          (selectedForm === "Portfolio" && (
+            <PortfolioForm
+              userId={userId}
+              profileData={profileData}
+              setProfileData={setProfileData}
+            />
+          ))
+        ) : (
+          <div className="w-full h-[656px] bg-gray-200 rounded-md flex justify-center items-center font-bold text-gray-500">
+            <FaArrowLeftLong className="text-[20px] me-2" /> Please select
+            option from the sidebar
+          </div>
+        )}
       </section>
       <Profiletable
         profileData={profileData}

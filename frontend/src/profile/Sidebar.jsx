@@ -13,7 +13,7 @@ const Sidebar = ({ setSelectedForm }) => {
       <div className="m-4">
         <button
           className={`w-[100px] p-3 self-stretch rounded-lg bg-gray-200 text-gray-700 block mb-3 hover:bg-brand-color-01 hover:text-white${
-            selectedOption === "Basic" ? " bg-[#00CC9C] text-white" : ""
+            selectedOption === "Basic" ? " bg-brand-color-01 text-white" : ""
           }`}
           onClick={() =>
             setSelectedOption((previousValue) =>
@@ -25,7 +25,9 @@ const Sidebar = ({ setSelectedForm }) => {
         </button>
         <button
           className={`w-[100px] p-3 self-stretch rounded-lg bg-gray-200 text-gray-700 block hover:bg-brand-color-01 hover:text-white${
-            selectedOption === "Portfolio" ? " bg-[#00CC9C] text-white" : ""
+            selectedOption === "Portfolio"
+              ? " bg-brand-color-01 text-white"
+              : ""
           }`}
           onClick={() =>
             setSelectedOption((previousValue) =>

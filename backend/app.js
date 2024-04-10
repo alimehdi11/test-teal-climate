@@ -625,6 +625,41 @@ app.get("/worldHeatMap/:userId", async (req, res) => {
   });
 });
 
+app.post("/companyIntro", async (req, res) => {
+  const {
+    companyName,
+    country,
+    primaryIndustry,
+    secondaryIndustry,
+    sustainabilityManager,
+    email,
+    phoneNumber,
+    userId,
+  } = req.body;
+  const query =
+    "INSERT INTO company_intro (user_id, company_name, country, primary_industry, secondary_industry, sustainability_manager, email, phone_number) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);";
+  const values = [
+    userId,
+    companyName,
+    country,
+    primaryIndustry,
+    secondaryIndustry,
+    sustainabilityManager,
+    email,
+    phoneNumber,
+  ];
+  console.table(values);
+  pool.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Error inserting data:", err);
+      res.status(500).json({ error: "Error inserting data" });
+    } else {
+      console.log("Data inserted successfully");
+      res.status(200).json({ message: "Companies Intro inserted succesfully" });
+    }
+  });
+});
+
 // Register endpoint
 app.use("/auth", authRoutes);
 

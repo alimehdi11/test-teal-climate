@@ -12,7 +12,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import Navbar from "./Header/Navbar";
 import API from "./Dashboard/API";
 import Sidebar from "./components/Sidebar";
-import Profile from "./profile/Profile";
+import Profile from "./profile/PortfolioForm";
 import Page from "./profile/Page";
 import Test from "./test/Test";
 import LoginForm from "../src/Auth/LoginForm";

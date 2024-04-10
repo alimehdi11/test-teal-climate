@@ -4,7 +4,7 @@ import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
 
-const Profile = ({ userId, profileData, setProfileData }) => {
+const PortfolioForm = ({ userId, profileData, setProfileData }) => {
   // const initialData = {
   //   employees: "",
   //   revenue: "",
@@ -539,4 +539,4 @@ const Profile = ({ userId, profileData, setProfileData }) => {
   );
 };
 
-export default Profile;
+export default PortfolioForm;
