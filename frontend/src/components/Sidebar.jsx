@@ -95,7 +95,7 @@ const Sidebar = ({
           <button
             key={scope}
             className={`w-[150px] p-3 rounded-md bg-gray-200 text-gray-700 hover:bg-brand-color-01 hover:text-white${
-              scope === selectedScope ? " bg-[#00cc9c] text-white" : ""
+              scope === selectedScope ? " bg-brand-color-01 text-white" : ""
             }`}
             onClick={(e) => {
               if (e.target.innerText === selectedScope) {

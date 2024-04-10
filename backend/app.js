@@ -9,6 +9,7 @@ const path = require("path");
 
 // Log environment variables
 // console.table([
+//   ["PORT", process.env.PORT],
 //   ["NODE_ENV", process.env.NODE_ENV],
 //   ["DATABASE_NAME", process.env.DATABASE_NAME],
 //   ["DATABASE_USER", process.env.DATABASE_USER],

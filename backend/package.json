@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "env-cmd -f ./.env env-cmd -f ./.env.development nodemon app.js",
-    "prod": "env-cmd -f ./.env env-cmd -f ./.env.production node app.js"
+    "dev": "env-cmd -f ./.env.development nodemon app.js",
+    "prod": "env-cmd -f ./.env.production node app.js"
   },
   "author": "",
   "license": "ISC",

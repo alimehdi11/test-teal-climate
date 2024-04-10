@@ -5,12 +5,12 @@ module.exports = {
     extend: {
       colors: {
         gray: {
-           "100": "#fbfbfb",
-          "300": "#929292",
-          "6": "#f2f2f2", // merged value from both configurations
-          "5": "#e0e0e0", // merged value from second configuration
-          "3": "#828282", // merged value from both configurations
-          "4": "#bdbdbd", // merged value from second configuration
+          100: "#fbfbfb",
+          300: "#929292",
+          6: "#f2f2f2", // merged value from both configurations
+          5: "#e0e0e0", // merged value from second configuration
+          3: "#828282", // merged value from both configurations
+          4: "#bdbdbd", // merged value from second configuration
         },
         white: "#fff",
         dark: "#111",
@@ -22,8 +22,8 @@ module.exports = {
         "not-white": "#f7f8fa",
         gainsboro: "#dedee0",
         indianred: {
-          "100": "#eb5757",
-          "200": "#c55757",
+          100: "#eb5757",
+          200: "#c55757",
         },
         orange: "#ffa400",
         gold: "#ffca2a",

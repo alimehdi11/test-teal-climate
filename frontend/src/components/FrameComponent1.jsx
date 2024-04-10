@@ -36,6 +36,13 @@ const FrameComponent1 = ({
   const [showLevel4Field, setShowLevel4Field] = useState(false);
   const [showLevel5Field, setShowLevel5Field] = useState(false);
 
+  // Onlly for electricity (Level 1)
+  const [electricityBasedUpon, setElectricityBasedUpon] =
+    useState("locationBased");
+  const [emissionFactor, setEmissionFactor] = useState("");
+  const [quantityPurchased, setQuantityPurchased] = useState("");
+  const [unitOfEmissionFactor, setUnitOfEmissionFactor] = useState("");
+
   const { id } = useParams();
   const navigation = useNavigate();
 
@@ -106,7 +113,7 @@ const FrameComponent1 = ({
 
   const filterScopeCategories = () => {
     let level2 = [];
-    scopeCategoriesData.forEach((item) => {
+    scopeCategoriesData?.forEach((item) => {
       if (item.type === selectedLevel) {
         level2.push(item.categy);
       }
@@ -117,7 +124,7 @@ const FrameComponent1 = ({
 
   const filterUnitOfMeasurements = () => {
     let unitsOfMeasurement = [];
-    activitesData.datas.forEach((item) => {
+    activitesData?.datas.forEach((item) => {
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -134,7 +141,7 @@ const FrameComponent1 = ({
 
   const filterFuelTypes = () => {
     let fuelTypes = [];
-    activitesData.datas.forEach((item) => {
+    activitesData?.datas.forEach((item) => {
       if (item.scope === selectedScope && item.level1 === selectedLevel) {
         fuelTypes.push(item.level2);
       }
@@ -145,7 +152,7 @@ const FrameComponent1 = ({
 
   const filterFuelNames = () => {
     let fuelNames = [];
-    activitesData.datas.forEach((item) => {
+    activitesData?.datas.forEach((item) => {
       if (
         item.level2 === fuelTypeValue &&
         item.level1 === selectedLevel &&
@@ -172,8 +179,8 @@ const FrameComponent1 = ({
       "kg CO2e of N2O per unit",
     ];
 
-    for (let i = 0; i < activitesData.datas.length; i++) {
-      const item = activitesData.datas[i];
+    for (let i = 0; i < activitesData?.datas.length; i++) {
+      const item = activitesData?.datas[i];
 
       if (
         item.scope === selectedScope &&
@@ -217,8 +224,8 @@ const FrameComponent1 = ({
       "kg CO2e of N2O per unit",
     ];
 
-    for (let i = 0; i < activitesData.datas.length; i++) {
-      const item = activitesData.datas[i];
+    for (let i = 0; i < activitesData?.datas.length; i++) {
+      const item = activitesData?.datas[i];
 
       if (
         item.scope === selectedScope &&
@@ -261,8 +268,8 @@ const FrameComponent1 = ({
       "kg CO2e of N2O per unit",
     ];
 
-    for (let i = 0; i < activitesData.datas.length; i++) {
-      const item = activitesData.datas[i];
+    for (let i = 0; i < activitesData?.datas.length; i++) {
+      const item = activitesData?.datas[i];
 
       if (
         item.scope === selectedScope &&
@@ -315,6 +322,14 @@ const FrameComponent1 = ({
 
     // setSelectedScope(selectedScope || null);
     // setSelectedLevel(selectedLevel || null);
+
+    /**
+     * For electricity(level1) market based
+     */
+    setElectricityBasedUpon("locationBased");
+    setEmissionFactor("");
+    setQuantityPurchased("");
+    setUnitOfEmissionFactor("");
   };
 
   const fetchCompanyData = async () => {
@@ -349,7 +364,7 @@ const FrameComponent1 = ({
 
   const filterLevel5BasedOnScopeAndLevel1 = () => {
     let level5 = [];
-    activitesData.datas.forEach((item) => {
+    activitesData?.datas.forEach((item) => {
       if (
         item.scope === selectedScope &&
         // here selectedLevel === Electricity
@@ -411,7 +426,17 @@ const FrameComponent1 = ({
       return;
     }
 
-    let payload, ghgconversions;
+    /**
+     * For electricity(level1) market based
+     */
+    if (electricityBasedUpon === "marketBased") {
+      if (!emissionFactor || !quantityPurchased || !unitOfEmissionFactor) {
+        toast.warn("Please fill all fields");
+        return;
+      }
+    }
+
+    let payload, ghgconversions, marketBasedElectricityPayload;
 
     if (
       selectedLevel === "Electricity" ||
@@ -450,8 +475,8 @@ const FrameComponent1 = ({
       };
 
       const filterLevel2 = (payload) => {
-        for (let index = 0; index < activitesData.datas.length; index++) {
-          const item = activitesData.datas[index];
+        for (let index = 0; index < activitesData?.datas.length; index++) {
+          const item = activitesData?.datas[index];
           if (
             item.scope === selectedScope &&
             item.level1 === selectedLevel &&
@@ -463,7 +488,7 @@ const FrameComponent1 = ({
           }
         }
         // let level2 = [];
-        // activitesData.datas.forEach((item) => {
+        // activitesData?.datas.forEach((item) => {
         //   if (
         //     item.scope === selectedScope &&
         //     item.level1 === selectedLevel &&
@@ -546,7 +571,7 @@ const FrameComponent1 = ({
       if (selectedLevel === "WTT- district heat and steam distribution") {
         payload.level3 = ((payload) => {
           let level3 = [];
-          activitesData.datas.forEach((item) => {
+          activitesData?.datas.forEach((item) => {
             if (
               item.scope === payload.scope &&
               item.level1 === payload.level1 &&
@@ -594,7 +619,22 @@ const FrameComponent1 = ({
       };
     }
 
+    /**
+     * For electricity(level1) market based
+     */
+    if (
+      selectedLevel === "Electricity" &&
+      electricityBasedUpon === "marketBased"
+    ) {
+      marketBasedElectricityPayload = { ...payload };
+      marketBasedElectricityPayload.level5 = electricityBasedUpon;
+      marketBasedElectricityPayload.quantity = quantityPurchased;
+      marketBasedElectricityPayload.co2e = Number(emissionFactor);
+      marketBasedElectricityPayload.uom = unitOfEmissionFactor;
+    }
+
     // console.table(payload);
+    // console.table(marketBasedElectricityPayload);
     // return;
     fetch(`${process.env.REACT_APP_API_BASE_URL}/companiesdata`, {
       method: "POST",
@@ -607,16 +647,52 @@ const FrameComponent1 = ({
         if (!response.ok) {
           throw new Error();
         }
-        toast.success("Data submitted successfully");
-        resetForm();
+        // Note : This if block is for omptimization purpose below i am fetching company data again
+        if (electricityBasedUpon !== "marketBased") {
+          toast.success("Data submitted successfully");
+          resetForm();
+        }
       })
       .then(() => {
-        fetchCompanyData();
+        // Note : This if block is for omptimization purpose below i am fetching company data again
+        if (electricityBasedUpon !== "marketBased") {
+          fetchCompanyData();
+        }
       })
       .catch((error) => {
         toast.error("Error adding data");
         console.error("Couldn't submit data", error);
       });
+
+    /**
+     * For electricity(level1) market based
+     */
+    if (
+      selectedLevel === "Electricity" &&
+      electricityBasedUpon === "marketBased"
+    ) {
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/companiesdata`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(marketBasedElectricityPayload),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error();
+          }
+          toast.success("Data submitted successfully");
+          resetForm();
+        })
+        .then(() => {
+          fetchCompanyData();
+        })
+        .catch((error) => {
+          toast.error("Error adding data");
+          console.error("Couldn't submit data", error);
+        });
+    }
   };
 
   const handleUpdateData = () => {
@@ -701,7 +777,7 @@ const FrameComponent1 = ({
 
   const filterLevel4Options = () => {
     let level4Options = [];
-    activitesData.datas.forEach((item) => {
+    activitesData?.datas.forEach((item) => {
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -719,7 +795,7 @@ const FrameComponent1 = ({
 
   const filterLevel5Options = () => {
     let level5 = [];
-    activitesData.datas.forEach((item) => {
+    activitesData?.datas.forEach((item) => {
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -737,8 +813,8 @@ const FrameComponent1 = ({
 
   const isFuelNamesAvaialble = () => {
     // let fuelNames = [];
-    for (let i = 0; i < activitesData.datas.length; i++) {
-      const item = activitesData.datas[i];
+    for (let i = 0; i < activitesData?.datas.length; i++) {
+      const item = activitesData?.datas[i];
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -757,8 +833,8 @@ const FrameComponent1 = ({
   };
 
   const isLevel4Available = () => {
-    for (let i = 0; i < activitesData.datas.length; i++) {
-      const item = activitesData.datas[i];
+    for (let i = 0; i < activitesData?.datas.length; i++) {
+      const item = activitesData?.datas[i];
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -769,7 +845,7 @@ const FrameComponent1 = ({
       }
     }
     // let level4 = [];
-    // activitesData.datas.forEach((item) => {
+    // activitesData?.datas.forEach((item) => {
     //   if (
     //     item.scope === selectedScope &&
     //     item.level1 === selectedLevel
@@ -788,8 +864,8 @@ const FrameComponent1 = ({
   };
 
   const isLevel5Available = () => {
-    for (let i = 0; i < activitesData.datas.length; i++) {
-      const item = activitesData.datas[i];
+    for (let i = 0; i < activitesData?.datas.length; i++) {
+      const item = activitesData?.datas[i];
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -801,7 +877,7 @@ const FrameComponent1 = ({
     }
     return false;
     // let level5 = [];
-    // activitesData.datas.forEach((item) => {
+    // activitesData?.datas.forEach((item) => {
     //   if (
     //     item.scope === selectedScope &&
     //     item.level1 === selectedLevel
@@ -820,7 +896,7 @@ const FrameComponent1 = ({
 
   const filterUnitOfMeasurementsBasedOnScopeAndLevel1 = () => {
     let unitsOfMeasurement = [];
-    activitesData.datas.forEach((item) => {
+    activitesData?.datas.forEach((item) => {
       if (
         item.scope === selectedScope &&
         // here selectedLevel === Electricity
@@ -835,7 +911,7 @@ const FrameComponent1 = ({
 
   const filterLevel3BasedOnScopeAndLevel1 = () => {
     let level3 = [];
-    activitesData.datas.forEach((item) => {
+    activitesData?.datas.forEach((item) => {
       if (
         item.scope === selectedScope &&
         // here selectedLevel === Electricity
@@ -949,7 +1025,7 @@ const FrameComponent1 = ({
         ) {
           const level4Options = (() => {
             let level4Options = [];
-            activitesData.datas.forEach((item) => {
+            activitesData?.datas.forEach((item) => {
               if (
                 item.scope === selectedScope &&
                 item.level1 === selectedLevel &&
@@ -1082,7 +1158,13 @@ const FrameComponent1 = ({
           <h1 className="m-0 h-9 relative text-inherit font-semibold font-inherit inline-block z-[1] mq450:text-lgi">
             Insert activity data here
           </h1>
+
           <div className="w-full grid grid-cols-2 text-base gap-5">
+            {selectedLevel === "Electricity" && (
+              <h3 className="text-base m-0 bg-gray-5 w-full p-2 col-span-2">
+                Location based
+              </h3>
+            )}
             {/* Scope Category */}
             <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
               <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
@@ -1409,6 +1491,106 @@ const FrameComponent1 = ({
               />
             </div>
           </div>
+
+          {/* Location based or Market based only for Electricity(Level1) */}
+          {selectedLevel === "Electricity" && (
+            <>
+              {/* Radio buttons */}
+              <div>
+                <p className="text-base m-0">
+                  Was a market based instrument purchases for this electricity
+                  use?
+                </p>
+                <div className="inline ms-[-6px] me-1">
+                  <input
+                    type="radio"
+                    id="locationBased"
+                    name="electricityBased"
+                    value="locationBased"
+                    checked={electricityBasedUpon === "locationBased"}
+                    onChange={(event) => {
+                      setElectricityBasedUpon(event.target.value);
+                    }}
+                  />
+                  <label
+                    htmlFor="locationBased"
+                    className="text-base font-medium"
+                  >
+                    {/* Location Based */}
+                    No
+                  </label>
+                </div>
+                <div className="inline">
+                  <input
+                    type="radio"
+                    id="marketBased"
+                    name="electricityBased"
+                    value="marketBased"
+                    checked={electricityBasedUpon === "marketBased"}
+                    onChange={(event) => {
+                      setElectricityBasedUpon(event.target.value);
+                    }}
+                  />
+                  <label
+                    htmlFor="marketBased"
+                    className="text-base font-medium"
+                  >
+                    {/* Market Based */}
+                    Yes
+                  </label>
+                </div>
+              </div>
+              {/* Market based form */}
+              {electricityBasedUpon === "marketBased" && (
+                <div className="w-full grid grid-cols-2 gap-5">
+                  <h3 className="text-base m-0 bg-gray-5 w-full p-2 col-span-2">
+                    Market based
+                  </h3>
+                  <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+                    <h3 className="text-base m-0 font-medium">
+                      Quantity Purchased
+                    </h3>
+                    <input
+                      type="number"
+                      className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600 placeholder-dark"
+                      placeholder="Enter Purchased Quantity"
+                      value={quantityPurchased}
+                      onChange={(event) => {
+                        setQuantityPurchased(event.target.value);
+                      }}
+                    />
+                  </div>
+                  <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+                    <h3 className="text-base m-0 font-medium">
+                      Emission Factor
+                    </h3>
+                    <input
+                      type="number"
+                      className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600 placeholder-dark"
+                      placeholder="Enter Quantity"
+                      value={emissionFactor}
+                      onChange={(event) => {
+                        setEmissionFactor(event.target.value);
+                      }}
+                    />
+                  </div>
+                  <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+                    <h3 className="text-base m-0 font-medium">
+                      Unit of Emission Factor
+                    </h3>
+                    <select
+                      className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
+                      value={unitOfEmissionFactor}
+                      onChange={(e) => setUnitOfEmissionFactor(e.target.value)}
+                    >
+                      <option value="">Select Option</option>
+                      <option value="kgco2e/kwh">kgco2e / kwh</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
 
           {/* Add, Edit, Cancel Buttons */}
           <div className="flex flex-row items-start justify-start gap-[8px] max-w-full mq450:flex-wrap ms-auto">

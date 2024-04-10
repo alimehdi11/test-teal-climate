@@ -61,3 +61,11 @@ td {
 html {
   font-family: Poppins;
 }
+
+/**
+* Bug color define in taiwind.config.js "brand-color-01": "#00cc9c", is not working
+*/
+
+.bg-brand-color-01 {
+  background-color: #00cc9c;
+}
