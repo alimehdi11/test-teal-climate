@@ -627,6 +627,7 @@ app.get("/worldHeatMap/:userId", async (req, res) => {
 
 app.post("/companyIntro", async (req, res) => {
   const {
+    userId,
     companyName,
     country,
     primaryIndustry,
@@ -634,10 +635,8 @@ app.post("/companyIntro", async (req, res) => {
     sustainabilityManager,
     email,
     phoneNumber,
-    userId,
   } = req.body;
-  const query =
-    "INSERT INTO company_intro (user_id, company_name, country, primary_industry, secondary_industry, sustainability_manager, email, phone_number) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);";
+  const query = `INSERT INTO "companyIntro" ("userId", "companyName", country, "primaryIndustry", "secondaryIndustry", "sustainabilityManager", email, "phoneNumber") VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`;
   const values = [
     userId,
     companyName,
@@ -648,7 +647,6 @@ app.post("/companyIntro", async (req, res) => {
     email,
     phoneNumber,
   ];
-  console.table(values);
   pool.query(query, values, (err, result) => {
     if (err) {
       console.error("Error inserting data:", err);

@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const BasicForm = () => {
   const [formData, setFormData] = useState({
+    userId: localStorage.getItem("userId"), // Logged in user id
     companyName: "",
     country: "",
     primaryIndustry: "",
@@ -11,7 +12,6 @@ const BasicForm = () => {
     sustainabilityManager: "",
     email: "",
     phoneNumber: "",
-    userId: localStorage.getItem("userId"), // Logged in user id
   });
 
   const handleInputChange = (event) => {
@@ -21,14 +21,14 @@ const BasicForm = () => {
 
   const areAllInputsProvided = (formData) => {
     if (
+      formData.userId === "" ||
       formData.companyName === "" ||
       formData.country === "" ||
       formData.primaryIndustry === "" ||
       formData.secondaryIndustry === "" ||
       formData.sustainabilityManager === "" ||
       formData.email === "" ||
-      formData.phoneNumber === "" ||
-      formData.userId === ""
+      formData.phoneNumber === ""
     ) {
       return false;
     }
