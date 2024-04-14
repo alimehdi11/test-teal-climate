@@ -24,7 +24,7 @@ app.use(express.json()); // Use built-in express.json middleware instead of body
 // app.use(bodyParser.urlencoded({ extended: true })); // Use bodyParser.urlencoded for form data
 app.use(
   session({
-    secret: "secret", // Change this to a random string for production
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
   })

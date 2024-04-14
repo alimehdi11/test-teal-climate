@@ -8,11 +8,11 @@ const poolOptions = {
   database: process.env.DATABASE_NAME,
 };
 
-if (process.env.NODE_ENV === "production") {
-  poolOptions.ssl = {
-    rejectUnauthorized: true, // Set to true to reject unauthorized connections
-  };
-}
+// if (process.env.NODE_ENV === "production") {
+//   poolOptions.ssl = {
+//     rejectUnauthorized: true, // Set to true to reject unauthorized connections
+//   };
+// }
 
 const pool = new Pool(poolOptions);
 
