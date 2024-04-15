@@ -92,10 +92,10 @@ const FrameComponent = ({ companyData, setCompanyData, userId }) => {
                 <td>{item.level5 || "-"}</td>
                 <td>{item.uom || "-"}</td>
                 <td>{item.quantity || "-"}</td>
-                <td>{item.co2e.toFixed(2) || "-"}</td>
-                <td>{item.co2eofco2.toFixed(2) || "-"}</td>
-                <td>{item.co2eofch4.toFixed(2) || "-"}</td>
-                <td>{item.co2eofn2o.toFixed(2) || "-"}</td>
+                <td>{item.co2e?.toFixed(2) || "-"}</td>
+                <td>{item.co2eofco2?.toFixed(2) || "-"}</td>
+                <td>{item.co2eofch4?.toFixed(2) || "-"}</td>
+                <td>{item.co2eofn2o?.toFixed(2) || "-"}</td>
                 <td className="border-e-0">
                   <div className="flex justify-center items-center">
                     <Link

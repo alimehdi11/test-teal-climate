@@ -37,7 +37,7 @@ const PortfolioForm = ({ userId, profileData, setProfileData }) => {
   const fetchContinents = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/Profiles`
+        `${process.env.REACT_APP_API_BASE_URL}/countries`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -57,7 +57,7 @@ const PortfolioForm = ({ userId, profileData, setProfileData }) => {
   const fetchCountries = async (continent) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/Profiles?continent=${continent}`
+        `${process.env.REACT_APP_API_BASE_URL}/countries?continent=${continent}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -79,7 +79,7 @@ const PortfolioForm = ({ userId, profileData, setProfileData }) => {
   const fetchRegions = async (country) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/Profiles?country=${country}`
+        `${process.env.REACT_APP_API_BASE_URL}/countries?country=${country}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -152,7 +152,7 @@ const PortfolioForm = ({ userId, profileData, setProfileData }) => {
       return;
     }
 
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/submit`, {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/companies`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

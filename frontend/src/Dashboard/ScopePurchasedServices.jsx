@@ -13,7 +13,7 @@ const ScopePurchasedServices = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/Profiles`
+        `${process.env.REACT_APP_API_BASE_URL}/countries`
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
