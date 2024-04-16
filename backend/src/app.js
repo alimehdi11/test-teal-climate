@@ -33,22 +33,22 @@ if (process.env.NODE_ENV === "development") {
   app.use(cors());
 }
 app.use(express.json());
-app.use(express.static(path.join(process.cwd(), "../public")));
+app.use(express.static(path.join(process.cwd(), "public")));
 
 /**
  * ---------- Routes ----------
  */
 app.use("/auth", authRouter);
-app.use(verifyToken);
-app.get("/activitydata", getActivityeData);
-app.get("/categories", getCategories);
-app.get("/countries", getCountries);
-app.use("/companies", companiesRouter);
-app.use("/companiesdata", companiesDataRouter);
-app.post("/companyIntro", createCompanyIntro);
-app.get("/worldHeatMap/:userId", getWorldHeatMapDataByUserId);
+// app.use(verifyToken);
+app.get("/activitydata", verifyToken, getActivityeData);
+app.get("/categories", verifyToken, getCategories);
+app.get("/countries", verifyToken, getCountries);
+app.use("/companies", verifyToken, companiesRouter);
+app.use("/companiesdata", verifyToken, companiesDataRouter);
+app.post("/companyIntro", verifyToken, createCompanyIntro);
+app.get("/worldHeatMap/:userId", verifyToken, getWorldHeatMapDataByUserId);
 app.get("*", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "../public", "index.html"));
+  res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });
 
 /**
