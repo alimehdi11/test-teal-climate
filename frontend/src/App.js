@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   Routes,
   Route,
@@ -18,6 +18,8 @@ import Test from "./test/Test";
 import LoginForm from "../src/Auth/LoginForm";
 import SignUpForm from "../src/Auth/SignUpForm";
 import "./global.css";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { UserProvider } from "./contexts/UserContext";
 
 function App() {
   const [userId, setUserId] = useState("");
@@ -61,17 +63,38 @@ function App() {
   }, [pathname]);
 
   return (
-    <Routes>
-      {/* <Route path="dashboardad" element={<Navbar userName={userName} />} /> */}
+    <UserProvider>
+      <Routes>
+        {/* <Route path="dashboardad" element={<Navbar userName={userName} />} /> */}
 
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="activites" element={<Activities />} />
-      <Route path="activites/:id/edit" element={<Activities />} />
-      <Route path="profile" element={<Page userId={userId} />} />
-      <Route path="/profile/:id/edit" element={<Page userId={userId} />} />
-      <Route path="/" element={<LoginForm onLogin={handleLogin} />} />
-      <Route path="signup" element={<SignUpForm />} />
-    </Routes>
+        <Route
+          path="/dashboard"
+          element={<ProtectedRoute Component={Dashboard} />}
+        />
+        <Route
+          path="/activites"
+          // element={<Activities />}
+          element={<ProtectedRoute Component={Activities} />}
+        />
+        <Route
+          path="/activites/:id/edit"
+          // element={<Activities />}
+          element={<ProtectedRoute Component={Activities} />}
+        />
+        <Route
+          path="/profile"
+          // element={<Page userId={userId} />}
+          element={<ProtectedRoute Component={Page} />}
+        />
+        <Route
+          path="/profile/:id/edit"
+          // element={<Page userId={userId} />}
+          element={<ProtectedRoute Component={Page} />}
+        />
+        <Route path="/" element={<LoginForm onLogin={handleLogin} />} />
+        <Route path="signup" element={<SignUpForm />} />
+      </Routes>
+    </UserProvider>
 
     //     <Routes>
     // <Route path="/" element={< LoginForm/>} />

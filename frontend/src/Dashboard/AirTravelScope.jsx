@@ -2,6 +2,8 @@ import ApexChart from "./ApexChart";
 import ApexChart1 from "./ApexChart1";
 import Circule from "./Circule";
 import { useState, useEffect } from "react";
+import { getBearerToken } from "./../utils/auth.utils.js";
+
 const AirTravelScope = () => {
   const [userId, setUserId] = useState("");
   const [companyData, setCompanyData] = useState([]);
@@ -14,7 +16,12 @@ const AirTravelScope = () => {
   const fetchCompanyData = async (userId) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);

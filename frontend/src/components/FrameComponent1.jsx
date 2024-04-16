@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams, useNavigate } from "react-router-dom";
+import { getBearerToken } from "./../utils/auth.utils.js";
 
 const FrameComponent1 = ({
   selectedScope,
@@ -49,7 +50,12 @@ const FrameComponent1 = ({
   const fetchBusinessUnit = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}?column=unitname`
+        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}?column=unitname`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -63,7 +69,12 @@ const FrameComponent1 = ({
   const fetchActivitesData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/activitydata`
+        `${process.env.REACT_APP_API_BASE_URL}/activitydata`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
 
       if (!response.ok) {
@@ -98,7 +109,12 @@ const FrameComponent1 = ({
   const fetchScopeCategoriesData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/categories`
+        `${process.env.REACT_APP_API_BASE_URL}/categories`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
 
       if (!response.ok) {
@@ -335,7 +351,12 @@ const FrameComponent1 = ({
   const fetchCompanyData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -350,7 +371,12 @@ const FrameComponent1 = ({
   const fetchCompanyDataOfGivenId = async (id) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/activites/${id}`
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/activites/${id}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -454,7 +480,12 @@ const FrameComponent1 = ({
       const fetchCompanyDataAndFilterCountryAndRegion = async () => {
         try {
           const response = await fetch(
-            `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`
+            `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`,
+            {
+              headers: {
+                authorization: getBearerToken(),
+              },
+            }
           );
           if (!response.ok) {
             throw new Error(`Failed to fetch data: ${response.statusText}`);
@@ -640,6 +671,7 @@ const FrameComponent1 = ({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: getBearerToken(),
       },
       body: JSON.stringify(payload),
     })
@@ -675,6 +707,7 @@ const FrameComponent1 = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: getBearerToken(),
         },
         body: JSON.stringify(marketBasedElectricityPayload),
       })
@@ -750,6 +783,7 @@ const FrameComponent1 = ({
       headers: {
         "Content-Type": "application/json",
         accept: "application/json",
+        authorization: getBearerToken(),
       },
       body: JSON.stringify(payload),
     })

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { getBearerToken } from "./../utils/auth.utils.js";
 
 const ScopePurchasedServices = () => {
   const [data, setData] = useState([]);
@@ -13,7 +14,12 @@ const ScopePurchasedServices = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/countries`
+        `${process.env.REACT_APP_API_BASE_URL}/countries`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);

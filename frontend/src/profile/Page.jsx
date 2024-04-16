@@ -6,6 +6,7 @@ import Navbar from "../Header/Navbar";
 import Profiletable from "./Profiletable";
 import { useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { getBearerToken } from "./../utils/auth.utils.js";
 
 const Page = () => {
   const [userId, setUserId] = useState("");
@@ -23,7 +24,12 @@ const Page = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`
+        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         console.log(response);

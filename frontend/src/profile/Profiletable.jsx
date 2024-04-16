@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import trashIcon from "../assets/trash-icon.svg";
 import editIcon from "../assets/edit-icon.svg";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { getBearerToken } from "./../utils/auth.utils.js";
 
 const Profiletable = ({ profileData, setProfileData, userId }) => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`
+        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data: ${response.statusText}`);
@@ -26,6 +32,7 @@ const Profiletable = ({ profileData, setProfileData, userId }) => {
         method: "DELETE",
         headers: {
           accept: "application/json",
+          authorization: getBearerToken(),
         },
       })
         .then((response) => {

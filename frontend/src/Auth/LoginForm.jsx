@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Nav from "./Nav";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "./../contexts/UserContext";
+import { setToken, isLoggedIn } from "./../utils/auth.utils.js";
 
 const LoginForm = ({ onLogin }) => {
   // Accept onLogin prop
   const [loginStatus, setLoginStatus] = useState(null);
   const [userName, setUserName] = useState("");
   const navigate = useNavigate();
-
+  const userContext = useContext(UserContext);
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate("/dashboard");
+    }
+  });
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -37,6 +44,8 @@ const LoginForm = ({ onLogin }) => {
           const userData = response.data.user;
           setUserName(userData.name); // Set the user's name
           localStorage.setItem("userId", userData.id); // Store user ID in local storage
+          setToken(response.data.token);
+          userContext.updateUserContext(response.data.user);
           console.log("UserID:", userData.id);
           onLogin(userData.id); // Call onLogin with the fetched userId
           navigate("/dashboard"); // Redirect to the dashboard page

@@ -3,12 +3,18 @@ import trashIcon from "../assets/trash-icon.svg";
 import editIcon from "../assets/edit-icon.svg";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { getBearerToken } from "./../utils/auth.utils.js";
 
 const FrameComponent = ({ companyData, setCompanyData, userId }) => {
   const fetchCompanyData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -26,6 +32,7 @@ const FrameComponent = ({ companyData, setCompanyData, userId }) => {
         method: "DELETE",
         headers: {
           accept: "application/json",
+          authorization: getBearerToken(),
         },
       })
         .then((response) => {

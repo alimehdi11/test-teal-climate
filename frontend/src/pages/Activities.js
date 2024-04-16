@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import Navbar from "../Header/Navbar";
 import { useParams } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { getBearerToken } from "./../utils/auth.utils.js";
 
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState(null);
@@ -16,7 +17,12 @@ const Activities = () => {
   const fetchCompanyData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);

@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Nav from "./Nav";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "./../contexts/UserContext";
+import { setToken, isLoggedIn } from "./../utils/auth.utils.js";
 
 const SignUpForm = () => {
   const [registrationStatus, setRegistrationStatus] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
@@ -27,6 +31,9 @@ const SignUpForm = () => {
       if (response.status === 200) {
         setRegistrationStatus("Registration successful");
         resetForm();
+        setToken(response.data.token);
+        userContext.updateUserContext(response.data.user);
+        navigate("/dashboard");
       } else {
         throw new Error(response.data.message); // Assuming server returns an error message
       }
@@ -37,6 +44,13 @@ const SignUpForm = () => {
       setSubmitting(false);
     }
   };
+
+  const userContext = useContext(UserContext);
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate("/dashboard");
+    }
+  });
 
   return (
     <>

@@ -3,6 +3,7 @@ import Sidebar from "./Sidebar";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
+import { getBearerToken } from "./../utils/auth.utils.js";
 
 const PortfolioForm = ({ userId, profileData, setProfileData }) => {
   // const initialData = {
@@ -37,7 +38,12 @@ const PortfolioForm = ({ userId, profileData, setProfileData }) => {
   const fetchContinents = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/countries`
+        `${process.env.REACT_APP_API_BASE_URL}/countries`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -57,7 +63,12 @@ const PortfolioForm = ({ userId, profileData, setProfileData }) => {
   const fetchCountries = async (continent) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/countries?continent=${continent}`
+        `${process.env.REACT_APP_API_BASE_URL}/countries?continent=${continent}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -79,7 +90,12 @@ const PortfolioForm = ({ userId, profileData, setProfileData }) => {
   const fetchRegions = async (country) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/countries?country=${country}`
+        `${process.env.REACT_APP_API_BASE_URL}/countries?country=${country}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -98,7 +114,12 @@ const PortfolioForm = ({ userId, profileData, setProfileData }) => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`
+        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data: ${response.statusText}`);
@@ -156,6 +177,7 @@ const PortfolioForm = ({ userId, profileData, setProfileData }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: getBearerToken(),
       },
       body: JSON.stringify({
         userid: userId,
@@ -189,7 +211,12 @@ const PortfolioForm = ({ userId, profileData, setProfileData }) => {
   const fetchProfileOfGivenId = async (id) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/companies/profile/${id}`
+        `${process.env.REACT_APP_API_BASE_URL}/companies/profile/${id}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -244,6 +271,7 @@ const PortfolioForm = ({ userId, profileData, setProfileData }) => {
       headers: {
         "Content-Type": "application/json",
         accept: "application/json",
+        authorization: getBearerToken(),
       },
       body: JSON.stringify({
         userId: userId,

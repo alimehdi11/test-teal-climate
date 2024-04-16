@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getBearerToken } from "./../utils/auth.utils.js";
 
 const Sidebar = ({
   selectedScope,
@@ -14,7 +15,12 @@ const Sidebar = ({
   const fetchScopes = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/activitydata`
+        `${process.env.REACT_APP_API_BASE_URL}/activitydata`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
 
       if (!response.ok) {
@@ -26,6 +32,7 @@ const Sidebar = ({
       ];
       return uniqueScopes;
     } catch (error) {
+      console.log("ERROR FETCHING ACTIVITY DATA");
       console.error("Error fetching data:", error);
     }
   };
@@ -33,7 +40,12 @@ const Sidebar = ({
   const fetchLevel1Data = async (scope) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/activitydata?scope=${scope}`
+        `${process.env.REACT_APP_API_BASE_URL}/activitydata?scope=${scope}`,
+        {
+          headers: {
+            authorization: getBearerToken(),
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch level1 data for ${scope}`);
@@ -91,7 +103,7 @@ const Sidebar = ({
     <div className="bg-white absolute min-w-[300px] max-h-[656px] top-[1px] left-[40px] rounded-[8px] font-poppin">
       <h1 className="text-2xl self-stretch rounded-lg ">Select Scope</h1>
       <div className="flex flex-col items-start gap-4">
-        {scopesData.map((scope) => (
+        {scopesData?.map((scope) => (
           <button
             key={scope}
             className={`w-[150px] p-3 rounded-md bg-gray-200 text-gray-700 hover:bg-brand-color-01 hover:text-white${

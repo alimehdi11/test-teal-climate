@@ -3,6 +3,8 @@ import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import worldGeoJSON from "./data.json"; // Ensure the path to your GeoJSON data is correct
 import "./App.css"; // Ensure this CSS file includes the necessary styles
+import { getBearerToken } from "./../utils/auth.utils.js";
+
 const Map = () => {
   const [emissionsData, setEmissionsData] = useState({});
   const [userId, setUserId] = useState("");
@@ -18,7 +20,11 @@ const Map = () => {
   // Fetch emissions data from backend upon component mount
   useEffect(() => {
     if (userId) {
-      fetch(`${process.env.REACT_APP_API_BASE_URL}/worldHeatMap/${userId}`)
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/worldHeatMap/${userId}`, {
+        headers: {
+          authorization: getBearerToken(),
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           const countriesEmissions = data.reduce((acc, current) => {
