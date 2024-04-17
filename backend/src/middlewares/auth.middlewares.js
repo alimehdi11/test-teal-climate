@@ -19,7 +19,8 @@ const verifyToken = (req, res, next) => {
     req.user = decodedToken;
     next();
     return;
-  } catch (err) {
+  } catch (error) {
+    console.log("Error Verifying Token: ", error);
     res.status(401).json({
       message: "You are not authorized",
     });
