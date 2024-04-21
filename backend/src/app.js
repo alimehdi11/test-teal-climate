@@ -16,15 +16,17 @@ const app = express();
 /**
  * ---------- Log environment variables ----------
  */
-console.table([
-  ["PORT", process.env.PORT],
-  ["NODE_ENV", process.env.NODE_ENV],
-  ["DATABASE_NAME", process.env.DATABASE_NAME],
-  ["DATABASE_USER", process.env.DATABASE_USER],
-  ["DATABASE_PASSWORD", process.env.DATABASE_PASSWORD],
-  ["DATABASE_HOST", process.env.DATABASE_HOST],
-  ["DATABASE_PORT", process.env.DATABASE_PORT],
-]);
+if (process.env.NODE_ENV === "development") {
+  console.table([
+    ["PORT", process.env.PORT],
+    ["NODE_ENV", process.env.NODE_ENV],
+    ["DATABASE_NAME", process.env.DATABASE_NAME],
+    ["DATABASE_USER", process.env.DATABASE_USER],
+    ["DATABASE_PASSWORD", process.env.DATABASE_PASSWORD],
+    ["DATABASE_HOST", process.env.DATABASE_HOST],
+    ["DATABASE_PORT", process.env.DATABASE_PORT],
+  ]);
+}
 
 /**
  * ---------- App configs ----------
@@ -52,7 +54,7 @@ app.get("*", (req, res) => {
 });
 
 /**
- * ---------- Server ----------
+ * ---------- Starting server ----------
  */
 app.listen(process.env.PORT, () => {
   console.log("Server listening on ...");
