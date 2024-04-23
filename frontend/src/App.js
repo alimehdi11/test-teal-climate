@@ -4,6 +4,7 @@ import {
   Route,
   useNavigationType,
   useLocation,
+  BrowserRouter,
 } from "react-router-dom";
 
 import Activities from "./pages/Activities";
@@ -20,6 +21,9 @@ import SignUpForm from "../src/Auth/SignUpForm";
 import "./global.css";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { UserProvider } from "./contexts/UserContext";
+import SubscriptionPlans from "./pages/SubscriptionPlans";
+import Checkout from "./pages/Checkout";
+import Completion from "./components/Completion";
 
 function App() {
   const [userId, setUserId] = useState("");
@@ -27,73 +31,78 @@ function App() {
   const handleLogin = (id) => {
     setUserId(id);
   };
-  const action = useNavigationType();
-  const location = useLocation();
-  const pathname = location.pathname;
+  // const action = useNavigationType();
+  // const location = useLocation();
+  // const pathname = location.pathname;
 
-  useEffect(() => {
-    if (action !== "POP") {
-      window.scrollTo(0, 0);
-    }
-  }, [action, pathname]);
+  // useEffect(() => {
+  //   if (action !== "POP") {
+  //     window.scrollTo(0, 0);
+  //   }
+  // }, [action, pathname]);
 
-  useEffect(() => {
-    let title = "";
-    let metaDescription = "";
+  // useEffect(() => {
+  //   let title = "";
+  //   let metaDescription = "";
 
-    switch (pathname) {
-      case "/":
-        title = "";
-        metaDescription = "";
-        break;
-    }
+  //   switch (pathname) {
+  //     case "/":
+  //       title = "";
+  //       metaDescription = "";
+  //       break;
+  //   }
 
-    if (title) {
-      document.title = title;
-    }
+  //   if (title) {
+  //     document.title = title;
+  //   }
 
-    if (metaDescription) {
-      const metaDescriptionTag = document.querySelector(
-        'head > meta[name="description"]'
-      );
-      if (metaDescriptionTag) {
-        metaDescriptionTag.content = metaDescription;
-      }
-    }
-  }, [pathname]);
+  //   if (metaDescription) {
+  //     const metaDescriptionTag = document.querySelector(
+  //       'head > meta[name="description"]'
+  //     );
+  //     if (metaDescriptionTag) {
+  //       metaDescriptionTag.content = metaDescription;
+  //     }
+  //   }
+  // }, [pathname]);
 
   return (
     <UserProvider>
-      <Routes>
-        {/* <Route path="dashboardad" element={<Navbar userName={userName} />} /> */}
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path="dashboardad" element={<Navbar userName={userName} />} /> */}
 
-        <Route
-          path="/dashboard"
-          element={<ProtectedRoute Component={Dashboard} />}
-        />
-        <Route
-          path="/activites"
-          // element={<Activities />}
-          element={<ProtectedRoute Component={Activities} />}
-        />
-        <Route
-          path="/activites/:id/edit"
-          // element={<Activities />}
-          element={<ProtectedRoute Component={Activities} />}
-        />
-        <Route
-          path="/profile"
-          // element={<Page userId={userId} />}
-          element={<ProtectedRoute Component={Page} />}
-        />
-        <Route
-          path="/profile/:id/edit"
-          // element={<Page userId={userId} />}
-          element={<ProtectedRoute Component={Page} />}
-        />
-        <Route path="/" element={<LoginForm onLogin={handleLogin} />} />
-        <Route path="signup" element={<SignUpForm />} />
-      </Routes>
+          <Route
+            path="/dashboard"
+            element={<ProtectedRoute Component={Dashboard} />}
+          />
+          <Route
+            path="/activites"
+            // element={<Activities />}
+            element={<ProtectedRoute Component={Activities} />}
+          />
+          <Route
+            path="/activites/:id/edit"
+            // element={<Activities />}
+            element={<ProtectedRoute Component={Activities} />}
+          />
+          <Route
+            path="/profile"
+            // element={<Page userId={userId} />}
+            element={<ProtectedRoute Component={Page} />}
+          />
+          <Route
+            path="/profile/:id/edit"
+            // element={<Page userId={userId} />}
+            element={<ProtectedRoute Component={Page} />}
+          />
+          <Route path="/" element={<LoginForm onLogin={handleLogin} />} />
+          <Route path="signup" element={<SignUpForm />} />
+          <Route path="/plans" element={<SubscriptionPlans />} />
+          <Route path="/subscribe" element={<Checkout />} />
+          <Route path="/completion" element={<Completion />} />
+        </Routes>
+      </BrowserRouter>
     </UserProvider>
 
     //     <Routes>

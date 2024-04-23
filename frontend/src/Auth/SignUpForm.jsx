@@ -33,7 +33,7 @@ const SignUpForm = () => {
         resetForm();
         setToken(response.data.token);
         userContext.updateUserContext(response.data.user);
-        navigate("/dashboard");
+        navigate("/plans");
       } else {
         throw new Error(response.data.message); // Assuming server returns an error message
       }

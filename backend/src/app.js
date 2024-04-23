@@ -10,6 +10,7 @@ import { getActivityeData } from "./controllers/activityData.controllers.js";
 import { getCategories } from "./controllers/categories.controllers.js";
 import { getCountries } from "./controllers/countries.controllers.js";
 import { verifyToken } from "./middlewares/auth.middlewares.js";
+import { subscriptionRouter } from "./routes/subscription.routes.js";
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use("/companies", verifyToken, companiesRouter);
 app.use("/companiesdata", verifyToken, companiesDataRouter);
 app.post("/companyIntro", verifyToken, createCompanyIntro);
 app.get("/worldHeatMap/:userId", verifyToken, getWorldHeatMapDataByUserId);
+app.use("/subscription", verifyToken, subscriptionRouter);
 app.get("*", (req, res) => {
   res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });

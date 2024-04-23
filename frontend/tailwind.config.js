@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+import tailgridsPlugin from "tailgrids/plugin";
+
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
@@ -92,4 +95,5 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
+  plugins: [tailgridsPlugin],
 };
