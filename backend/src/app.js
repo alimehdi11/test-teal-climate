@@ -10,7 +10,8 @@ import { getActivityeData } from "./controllers/activityData.controllers.js";
 import { getCategories } from "./controllers/categories.controllers.js";
 import { getCountries } from "./controllers/countries.controllers.js";
 import { verifyToken } from "./middlewares/auth.middlewares.js";
-import { subscriptionRouter } from "./routes/subscription.routes.js";
+import { subscriptionRouter } from "./routes/subscriptions.routes.js";
+import { stripeRouter } from "./routes/stripe.routes.js";
 
 const app = express();
 
@@ -33,7 +34,11 @@ if (process.env.NODE_ENV === "development") {
  * ---------- App configs ----------
  */
 if (process.env.NODE_ENV === "development") {
-  app.use(cors());
+  const corsOptions = {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  };
+  app.use(cors(corsOptions));
 }
 app.use(express.json());
 app.use(express.static(path.join(process.cwd(), "public")));
@@ -50,7 +55,8 @@ app.use("/companies", verifyToken, companiesRouter);
 app.use("/companiesdata", verifyToken, companiesDataRouter);
 app.post("/companyIntro", verifyToken, createCompanyIntro);
 app.get("/worldHeatMap/:userId", verifyToken, getWorldHeatMapDataByUserId);
-app.use("/subscription", verifyToken, subscriptionRouter);
+app.use("/subscriptions", verifyToken, subscriptionRouter);
+app.use("/stripe", verifyToken, stripeRouter);
 app.get("*", (req, res) => {
   res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });

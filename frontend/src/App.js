@@ -23,7 +23,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { UserProvider } from "./contexts/UserContext";
 import SubscriptionPlans from "./pages/SubscriptionPlans";
 import Checkout from "./pages/Checkout";
-import Completion from "./components/Completion";
+import Completion from "./pages/Completion";
 
 function App() {
   const [userId, setUserId] = useState("");

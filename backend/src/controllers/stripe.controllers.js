@@ -1,8 +1,9 @@
 import stripeConfig from "stripe";
+import { pool } from "./../database/connectDb.js";
 
 const stripe = stripeConfig(process.env.STRIPE_SECRET_KEY);
 
-const createCustomer = async (req, res) => {
+const createCustomerAtStripe = async (req, res) => {
   const { email } = req.body;
 
   try {
@@ -18,7 +19,8 @@ const createCustomer = async (req, res) => {
     return res.status(400).send({ error: { message: error.message } });
   }
 };
-const createSubscription = async (req, res) => {
+
+const createSubscriptionAtStripe = async (req, res) => {
   const { customerId, priceId } = req.body;
 
   if (!customerId || !priceId) {
@@ -53,4 +55,37 @@ const createSubscription = async (req, res) => {
   }
 };
 
-export { createCustomer, createSubscription };
+const getCustomerFromStripe = async (req, res) => {
+  try {
+    const { customerId } = req.params;
+    if (!customerId) {
+      throw new Error("customerId is required");
+    }
+    const customer = await stripe.customers.retrieve(customerId);
+
+    return res.send(customer);
+  } catch (error) {
+    return res.status(400).send({ error: { message: error.message } });
+  }
+};
+
+const getSubscriptionFromStripe = async (req, res) => {
+  try {
+    const { subscriptionId } = req.params;
+    if (!subscriptionId) {
+      throw new Error("subscriptionId is required");
+    }
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+
+    return res.send(subscription);
+  } catch (error) {
+    return res.status(400).send({ error: { message: error.message } });
+  }
+};
+
+export {
+  createCustomerAtStripe,
+  createSubscriptionAtStripe,
+  getCustomerFromStripe,
+  getSubscriptionFromStripe,
+};

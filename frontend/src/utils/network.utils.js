@@ -9,7 +9,7 @@ const request = (url, method, body) => {
       Accept: "application/json",
       authorization: getBearerToken(),
     },
-    body: JSON.stringify(body),
+    ...(body && { body: JSON.stringify(body) }),
   });
 };
 

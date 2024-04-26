@@ -29,6 +29,16 @@ const isLoggedIn = () => {
   }
 };
 
+const isSubscribed = () => {
+  const token = getToken();
+  if (token) {
+    const payload = decodeToken(token);
+    return payload.subscribed ? true : false;
+  } else {
+    return false;
+  }
+};
+
 const getBearerToken = () => {
   return "Bearer " + getToken();
 };
@@ -40,4 +50,5 @@ export {
   decodeToken,
   isLoggedIn,
   getBearerToken,
+  isSubscribed,
 };

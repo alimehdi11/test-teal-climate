@@ -1,9 +1,43 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useStripe } from "@stripe/react-stripe-js";
+import { request } from "./../utils/network.utils.js";
+import { UserContext } from "./../contexts/UserContext.jsx";
+import { Link } from "react-router-dom";
+import { setToken } from "../utils/auth.utils.js";
 
 const PaymentStatus = () => {
   const [message, setMessage] = useState("pending");
   const stripe = useStripe();
+  const { user } = useContext(UserContext);
+
+  const updateSubscription = async (payload) => {
+    try {
+      const response = await request(
+        `${process.env.REACT_APP_API_BASE_URL}/subscriptions/${user.id}`,
+        "PUT",
+        payload
+      );
+      console.log(response);
+    } catch (error) {
+      console.log("Could not update subscription");
+      console.error(error.message);
+    }
+  };
+
+  const updateToken = async () => {
+    try {
+      let response = await request(
+        `${process.env.REACT_APP_API_BASE_URL}/auth/token`,
+        "POST"
+      );
+      response = await response.json();
+      console.log("newToken", response.token);
+      setToken(response.token);
+    } catch (error) {
+      console.log("Could not updateToken");
+      console.error(error.message);
+    }
+  };
 
   useEffect(() => {
     if (!stripe) {
@@ -28,6 +62,17 @@ const PaymentStatus = () => {
       switch (paymentIntent.status) {
         case "succeeded":
           setMessage("Success! Payment received.");
+
+          (async () => {
+            const clientSecretParts = clientSecret.split("_");
+            await updateSubscription({
+              paymentIntentId:
+                clientSecretParts[0] + "_" + clientSecretParts[1],
+              clientSecret: clientSecretParts[2] + "_" + clientSecretParts[3],
+            });
+          })();
+
+          updateToken();
           break;
 
         case "processing":
@@ -51,7 +96,19 @@ const PaymentStatus = () => {
 
   return (
     <>
-      <bold>Status : </bold> {message}
+      <div>
+        <b>Payment Status : </b> {message}
+      </div>
+      {message === "Success! Payment received." && (
+        <Link to="/dashboard">
+          <button
+            type="button"
+            className="rounded bg-brand-color-01 text-white p-4 mt-4 hover:bg-brand-color-2"
+          >
+            Dashboard
+          </button>
+        </Link>
+      )}
     </>
   );
 };

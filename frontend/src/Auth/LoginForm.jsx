@@ -5,7 +5,7 @@ import Nav from "./Nav";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./../contexts/UserContext";
-import { setToken, isLoggedIn } from "./../utils/auth.utils.js";
+import { setToken, isLoggedIn, decodeToken } from "./../utils/auth.utils.js";
 
 const LoginForm = ({ onLogin }) => {
   // Accept onLogin prop
@@ -41,14 +41,21 @@ const LoginForm = ({ onLogin }) => {
           // If login is successful, update login status, reset form, and navigate to the dashboard
           setLoginStatus(response.data.message); // Update login status with the message from response
           formik.resetForm();
+
           const userData = response.data.user;
           setUserName(userData.name); // Set the user's name
+
           localStorage.setItem("userId", userData.id); // Store user ID in local storage
+
           setToken(response.data.token);
-          userContext.updateUserContext(response.data.user);
+
+          const user = decodeToken(response.data.token);
+          userContext.updateUserContext(user);
+
           console.log("UserID:", userData.id);
           onLogin(userData.id); // Call onLogin with the fetched userId
-          navigate("/plans"); // Redirect to the dashboard page
+
+          navigate("/dashboard"); // Redirect to the dashboard page
         } else {
           // Handle different status codes
           if (response.status === 401) {

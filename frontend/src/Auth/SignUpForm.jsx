@@ -5,7 +5,7 @@ import Nav from "./Nav";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./../contexts/UserContext";
-import { setToken, isLoggedIn } from "./../utils/auth.utils.js";
+import { setToken, isLoggedIn, decodeToken } from "./../utils/auth.utils.js";
 
 const SignUpForm = () => {
   const [registrationStatus, setRegistrationStatus] = useState(null);
@@ -31,8 +31,12 @@ const SignUpForm = () => {
       if (response.status === 200) {
         setRegistrationStatus("Registration successful");
         resetForm();
+
         setToken(response.data.token);
-        userContext.updateUserContext(response.data.user);
+
+        const user = decodeToken(response.data.token);
+        userContext.updateUserContext(user);
+
         navigate("/plans");
       } else {
         throw new Error(response.data.message); // Assuming server returns an error message

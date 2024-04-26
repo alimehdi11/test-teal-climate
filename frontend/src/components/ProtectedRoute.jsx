@@ -1,24 +1,25 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
-  deleteToken,
   isLoggedIn as isUserLoggedIn,
+  isSubscribed,
 } from "./../utils/auth.utils.js";
+import { UserContext } from "./../contexts/UserContext.jsx";
 
 const ProtectedRoute = ({ Component }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedInAndSubscribed, setIsLoggedInAndSubscribed] = useState(false);
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
-    if (isUserLoggedIn()) {
-      setIsLoggedIn(true);
+    if (isUserLoggedIn() && isSubscribed()) {
+      setIsLoggedInAndSubscribed(true);
     } else {
-      deleteToken();
-      navigate("/");
+      navigate("/plans");
     }
   });
 
-  return isLoggedIn ? <Component /> : <></>;
+  return isLoggedInAndSubscribed ? <Component /> : <></>;
 };
 
 export default ProtectedRoute;

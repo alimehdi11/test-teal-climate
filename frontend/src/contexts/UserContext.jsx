@@ -14,11 +14,7 @@ const UserProvider = ({ children }) => {
     if (isLoggedIn()) {
       const token = getToken();
       const payload = decodeToken(token);
-      updateUserContext({
-        id: payload.id,
-        name: payload.name,
-        email: payload.email,
-      });
+      updateUserContext(payload);
     }
   }, []);
 

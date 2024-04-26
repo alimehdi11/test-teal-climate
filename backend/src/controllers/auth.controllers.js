@@ -1,6 +1,10 @@
 import bcrypt from "bcrypt";
 import { pool } from "./../database/connectDb.js";
 import { issueJWT } from "./../services/auth.services.js";
+import {
+  getSubscriptionFromStripe,
+  getSubscription,
+} from "./../services/subscription.services.js";
 
 const registerUser = async (req, res) => {
   try {
@@ -23,6 +27,10 @@ const registerUser = async (req, res) => {
 
     const result = await pool.query(insertQuery, values);
     const newUser = result.rows[0];
+
+    // Create a subscription entry
+    const subscriptionInsertQuery = `INSERT INTO subscriptions ("userId") VALUES ($1)`;
+    await pool.query(subscriptionInsertQuery, [newUser.id]);
 
     const token = issueJWT({
       id: newUser.id,
@@ -68,13 +76,38 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    const token = issueJWT({ id: user.id, name: user.name, email: user.email });
+    let subscriptionFromStripe;
+    const subscription = await getSubscription(user.id);
+    console.log("===>>>", subscription);
+
+    if (subscription.subscriptionId) {
+      subscriptionFromStripe = await getSubscriptionFromStripe(
+        subscription.subscriptionId
+      );
+    }
+
+    const tokenPayload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      subscribed: false,
+    };
+
+    if (
+      subscriptionFromStripe &&
+      !subscriptionFromStripe.error &&
+      subscriptionFromStripe.status === "active"
+    ) {
+      tokenPayload.subscribed = true;
+    }
+
+    const token = issueJWT(tokenPayload);
 
     // Return token along with user information
     res.status(200).json({
       message: "Login successful",
       token,
-      user: { id: user.id, name: user.name, email: user.email },
+      user: tokenPayload,
     });
   } catch (error) {
     console.error("Error logging in:", error);
@@ -82,4 +115,16 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser };
+const updateToken = (req, res) => {
+  const tokenPayload = req.user;
+  if (!tokenPayload.subscribed) {
+    delete tokenPayload.exp;
+    tokenPayload.subscribed = true;
+    const token = issueJWT(tokenPayload);
+    return res.send({ token });
+  } else {
+    return res.status(204).send();
+  }
+};
+
+export { registerUser, loginUser, updateToken };
