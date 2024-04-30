@@ -37,7 +37,7 @@ const SubscriptionPlans = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center mq800:flex-row">
+      <div className="flex flex-col justify-center items-center mqMin800:flex-row">
         <PricingCard
           redirectTo="/subscribe?plan=basic"
           type="Basic"

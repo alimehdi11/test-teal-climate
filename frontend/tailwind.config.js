@@ -87,7 +87,7 @@ module.exports = {
       mq1050: {
         raw: "screen and (max-width: 1050px)",
       },
-      mq800: {
+      mqMin800: {
         raw: "screen and (min-width: 800px)",
       },
     },
