@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import FrameComponent1 from "../components/FrameComponent1";
-import FrameComponent from "../components/FrameComponent";
-import Sidebar from "../components/Sidebar";
-import Navbar from "../Header/Navbar";
+import FrameComponent1 from "../components/FrameComponent1.jsx";
+import FrameComponent from "../components/FrameComponent.jsx";
+import Sidebar from "../components/Sidebar.jsx";
+import Navbar from "../Header/Navbar.jsx";
 import { useParams } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { getBearerToken } from "./../utils/auth.utils.js";
+import { getBearerToken } from "../utils/auth.utils.js";
 
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState(null);

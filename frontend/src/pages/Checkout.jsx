@@ -14,6 +14,7 @@ function Checkout() {
   const [stripePromise, setStripePromise] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState("");
   const location = useLocation();
+  const [amount, setAmount] = useState("");
 
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
@@ -43,6 +44,19 @@ function Checkout() {
   }, []);
 
   useEffect(() => {
+    if (!selectedPlan) {
+      // Early return
+      return;
+    }
+
+    if (selectedPlan === "basic") {
+      setAmount(2000);
+    } else if (selectedPlan === "pro") {
+      setAmount(2500);
+    }
+  }, [selectedPlan]);
+
+  useEffect(() => {
     fetch(`${process.env.REACT_APP_API_BASE_URL}/stripe/config`, {
       headers: {
         "Content-type": "application/json",
@@ -59,8 +73,8 @@ function Checkout() {
     <>
       <div className="flex p-10">
         <div className="flex-1">
-          <h2 className="text-center">Selected Plan</h2>
-          <div className="text-center">Amount: $2000/month</div>
+          <h2 className="text-center">Selected Plan : {selectedPlan}</h2>
+          <h2 className="text-center">Amount: {amount}/month</h2>
         </div>
         <div className="flex-1">
           <div className="max-w-[400px] mx-auto border-solid border-gray-5 border-[1px] p-3 rounded">

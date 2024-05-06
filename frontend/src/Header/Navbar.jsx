@@ -124,7 +124,7 @@ const Navbar = ({ userName }) => {
           src="/notification.svg"
         />
         {/* Profile Link */}
-        <Link to="/">
+        <Link to="/account">
           <div className="h-10 w-10 relative rounded-81xl object-contain min-h-[40px] z-[1] bg-gray-100 flex items-center justify-center text-black font-semibold">
             {userName ? userName.charAt(0).toUpperCase() : "A"}
           </div>

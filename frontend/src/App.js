@@ -24,6 +24,7 @@ import { UserProvider } from "./contexts/UserContext";
 import SubscriptionPlans from "./pages/SubscriptionPlans";
 import Checkout from "./pages/Checkout";
 import Completion from "./pages/Completion";
+import Account from "./pages/Account";
 
 function App() {
   const [userId, setUserId] = useState("");
@@ -101,6 +102,10 @@ function App() {
           <Route path="/plans" element={<SubscriptionPlans />} />
           <Route path="/subscribe" element={<Checkout />} />
           <Route path="/completion" element={<Completion />} />
+          <Route
+            path="/account"
+            element={<ProtectedRoute Component={Account} />}
+          />
         </Routes>
       </BrowserRouter>
     </UserProvider>

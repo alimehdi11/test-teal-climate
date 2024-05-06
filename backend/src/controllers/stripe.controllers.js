@@ -83,9 +83,29 @@ const getSubscriptionFromStripe = async (req, res) => {
   }
 };
 
+const updateSubscriptionAtStripe = async (req, res) => {
+  try {
+    const { subscriptionId } = req.params;
+    const payload = req.body;
+
+    if (!subscriptionId) {
+      throw new Error("subscriptionId is required");
+    }
+    const subscription = await stripe.subscriptions.update(
+      subscriptionId,
+      payload
+    );
+
+    return res.send(subscription);
+  } catch (error) {
+    return res.status(400).send({ error: { message: error.message } });
+  }
+};
+
 export {
   createCustomerAtStripe,
   createSubscriptionAtStripe,
   getCustomerFromStripe,
   getSubscriptionFromStripe,
+  updateSubscriptionAtStripe,
 };

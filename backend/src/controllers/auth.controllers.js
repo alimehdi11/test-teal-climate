@@ -78,7 +78,6 @@ const loginUser = async (req, res) => {
 
     let subscriptionFromStripe;
     const subscription = await getSubscription(user.id);
-    console.log("===>>>", subscription);
 
     if (subscription && subscription.subscriptionId) {
       subscriptionFromStripe = await getSubscriptionFromStripe(

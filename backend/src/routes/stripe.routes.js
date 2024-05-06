@@ -4,6 +4,7 @@ import {
   createSubscriptionAtStripe,
   getCustomerFromStripe,
   getSubscriptionFromStripe,
+  updateSubscriptionAtStripe,
 } from "../controllers/stripe.controllers.js";
 
 const stripeRouter = express.Router();
@@ -26,5 +27,8 @@ stripeRouter.post("/subscriptions", createSubscriptionAtStripe);
 
 // Get subscription
 stripeRouter.get("/subscriptions/:subscriptionId", getSubscriptionFromStripe);
+
+// Update subscription
+stripeRouter.put("/subscriptions/:subscriptionId", updateSubscriptionAtStripe);
 
 export { stripeRouter };

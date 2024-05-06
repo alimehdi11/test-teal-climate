@@ -12,6 +12,7 @@ import { getCountries } from "./controllers/countries.controllers.js";
 import { verifyToken } from "./middlewares/auth.middlewares.js";
 import { subscriptionRouter } from "./routes/subscriptions.routes.js";
 import { stripeRouter } from "./routes/stripe.routes.js";
+import { handleWebhookEvents } from "./controllers/webhook.controllers.js";
 
 const app = express();
 
@@ -47,7 +48,6 @@ app.use(express.static(path.join(process.cwd(), "public")));
  * ---------- Routes ----------
  */
 app.use("/auth", authRouter);
-// app.use(verifyToken);
 app.get("/activitydata", verifyToken, getActivityeData);
 app.get("/categories", verifyToken, getCategories);
 app.get("/countries", verifyToken, getCountries);
@@ -57,6 +57,11 @@ app.post("/companyIntro", verifyToken, createCompanyIntro);
 app.get("/worldHeatMap/:userId", verifyToken, getWorldHeatMapDataByUserId);
 app.use("/subscriptions", verifyToken, subscriptionRouter);
 app.use("/stripe", verifyToken, stripeRouter);
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  handleWebhookEvents
+);
 app.get("*", (req, res) => {
   res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });
