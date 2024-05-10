@@ -1230,7 +1230,7 @@ const FrameComponent1 = ({
                 onChange={(e) => setBusinessUnitValue(e.target.value)}
                 value={businessUnitValue}
               >
-                <option value="">Select option</option>
+                <option value="">Select Option</option>
                 {businessUnits &&
                   businessUnits.map((option, index) => {
                     return (

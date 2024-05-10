@@ -8,7 +8,9 @@ const Account = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [subscriptionId, setSubscriptionId] = useState(null);
+  const [subscriptionFromStripe, setSubscriptionFromStripe] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [nextInvoiceData, setNextInvoiceData] = useState("");
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -24,7 +26,11 @@ const Account = () => {
       "GET"
     )
       .then((data) => {
-        return data.json();
+        if (data.error) {
+          throw new Error(data.error);
+        } else {
+          return data.json();
+        }
       })
       .then((subscription) => {
         return setSubscriptionId(subscription.subscriptionId);
@@ -34,6 +40,45 @@ const Account = () => {
         console.error(error);
       });
   }, []);
+
+  useEffect(() => {
+    if (subscriptionId) {
+      request(
+        `${process.env.REACT_APP_API_BASE_URL}/stripe/subscriptions/${subscriptionId}`,
+        "GET"
+      )
+        .then((data) => {
+          if (data.error) {
+            throw new Error(data.error);
+          } else {
+            return data.json();
+          }
+        })
+        .then((subscription) => {
+          console.log(subscription);
+          return setSubscriptionFromStripe(subscription);
+        })
+        .catch((error) => {
+          console.log("Can't fetch subscriptionFromStripe");
+          console.error(error);
+        });
+    }
+  }, [subscriptionId]);
+
+  useEffect(() => {
+    if (subscriptionFromStripe) {
+      const timestamp = subscriptionFromStripe.billing_cycle_anchor;
+      /**
+       * Convert timestamp to milliseconds add 30 days time to it
+       * To get next invoice date
+       */
+      const date = new Date(timestamp * 1000 + 60 * 60 * 24 * 30 * 1000);
+      const day = date.getDate();
+      const month = date.getMonth() + 1; // Months are zero-based, so add 1
+      const year = date.getFullYear();
+      setNextInvoiceData(`${day}/${month}/${year}`);
+    }
+  }, [subscriptionFromStripe]);
 
   const handleLogout = () => {
     deleteToken();
@@ -45,12 +90,11 @@ const Account = () => {
       // Unsubscribe
       const updatedSubscriptionFromStripe = await request(
         `${process.env.REACT_APP_API_BASE_URL}/stripe/subscriptions/${subscriptionId}`,
-        "PUT",
+        "DELETE",
         {
           cancel_at_period_end: true,
         }
       );
-      console.log("updated subscription", updatedSubscriptionFromStripe);
       if (!updatedSubscriptionFromStripe.error) {
         // Update subscription record in our database
         const subscription = await request(
@@ -81,9 +125,9 @@ const Account = () => {
   return (
     <>
       <div className="flex font-poppins">
+        {/* Sidebar Content */}
         <div className="text-white w-1/4 h-screen flex flex-col justify-between p-3 max-h-[100vh] box-border border-solid border-r-[2px] border-gray-200">
           <div className="text-black">
-            {/* Sidebar Content */}
             <h2 className="text-xl font-bold text-center m-0 mt-5">Settings</h2>
             <ul className="list-none p-[0px] m-[0px] mt-5">
               <li className="p-3 rounded-md bg-brand-color-01 text-white text-center">
@@ -91,7 +135,6 @@ const Account = () => {
               </li>
             </ul>
           </div>
-          {/* Logo Button */}
           <button
             onClick={handleLogout}
             className="p-3 rounded-md bg-gray-200 text-gray-700 hover:bg-brand-color-01 hover:text-white w-[100%] font-bold"
@@ -99,16 +142,12 @@ const Account = () => {
             Log out
           </button>
         </div>
+        {/* Content Area */}
         <div className="flex-1 p-4">
-          {/* Content Area */}
           <h2 className="text-xl font-bold mb-0">Subscription Details</h2>
           <div className="mt-4">
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-              nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.
-              Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.
-              Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris
-              massa.
+              {"Your next invoive will be on "} <b>{nextInvoiceData}</b>
             </p>
             <button
               type="button"
