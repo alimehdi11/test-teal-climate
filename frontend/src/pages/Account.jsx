@@ -55,7 +55,6 @@ const Account = () => {
           }
         })
         .then((subscription) => {
-          console.log(subscription);
           return setSubscriptionFromStripe(subscription);
         })
         .catch((error) => {
