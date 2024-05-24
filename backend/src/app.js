@@ -13,6 +13,7 @@ import { verifyToken } from "./middlewares/auth.middlewares.js";
 import { subscriptionRouter } from "./routes/subscriptions.routes.js";
 import { stripeRouter } from "./routes/stripe.routes.js";
 import { handleWebhookEvents } from "./controllers/webhook.controllers.js";
+import { airportsRouter } from "./routes/airports.routes.js";
 
 const app = express();
 
@@ -57,6 +58,7 @@ app.post("/companyIntro", verifyToken, createCompanyIntro);
 app.get("/worldHeatMap/:userId", verifyToken, getWorldHeatMapDataByUserId);
 app.use("/subscriptions", verifyToken, subscriptionRouter);
 app.use("/stripe", verifyToken, stripeRouter);
+app.use("/airports", verifyToken, airportsRouter);
 app.post(
   "/webhook",
   express.raw({ type: "application/json" }),

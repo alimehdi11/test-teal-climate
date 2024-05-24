@@ -30,7 +30,13 @@ const Sidebar = ({
       const uniqueScopes = [
         ...new Set(jsonData.datas.map((item) => item.scope)),
       ];
-      return uniqueScopes;
+      // uniqueScopes.sort();
+      // return uniqueScopes;
+      const sortedFirstThreeScopes = uniqueScopes.slice(0, 3).sort();
+      const remainingScopes = uniqueScopes.slice(3);
+      const sortedScopes = [...sortedFirstThreeScopes, ...remainingScopes];
+
+      return sortedScopes;
     } catch (error) {
       console.log("ERROR FETCHING ACTIVITY DATA");
       console.error("Error fetching data:", error);
