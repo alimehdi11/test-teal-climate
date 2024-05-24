@@ -38,8 +38,7 @@ const FrameComponent1 = ({
   const [showLevel5Field, setShowLevel5Field] = useState(false);
 
   // Onlly for electricity (Level 1)
-  const [electricityBasedUpon, setElectricityBasedUpon] =
-    useState("locationBased");
+  const [marketBased, setMarketBased] = useState(false);
   const [emissionFactor, setEmissionFactor] = useState("");
   const [quantityPurchased, setQuantityPurchased] = useState("");
   const [unitOfEmissionFactor, setUnitOfEmissionFactor] = useState("");
@@ -342,7 +341,7 @@ const FrameComponent1 = ({
     /**
      * For electricity(level1) market based
      */
-    setElectricityBasedUpon("locationBased");
+    setMarketBased(false);
     setEmissionFactor("");
     setQuantityPurchased("");
     setUnitOfEmissionFactor("");
@@ -453,16 +452,16 @@ const FrameComponent1 = ({
     }
 
     /**
-     * For electricity(level1) market based
+     * For Scope 2 market based
      */
-    if (electricityBasedUpon === "marketBased") {
+    if (marketBased) {
       if (!emissionFactor || !quantityPurchased || !unitOfEmissionFactor) {
         toast.warn("Please fill all fields");
         return;
       }
     }
 
-    let payload, ghgconversions, marketBasedElectricityPayload;
+    let payload, ghgconversions, marketBasedPayload;
 
     if (
       selectedLevel === "Electricity" ||
@@ -651,21 +650,26 @@ const FrameComponent1 = ({
     }
 
     /**
-     * For electricity(level1) market based
+     * For Scope 2 market based
      */
-    if (
-      selectedLevel === "Electricity" &&
-      electricityBasedUpon === "marketBased"
-    ) {
-      marketBasedElectricityPayload = { ...payload };
-      marketBasedElectricityPayload.level5 = electricityBasedUpon;
-      marketBasedElectricityPayload.quantity = quantityPurchased;
-      marketBasedElectricityPayload.co2e = Number(emissionFactor);
-      marketBasedElectricityPayload.uom = unitOfEmissionFactor;
+    if (selectedScope === "Scope 2") {
+      // explicitly setting marketBased here
+      payload.level5 = "locationBased";
+    }
+
+    if (selectedScope === "Scope 2" && marketBased) {
+      marketBasedPayload = { ...payload };
+      marketBasedPayload.level5 = "marketBased";
+      marketBasedPayload.quantity = quantityPurchased;
+      marketBasedPayload.co2e = Number(emissionFactor);
+      marketBasedPayload.uom = unitOfEmissionFactor;
+      marketBasedPayload.co2eofco2 = null;
+      marketBasedPayload.co2eofch4 = null;
+      marketBasedPayload.co2eofn2o = null;
     }
 
     // console.table(payload);
-    // console.table(marketBasedElectricityPayload);
+    // console.table(marketBasedPayload);
     // return;
     fetch(`${process.env.REACT_APP_API_BASE_URL}/companiesdata`, {
       method: "POST",
@@ -680,14 +684,14 @@ const FrameComponent1 = ({
           throw new Error();
         }
         // Note : This if block is for omptimization purpose below i am fetching company data again
-        if (electricityBasedUpon !== "marketBased") {
+        if (!marketBased) {
           toast.success("Data submitted successfully");
           resetForm();
         }
       })
       .then(() => {
         // Note : This if block is for omptimization purpose below i am fetching company data again
-        if (electricityBasedUpon !== "marketBased") {
+        if (!marketBased) {
           fetchCompanyData();
         }
       })
@@ -697,19 +701,16 @@ const FrameComponent1 = ({
       });
 
     /**
-     * For electricity(level1) market based
+     * For Scope 2 market based
      */
-    if (
-      selectedLevel === "Electricity" &&
-      electricityBasedUpon === "marketBased"
-    ) {
+    if (selectedScope === "Scope 2" && marketBased) {
       fetch(`${process.env.REACT_APP_API_BASE_URL}/companiesdata`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           authorization: getBearerToken(),
         },
-        body: JSON.stringify(marketBasedElectricityPayload),
+        body: JSON.stringify(marketBasedPayload),
       })
         .then((response) => {
           if (!response.ok) {
@@ -1192,7 +1193,6 @@ const FrameComponent1 = ({
           <h1 className="m-0 h-9 relative text-inherit font-semibold font-inherit inline-block z-[1] mq450:text-lgi">
             Insert activity data here
           </h1>
-
           <div className="w-full grid grid-cols-2 text-base gap-5">
             {selectedLevel === "Electricity" && (
               <h3 className="text-base m-0 bg-gray-5 w-full p-2 col-span-2">
@@ -1527,7 +1527,8 @@ const FrameComponent1 = ({
           </div>
 
           {/* Location based or Market based only for Electricity(Level1) */}
-          {selectedLevel === "Electricity" && (
+          {/* {selectedLevel === "Electricity"  */}
+          {selectedScope === "Scope 2" && (
             <>
               {/* Radio buttons */}
               <div>
@@ -1540,10 +1541,10 @@ const FrameComponent1 = ({
                     type="radio"
                     id="locationBased"
                     name="electricityBased"
-                    value="locationBased"
-                    checked={electricityBasedUpon === "locationBased"}
+                    value="0" // False
+                    checked={!marketBased}
                     onChange={(event) => {
-                      setElectricityBasedUpon(event.target.value);
+                      setMarketBased(Boolean(Number(event.target.value)));
                     }}
                   />
                   <label
@@ -1559,10 +1560,10 @@ const FrameComponent1 = ({
                     type="radio"
                     id="marketBased"
                     name="electricityBased"
-                    value="marketBased"
-                    checked={electricityBasedUpon === "marketBased"}
+                    value="1"
+                    checked={marketBased}
                     onChange={(event) => {
-                      setElectricityBasedUpon(event.target.value);
+                      setMarketBased(Boolean(Number(event.target.value)));
                     }}
                   />
                   <label
@@ -1575,7 +1576,7 @@ const FrameComponent1 = ({
                 </div>
               </div>
               {/* Market based form */}
-              {electricityBasedUpon === "marketBased" && (
+              {marketBased && (
                 <div className="w-full grid grid-cols-2 gap-5">
                   <h3 className="text-base m-0 bg-gray-5 w-full p-2 col-span-2">
                     Market based
@@ -1625,7 +1626,6 @@ const FrameComponent1 = ({
               )}
             </>
           )}
-
           {/* Add, Edit, Cancel Buttons */}
           <div className="flex flex-row items-start justify-start gap-[8px] max-w-full mq450:flex-wrap ms-auto">
             {id ? (

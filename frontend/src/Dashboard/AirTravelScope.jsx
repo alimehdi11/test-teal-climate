@@ -29,7 +29,7 @@ const AirTravelScope = () => {
         throw new Error(`Failed to fetch data:`);
       }
       const jsonData = await response.json();
-      console.log(jsonData);
+      console.table(jsonData);
       return jsonData;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -67,15 +67,87 @@ const AirTravelScope = () => {
       (accumulator, obj) => {
         if (obj.fuel_category === scopeCategory) {
           return accumulator + obj.co2e;
+          ``;
         }
         return accumulator;
       },
       0
     );
 
-    if (scopeCategory === "Purchased Electricity") {
-      console.log("Purchased Electricity", totalC02eOfGivenScopeCategory);
+    if (scopeCategory === "Heat and steam") {
+      console.log("Heat and steam", totalC02eOfGivenScopeCategory);
     }
+
+    if (totalC02eOfGivenScopeCategory === 0) {
+      return totalC02eOfGivenScopeCategory;
+    } else {
+      return (
+        (totalC02eOfGivenScopeCategory / (totalCO2e * 1000)) *
+        100
+      ).toFixed(2);
+    }
+  };
+
+  const calculateTotalC02eOfScope2 = () => {
+    const totalC02eOfScope2 = companyData.reduce((accumulator, obj) => {
+      // Here we are excluding marketBased data(Scope 2)
+      if (obj.scope === "Scope 2" && obj.level5 !== "marketBased") {
+        return accumulator + obj.co2e;
+      }
+      return accumulator;
+    }, 0);
+    return totalC02eOfScope2 / 1000; // kg CO2e of given scope
+  };
+
+  const calculateC02ePercentageOfScope2 = () => {
+    if (totalCO2e === 0) {
+      return 0;
+    }
+
+    return (((totalScope2CO2e * 1000) / (totalCO2e * 1000)) * 100).toFixed(2);
+  };
+
+  const calculateC02ePercentageOfLocationBasedScopeCategory = (
+    scopeCategory
+  ) => {
+    const totalC02eOfGivenScopeCategory = companyData.reduce(
+      (accumulator, obj) => {
+        // Here we are excluding marketBased data(Scope 2)
+        if (
+          obj.fuel_category === scopeCategory &&
+          obj.level5 !== "marketBased"
+        ) {
+          return accumulator + obj.co2e;
+        }
+        return accumulator;
+      },
+      0
+    );
+
+    if (totalC02eOfGivenScopeCategory === 0) {
+      return totalC02eOfGivenScopeCategory;
+    } else {
+      return (
+        (totalC02eOfGivenScopeCategory / (totalCO2e * 1000)) *
+        100
+      ).toFixed(2);
+    }
+  };
+
+  const calculateC02ePercentageOfMarketBasedScopeCategory = (scopeCategory) => {
+    const totalC02eOfGivenScopeCategory = companyData.reduce(
+      (accumulator, obj) => {
+        // Here we are excluding marketBased data(Scope 2)
+        if (
+          obj.fuel_category === scopeCategory &&
+          obj.level5 === "marketBased"
+        ) {
+          return accumulator + obj.co2e;
+        }
+        return accumulator;
+      },
+      0
+    );
 
     if (totalC02eOfGivenScopeCategory === 0) {
       return totalC02eOfGivenScopeCategory;
@@ -125,7 +197,7 @@ const AirTravelScope = () => {
     if (companyData.length > 0) {
       const totalCO2e = calculateTotalC02e();
       const totalScope1CO2e = calculateTotalC02eOfGivenScope("Scope 1");
-      const totalScope2CO2e = calculateTotalC02eOfGivenScope("Scope 2");
+      const totalScope2CO2e = calculateTotalC02eOfScope2();
       const totalScope3CO2e = calculateTotalC02eOfGivenScope("Scope 3");
       const scopeCategoriesCO2ePercentages = scopeCategories.map(
         (scopeCategory) =>
@@ -224,7 +296,7 @@ const AirTravelScope = () => {
                     </div>
                   </div>
                   <div className="relative capitalize font-medium text-right">
-                    {calculateC02ePercentageOfGivenScope(totalScope2CO2e)}%
+                    {calculateC02ePercentageOfScope2()}%
                   </div>
                 </div>
                 <div className="self-stretch flex flex-row items-end justify-start gap-[6px] z-[1]">
@@ -341,7 +413,6 @@ const AirTravelScope = () => {
                       "Fugitive emissions"
                     ),
                   ]}
-                  // labels={labels2}
                 />
               </div>
             </div>
@@ -358,7 +429,7 @@ const AirTravelScope = () => {
                 <div className="rounded-81xl bg-orange overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
                   <div className="relative capitalize font-semibold">
                     <span>
-                      {calculateC02ePercentageOfGivenScope(totalScope2CO2e)}
+                      {calculateC02ePercentageOfScope2(totalScope2CO2e)}
                     </span>
                     <span className="text-7xs">{` `}</span>
                     <span>%</span>
@@ -399,8 +470,8 @@ const AirTravelScope = () => {
                       </div>
                     </div>
                     <div className="relative capitalize font-medium text-right">
-                      {calculateC02ePercentageOfGivenScopeCategory(
-                        "Purchased Electricity"
+                      {calculateC02ePercentageOfLocationBasedScopeCategory(
+                        "Purchased electricity"
                       )}
                       %
                     </div>
@@ -413,8 +484,8 @@ const AirTravelScope = () => {
                       </div>
                     </div>
                     <div className="relative capitalize font-medium text-right">
-                      {calculateC02ePercentageOfGivenScopeCategory(
-                        "Heat & Steam"
+                      {calculateC02ePercentageOfLocationBasedScopeCategory(
+                        "Heat and steam"
                       )}
                       %
                     </div>
@@ -424,12 +495,13 @@ const AirTravelScope = () => {
               <div className="h-[130px] w-[130px] relative z-[1] mq450:flex-1">
                 <ApexChart1
                   scopes={[
-                    calculateC02ePercentageOfGivenScopeCategory(
-                      "Purchased Electricity"
+                    calculateC02ePercentageOfLocationBasedScopeCategory(
+                      "Purchased electricity"
                     ),
-                    calculateC02ePercentageOfGivenScopeCategory("Heat & Steam"),
+                    calculateC02ePercentageOfLocationBasedScopeCategory(
+                      "Heat & steam"
+                    ),
                   ]}
-                  // labels={labels3}
                 />
               </div>
               <div className="h-[162px] w-px relative box-border z-[1] border-r-[1px] border-solid border-gray-5 mq750:w-full mq750:h-px" />
@@ -446,7 +518,10 @@ const AirTravelScope = () => {
                       </div>
                     </div>
                     <div className="relative capitalize font-medium text-right">
-                      10%
+                      {calculateC02ePercentageOfMarketBasedScopeCategory(
+                        "Electricity"
+                      )}
+                      %
                     </div>
                   </div>
                   <div className="self-stretch flex flex-row items-end justify-start gap-[6px] z-[1]">
@@ -457,15 +532,24 @@ const AirTravelScope = () => {
                       </div>
                     </div>
                     <div className="relative capitalize font-medium text-right">
-                      10%
+                      {calculateC02ePercentageOfMarketBasedScopeCategory(
+                        "Heat and steam"
+                      )}
+                      %
                     </div>
                   </div>
                 </div>
               </div>
               <div className="h-[130px] w-[130px] relative z-[1] mq450:flex-1">
                 <ApexChart1
-                  scopes={scopes2}
-                  //  labels={labels4}
+                  scopes={[
+                    calculateC02ePercentageOfMarketBasedScopeCategory(
+                      "Electricity"
+                    ),
+                    calculateC02ePercentageOfMarketBasedScopeCategory(
+                      "Heat & steam"
+                    ),
+                  ]}
                 />
               </div>
             </div>

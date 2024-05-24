@@ -2,6 +2,9 @@ import jwt from "jsonwebtoken";
 
 const verifyToken = (req, res, next) => {
   try {
+    if (!req?.headers.authorization) {
+      throw Error("No authorization header provided");
+    }
     const tokenParts = req.headers.authorization.split(" ");
     if (
       tokenParts[0] !== "Bearer" ||

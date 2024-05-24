@@ -3,7 +3,7 @@ import ReactApexChart from "react-apexcharts";
 
 const ApexChart = ({ scopes }) => {
   // Calculate percentages
-  const percentages = scopes.map((scope) => scope);
+  const percentages = scopes.map((scope) => Number(scope));
 
   // Series data for the chart
   const series = percentages;
