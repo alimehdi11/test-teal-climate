@@ -1,1 +1,1 @@
-# mern-eslint-prettier-husky
+# TEAL CLIMATE

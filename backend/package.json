@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "env-cmd -f ./.env.development nodemon ./src/app.js",
+    "dev": "env-cmd -f ./.env.development -f ./.env.development.local nodemon ./src/app.js",
     "prod": "env-cmd -f ./.env.production node ./src/app.js"
   },
   "dependencies": {
