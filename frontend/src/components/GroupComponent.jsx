@@ -1,4 +1,4 @@
-import { Link , useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const GroupComponent = () => {
   return (
     <header className="self-stretch bg-white shadow-[0px_4px_50px_rgba(0,_0,_0,_0.05)] flex flex-row items-start justify-between py-3 px-6 box-border gap-[20px] top-[0] z-[99] sticky max-w-full text-left text-xs text-dark font-poppins">
@@ -19,20 +19,23 @@ const GroupComponent = () => {
       </div>
       <div className="flex flex-col items-start justify-start py-0 pr-3.5 pl-0 box-border max-w-full">
         <div className="flex flex-row items-start justify-start gap-[8px] z-[2]">
-        <Link to="/" className="flex items-center gap-[8px]" style={{ textDecoration: 'none'}}>
-
-          <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
-            <div className="flex flex-row items-center justify-start py-0 pr-px pl-0 gap-[8px]">
-              <img
-                className="h-5 w-5 relative min-h-[20px]"
-                loading="eager"
-                alt=""
-                src="/icons.svg"
-              />
-              <div className="relative font-medium">Dashboard</div>
+          <Link
+            to="/"
+            className="flex items-center gap-[8px]"
+            style={{ textDecoration: "none" }}
+          >
+            <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
+              <div className="flex flex-row items-center justify-start py-0 pr-px pl-0 gap-[8px]">
+                <img
+                  className="h-5 w-5 relative min-h-[20px]"
+                  loading="eager"
+                  alt=""
+                  src="/icons.svg"
+                />
+                <div className="relative font-medium">Dashboard</div>
+              </div>
             </div>
-          </div>
-</Link>
+          </Link>
 
           <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
             <div className="flex flex-row items-center justify-start py-0 pr-[13px] pl-3 gap-[8px]">

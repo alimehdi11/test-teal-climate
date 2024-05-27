@@ -32,29 +32,37 @@ const GroupComponent = () => {
               </div>
             </div>
           </button>
-          <Link to="/profile" className="flex items-center gap-[8px]" style={{ textDecoration: 'none'}}>
-          <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
-            <div className="flex flex-row items-center justify-start py-0 pr-[13px] pl-3 gap-[8px]">
-              <img
-                className="h-5 w-5 relative min-h-[20px]"
-                alt=""
-                src="/icons-1.svg"
-              />
-              <div className="relative font-medium">Profile</div>
+          <Link
+            to="/profile"
+            className="flex items-center gap-[8px]"
+            style={{ textDecoration: "none" }}
+          >
+            <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
+              <div className="flex flex-row items-center justify-start py-0 pr-[13px] pl-3 gap-[8px]">
+                <img
+                  className="h-5 w-5 relative min-h-[20px]"
+                  alt=""
+                  src="/icons-1.svg"
+                />
+                <div className="relative font-medium">Profile</div>
+              </div>
             </div>
-          </div>
           </Link>
-          <Link to="/activites" className="flex items-center gap-[8px]" style={{ textDecoration: 'none'}}>
-          <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
-            <div className="flex flex-row items-center justify-start py-0 px-[7px] gap-[8px]">
-              <img
-                className="h-5 w-5 relative min-h-[20px]"
-                alt=""
-                src="/icons-2.svg"
-              />
-              <div className="relative font-medium">Activities</div>
+          <Link
+            to="/activites"
+            className="flex items-center gap-[8px]"
+            style={{ textDecoration: "none" }}
+          >
+            <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
+              <div className="flex flex-row items-center justify-start py-0 px-[7px] gap-[8px]">
+                <img
+                  className="h-5 w-5 relative min-h-[20px]"
+                  alt=""
+                  src="/icons-2.svg"
+                />
+                <div className="relative font-medium">Activities</div>
+              </div>
             </div>
-          </div>
           </Link>
           <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
             <div className="flex flex-row items-center justify-center py-0 px-[9px] gap-[8px]">

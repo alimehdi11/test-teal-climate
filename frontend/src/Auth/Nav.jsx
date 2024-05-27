@@ -25,30 +25,33 @@ const Nav = () => {
       <div className="flex flex-row items-center justify-center py-0 pr-3.5 pl-0 box-border max-w-full">
         <div className="flex flex-row items-center justify-center gap-[8px] z-[2]">
           {/* Dashboard Link */}
-          <Link to="/" className={`flex items-center ${location.pathname === '/' ? 'bg-brand-color-01 rounded-lg text-white' : ''}`} style={{ textDecoration: 'none'}}>
+          <Link
+            to="/"
+            className={`flex items-center ${location.pathname === "/" ? "bg-brand-color-01 rounded-lg text-white" : ""}`}
+            style={{ textDecoration: "none" }}
+          >
             <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
               <div className="flex flex-row items-center justify-start py-0 pr-px pl-0 gap-[8px]">
-                
                 <div className="relative font-medium">Login</div>
               </div>
             </div>
           </Link>
           {/* Profile Link */}
-         
-         
-          <Link to="/signup" className={`flex items-center ${location.pathname === '/signup' ? 'bg-brand-color-01 rounded-lg text-white' : ''}`} style={{ textDecoration: 'none'}}>
+
+          <Link
+            to="/signup"
+            className={`flex items-center ${location.pathname === "/signup" ? "bg-brand-color-01 rounded-lg text-white" : ""}`}
+            style={{ textDecoration: "none" }}
+          >
             <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
               <div className="flex flex-row items-center justify-start py-0 pr-px pl-0 gap-[8px]">
-                
                 <div className="relative font-medium">Sign up</div>
               </div>
             </div>
           </Link>
-    
         </div>
       </div>
       {/* Profile and Notification Icons */}
-      
     </header>
   );
 };
