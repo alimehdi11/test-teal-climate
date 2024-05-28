@@ -14,7 +14,7 @@ export default [
   pluginReactHooks.configs.recommended,
   { plugins: { pluginReactRefresh } },
   {
-    ignores: ["node_modules"],
+    ignores: ["node_modules", "public"],
   },
   eslintConfigPrettier,
 ];
