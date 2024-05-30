@@ -9,6 +9,6 @@ const Select = ({ children, className = "", id = "", onChange, value }) => {
       {children}
     </select>
   );
-};  
+};
 
 export default Select;
