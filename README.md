@@ -33,12 +33,14 @@
 
    ```bash
    cd backend
+   npm i
    npm run dev
    ```
 
 3. Start frontend server
    ```bash
    cd frontend
+   npm i
    npm run dev
    ```
 
@@ -48,20 +50,20 @@
 tealClimate/
 ├── backend/ # Express application
 |   ├── public/ # Static files
-│   └── src/ # Source files
-│       ├── controllers/ # Route controllers
-│       ├── database/ # Database configuration and connection
-│       ├── middlewares/ # Custom middlewares
-│       ├── routes/ # Express routes
-│       ├── services/ # Service layer
-│       └── app.js # Entry point for the backend
-└── frontend/ # React application
-     ├── public/ # Static files
-     └── src/ # Source files
-         ├── components/ # React components
-         |    ├── ui/ # UI components
-         |    └── layout/ # Layout components
-         ├── contexts/ # React contexts
-         ├── pages/ # React pages
-         └── utils/ # Utility functions
+│   ├── src/ # Source files
+│   │   ├── controllers/ # Route controllers
+│   │   ├── database/ # Database configuration and connection
+│   │   ├── middlewares/ # Custom middlewares
+│   │   ├── routes/ # Express routes
+│   │   ├── services/ # Service layer
+│   └───└── app.js # Entry point for the backend
+├── frontend/ # React application
+│   ├── public/ # Static files
+│   ├── src/ # Source files
+│   │   ├── components/ # React components
+│   │   |   ├── ui/ # UI components
+│   │   ├── └── layout/ # Layout components
+│   │   ├── contexts/ # React contexts
+│   │   ├── pages/ # React pages
+└───└───└── utils/ # Utility functions
 </pre>
