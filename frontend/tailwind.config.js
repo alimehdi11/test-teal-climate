@@ -1,12 +1,33 @@
 /** @type {import('tailwindcss').Config} */
 
 import tailgridsPlugin from "tailgrids/plugin";
+import colors from "tailwindcss/colors";
 
 export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
+        "brand-color-01": "#00cc9c",
+        "tc-green": "#00cc9c",
+        "brand-color-2": "#197ec6",
+        "tc-blue": "#197ec6",
+        "tc-gray": "#e5e7eb",
+        "tc-input-border": "#475569",
+        "forest-green": "#32b950",
+        "golden-rod": "#e6ba1f",
+        "medium-slate-blue": "#5d5fef",
+        "corn-flower-blue": "#a5a6f6",
+        "indian-red": {
+          100: "#eb5757",
+          200: "#c55757",
+        },
+        "medium-aqua-marine": "#85e0ab",
+        "green-1": "#219653",
+        "sky-blue": "#56ccf2",
+        "medium-orchid": "#bb6bd9",
+        "tc-violet": "#fd8bff",
+        /*-----------------------------------*/
         gray: {
           100: "#fbfbfb",
           300: "#929292",
@@ -41,59 +62,59 @@ export default {
         mediumslateblue: "#5d5fef",
         cornflowerblue: "#a5a6f6",
       },
-      spacing: {},
-      fontFamily: {
-        "sf-pro-display": "'SF Pro Display'",
-        "font-awesome-5-free": "'Font Awesome 5 Free'",
-        poppins: "Poppins",
-      },
-      borderRadius: {
-        "31xl": "50px",
-        "81xl": "100px",
-        "5xs-5": "7.5px",
-      },
+      // spacing: {},
+      // fontFamily: {
+      //   "sf-pro-display": "'SF Pro Display'",
+      //   "font-awesome-5-free": "'Font Awesome 5 Free'",
+      //   poppins: "Poppins",
+      // },
+      // borderRadius: {
+      //   "31xl": "50px",
+      //   "81xl": "100px",
+      //   "5xs-5": "7.5px",
+      // },
     },
-    fontSize: {
-      sm: "14px",
-      "2xs": "11px",
-      "5xs": "8px",
-      base: "16px",
-      "5xl": "24px",
-      lgi: "19px",
-      xs: "12px",
-      inherit: "inherit",
-      "3xs": "10px",
-      "7xs": "6px",
-      "6xs": "7px",
-      "13xl": "32px",
-      "7xl": "26px",
-    },
-    screens: {
-      mq1325: {
-        raw: "screen and (max-width: 1325px)",
-      },
-      mq1125: {
-        raw: "screen and (max-width: 1125px)",
-      },
-      mq800: {
-        raw: "screen and (max-width: 800px)",
-      },
-      mq450: {
-        raw: "screen and (max-width: 450px)",
-      },
-      lg: {
-        max: "1200px",
-      },
-      mq1050: {
-        raw: "screen and (max-width: 1050px)",
-      },
-      mqMin800: {
-        raw: "screen and (min-width: 800px)",
-      },
-    },
+    // fontSize: {
+    //   sm: "14px",
+    //   "2xs": "11px",
+    //   "5xs": "8px",
+    //   base: "16px",
+    //   "5xl": "24px",
+    //   lgi: "19px",
+    //   xs: "12px",
+    //   inherit: "inherit",
+    //   "3xs": "10px",
+    //   "7xs": "6px",
+    //   "6xs": "7px",
+    //   "13xl": "32px",
+    //   "7xl": "26px",
+    // },
+    // screens: {
+    //   mq1325: {
+    //     raw: "screen and (max-width: 1325px)",
+    //   },
+    //   mq1125: {
+    //     raw: "screen and (max-width: 1125px)",
+    //   },
+    //   mq800: {
+    //     raw: "screen and (max-width: 800px)",
+    //   },
+    //   mq450: {
+    //     raw: "screen and (max-width: 450px)",
+    //   },
+    //   lg: {
+    //     max: "1200px",
+    //   },
+    //   mq1050: {
+    //     raw: "screen and (max-width: 1050px)",
+    //   },
+    //   mqMin800: {
+    //     raw: "screen and (min-width: 800px)",
+    //   },
+    // },
   },
-  corePlugins: {
-    preflight: false,
-  },
+  // corePlugins: {
+  //   preflight: false,
+  // },
   plugins: [tailgridsPlugin],
 };
