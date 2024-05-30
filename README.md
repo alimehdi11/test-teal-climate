@@ -44,6 +44,7 @@
 
 ## Project Structure
 
+<pre>
 tealClimate/
 ├── backend/ # Express application
 │ ├── public/ # Static files
@@ -63,3 +64,4 @@ tealClimate/
 │ ├── contexts/ # React contexts
 │ ├── pages/ # React pages
 └ └── utils/ # Utility functions
+</pre>
