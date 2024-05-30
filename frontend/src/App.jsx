@@ -25,10 +25,10 @@ import SubscriptionPlans from "./pages/SubscriptionPlans";
 import Checkout from "./pages/Checkout";
 import Completion from "./pages/Completion";
 import Account from "./pages/Account";
-import Button from "../src/components/ui/Button";
 
 function App() {
   const [userId, setUserId] = useState("");
+  const [selectValue, setSelectValue] = useState("");
 
   const handleLogin = (id) => {
     setUserId(id);
@@ -68,49 +68,52 @@ function App() {
   //   }
   // }, [pathname]);
 
-  return (
-    <Button>Submit</Button>
-    // <UserProvider>
-    //   <BrowserRouter>
-    //     <Routes>
-    //       {/* <Route path="dashboardad" element={<Navbar userName={userName} />} /> */}
+  const handleOnChange = (e) => {
+    setSelectValue(e.target.value);
+  };
 
-    //       <Route
-    //         path="/dashboard"
-    //         element={<ProtectedRoute Component={Dashboard} />}
-    //       />
-    //       <Route
-    //         path="/activites"
-    //         element={<Activities />}
-    //         // element={<ProtectedRoute Component={Activities} />}
-    //       />
-    //       <Route
-    //         path="/activites/:id/edit"
-    //         element={<Activities />}
-    //         // element={<ProtectedRoute Component={Activities} />}
-    //       />
-    //       <Route
-    //         path="/profile"
-    //         element={<Page userId={userId} />}
-    //         // element={<ProtectedRoute Component={Page} />}
-    //       />
-    //       <Route
-    //         path="/profile/:id/edit"
-    //         element={<Page userId={userId} />}
-    //         // element={<ProtectedRoute Component={Page} />}
-    //       />
-    //       <Route path="/" element={<LoginForm onLogin={handleLogin} />} />
-    //       <Route path="signup" element={<SignUpForm />} />
-    //       <Route path="/plans" element={<SubscriptionPlans />} />
-    //       <Route path="/subscribe" element={<Checkout />} />
-    //       <Route path="/completion" element={<Completion />} />
-    //       <Route
-    //         path="/account"
-    //         element={<ProtectedRoute Component={Account} />}
-    //       />
-    //     </Routes>
-    //   </BrowserRouter>
-    // </UserProvider>
+  return (
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path="dashboardad" element={<Navbar userName={userName} />} /> */}
+
+          <Route
+            path="/dashboard"
+            element={<ProtectedRoute Component={Dashboard} />}
+          />
+          <Route
+            path="/activites"
+            element={<Activities />}
+            // element={<ProtectedRoute Component={Activities} />}
+          />
+          <Route
+            path="/activites/:id/edit"
+            element={<Activities />}
+            // element={<ProtectedRoute Component={Activities} />}
+          />
+          <Route
+            path="/profile"
+            element={<Page userId={userId} />}
+            // element={<ProtectedRoute Component={Page} />}
+          />
+          <Route
+            path="/profile/:id/edit"
+            element={<Page userId={userId} />}
+            // element={<ProtectedRoute Component={Page} />}
+          />
+          <Route path="/" element={<LoginForm onLogin={handleLogin} />} />
+          <Route path="signup" element={<SignUpForm />} />
+          <Route path="/plans" element={<SubscriptionPlans />} />
+          <Route path="/subscribe" element={<Checkout />} />
+          <Route path="/completion" element={<Completion />} />
+          <Route
+            path="/account"
+            element={<ProtectedRoute Component={Account} />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
 
     //     <Routes>
     // <Route path="/" element={< LoginForm/>} />
