@@ -1,6 +1,4 @@
-# Project Name
-
-- TEAL CLIMATE
+# TEAL CLIMATE
 
 ## Table of Contents
 
@@ -48,22 +46,30 @@
 
 <pre>
 tealClimate/
-├── backend/ # Express application
-|   ├── public/ # Static files
-│   ├── src/ # Source files
-│   │   ├── controllers/ # Route controllers
-│   │   ├── database/ # Database configuration and connection
-│   │   ├── middlewares/ # Custom middlewares
-│   │   ├── routes/ # Express routes
-│   │   ├── services/ # Service layer
-│   └───└── app.js # Entry point for the backend
-├── frontend/ # React application
-│   ├── public/ # Static files
-│   ├── src/ # Source files
-│   │   ├── components/ # React components
-│   │   |   ├── ui/ # UI components
-│   │   ├───└── layout/ # Layout components
-│   │   ├── contexts/ # React contexts
-│   │   ├── pages/ # React pages
-└───└───└── utils/ # Utility functions
+├───backend/
+|   ├───public/
+│   ├───src/
+│   │   ├───controllers/
+│   │   ├───database/
+│   │   ├───middlewares/
+│   │   ├───routes/
+│   │   ├───services/
+│   ├───└───app.js
+├───frontend/
+│   ├───public/
+│   ├───src/
+│   │   ├───components/
+│   │   |   ├───ui/
+│   │   ├───└───layout/
+│   │   ├───contexts/
+│   ├───└───pages/
+│   ├───.env.development 
+│   ├───.env.production 
+│   ├───index.html
+│   ├───tailwind.config.js
+│   ├───vite.config.js
+├───.gitignore
+├───eslint.config.mjs
+├───prettier.config.mjs
+└───README.md
 </pre>

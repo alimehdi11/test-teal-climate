@@ -1,7 +1,6 @@
 {
-  "name": "backend",
-  "private": true,
-  "version": "0.0.0",
+  "name": "tealclimate-backend",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "env-cmd -f ./.env.development -f ./.env.development.local nodemon ./src/app.js",
