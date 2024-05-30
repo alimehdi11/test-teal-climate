@@ -62,7 +62,7 @@ tealClimate/
 │   ├── src/ # Source files
 │   │   ├── components/ # React components
 │   │   |   ├── ui/ # UI components
-│   │   ├── └── layout/ # Layout components
+│   │   ├───└── layout/ # Layout components
 │   │   ├── contexts/ # React contexts
 │   │   ├── pages/ # React pages
 └───└───└── utils/ # Utility functions
