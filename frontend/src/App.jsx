@@ -25,6 +25,9 @@ import SubscriptionPlans from "./pages/SubscriptionPlans";
 import Checkout from "./pages/Checkout";
 import Completion from "./pages/Completion";
 import Account from "./pages/Account";
+import Layout from "./components/Layout";
+import __sidebar from "./components/__sidebar";
+import Main from "./components/Main";
 
 function App() {
   const [userId, setUserId] = useState("");
@@ -73,47 +76,51 @@ function App() {
   };
 
   return (
-    <UserProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* <Route path="dashboardad" element={<Navbar userName={userName} />} /> */}
+    <Layout>
+      <__sidebar></__sidebar>
+      <Main></Main>
+    </Layout>
+    // <UserProvider>
+    //   <BrowserRouter>
+    //     <Routes>
+    //       {/* <Route path="dashboardad" element={<Navbar userName={userName} />} /> */}
 
-          <Route
-            path="/dashboard"
-            element={<ProtectedRoute Component={Dashboard} />}
-          />
-          <Route
-            path="/activites"
-            element={<Activities />}
-            // element={<ProtectedRoute Component={Activities} />}
-          />
-          <Route
-            path="/activites/:id/edit"
-            element={<Activities />}
-            // element={<ProtectedRoute Component={Activities} />}
-          />
-          <Route
-            path="/profile"
-            element={<Page userId={userId} />}
-            // element={<ProtectedRoute Component={Page} />}
-          />
-          <Route
-            path="/profile/:id/edit"
-            element={<Page userId={userId} />}
-            // element={<ProtectedRoute Component={Page} />}
-          />
-          <Route path="/" element={<LoginForm onLogin={handleLogin} />} />
-          <Route path="signup" element={<SignUpForm />} />
-          <Route path="/plans" element={<SubscriptionPlans />} />
-          <Route path="/subscribe" element={<Checkout />} />
-          <Route path="/completion" element={<Completion />} />
-          <Route
-            path="/account"
-            element={<ProtectedRoute Component={Account} />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </UserProvider>
+    //       <Route
+    //         path="/dashboard"
+    //         element={<ProtectedRoute Component={Dashboard} />}
+    //       />
+    //       <Route
+    //         path="/activites"
+    //         element={<Activities />}
+    //         // element={<ProtectedRoute Component={Activities} />}
+    //       />
+    //       <Route
+    //         path="/activites/:id/edit"
+    //         element={<Activities />}
+    //         // element={<ProtectedRoute Component={Activities} />}
+    //       />
+    //       <Route
+    //         path="/profile"
+    //         element={<Page userId={userId} />}
+    //         // element={<ProtectedRoute Component={Page} />}
+    //       />
+    //       <Route
+    //         path="/profile/:id/edit"
+    //         element={<Page userId={userId} />}
+    //         // element={<ProtectedRoute Component={Page} />}
+    //       />
+    //       <Route path="/" element={<LoginForm onLogin={handleLogin} />} />
+    //       <Route path="signup" element={<SignUpForm />} />
+    //       <Route path="/plans" element={<SubscriptionPlans />} />
+    //       <Route path="/subscribe" element={<Checkout />} />
+    //       <Route path="/completion" element={<Completion />} />
+    //       <Route
+    //         path="/account"
+    //         element={<ProtectedRoute Component={Account} />}
+    //       />
+    //     </Routes>
+    //   </BrowserRouter>
+    // </UserProvider>
 
     //     <Routes>
     // <Route path="/" element={< LoginForm/>} />

@@ -72,6 +72,29 @@ export default {
         "81xl": "100px",
         "5xs-5": "7.5px",
       },
+      screens: {
+        mq1325: {
+          raw: "screen and (max-width: 1325px)",
+        },
+        mq1125: {
+          raw: "screen and (max-width: 1125px)",
+        },
+        mq800: {
+          raw: "screen and (max-width: 800px)",
+        },
+        mq450: {
+          raw: "screen and (max-width: 450px)",
+        },
+        lg: {
+          max: "1200px",
+        },
+        mq1050: {
+          raw: "screen and (max-width: 1050px)",
+        },
+        mqMin800: {
+          raw: "screen and (min-width: 800px)",
+        },
+      },
     },
     fontSize: {
       sm: "14px",
@@ -87,29 +110,6 @@ export default {
       "6xs": "7px",
       "13xl": "32px",
       "7xl": "26px",
-    },
-    screens: {
-      mq1325: {
-        raw: "screen and (max-width: 1325px)",
-      },
-      mq1125: {
-        raw: "screen and (max-width: 1125px)",
-      },
-      mq800: {
-        raw: "screen and (max-width: 800px)",
-      },
-      mq450: {
-        raw: "screen and (max-width: 450px)",
-      },
-      lg: {
-        max: "1200px",
-      },
-      mq1050: {
-        raw: "screen and (max-width: 1050px)",
-      },
-      mqMin800: {
-        raw: "screen and (min-width: 800px)",
-      },
     },
   },
   corePlugins: {
