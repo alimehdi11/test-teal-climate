@@ -10,10 +10,11 @@ import { getActivityeData } from "./controllers/activityData.controllers.js";
 import { getCategories } from "./controllers/categories.controllers.js";
 import { getCountries } from "./controllers/countries.controllers.js";
 import { verifyToken } from "./middlewares/auth.middlewares.js";
-import { subscriptionRouter } from "./routes/subscriptions.routes.js";
+import { subscriptionsRouter } from "./routes/subscriptions.routes.js";
 import { stripeRouter } from "./routes/stripe.routes.js";
 import { handleWebhookEvents } from "./controllers/webhook.controllers.js";
 import { airportsRouter } from "./routes/airports.routes.js";
+import { electricVehiclesRouter } from "./routes/electricVehicles.routes.js";
 
 const app = express();
 
@@ -37,11 +38,12 @@ if (process.env.NODE_ENV === "development") {
  */
 if (process.env.NODE_ENV === "development") {
   const corsOptions = {
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_ORIGIN,
     methods: ["GET", "POST", "PUT", "DELETE"],
   };
   app.use(cors(corsOptions));
 }
+
 app.use(express.json());
 app.use(express.static(path.join(process.cwd(), "public")));
 
@@ -56,14 +58,18 @@ app.use("/companies", verifyToken, companiesRouter);
 app.use("/companiesdata", verifyToken, companiesDataRouter);
 app.post("/companyIntro", verifyToken, createCompanyIntro);
 app.get("/worldHeatMap/:userId", verifyToken, getWorldHeatMapDataByUserId);
-app.use("/subscriptions", verifyToken, subscriptionRouter);
+app.use("/subscriptions", verifyToken, subscriptionsRouter);
 app.use("/stripe", verifyToken, stripeRouter);
 app.use("/airports", verifyToken, airportsRouter);
-app.post(
-  "/webhook",
-  express.raw({ type: "application/json" }),
-  handleWebhookEvents
-);
+app.use("/electricVehicles", electricVehiclesRouter);
+
+// TODO : check webhook setup needed or not
+// app.post(
+//   "/webhook",
+//   express.raw({ type: "application/json" }),
+//   handleWebhookEvents
+// );
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });

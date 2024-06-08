@@ -3,6 +3,7 @@ import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { getBearerToken } from "./../utils/auth.utils.js";
+import { request } from "./../utils/network.utils.js";
 
 const FrameComponent1 = ({
   selectedScope,
@@ -13,10 +14,10 @@ const FrameComponent1 = ({
   setCompanyData,
 }) => {
   const [scopeCategoryValue, setScopeCategoryValue] = useState("");
-  const [fuelTypeValue, setFuelTypeValue] = useState("");
+  const [fuelTypeValue, setFuelTypeValue] = useState(""); // level2
   const [businessUnitValue, setBusinessUnitValue] = useState("");
   const [unitOfMeasurementValue, setUnitOfMeasurementValue] = useState("");
-  const [fuelNameValue, setFuelNameValue] = useState("");
+  const [fuelNameValue, setFuelNameValue] = useState(""); // level3
   const [quantityValue, setQuantityValue] = useState("");
   const [level4Value, setLevel4Value] = useState("");
   const [level5Value, setLevel5Value] = useState("");
@@ -402,6 +403,12 @@ const FrameComponent1 = ({
     return level5;
   };
 
+  const fetchElectricVehicle = async () => {
+    const url = `${import.meta.env.VITE_API_BASE_URL}/electricVehicles?scope=${selectedScope}&level1=${selectedLevel}&level2=${fuelTypeValue}&level3=${fuelNameValue}&uom=${unitOfMeasurementValue}&unit=kWh`;
+    const electricVehicle = await request(url, "GET");
+    return electricVehicle;
+  };
+
   const handleFormSubmit = async () => {
     // console.log(
     //   userId,
@@ -596,6 +603,7 @@ const FrameComponent1 = ({
         level5: null, // filter out
       };
       // find level2 and level5 and then calculate ghgconversions and then update payload
+      // Filtering level2
       payload.level2 = filterFuelTypes()[0];
 
       if (selectedLevel === "WTT- district heat and steam distribution") {
@@ -624,6 +632,7 @@ const FrameComponent1 = ({
         selectedLevel !== "Business travel- air" ||
         selectedLevel !== "WTT- business travel- air"
       ) {
+        // Filtering level5
         payload.level5 = filterLevel5BasedOnScopeAndLevel1()[0];
       }
       ghgconversions = calculateConversionGHGForDeliveryEvs(payload);
@@ -647,6 +656,27 @@ const FrameComponent1 = ({
         level5: level5Value || null,
         ...ghgconversions,
       };
+
+      /**
+       * For "Passenger Evs", "Delivery Evs"
+       */
+      if (
+        selectedLevel === "Passenger Evs" ||
+        selectedLevel === "Delivery Evs"
+      ) {
+        const electricVehicle = await (await fetchElectricVehicle())
+          .json()
+          .catch((error) => console.log(error));
+
+        let electricityConsumptionPerUnit =
+          electricVehicle.electricityConsumptionPerUnit;
+        payload.co2e = payload.co2e * electricityConsumptionPerUnit;
+
+        /** TODO : "activitydata" table column values should be corrected.
+         * "level5" data should be in level4. And level5 should be null.
+         */
+        payload.level4 = payload.level5;
+      }
     }
 
     /**
@@ -668,9 +698,9 @@ const FrameComponent1 = ({
       marketBasedPayload.co2eofn2o = null;
     }
 
-    // console.table(payload);
-    // console.table(marketBasedPayload);
-    // return;
+    console.table(payload);
+    console.table(marketBasedPayload);
+    return;
     fetch(`${import.meta.env.VITE_API_BASE_URL}/companiesdata`, {
       method: "POST",
       headers: {
@@ -1544,7 +1574,7 @@ const FrameComponent1 = ({
                 type="number"
                 className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600 placeholder-dark"
                 value={quantityValue}
-                onChange={(e) => setQuantityValue(e.target.value)}
+                onChange={(e) => setQuantityValue(Math.max(0, e.target.value))}
                 placeholder="Enter Quantity"
               />
             </div>

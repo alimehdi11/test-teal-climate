@@ -4,12 +4,12 @@ import {
   updateSubscription,
 } from "../controllers/subscriptions.controllers.js";
 
-const subscriptionRouter = express.Router();
+const subscriptionsRouter = express.Router();
 
 // Read subscription for loggedIn user
-subscriptionRouter.get("/:userId", getSubscription);
+subscriptionsRouter.get("/:userId", getSubscription);
 
 // Update subscription for loggedIn user
-subscriptionRouter.put("/:userId", updateSubscription);
+subscriptionsRouter.put("/:userId", updateSubscription);
 
-export { subscriptionRouter };
+export { subscriptionsRouter };

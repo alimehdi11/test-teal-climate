@@ -63,7 +63,7 @@ const AirTravelScope = () => {
   };
 
   const calculateC02ePercentageOfGivenScopeCategory = (scopeCategory) => {
-    const totalC02eOfGivenScopeCategory = companyData.reduce(
+    const totalC02eOfGivenScopeCategory = companyData?.reduce(
       (accumulator, obj) => {
         if (obj.fuel_category === scopeCategory) {
           return accumulator + obj.co2e;
