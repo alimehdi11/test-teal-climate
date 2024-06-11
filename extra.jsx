@@ -14,10 +14,10 @@ const FrameComponent1 = ({
   setCompanyData,
 }) => {
   const [scopeCategoryValue, setScopeCategoryValue] = useState("");
-  const [fuelTypeValue, setFuelTypeValue] = useState(""); // level2
+  const [fuelTypeValue, setFuelTypeValue] = useState("");
   const [businessUnitValue, setBusinessUnitValue] = useState("");
   const [unitOfMeasurementValue, setUnitOfMeasurementValue] = useState("");
-  const [fuelNameValue, setFuelNameValue] = useState(""); // level3
+  const [fuelNameValue, setFuelNameValue] = useState("");
   const [quantityValue, setQuantityValue] = useState("");
   const [level4Value, setLevel4Value] = useState("");
   const [level5Value, setLevel5Value] = useState("");
@@ -38,11 +38,15 @@ const FrameComponent1 = ({
   const [showLevel4Field, setShowLevel4Field] = useState(false);
   const [showLevel5Field, setShowLevel5Field] = useState(false);
 
-  // Onlly for electricity (Level 1)
+  /**
+   * For Scope 2 market based
+   */
   const [marketBased, setMarketBased] = useState(false);
   const [emissionFactor, setEmissionFactor] = useState("");
   const [quantityPurchased, setQuantityPurchased] = useState("");
   const [unitOfEmissionFactor, setUnitOfEmissionFactor] = useState("");
+
+  const [airports, setAirports] = useState([]);
 
   const { id } = useParams();
   const navigation = useNavigate();
@@ -50,7 +54,7 @@ const FrameComponent1 = ({
   const fetchBusinessUnit = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/companies/${userId}?column=unitname`,
+        `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}?column=unitname`,
         {
           headers: {
             authorization: getBearerToken(),
@@ -69,7 +73,7 @@ const FrameComponent1 = ({
   const fetchActivitesData = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/activitydata`,
+        `${process.env.REACT_APP_API_BASE_URL}/activitydata`,
         {
           headers: {
             authorization: getBearerToken(),
@@ -109,7 +113,7 @@ const FrameComponent1 = ({
   const fetchScopeCategoriesData = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/categories`,
+        `${process.env.REACT_APP_API_BASE_URL}/categories`,
         {
           headers: {
             authorization: getBearerToken(),
@@ -124,6 +128,23 @@ const FrameComponent1 = ({
       return jsonData;
     } catch (error) {
       console.error("Error fetching categories data:", error);
+    }
+  };
+
+  const fetchAirports = async () => {
+    try {
+      const response = await request(
+        `${process.env.REACT_APP_API_BASE_URL}/airports`,
+        "GET"
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch airports");
+      }
+      const jsonData = await response.json();
+      return jsonData;
+    } catch (error) {
+      console.error("Error fetching airports data:", error);
     }
   };
 
@@ -351,7 +372,7 @@ const FrameComponent1 = ({
   const fetchCompanyData = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/companiesdata/${userId}`,
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/${userId}`,
         {
           headers: {
             authorization: getBearerToken(),
@@ -371,7 +392,7 @@ const FrameComponent1 = ({
   const fetchCompanyDataOfGivenId = async (id) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/companiesdata/activites/${id}`,
+        `${process.env.REACT_APP_API_BASE_URL}/companiesdata/activites/${id}`,
         {
           headers: {
             authorization: getBearerToken(),
@@ -404,13 +425,13 @@ const FrameComponent1 = ({
   };
 
   const fetchElectricVehicle = async () => {
-    const url = `${import.meta.env.VITE_API_BASE_URL}/electricVehicles?scope=${selectedScope}&level1=${selectedLevel}&level2=${fuelTypeValue}&level3=${fuelNameValue}&uom=${unitOfMeasurementValue}&unit=kWh`;
+    const url = `${process.env.REACT_APP_API_BASE_URL}/electricVehicles?scope=${selectedScope}&level1=${selectedLevel}&level2=${fuelTypeValue}&level3=${fuelNameValue}&uom=${unitOfMeasurementValue}&unit=kWh`;
     const electricVehicle = await request(url, "GET");
     return electricVehicle;
   };
 
   const handleFormSubmit = async () => {
-    // console.log(
+    // console.table([
     //   userId,
     //   selectedScope,
     //   selectedLevel,
@@ -425,8 +446,8 @@ const FrameComponent1 = ({
     //   level5Options,
     //   level5Value,
     //   unitOfMeasurementValue,
-    //   quantityValue
-    // );
+    //   quantityValue,
+    // ]);
     // console.log(
     //   !userId ||
     //     !selectedScope ||
@@ -486,7 +507,7 @@ const FrameComponent1 = ({
       const fetchCompanyDataAndFilterCountryAndRegion = async () => {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_API_BASE_URL}/companies/${userId}`,
+            `${process.env.REACT_APP_API_BASE_URL}/companies/${userId}`,
             {
               headers: {
                 authorization: getBearerToken(),
@@ -586,7 +607,7 @@ const FrameComponent1 = ({
       selectedLevel === "WTT- heat and steam" ||
       selectedLevel === "WTT- district heat and steam distribution" ||
       selectedLevel === "Hotel stay" ||
-      selectedLevel === "Business travel- air" ||
+      // selectedLevel === "Business travel- air" ||
       selectedLevel === "WTT- business travel- air"
     ) {
       payload = {
@@ -603,7 +624,6 @@ const FrameComponent1 = ({
         level5: null, // filter out
       };
       // find level2 and level5 and then calculate ghgconversions and then update payload
-      // Filtering level2
       payload.level2 = filterFuelTypes()[0];
 
       if (selectedLevel === "WTT- district heat and steam distribution") {
@@ -632,7 +652,6 @@ const FrameComponent1 = ({
         selectedLevel !== "Business travel- air" ||
         selectedLevel !== "WTT- business travel- air"
       ) {
-        // Filtering level5
         payload.level5 = filterLevel5BasedOnScopeAndLevel1()[0];
       }
       ghgconversions = calculateConversionGHGForDeliveryEvs(payload);
@@ -701,7 +720,7 @@ const FrameComponent1 = ({
     // console.table(payload);
     // console.table(marketBasedPayload);
     // return;
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/companiesdata`, {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/companiesdata`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -734,7 +753,7 @@ const FrameComponent1 = ({
      * For Scope 2 market based
      */
     if (selectedScope === "Scope 2" && marketBased) {
-      fetch(`${import.meta.env.VITE_API_BASE_URL}/companiesdata`, {
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/companiesdata`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -809,7 +828,7 @@ const FrameComponent1 = ({
 
     // console.table(payload);
     // return;
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/companiesdata/${id}`, {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/companiesdata/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -962,15 +981,14 @@ const FrameComponent1 = ({
   const filterUnitOfMeasurementsBasedOnScopeAndLevel1 = () => {
     let unitsOfMeasurement = [];
     activitesData?.datas.forEach((item) => {
-      if (
-        item.scope === selectedScope &&
-        // here selectedLevel === Electricity
-        item.level1 === selectedLevel
-      ) {
+      if (item.scope === selectedScope && item.level1 === selectedLevel) {
         unitsOfMeasurement.push(item.uom);
       }
     });
     unitsOfMeasurement = [...new Set(unitsOfMeasurement)];
+    console.table("selectedScope", selectedScope);
+    console.table("selectedLevel", selectedLevel);
+    console.table("unitOfMeasurements", unitOfMeasurements);
     return unitsOfMeasurement;
   };
 
@@ -987,6 +1005,24 @@ const FrameComponent1 = ({
     });
     level3 = [...new Set(level3)];
     return level3;
+  };
+
+  const filterAirportsName = (airports) => {
+    const airportsName = airports.map((item) => {
+      return item.airports;
+    });
+    return airportsName;
+  };
+
+  const getLatAndLonOfGivenAirport = (givenAirportName) => {
+    const filteredAirport = airports.filter(
+      (airport) => airport.airports === givenAirportName
+    )[0];
+
+    return {
+      latitude: filteredAirport.latitude,
+      longitude: filteredAirport.longitude,
+    };
   };
 
   useEffect(() => {
@@ -1045,8 +1081,14 @@ const FrameComponent1 = ({
           selectedLevel !== "WTT- heat and steam" &&
           selectedLevel !== "Hotel stay"
         ) {
-          setShowLevel4Field(isLevel4Available());
-          setShowLevel5Field(isLevel5Available());
+          if (selectedLevel !== "Business travel- air") {
+            setShowLevel4Field(isLevel4Available());
+          }
+          setShowLevel5Field(
+            selectedLevel === "Business travel- air"
+              ? true
+              : isLevel5Available()
+          );
         }
       }
 
@@ -1081,11 +1123,14 @@ const FrameComponent1 = ({
         const unitOfMeasurements =
           filterUnitOfMeasurementsBasedOnScopeAndLevel1();
         setUnitOfMeasurements(unitOfMeasurements);
-        const level3 = filterLevel3BasedOnScopeAndLevel1();
-        setFuelNames(level3);
+
+        if (selectedLevel !== "Business travel- air") {
+          const level3 = filterLevel3BasedOnScopeAndLevel1();
+          setFuelNames(level3);
+        }
 
         if (
-          selectedLevel === "Business travel- air" ||
+          // selectedLevel === "Business travel- air" ||
           selectedLevel === "WTT- business travel- air"
         ) {
           const level4Options = (() => {
@@ -1109,8 +1154,11 @@ const FrameComponent1 = ({
     }
   }, [selectedLevel, scopeCategoriesData, activitesData, businessUnits]);
 
+  /**
+   * level2
+   */
   useEffect(() => {
-    if (!id) {
+    if (!id && selectedLevel !== "Business travel- air") {
       setFuelTypes([]);
       setFuelTypeValue("");
       setUnitOfMeasurementValue("");
@@ -1143,14 +1191,18 @@ const FrameComponent1 = ({
     }
   }, [scopeCategoryValue]);
 
+  /**
+   * level3
+   */
   useEffect(() => {
     if (!id) {
       setFuelNameValue("");
       setFuelNames([]);
       setUnitOfMeasurementValue("");
-      setUnitOfMeasurements([]);
+      // setUnitOfMeasurements([]);
     }
-    if (fuelTypeValue !== "") {
+
+    if (fuelTypeValue !== "" && selectedLevel !== "Business travel- air") {
       const unitsOfMeasurement = filterUnitOfMeasurements();
       setUnitOfMeasurements(unitsOfMeasurement);
       if (
@@ -1166,8 +1218,21 @@ const FrameComponent1 = ({
         setFuelNames(fuelNames);
       }
     }
+
+    if (selectedLevel === "Business travel- air") {
+      const airportsName = filterAirportsName(airports);
+      const airportsNameExceptSelectedInLevel2 = airportsName.filter(
+        (airportName) => {
+          return airportName !== fuelTypeValue;
+        }
+      );
+      setFuelNames(airportsNameExceptSelectedInLevel2);
+    }
   }, [fuelTypeValue]);
 
+  /**
+   * level4 & level5
+   */
   useEffect(() => {
     if (!id) {
       if (
@@ -1191,7 +1256,84 @@ const FrameComponent1 = ({
       const level5Options = filterLevel5Options();
       setLevel5Options(level5Options);
     }
+
+    if (selectedLevel === "Business travel- air") {
+      // Filtering level5 options
+      let level5 = [];
+      activitesData?.datas.forEach((item) => {
+        if (
+          item.scope === selectedScope &&
+          item.level1 === selectedLevel &&
+          /**
+           * For "Business travel- air" there will be no airport value
+           * for level2 and level3 in activitydata table.
+           * We are fetching from airport table add assigning them.
+           */
+          // item.level2 === fuelTypeValue &&
+          // item.level3 === fuelNameValue &&
+          item.level4 !== "null" &&
+          item.level4
+        ) {
+          level5.push(item.level4);
+        }
+      });
+      level5 = [...new Set(level5)];
+      setLevel5Options(level5);
+      if (fuelNameValue) {
+        // Calculating distance between airports
+        const { latitude: lat1, longitude: lon1 } =
+          getLatAndLonOfGivenAirport(fuelTypeValue);
+        const { latitude: lat2, longitude: lon2 } =
+          getLatAndLonOfGivenAirport(fuelNameValue);
+        const EARTH_RADIUS_IN_MILES = 3963.19;
+        let distanceInMiles =
+          EARTH_RADIUS_IN_MILES *
+          Math.acos(
+            Math.sin(lat1) * Math.sin(lat2) +
+              Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)
+          );
+        distanceInMiles = Number(distanceInMiles.toFixed(2));
+
+        setQuantityValue(distanceInMiles);
+
+        // Determining level4
+        if (distanceInMiles < 300) {
+          setLevel4Value("Air Travel - Short Haul");
+        } else if (distanceInMiles >= 300 && distanceInMiles < 2300) {
+          setLevel4Value("Air Travel - Medium Haul");
+        } else if (distanceInMiles >= 2300) {
+          setLevel4Value("Air Travel - Long Haul");
+        }
+      }
+    }
   }, [fuelNameValue]);
+
+  /**
+   * Business travel- air
+   */
+  useEffect(() => {
+    if (selectedLevel === "Business travel- air") {
+      fetchAirports()
+        .then((airports) => {
+          setAirports(airports);
+          return filterAirportsName(airports);
+        })
+        .then((airportsName) => setFuelTypes(airportsName))
+        .catch((error) => console.log(error));
+    }
+  }, []);
+
+  /**
+   * Only for "Business travel- air"
+   */
+  useEffect(() => {
+    if (unitOfMeasurementValue && selectedLevel === "Business travel- air") {
+      // If selected in km then update it otherwise it will default in miles
+      if (unitOfMeasurementValue === "passenger.km") {
+        setQuantityValue(Number((quantityValue * 1.609344).toFixed(2)));
+      }
+    }
+  }, [unitOfMeasurementValue]);
 
   useEffect(() => {
     if (id && activitesData) {
@@ -1272,7 +1414,7 @@ const FrameComponent1 = ({
               </select>
             </div>
 
-            {/* Fuel Type */}
+            {/* Fuel Type (level2) */}
             {/* selectedLevel !== "WTT- electricity" && */}
             {selectedLevel !== "Electricity" &&
               selectedLevel !== "Electricity TandD" &&
@@ -1288,7 +1430,7 @@ const FrameComponent1 = ({
               selectedLevel !== "WTT- district heat and steam distribution" &&
               selectedLevel !== "Hotel stay" &&
               selectedLevel !== "Managed assets- electricity" &&
-              selectedLevel !== "Business travel- air" &&
+              // selectedLevel !== "Business travel- air" &&
               selectedLevel !== "WTT- business travel- air" &&
               selectedLevel !== "WTT- electricity (T&D)" &&
               selectedLevel !== "Electricity T&D" && (
@@ -1337,7 +1479,10 @@ const FrameComponent1 = ({
                                                       : selectedLevel ===
                                                           "Managed assets- vehicles"
                                                         ? "Vehicle Category"
-                                                        : `${selectedLevel} Type`
+                                                        : selectedLevel ===
+                                                            "Business travel- air"
+                                                          ? "Airport From"
+                                                          : `${selectedLevel} Type`
                       : "Fuel Type"}
                   </h3>
                   <select
@@ -1357,7 +1502,7 @@ const FrameComponent1 = ({
                 </div>
               )}
 
-            {/* Fuel Name */}
+            {/* Fuel Name (level3) */}
             {showFuelNamesField && (
               <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
                 <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
@@ -1417,7 +1562,7 @@ const FrameComponent1 = ({
                                                               ? "Vehicle Segment / Size"
                                                               : selectedLevel ===
                                                                   "Business travel- air"
-                                                                ? "Distance type"
+                                                                ? "Airport To"
                                                                 : selectedLevel ===
                                                                     "WTT- business travel- air"
                                                                   ? "Distance type"
@@ -1450,11 +1595,11 @@ const FrameComponent1 = ({
                       ? "Capacity"
                       : selectedLevel === "WTT- delivery vehs and freight"
                         ? "Capacity"
-                        : selectedLevel === "Business travel- air"
+                        : // : selectedLevel === "Business travel- air"
+                          // ? "Class"
+                          selectedLevel === "WTT- business travel- air"
                           ? "Class"
-                          : selectedLevel === "WTT- business travel- air"
-                            ? "Class"
-                            : "Level 4"
+                          : "Level 4"
                     : "Level 4"}
                 </h3>
                 <select
@@ -1507,7 +1652,10 @@ const FrameComponent1 = ({
                                           : selectedLevel ===
                                               "Managed assets- vehicles"
                                             ? "Fuel Type / Laden"
-                                            : "Level 5"
+                                            : selectedLevel ===
+                                                "Business travel- air"
+                                              ? "Class"
+                                              : "Level 5"
                     : "Level 5"}
                 </h3>
                 <select
@@ -1549,39 +1697,40 @@ const FrameComponent1 = ({
             </div>
 
             {/* Quantity */}
-            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-                {selectedLevel
-                  ? selectedLevel === "Passenger vehicles" ||
-                    selectedLevel === "Delivery vehicles" ||
-                    selectedLevel === "Passenger Evs" ||
-                    selectedLevel === "Delivery Evs" ||
-                    selectedLevel === "Electricity TandD for passenger EVs" ||
-                    selectedLevel === "Business travel- land" ||
-                    selectedLevel === "Business travel- sea" ||
-                    selectedLevel === "WTT- business travel- sea" ||
-                    selectedLevel === "WTT- pass vehs and travel- land" ||
-                    selectedLevel === "Managed assets- vehicles" ||
-                    selectedLevel === "Business travel- air" ||
-                    selectedLevel === "WTT- business travel- air"
-                    ? "Distance Travelled"
-                    : selectedLevel === "Hotel stay"
-                      ? "Number of Nights"
-                      : "Quantity"
-                  : "Quantity"}
-              </h3>
-              <input
-                type="number"
-                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600 placeholder-dark"
-                value={quantityValue}
-                onChange={(e) => setQuantityValue(Math.max(0, e.target.value))}
-                placeholder="Enter Quantity"
-              />
-            </div>
+            {selectedLevel !== "Business travel- air" && (
+              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
+                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+                  {selectedLevel
+                    ? selectedLevel === "Passenger vehicles" ||
+                      selectedLevel === "Delivery vehicles" ||
+                      selectedLevel === "Passenger Evs" ||
+                      selectedLevel === "Delivery Evs" ||
+                      selectedLevel === "Electricity TandD for passenger EVs" ||
+                      selectedLevel === "Business travel- land" ||
+                      selectedLevel === "Business travel- sea" ||
+                      selectedLevel === "WTT- business travel- sea" ||
+                      selectedLevel === "WTT- pass vehs and travel- land" ||
+                      selectedLevel === "Managed assets- vehicles" ||
+                      selectedLevel === "Business travel- air" ||
+                      selectedLevel === "WTT- business travel- air"
+                      ? "Distance Travelled"
+                      : selectedLevel === "Hotel stay"
+                        ? "Number of Nights"
+                        : "Quantity"
+                    : "Quantity"}
+                </h3>
+                <input
+                  type="number"
+                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600 placeholder-dark"
+                  value={quantityValue}
+                  onChange={(e) => setQuantityValue(e.target.value)}
+                  placeholder="Enter Quantity"
+                />
+              </div>
+            )}
           </div>
 
-          {/* Location based or Market based only for Electricity(Level1) */}
-          {/* {selectedLevel === "Electricity"  */}
+          {/* For Scope 2 market based */}
           {selectedScope === "Scope 2" && (
             <>
               {/* Radio buttons */}
@@ -1680,6 +1829,7 @@ const FrameComponent1 = ({
               )}
             </>
           )}
+
           {/* Add, Edit, Cancel Buttons */}
           <div className="flex flex-row items-start justify-start gap-[8px] max-w-full mq450:flex-wrap ms-auto">
             {id ? (

@@ -12,7 +12,7 @@ import { getCountries } from "./controllers/countries.controllers.js";
 import { verifyToken } from "./middlewares/auth.middlewares.js";
 import { subscriptionsRouter } from "./routes/subscriptions.routes.js";
 import { stripeRouter } from "./routes/stripe.routes.js";
-import { handleWebhookEvents } from "./controllers/webhook.controllers.js";
+// import { handleWebhookEvents } from "./controllers/webhook.controllers.js";
 import { airportsRouter } from "./routes/airports.routes.js";
 import { electricVehiclesRouter } from "./routes/electricVehicles.routes.js";
 
