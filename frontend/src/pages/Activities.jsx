@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import FrameComponent1 from "../components/FrameComponent1.jsx";
 import FrameComponent from "../components/FrameComponent.jsx";
 import Sidebar from "../components/Sidebar.jsx";
-import Navbar from "../Header/Navbar.jsx";
+import Navbar from "../components/Navbar.jsx";
 import { useParams } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { getBearerToken } from "../utils/auth.utils.js";

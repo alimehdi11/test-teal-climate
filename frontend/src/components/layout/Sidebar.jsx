@@ -1,5 +1,4 @@
 import { useState } from "react";
-import rightAngleArror from "./../assets/right-angle-icon.svg";
 
 const Sidebar = ({ children }) => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -19,7 +18,7 @@ const Sidebar = ({ children }) => {
           setSidebarVisible((prev) => !prev);
         }}
       >
-        <img src={rightAngleArror} className="w-7" />
+        <img src="/right-angle-icon.svg" className="w-7" />
       </button>
       sidebar
     </div>

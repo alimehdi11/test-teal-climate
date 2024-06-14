@@ -8,8 +8,11 @@ import {
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
 
+    if (!email || !password) {
+      return res.status(400).json({ error: "Invalid payload" });
+    }
     // Check if the email already exists in the database
     const checkEmailQuery = "SELECT * FROM users WHERE email = $1";
     const checkEmailResult = await pool.query(checkEmailQuery, [email]);
@@ -22,8 +25,8 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const insertQuery =
-      "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *";
-    const values = [name, email, hashedPassword];
+      "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *";
+    const values = [email, hashedPassword];
 
     const result = await pool.query(insertQuery, values);
     const newUser = result.rows[0];

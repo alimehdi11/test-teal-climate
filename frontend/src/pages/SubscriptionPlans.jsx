@@ -23,16 +23,20 @@ const SubscriptionPlans = () => {
         <div className="flex flex-wrap">
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center">
-              <span className="mb-2 block text-lg font-semibold text-primary">
+              {/* <span className="mb-2 block text-lg font-semibold text-primary">
                 Teal Climate
-              </span>
+              </span> */}
+              <div className="flex items-center justify-center">
+                <img src="/logo.svg" />
+                <img src="/teal-climate.svg" />
+              </div>
               <h2 className="mb-3 text-3xl font-bold leading-[1.208]text-white sm:text-4xl md:text-[40px]">
                 Our Subscription Plans
               </h2>
-              <p className="text-base text-body-color">
+              {/* <p className="text-base text-body-color">
                 There are many variations of passages of Lorem Ipsum available
                 but the majority have suffered alteration in some form.
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

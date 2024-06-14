@@ -1,133 +1,54 @@
-import { useEffect, useState, useContext } from "react";
-import {
-  Routes,
-  Route,
-  useNavigationType,
-  useLocation,
-  BrowserRouter,
-} from "react-router-dom";
-
-import Activities from "./pages/Activities";
-// import EditActivity from "./pages/EditActivity";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
-import Navbar from "./Header/Navbar";
-import API from "./Dashboard/API";
-import Sidebar from "./components/Sidebar";
-import Profile from "./profile/PortfolioForm";
 import Page from "./profile/Page";
-import Test from "./test/Test";
-import LoginForm from "./Auth/LoginForm";
-import SignUpForm from "./Auth/SignUpForm";
-import "./global.css";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { UserProvider } from "./contexts/UserContext";
+// Pages
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Activities from "./pages/Activities";
 import SubscriptionPlans from "./pages/SubscriptionPlans";
 import Checkout from "./pages/Checkout";
 import Completion from "./pages/Completion";
 import Account from "./pages/Account";
 
+import Table from "./components/ui/Table.jsx";
+
 function App() {
-  const [userId, setUserId] = useState("");
-  const [selectValue, setSelectValue] = useState("");
-
-  const handleLogin = (id) => {
-    setUserId(id);
-  };
-  // const action = useNavigationType();
-  // const location = useLocation();
-  // const pathname = location.pathname;
-
-  // useEffect(() => {
-  //   if (action !== "POP") {
-  //     window.scrollTo(0, 0);
-  //   }
-  // }, [action, pathname]);
-
-  // useEffect(() => {
-  //   let title = "";
-  //   let metaDescription = "";
-
-  //   switch (pathname) {
-  //     case "/":
-  //       title = "";
-  //       metaDescription = "";
-  //       break;
-  //   }
-
-  //   if (title) {
-  //     document.title = title;
-  //   }
-
-  //   if (metaDescription) {
-  //     const metaDescriptionTag = document.querySelector(
-  //       'head > meta[name="description"]'
-  //     );
-  //     if (metaDescriptionTag) {
-  //       metaDescriptionTag.content = metaDescription;
-  //     }
-  //   }
-  // }, [pathname]);
-
-  const handleOnChange = (e) => {
-    setSelectValue(e.target.value);
-  };
-
   return (
-    <UserProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* <Route path="dashboardad" element={<Navbar userName={userName} />} /> */}
-
+    <BrowserRouter>
+      <Table />
+      {/* <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/plans" element={<SubscriptionPlans />} />
+        <Route path="/subscribe" element={<Checkout />} />
+        <Route path="/completion" element={<Completion />} />
+        <Route
+          path="/dashboard"
+          element={<ProtectedRoute Component={Dashboard} />}
+        />
+        <Route
+          path="/activites"
+          element={<ProtectedRoute Component={Activities} />}
+        >
           <Route
-            path="/dashboard"
-            element={<ProtectedRoute Component={Dashboard} />}
+            path=":id/edit"
+            element={<ProtectedRoute Component={Activities} />}
           />
+        </Route>
+        <Route path="/profile" element={<ProtectedRoute Component={Page} />}>
           <Route
-            path="/activites"
-            element={<Activities />}
-            // element={<ProtectedRoute Component={Activities} />}
+            path=":id/edit"
+            element={<ProtectedRoute Component={Page} />}
           />
-          <Route
-            path="/activites/:id/edit"
-            element={<Activities />}
-            // element={<ProtectedRoute Component={Activities} />}
-          />
-          <Route
-            path="/profile"
-            element={<Page userId={userId} />}
-            // element={<ProtectedRoute Component={Page} />}
-          />
-          <Route
-            path="/profile/:id/edit"
-            element={<Page userId={userId} />}
-            // element={<ProtectedRoute Component={Page} />}
-          />
-          <Route path="/" element={<LoginForm onLogin={handleLogin} />} />
-          <Route path="signup" element={<SignUpForm />} />
-          <Route path="/plans" element={<SubscriptionPlans />} />
-          <Route path="/subscribe" element={<Checkout />} />
-          <Route path="/completion" element={<Completion />} />
-          <Route
-            path="/account"
-            element={<ProtectedRoute Component={Account} />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </UserProvider>
-
-    //     <Routes>
-    // <Route path="/" element={< LoginForm/>} />
-    // <Route path="signup" element={< SignUpForm/>} />
-
-    //   </Routes>
-    // <LoginForm />
-
-    // <SignUpForm />
-    //  <Activities />
-    //  <Test />
-    //  <Page/>
-
-    // <MapWrapper/>
+        </Route>
+        <Route
+          path="/account"
+          element={<ProtectedRoute Component={Account} />}
+        />
+      </Routes> */}
+    </BrowserRouter>
   );
 }
 export default App;

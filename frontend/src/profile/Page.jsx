@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Sidebar from "./Sidebar";
 import PortfolioForm from "./PortfolioForm";
 import BasicForm from "./BasicForm";
-import Navbar from "../Header/Navbar";
+import Navbar from "../components/Navbar.jsx";
 import Profiletable from "./Profiletable";
 import { useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";

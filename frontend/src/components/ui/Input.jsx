@@ -10,7 +10,7 @@ const Input = ({
   return (
     <input
       className={(
-        "rounded border-slate-600 border w-full h-4 px-2 py-4 " + className
+        "rounded border-slate-600 border px-2 py-2 w-full" + className
       ).trim()}
       type={type}
       {...(name ? (name = { name }) : null)}
