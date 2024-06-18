@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { request } from "../utils/network.utils";
 
 const BasicForm = () => {
   const [formData, setFormData] = useState({
@@ -55,13 +56,8 @@ const BasicForm = () => {
     }
     console.log(formData);
     // return;
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/companyIntro`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
+    const url = `${import.meta.env.VITE_API_BASE_URL}/companyIntro`;
+    request(url, "POST", formData)
       .then((response) => {
         if (!response.ok) {
           throw new Error();

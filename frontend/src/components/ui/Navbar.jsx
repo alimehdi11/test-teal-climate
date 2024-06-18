@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Logo from "./Logo";
+import { IoMenu } from "react-icons/io5";
 
 const Navbar = ({ userName, activePath }) => {
   const [isNavVisible, setIsNavVisible] = useState(false);
@@ -9,22 +11,8 @@ const Navbar = ({ userName, activePath }) => {
   };
 
   return (
-    <header className="self-stretch bg-white shadow-[0px_4px_50px_rgba(0,_0,_0,_0.05)] flex items-center justify-between py-3 px-6 box-border top-[0] z-[9999] sticky max-w-full text-left text-xs text-dark font-poppins">
-      {/* Logo and Brand */}
-      <div className="flex flex-row items-center justify-start gap-[4px]">
-        <img
-          className="h-10 w-[48.8px] relative overflow-hidden shrink-0 z-[1]"
-          loading="eager"
-          alt=""
-          src="/logo.svg"
-        />
-        <img
-          className="h-[13.8px] w-[104.9px] relative z-[1]"
-          loading="eager"
-          alt=""
-          src="/teal-climate.svg"
-        />
-      </div>
+    <nav className="flex">
+      <Logo />
 
       {/* Navigation Links */}
       <div
@@ -93,7 +81,28 @@ const Navbar = ({ userName, activePath }) => {
         </Link>
       </div>
 
-      {/* Profile and Notification Icons */}
+      {/* Profile and Notification Icons Desktop*/}
+      <div className="hidden md:flex items-center justify-end gap-[12px]">
+        <img
+          className="h-10 w-10 relative min-h-[40px] z-[1]"
+          loading="eager"
+          alt="Messages"
+          src="/messages.svg"
+        />
+        <img
+          className="h-10 w-10 relative min-h-[40px] z-[1]"
+          loading="eager"
+          alt="Notification"
+          src="/notification.svg"
+        />
+        <Link to="/account">
+          <div className="h-10 w-10 relative rounded-81xl object-contain min-h-[40px] z-[1] bg-gray-100 flex items-center justify-center text-black font-semibold">
+            {userName ? userName.charAt(0).toUpperCase() : "A"}
+          </div>
+        </Link>
+      </div>
+
+      {/* Profile and Notification Icons Mobile*/}
       <div className="md:hidden flex-1 flex justify-center">
         <div className="flex flex-row items-center justify-start gap-[12px]">
           <img
@@ -116,34 +125,9 @@ const Navbar = ({ userName, activePath }) => {
         </div>
       </div>
 
-      <div className="hidden md:flex items-center justify-end gap-[12px]">
-        <img
-          className="h-10 w-10 relative min-h-[40px] z-[1]"
-          loading="eager"
-          alt="Messages"
-          src="/messages.svg"
-        />
-        <img
-          className="h-10 w-10 relative min-h-[40px] z-[1]"
-          loading="eager"
-          alt="Notification"
-          src="/notification.svg"
-        />
-        <Link to="/account">
-          <div className="h-10 w-10 relative rounded-81xl object-contain min-h-[40px] z-[1] bg-gray-100 flex items-center justify-center text-black font-semibold">
-            {userName ? userName.charAt(0).toUpperCase() : "A"}
-          </div>
-        </Link>
-      </div>
-
       {/* Toggle Button */}
-      <button
-        className="md:hidden p-2 bg-gray-200 rounded"
-        onClick={toggleNavVisibility}
-      >
-        ☰
-      </button>
-    </header>
+      <IoMenu className="md:hidden text-[20px]" onClick={toggleNavVisibility} />
+    </nav>
   );
 };
 
