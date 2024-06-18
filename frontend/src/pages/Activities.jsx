@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import FrameComponent1 from "../components/FrameComponent1.jsx";
 import FrameComponent from "../components/FrameComponent.jsx";
 import Sidebar from "../components/Sidebar.jsx";
@@ -6,18 +6,19 @@ import Navbar from "../components/Navbar.jsx";
 import { useParams } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { getBearerToken } from "../utils/auth.utils.js";
+import { UserContext } from "../contexts/UserContext.jsx";
 
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
-  const [userId, setUserId] = useState("");
   const [companyData, setCompanyData] = useState([]);
   const { id } = useParams();
+  const { user } = useContext(UserContext);
 
   const fetchCompanyData = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/companiesdata/${userId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/companiesdata/${user.id}`,
         {
           headers: {
             authorization: getBearerToken(),
@@ -34,19 +35,20 @@ const Activities = () => {
     }
   };
 
-  useEffect(() => {
-    // Fetch userId from localStorage
-    const storedUserID = localStorage.getItem("userId");
-    if (storedUserID) {
-      setUserId(storedUserID);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user.id) {
+  //     fetchCompanyData();
+  //   }
+  // }, [user.id]);
 
+  /**
+   * Above commented useEffect was previously used. It has [user.id] as dependency.
+   * I change it to no dependency. I do not why developer who added this as a dependency.
+   * For safety purpose I comment it so we can go back easily.
+   */
   useEffect(() => {
-    if (userId) {
-      fetchCompanyData();
-    }
-  }, [userId]);
+    fetchCompanyData();
+  }, []);
 
   useEffect(() => {
     if (!id) {
@@ -76,7 +78,7 @@ const Activities = () => {
             selectedLevel={selectedLevel}
             setSelectedScope={setSelectedScope}
             setSelectedLevel={setSelectedLevel}
-            userId={userId}
+            userId={user.id}
             setCompanyData={setCompanyData}
           />
         ) : (
@@ -90,7 +92,7 @@ const Activities = () => {
       <FrameComponent
         companyData={companyData}
         setCompanyData={setCompanyData}
-        userId={userId}
+        userId={user.id}
       />
     </>
   );

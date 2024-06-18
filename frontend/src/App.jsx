@@ -11,13 +11,10 @@ import Checkout from "./pages/Checkout";
 import Completion from "./pages/Completion";
 import Account from "./pages/Account";
 
-import Table from "./components/ui/Table.jsx";
-
 function App() {
   return (
     <BrowserRouter>
-      <Table />
-      {/* <Routes>
+      <Routes>
         <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
@@ -47,7 +44,7 @@ function App() {
           path="/account"
           element={<ProtectedRoute Component={Account} />}
         />
-      </Routes> */}
+      </Routes>
     </BrowserRouter>
   );
 }

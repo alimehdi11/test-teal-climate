@@ -7,8 +7,9 @@ import Input from "../components/ui/Input.jsx";
 import Button from "../components/ui/Button.jsx";
 import { request } from "../utils/network.utils.js";
 import { MdOutlineClose } from "react-icons/md";
+import Logo from "../components/ui/Logo.jsx";
 
-const SignUpForm = () => {
+const Signup = () => {
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
 
@@ -18,7 +19,7 @@ const SignUpForm = () => {
   const [emailError, setEmailError] = useState("");
   const [submitError, setSubmitError] = useState("");
 
-  const signupFormSchema = {
+  const SignupSchema = {
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
@@ -34,7 +35,7 @@ const SignUpForm = () => {
 
   const validator = async (key) => {
     try {
-      await signupFormSchema[key].validate(inputValues[key]);
+      await SignupSchema[key].validate(inputValues[key]);
     } catch (error) {
       switch (key) {
         case "email":
@@ -52,9 +53,9 @@ const SignUpForm = () => {
     }
   };
 
-  const validateSignupForm = async () => {
+  const validateSignup = async () => {
     let validateError = false;
-    const keys = Object.keys(signupFormSchema);
+    const keys = Object.keys(SignupSchema);
     for (let key of keys) {
       validateError = await validator(key);
     }
@@ -86,7 +87,7 @@ const SignUpForm = () => {
       resetErrorMessages();
 
       // 2. Validate input values
-      const validateError = await validateSignupForm();
+      const validateError = await validateSignup();
 
       // 3. Check if there are no validation errors
       if (validateError) {
@@ -134,10 +135,7 @@ const SignUpForm = () => {
   return (
     <div className="flex flex-col justify-center items-center h-screen gap-y-3">
       {/* Logo */}
-      <div className="flex items-center">
-        <img src="/logo.svg" />
-        <img src="/teal-climate.svg" />
-      </div>
+      <Logo />
       {/* Submit Error */}
       {submitError && (
         <div className="bg-red-500 min-w-[350px] max-w-[350px] break-words rounded p-3 text-white flex justify-between items-center">
@@ -152,40 +150,45 @@ const SignUpForm = () => {
       <form
         method="POST"
         onSubmit={handleSubmit}
-        className="rounded p-3 border-solid border-slate-600 border-[1px] flex flex-col gap-y-3 min-w-[350px] max-w-[350px]"
+        className="rounded border-solid border-slate-600 border-[1px] min-w-[350px] max-w-[350px] overflow-hidden"
       >
-        {/* Email */}
-        <div className="flex flex-col gap-y-1">
-          <label htmlFor="email">Email</label>
-          <Input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={handleEmailChange}
-          />
-          {/* error */}
-          {emailError && (
-            <div className="text-red-600 break-words">{emailError}</div>
-          )}
-        </div>
-        {/* Password */}
-        <div className="flex flex-col gap-y-1">
-          <label htmlFor="password">Password</label>
-          <Input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-          {passwordError && (
-            <div className="text-red-600 break-words">{passwordError}</div>
-          )}
-        </div>
-        <Button type="submit" className="bg-tc-blue text-white text-base">
+        <div className="text-center bg-tc-blue text-[24px] text-white font-bold py-2 border-b border-slate-600">
           Signup
-        </Button>
+        </div>
+        <div className="flex flex-col gap-y-3 p-3">
+          {/* Email */}
+          <div className="flex flex-col gap-y-1">
+            <label htmlFor="email">Email</label>
+            <Input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+            {/* error */}
+            {emailError && (
+              <div className="text-red-600 break-words">{emailError}</div>
+            )}
+          </div>
+          {/* Password */}
+          <div className="flex flex-col gap-y-1">
+            <label htmlFor="password">Password</label>
+            <Input
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            {passwordError && (
+              <div className="text-red-600 break-words">{passwordError}</div>
+            )}
+          </div>
+          <Button type="submit" className="bg-tc-blue text-white text-base">
+            Submit
+          </Button>
+        </div>
       </form>
       {/* Login link */}
       <div>
@@ -195,4 +198,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default Signup;

@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getBearerToken } from "./../utils/auth.utils.js";
+import { UserContext } from "../contexts/UserContext.jsx";
 
 const Top10EmissionsTable = () => {
   const [top10Emissions, setTop10Emissions] = useState([]);
-  const [userId, setUserId] = useState("");
+  const { user } = useContext(UserContext);
 
   const fetchTop10Emissions = async (userId) => {
     try {
@@ -25,20 +26,24 @@ const Top10EmissionsTable = () => {
     }
   };
 
-  useEffect(() => {
-    const storedUserID = localStorage.getItem("userId");
-    if (storedUserID) {
-      setUserId(storedUserID);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user.id) {
+  //     fetchTop10Emissions(user.id).then((top10Emissions) =>
+  //       setTop10Emissions(top10Emissions)
+  //     );
+  //   }
+  // }, [user.id]);
 
+  /**
+   * Above commented useEffect was previously used. It has [user.id] as dependency.
+   * I change it to no dependency. I do not why developer who added this as a dependency.
+   * For safety purpose I comment it so we can go back easily.
+   */
   useEffect(() => {
-    if (userId) {
-      fetchTop10Emissions(userId).then((top10Emissions) =>
-        setTop10Emissions(top10Emissions)
-      );
-    }
-  }, [userId]);
+    fetchTop10Emissions(user.id).then((top10Emissions) =>
+      setTop10Emissions(top10Emissions)
+    );
+  }, []);
 
   return (
     <div

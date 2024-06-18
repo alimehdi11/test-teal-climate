@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import Sidebar from "./Sidebar";
 import PortfolioForm from "./PortfolioForm";
 import BasicForm from "./BasicForm";
@@ -7,24 +7,18 @@ import Profiletable from "./Profiletable";
 import { useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { getBearerToken } from "./../utils/auth.utils.js";
+import { UserContext } from "../contexts/UserContext.jsx";
 
 const Page = () => {
-  const [userId, setUserId] = useState("");
   const [profileData, setProfileData] = useState([]);
   const [selectedForm, setSelectedForm] = useState("");
 
-  useEffect(() => {
-    // Fetch userID from localStorage
-    const storedUserId = localStorage.getItem("userId");
-    if (storedUserId) {
-      setUserId(storedUserId);
-    }
-  }, []);
+  const { user } = useContext(UserContext);
 
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/companies/${userId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/companies/${user.id}`,
         {
           headers: {
             authorization: getBearerToken(),
@@ -43,10 +37,10 @@ const Page = () => {
   };
 
   useEffect(() => {
-    if (userId) {
+    if (user.id) {
       fetchData();
     }
-  }, [userId]);
+  }, [user.id]);
 
   return (
     <>
@@ -63,7 +57,7 @@ const Page = () => {
           (selectedForm === "Basic" && <BasicForm />) || // Or
           (selectedForm === "Portfolio" && (
             <PortfolioForm
-              userId={userId}
+              userId={user.id}
               profileData={profileData}
               setProfileData={setProfileData}
             />
@@ -78,7 +72,7 @@ const Page = () => {
       <Profiletable
         profileData={profileData}
         setProfileData={setProfileData}
-        userId={userId}
+        userId={user.id}
       />
     </>
   );

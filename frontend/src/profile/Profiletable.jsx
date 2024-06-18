@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
 import trashIcon from "../assets/trash-icon.svg";
 import editIcon from "../assets/edit-icon.svg";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { getBearerToken } from "./../utils/auth.utils.js";
+// import Table from "../components/ui/Table.jsx";
 
 const Profiletable = ({ profileData, setProfileData, userId }) => {
   const fetchData = async () => {
