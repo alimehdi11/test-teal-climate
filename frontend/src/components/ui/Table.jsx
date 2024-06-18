@@ -16,17 +16,23 @@ const Table = ({ data, column }) => {
         <table className="border-0 text-[18px]">
           <thead>
             <tr className="bg-tc-blue text-white">
-              {Object.keys(data[0]).map((columnName, index) => (
-                <th
-                  key={index}
-                  className={
-                    "border-slate-600 border-t-0 " +
-                    (index === 0 && "border-s-0")
-                  }
-                >
-                  {columnName}
-                </th>
-              ))}
+              <td>S.No</td>
+              {Object.keys(data[0]).map((columnName, index) => {
+                if (columnName === "userid" || columnName === "id") {
+                  return; // Early return
+                }
+                return (
+                  <th
+                    key={index}
+                    className={
+                      "border-slate-600 border-t-0 " +
+                      (index === 0 && "border-s-0")
+                    }
+                  >
+                    {columnName}
+                  </th>
+                );
+              })}
               {column && (
                 <th className="border-slate-600 border-t-0 border-e-0">
                   {column.name}
@@ -35,40 +41,49 @@ const Table = ({ data, column }) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {Object.values(row).map((cell, cellIndex) => (
-                  <td
-                    key={cellIndex}
-                    className={
-                      "border-slate-600 " + (cellIndex === 0 && "border-s-0")
+            {data.map((row, rowIndex) => {
+              return (
+                <tr key={rowIndex}>
+                  <td>{rowIndex + 1}</td>
+                  {Object.entries(row).map((cell, cellIndex) => {
+                    if (cell[0] === "userid" || cell[0] === "id") {
+                      return; // Early return
                     }
-                  >
-                    {cell}
-                  </td>
-                ))}
-                {column && (
-                  <td className="border-slate-600 border-e-0">
-                    <div className="flex justify-center gap-x-1">
-                      <Link
-                        to={`/profile/${column.userId}/edit`}
-                        className="flex justify-center items-center"
+                    return (
+                      <td
+                        key={cellIndex}
+                        className={
+                          "border-slate-600 " +
+                          (cellIndex === 0 && "border-s-0")
+                        }
                       >
+                        {cell[1]}
+                      </td>
+                    );
+                  })}
+                  {column && (
+                    <td className="border-slate-600 border-e-0">
+                      <div className="flex justify-center gap-x-1">
+                        <Link
+                          to={`/profile/${row.id}/edit`}
+                          className="flex justify-center items-center"
+                        >
+                          <img
+                            src="edit-icon.svg"
+                            className="p-1 rounded hover:bg-slate-300 w-7 h-7"
+                          />
+                        </Link>
                         <img
-                          src="edit-icon.svg"
+                          src="trash-icon.svg"
                           className="p-1 rounded hover:bg-slate-300 w-7 h-7"
+                          onClick={column.handleDelete(row.id)}
                         />
-                      </Link>
-                      <img
-                        src="trash-icon.svg"
-                        className="p-1 rounded hover:bg-slate-300 w-7 h-7"
-                        onClick={column.handleDelete(cell)}
-                      />
-                    </div>
-                  </td>
-                )}
-              </tr>
-            ))}
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

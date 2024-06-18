@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { getBearerToken } from "./../utils/auth.utils.js";
 import { UserContext } from "../contexts/UserContext.jsx";
+import Table from "../components/ui/Table.jsx";
 
 const Top10EmissionsTable = () => {
   const [top10Emissions, setTop10Emissions] = useState([]);
@@ -44,6 +45,8 @@ const Top10EmissionsTable = () => {
       setTop10Emissions(top10Emissions)
     );
   }, []);
+
+  // return <Table data={top10Emissions} />;
 
   return (
     <div
