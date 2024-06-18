@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 
 /**
- * TODO :
- * 1. data and column default values should removed
- * 2. Table sholud style properly to match previous styles
+ * @param {number} data - Data to shoe in the table.
+ * @param {object} column - {
+ *                            name : string, - column name
+ *                            handleDelete : function - a function to delete entry
+ *                          }.
+ * @returns {jsx} - Table.
  */
 
 const Table = ({ data, column }) => {
@@ -59,7 +62,7 @@ const Table = ({ data, column }) => {
                       <img
                         src="trash-icon.svg"
                         className="p-1 rounded hover:bg-slate-300 w-7 h-7"
-                        onClick={column.handleDelete(column.userId)}
+                        onClick={column.handleDelete(cell)}
                       />
                     </div>
                   </td>

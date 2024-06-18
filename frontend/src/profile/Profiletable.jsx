@@ -3,7 +3,7 @@ import editIcon from "../assets/edit-icon.svg";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { getBearerToken } from "./../utils/auth.utils.js";
-// import Table from "../components/ui/Table.jsx";
+import Table from "../components/ui/Table.jsx";
 
 const Profiletable = ({ profileData, setProfileData, userId }) => {
   const fetchData = async () => {
@@ -51,6 +51,9 @@ const Profiletable = ({ profileData, setProfileData, userId }) => {
     };
   };
 
+  // return (
+  //   <Table data={profileData} column={{ name: "Actions", handleDelete }} />
+  // );
   return (
     <div className="mx-5 my-10 hide-scroll border-[1px] border-gray-300 border-solid rounded-md overflow-x-auto max-w-full font-poppins shadow-2xl">
       <table className="border-0">
