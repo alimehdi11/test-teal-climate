@@ -94,6 +94,9 @@ export default {
         mqMin800: {
           raw: "screen and (min-width: 800px)",
         },
+        xsm: {
+          min: "480px",
+        },
       },
       fontSize: {
         sm: "14px",

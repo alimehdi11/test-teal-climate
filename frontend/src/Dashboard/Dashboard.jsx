@@ -7,6 +7,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRef } from "react";
 import Map from "./Map";
+import Button from "../components/ui/Button.jsx";
 
 const Dashboard = () => {
   const pdfRef = useRef();
@@ -38,23 +39,28 @@ const Dashboard = () => {
   };
 
   return (
-    <div ref={pdfRef}>
+    <div ref={pdfRef} className="">
       <Navbar />
-      {/* <div className="rounded-lg bg-white flex flex-row items-center justify-start py-3 pr-[15px] pl-3.5 gap-[6px] whitespace-nowrap text-sm font-sf-pro-display">
-        <img
-          className="h-6 w-6 relative overflow-hidden shrink-0"
-          loading="eager"
-          alt=""
-          src="/phcalendar.svg"
-        />
-        <span>Jan 01, 2024 - Jan 11, 2024</span>
+      <div className="flex flex-col xsm:flex-row gap-y-2 justify-between px-3 mt-4">
+        <div className="flex justify-center items-center">
+          <img
+            className="h-6 w-6 relative overflow-hidden shrink-0"
+            loading="eager"
+            alt=""
+            src="/phcalendar.svg"
+          />
+          <span>Jan 01, 2024 - Jan 11, 2024</span>
+        </div>
+        <Button
+          className="bg-tc-green text-white text-base"
+          onClick={downloadPDF}
+        >
+          Download PDF
+        </Button>
       </div>
-      <Button className="" onClick={downloadPDF}>
-        Download PDF
-      </Button> */}
-      <AirTravelScope className="border-[1px] border-black border-solid" />
-      <Map />
-      <Top10EmissionsTable />
+      <AirTravelScope />
+      {/* <Map />
+      <Top10EmissionsTable /> */}
     </div>
   );
 };
