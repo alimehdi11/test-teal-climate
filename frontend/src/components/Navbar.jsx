@@ -28,8 +28,8 @@ const Navbar = () => {
           <img
             src={
               location.pathname === "/dashboard"
-                ? "/dashboard-nav-link-icon-white.svg"
-                : "/icons.svg"
+                ? "/src/assets/dashboard-nav-link-icon-white.svg"
+                : "/src/assets/icons.svg"
             }
           />
           <div>Dashboard</div>
@@ -44,8 +44,8 @@ const Navbar = () => {
           <img
             src={
               location.pathname === "/profile"
-                ? "/profile-nav-link-icon-white.svg"
-                : "/icons-1.svg"
+                ? "/src/assets/profile-nav-link-icon-white.svg"
+                : "/src/assets/icons-1.svg"
             }
           />
           <div>Profile</div>
@@ -60,8 +60,8 @@ const Navbar = () => {
           <img
             src={
               location.pathname === "/activities"
-                ? "/activities-nav-link-icon-white.svg"
-                : "/icons-2.svg"
+                ? "/src/assets/activities-nav-link-icon-white.svg"
+                : "/src/assets/icons-2.svg"
             }
           />
           <div>Activites</div>
@@ -71,13 +71,11 @@ const Navbar = () => {
       {/* Profile and Notification Icons*/}
       <div className="hidden md:flex items-center gap-x-2">
         <img
-          alt="Messages"
-          src="/messages.svg"
+          src="/src/assets/messages.svg"
           className="border rounded-full border-slate-500"
         />
         <img
-          alt="Notification"
-          src="/notification.svg"
+          src="/src/assets/notification.svg"
           className="border rounded-full border-slate-500"
         />
         <Link
@@ -104,68 +102,69 @@ const Navbar = () => {
         <div className="mt-3 flex flex-col gap-y-3 px-3">
           <Link
             to="/dashboard"
-            className={`text-black flex items-center gap-x-1 p-2 rounded-md ${
+            className={`text-black flex items-center gap-x-1 p-2 rounded ${
               location.pathname === "/dashboard" ? "bg-tc-green text-white" : ""
             }`}
             style={{ textDecoration: "none" }}
           >
             <img
-              className={`${
-                location.pathname === "/dashboard" ? "text-white" : ""
-              }`}
-              loading="eager"
-              src="/icons.svg"
+              src={
+                location.pathname === "/dashboard"
+                  ? "/src/assets/dashboard-nav-link-icon-white.svg"
+                  : "/src/assets/icons.svg"
+              }
             />
             <div>Dashboard</div>
           </Link>
           <Link
             to="/profile"
-            className={`text-black flex items-center gap-x-1 p-2 rounded-md ${
+            className={`text-black flex items-center gap-x-1 p-2 rounded ${
               location.pathname === "/profile" ? "bg-tc-green text-white" : ""
             }`}
             style={{ textDecoration: "none" }}
           >
             <img
-              className={`${
-                location.pathname === "/profile" ? "text-white" : ""
-              }`}
-              loading="eager"
-              src="/icons-1.svg"
+              src={
+                location.pathname === "/profile"
+                  ? "/src/assets/profile-nav-link-icon-white.svg"
+                  : "/src/assets/icons-1.svg"
+              }
             />
             <div>Profile</div>
           </Link>
           <Link
-            to="/activites"
-            className={`text-black flex items-center gap-x-1 p-2 rounded-md ${
-              location.pathname === "/activites" ? "bg-tc-green text-white" : ""
+            to="/activities"
+            className={`text-black flex items-center gap-x-1 p-2 rounded ${
+              location.pathname === "/activities"
+                ? "bg-tc-green text-white"
+                : ""
             }`}
             style={{ textDecoration: "none" }}
           >
             <img
-              className={`${
-                location.pathname === "/activites" ? "text-white" : ""
-              }`}
-              loading="eager"
-              src="/icons-2.svg"
+              src={
+                location.pathname === "/activities"
+                  ? "/src/assets/activities-nav-link-icon-white.svg"
+                  : "/src/assets/icons-2.svg"
+              }
             />
             <div>Activites</div>
           </Link>
         </div>
+
         {/* Profile and Notification Icons*/}
         <div className="mt-3 flex justify-center items-center gap-x-2">
           <img
-            alt="Messages"
-            src="/messages.svg"
-            className=" border rounded-full border-slate-500"
+            src="/src/assets/messages.svg"
+            className="border rounded-full border-slate-500"
           />
           <img
-            alt="Notification"
-            src="/notification.svg"
-            className=" border rounded-full border-slate-500"
+            src="/src/assets/notification.svg"
+            className="border rounded-full border-slate-500"
           />
           <Link
             to="/account"
-            className="no-underline text-black bg-[#F7F8FA] w-10 h-10 flex justify-center items-center border rounded-full border-slate-500"
+            className="no-underline text-black bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500"
           >
             A
           </Link>

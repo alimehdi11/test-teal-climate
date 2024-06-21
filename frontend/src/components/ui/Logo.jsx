@@ -1,8 +1,8 @@
 const Logo = () => {
   return (
     <div className="flex items-center gap-x-1">
-      <img src="/logo.svg" />
-      <img src="/teal-climate.svg" />
+      <img src="/src/assets/logo.svg" />
+      <img src="/src/assets/teal-climate.svg" />
     </div>
   );
 };
