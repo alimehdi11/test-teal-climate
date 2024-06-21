@@ -1,18 +1,3 @@
-// const Input = ({ className, type, ...props }) => {
-//   return (
-//     <input
-//       type={type}
-//       className={(
-//         "rounded border-slate-600 border px-2 py-2 w-full text-base " +
-//         className
-//       ).trim()}
-//       {...props}
-//     />
-//   );
-// };
-
-// export default Input;
-
 const Input = ({
   className = "",
   type,
@@ -25,7 +10,7 @@ const Input = ({
   return (
     <input
       className={(
-        "rounded border-slate-600 border px-2 py-2 w-full text-base " +
+        "rounded border-slate-500 border px-2 py-2 w-full text-base " +
         className
       ).trim()}
       type={type}

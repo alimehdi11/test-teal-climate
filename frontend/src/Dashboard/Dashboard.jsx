@@ -1,7 +1,7 @@
 import GroupComponent from "./GroupComponent";
 import AirTravelScope from "./AirTravelScope";
 import ScopePurchasedServices from "./ScopePurchasedServices";
-import Navbar from "../components/ui/Navbar.jsx";
+import Navbar from "../components/Navbar.jsx";
 import Top10EmissionsTable from "./Top10EmissionsTable.jsx";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -39,17 +39,14 @@ const Dashboard = () => {
   };
 
   return (
-    <div ref={pdfRef} className="">
+    <div ref={pdfRef}>
       <Navbar />
-      <div className="flex flex-col xsm:flex-row gap-y-2 justify-between px-3 mt-4">
-        <div className="flex justify-center items-center">
-          <img
-            className="h-6 w-6 relative overflow-hidden shrink-0"
-            loading="eager"
-            alt=""
-            src="/phcalendar.svg"
-          />
-          <span>Jan 01, 2024 - Jan 11, 2024</span>
+      <div className="flex flex-col xs:flex-row gap-y-4 justify-between px-3 mt-4">
+        <div className="flex justify-center items-center gap-x-1">
+          <img className="h-6 w-6" src="/phcalendar.svg" />
+          <span className="font-medium text-gray-800">
+            Jan 01, 2024 - Dec 11, 2024
+          </span>
         </div>
         <Button
           className="bg-tc-green text-white text-base"

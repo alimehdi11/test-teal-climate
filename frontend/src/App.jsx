@@ -26,7 +26,7 @@ function App() {
           element={<ProtectedRoute Component={Dashboard} />}
         />
         <Route
-          path="/activites"
+          path="/activities"
           element={<ProtectedRoute Component={Activities} />}
         >
           <Route

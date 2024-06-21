@@ -1,5 +1,4 @@
 # NOTE: prettier also ignore bellow specified folders and files
 node_modules
 .env.development.local
-public
 dist

@@ -3,6 +3,7 @@ import ApexChart1 from "./ApexChart1";
 import Circule from "./Circule";
 import { useState, useEffect } from "react";
 import { getBearerToken } from "./../utils/auth.utils.js";
+import RadialBarChart from "../components/RadialBarChart.jsx";
 
 const AirTravelScope = () => {
   const [userId, setUserId] = useState("");
@@ -211,132 +212,107 @@ const AirTravelScope = () => {
     }
   }, [companyData]);
 
-  const scopes2 = [85, 50];
-
   return (
-    <section className="mt-4 px-3">
-      {/* Card */}
-      <div className="border rounded-md border-slate-600 p-3">
-        <div className="">Total GHG Emissions</div>
-        <div className="">{totalCO2e.toFixed(2)}</div>
-        <div className="">
-          Metric Tonnes CO<span className="text-2xs">2</span>e
+    <div className="grid mqMin850:grid-cols-2 xl:grid-cols-3 px-3 gap-4 my-4">
+      {/* Card total emissions */}
+      <div className="border rounded-md border-slate-500 p-3">
+        <div className="font-medium">Total GHG Emissions</div>
+        <div className="text-[2rem]">{totalCO2e.toFixed(2)}</div>
+        <div className="font-medium text-gray-400 text-xs">
+          Metric Tonnes CO<span className="text-[8px]">2</span>e
         </div>
-
-        <hr className="border-t-[1px] bg-slate-600" />
-
-        <div className="flex bg-red">
-          <div className="bg-green">
+        <hr className="border-t-[1px] border-slate-500 h-0" />
+        <div className="flex flex-col-reverse gap-y-1 xs:flex-row xs:items-center">
+          <div className="flex-1 flex flex-col gap-y-3">
             {/* Scope 1 */}
-            <div className="self-stretch flex flex-row items-end justify-start gap-[6px] z-[1]">
-              <div className="h-3 w-3 rounded-[50%] bg-tc-blue" />
-              <div className="">Scope 1</div>
-              <div className="">
-                {calculateC02ePercentageOfGivenScope(totalScope1CO2e)}%
+            <div className="flex items-center justify-between gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <span className="h-4 w-4 rounded-[50%] bg-tc-blue"></span>
+                <div className="text-nowrap">Scope 1</div>
               </div>
+              <div>{calculateC02ePercentageOfGivenScope(totalScope1CO2e)}%</div>
             </div>
             {/* Scope 2 */}
-            <div className="self-stretch flex flex-row items-end justify-start gap-[6px] z-[1]">
-              <div className="h-3 w-3 rounded-[50%] bg-orange" />
-              <div className="">Scope 2</div>
-              <div className="">{calculateC02ePercentageOfScope2()}%</div>
+            <div className="flex items-center justify-between gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <div className="h-4 w-4 rounded-[50%] bg-orange" />
+                <div className="text-nowrap">Scope 2</div>
+              </div>
+              <div>{calculateC02ePercentageOfScope2()}%</div>
             </div>
             {/* Scope 3 */}
-            <div className="self-stretch flex flex-row items-end justify-start gap-[6px] z-[1]">
-              <div className="h-3 w-3 rounded-[50%] bg-tc-green" />
-              <div className="">Scope 3</div>
-              <div className="">
-                {calculateC02ePercentageOfGivenScope(totalScope3CO2e)}%
+            <div className="flex items-center justify-between gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <div className="h-4 w-4 rounded-[50%] bg-tc-green" />
+                <div className="text-nowrap">Scope 3</div>
               </div>
+              <div>{calculateC02ePercentageOfGivenScope(totalScope3CO2e)}%</div>
             </div>
           </div>
-          <ApexChart
-            scopes={[
-              calculateC02ePercentageOfGivenScope(totalScope1CO2e),
-              calculateC02ePercentageOfGivenScope(totalScope2CO2e),
-              calculateC02ePercentageOfGivenScope(totalScope3CO2e),
-            ]}
-          />
+          <div className="flex-1 h-36 min-w-[144px] flex items-center justify-center">
+            <RadialBarChart
+              scopes={[
+                calculateC02ePercentageOfGivenScope(totalScope1CO2e),
+                calculateC02ePercentageOfGivenScope(totalScope2CO2e),
+                calculateC02ePercentageOfGivenScope(totalScope3CO2e),
+              ]}
+            />
+          </div>
         </div>
       </div>
-      {/* <div className="flex-1 rounded-lg bg-white shadow-[0px_4px_60px_rgba(0,_0,_0,_0.02)] flex flex-col items-center justify-start pt-[18px] px-0 pb-4 box-border gap-[17px] min-w-[272px] max-w-full">
-        <div className="self-stretch h-[284px] relative rounded-lg bg-white shadow-[0px_4px_60px_rgba(0,_0,_0,_0.02)] hidden" />
-        <div className="self-stretch flex flex-col items-start justify-start py-0 px-6 gap-[6px] z-[1]">
-          <div className="self-stretch flex flex-row items-center justify-between gap-[20px]">
-            <div className="flex flex-row items-center justify-start gap-[8px]">
-              <div className="relative capitalize font-medium">
-                Scope 1 Emissions
-              </div>
-              <div className="rounded-81xl bg-brand-color-2 overflow-hidden flex flex-row items-center justify-center py-0.5 px-1 whitespace-nowrap text-right text-3xs text-white">
-                <div className="relative capitalize font-semibold">
-                  <span>
-                    {calculateC02ePercentageOfGivenScope(totalScope1CO2e)}
-                  </span>
-                  <span className="text-7xs">{` `}</span>
-                  <span>%</span>
-                </div>
-              </div>
-            </div>
-            <div className="h-5 w-5 relative">
-              <div className="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-[50%] bg-gray-6" />
-              <div className="absolute h-[56.5%] w-[12.5%] top-[25%] right-[44%] bottom-[18.5%] left-[43.5%] z-[1]">
-                <div className="absolute h-[66.37%] w-full top-[33.63%] right-[0%] bottom-[0%] left-[0%] rounded-5xs-5 bg-gray-4" />
-                <div className="absolute h-[22.12%] w-full top-[0%] right-[0%] bottom-[77.88%] left-[0%] rounded-5xs-5 bg-gray-4" />
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col items-start justify-start text-13xl font-sf-pro-display">
-            <div className="h-[38px] relative font-medium inline-block mq450:text-lgi mq1050:text-7xl">
-              {totalScope1CO2e.toFixed(2)}
-            </div>
-            <div className="relative capitalize font-medium font-poppins text-gray-3 text-xs">
-              <span>Metric Tonnes CO</span>
-              <span className="text-6xs">2</span>e
-            </div>
-          </div>
+
+      {/* Card scope 1*/}
+      <div className="border rounded-md border-slate-500 p-3">
+        <div className="font-medium">Scope 1 Emissions</div>
+        <div className="text-[2rem]">{totalScope1CO2e.toFixed(2)}</div>
+        <div className="font-medium text-gray-400 text-xs">
+          Metric Tonnes CO<span className="text-[8px]">2</span>e
         </div>
-        <div className="self-stretch h-px relative box-border z-[1] border-t-[1px] border-solid border-gray-5" />
-        <div className="self-stretch flex flex-row items-center justify-start py-0 px-6 gap-[29px] text-3xs mq450:flex-wrap">
-          <div className="flex-1 flex flex-col items-start justify-start py-5 pr-[29px] pl-0 box-border gap-[10px] min-w-[107px]">
-            <div className="flex flex-row items-end justify-start gap-[6px]">
-              <div className="h-3 w-3 relative rounded-[50%] bg-brand-color-2 z-[1]" />
-              <div className="relative capitalize font-medium z-[1] text-nowrap">
-                Stationary Combustion
+        <hr className="border-t-[1px] border-slate-500 h-0" />
+        <div className="flex flex-col-reverse gap-y-1 xs:flex-row xs:items-center">
+          <div className="flex-1 flex flex-col gap-y-3">
+            {/* Stationary Combustion */}
+            <div className="flex items-center justify-between gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <span className="h-4 w-4 rounded-[50%] bg-tc-blue"></span>
+                <div className="text-nowrap">Stationary Combustion</div>
+              </div>
+              <div>
+                {calculateC02ePercentageOfGivenScopeCategory(
+                  "Stationary combustion"
+                )}
+                %
               </div>
             </div>
-            <div className="flex flex-row items-end justify-start gap-[6px]">
-              <div className="h-3 w-3 relative rounded-[50%] bg-orange z-[1]" />
-              <div className="relative capitalize font-medium z-[1] text-nowrap">
-                Mobile Combustion
+            {/* Mobile Combustion */}
+            <div className="flex items-center justify-between gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <span className="h-4 w-4 rounded-[50%] bg-orange"></span>
+                <div className="text-nowrap">Mobile Combustion</div>
+              </div>
+              <div>
+                {calculateC02ePercentageOfGivenScopeCategory(
+                  "Mobile combustion"
+                )}
+                %
               </div>
             </div>
-            <div className="flex flex-row items-end justify-start gap-[6px]">
-              <div className="h-3 w-3 relative rounded-[50%] bg-brand-color-01 z-[1]" />
-              <div className="relative capitalize font-medium z-[1] text-nowrap">
-                Fugitive Emissions
+            {/* Fugitive Emissions */}
+            <div className="flex items-center justify-between  gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <div className="h-4 w-4 rounded-[50%] bg-tc-green" />
+                <div className="text-nowrap">Fugitive Emissions</div>
+              </div>
+              <div>
+                {calculateC02ePercentageOfGivenScopeCategory(
+                  "Fugitive emissions"
+                )}
+                %
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-start justify-start py-5 px-0 gap-[10px] text-right">
-            <div className="relative capitalize font-medium z-[1]">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Stationary combustion"
-              )}
-              %
-            </div>
-            <div className="relative capitalize font-medium z-[1]">
-              {calculateC02ePercentageOfGivenScopeCategory("Mobile combustion")}
-              %
-            </div>
-            <div className="relative capitalize font-medium z-[1]">
-              {calculateC02ePercentageOfGivenScopeCategory(
-                "Fugitive emissions"
-              )}
-              %
-            </div>
-          </div>
-          <div className="h-[130px] w-[130px] relative z-[1] mq450:flex-1">
-            <ApexChart
+          <div className="flex-1 h-36 min-w-[144px] flex items-center justify-center">
+            <RadialBarChart
               scopes={[
                 calculateC02ePercentageOfGivenScopeCategory(
                   "Stationary combustion"
@@ -351,7 +327,132 @@ const AirTravelScope = () => {
             />
           </div>
         </div>
-      </div> */}
+      </div>
+
+      {/* Card scope 2 row-span-2 */}
+      <div className="border rounded-md border-slate-500 p-3">
+        <div className="font-medium">Scope 2 Emissions</div>
+        <div className="text-[2rem]">{totalScope2CO2e.toFixed(2)}</div>
+        <div className="font-medium text-gray-400 text-xs">
+          Metric Tonnes CO<span className="text-[8px]">2</span>e
+        </div>
+        <hr className="border-t-[1px] border-slate-500 h-0" />
+        <div className="flex flex-col-reverse gap-y-1 xs:flex-row xs:items-center">
+          <div className="flex-1 flex flex-col gap-y-3">
+            {/* Stationary Combustion */}
+            <div className="flex items-center justify-between gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <span className="h-4 w-4 rounded-[50%] bg-tc-blue"></span>
+                <div className="text-nowrap">Stationary Combustion</div>
+              </div>
+              <div>
+                {calculateC02ePercentageOfGivenScopeCategory(
+                  "Stationary combustion"
+                )}
+                %
+              </div>
+            </div>
+            {/* Mobile Combustion */}
+            <div className="flex items-center justify-between gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <span className="h-4 w-4 rounded-[50%] bg-orange"></span>
+                <div className="text-nowrap">Mobile Combustion</div>
+              </div>
+              <div>
+                {calculateC02ePercentageOfGivenScopeCategory(
+                  "Mobile combustion"
+                )}
+                %
+              </div>
+            </div>
+            {/* Fugitive Emissions */}
+            <div className="flex items-center justify-between  gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <div className="h-4 w-4 rounded-[50%] bg-tc-green" />
+                <div className="text-nowrap">Fugitive Emissions</div>
+              </div>
+              <div>
+                {calculateC02ePercentageOfGivenScopeCategory(
+                  "Fugitive emissions"
+                )}
+                %
+              </div>
+            </div>
+          </div>
+          <div className="flex-1 h-36 min-w-[144px] flex items-center justify-center">
+            <RadialBarChart
+              scopes={[
+                calculateC02ePercentageOfGivenScope(totalScope1CO2e),
+                calculateC02ePercentageOfGivenScope(totalScope2CO2e),
+                calculateC02ePercentageOfGivenScope(totalScope3CO2e),
+              ]}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Card scope 3 col-span-2 */}
+      <div className="border rounded-md border-slate-500 p-3">
+        <div className="font-medium">Scope 2 Emissions</div>
+        <div className="text-[2rem]">{totalScope2CO2e.toFixed(2)}</div>
+        <div className="font-medium text-gray-400 text-xs">
+          Metric Tonnes CO<span className="text-[8px]">2</span>e
+        </div>
+        <hr className="border-t-[1px] border-slate-500 h-0" />
+        <div className="flex flex-col-reverse gap-y-1 xs:flex-row xs:items-center">
+          <div className="flex-1 flex flex-col gap-y-3">
+            {/* Stationary Combustion */}
+            <div className="flex items-center justify-between gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <span className="h-4 w-4 rounded-[50%] bg-tc-blue"></span>
+                <div className="text-nowrap">Stationary Combustion</div>
+              </div>
+              <div>
+                {calculateC02ePercentageOfGivenScopeCategory(
+                  "Stationary combustion"
+                )}
+                %
+              </div>
+            </div>
+            {/* Mobile Combustion */}
+            <div className="flex items-center justify-between gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <span className="h-4 w-4 rounded-[50%] bg-orange"></span>
+                <div className="text-nowrap">Mobile Combustion</div>
+              </div>
+              <div>
+                {calculateC02ePercentageOfGivenScopeCategory(
+                  "Mobile combustion"
+                )}
+                %
+              </div>
+            </div>
+            {/* Fugitive Emissions */}
+            <div className="flex items-center justify-between  gap-x-2">
+              <div className="flex items-center gap-x-1">
+                <div className="h-4 w-4 rounded-[50%] bg-tc-green" />
+                <div className="text-nowrap">Fugitive Emissions</div>
+              </div>
+              <div>
+                {calculateC02ePercentageOfGivenScopeCategory(
+                  "Fugitive emissions"
+                )}
+                %
+              </div>
+            </div>
+          </div>
+          <div className="flex-1 h-36 min-w-[144px] flex items-center justify-center">
+            <RadialBarChart
+              scopes={[
+                calculateC02ePercentageOfGivenScope(totalScope1CO2e),
+                calculateC02ePercentageOfGivenScope(totalScope2CO2e),
+                calculateC02ePercentageOfGivenScope(totalScope3CO2e),
+              ]}
+            />
+          </div>
+        </div>
+      </div>
+
       {/* <div className="self-stretch rounded-lg bg-white shadow-[0px_4px_60px_rgba(0,_0,_0,_0.02)] flex flex-col items-center justify-start pt-4 px-0 pb-0 gap-[18px]">
         <div className="self-stretch h-[282px] relative rounded-lg bg-white shadow-[0px_4px_60px_rgba(0,_0,_0,_0.02)] hidden" />
         <div className="self-stretch flex flex-col items-start justify-start py-0 px-6 gap-[6px] z-[1]">
@@ -720,7 +821,7 @@ const AirTravelScope = () => {
           </div>
         </div>
       </div> */}
-    </section>
+    </div>
   );
 };
 

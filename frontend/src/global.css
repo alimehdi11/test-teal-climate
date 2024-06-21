@@ -8,6 +8,7 @@
 
 body {
   @apply leading-[normal] m-0;
+  font-family: "Poppins";
 }
 
 *,

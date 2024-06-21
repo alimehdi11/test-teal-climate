@@ -1,136 +1,177 @@
-// Navbar.js
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Logo from "../components/ui/Logo";
+import { IoMenu } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 
-const Navbar = ({ userName }) => {
+const Navbar = () => {
+  const [isNavVisible, setIsNavVisible] = useState(false);
   const location = useLocation();
-  return (
-    <header className="self-stretch bg-white shadow-[0px_4px_50px_rgba(0,_0,_0,_0.05)] flex flex-row items-start justify-between py-3 px-6 box-border gap-[20px] top-[0] z-[9999] sticky max-w-full text-left text-xs text-dark font-poppins">
-      {/* Logo and Brand */}
-      <div className="flex flex-row items-center justify-start gap-[4px]">
-        <img
-          className="h-10 w-[48.8px] relative overflow-hidden shrink-0 z-[1]"
-          loading="eager"
-          alt=""
-          src="/logo.svg"
-        />
-        <img
-          className="h-[13.8px] w-[104.9px] relative z-[1]"
-          loading="eager"
-          alt=""
-          src="/teal-climate.svg"
-        />
-      </div>
-      {/* Navigation Links */}
-      <div className="flex flex-col items-start justify-start py-0 pr-3.5 pl-0 box-border max-w-full">
-        <div className="flex flex-row items-start justify-start gap-[8px] z-[2]">
-          {/* Dashboard Link */}
-          <Link
-            to="/dashboard"
-            className={`text-black flex items-center ${
-              location.pathname === "/dashboard"
-                ? "bg-brand-color-01 rounded-lg text-white"
-                : ""
-            }`}
-            style={{ textDecoration: "none" }}
-          >
-            <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
-              <div className="flex flex-row items-center justify-start py-0 pr-px pl-0 gap-[8px]">
-                <img
-                  className="h-5 w-5 relative min-h-[20px]"
-                  loading="eager"
-                  alt=""
-                  src="/icons.svg"
-                />
-                <div className="relative font-medium">Dashboard</div>
-              </div>
-            </div>
-          </Link>
-          {/* Profile Link */}
-          <Link
-            to="/profile"
-            className={`text-black flex items-center ${
-              location.pathname === "/profile"
-                ? "bg-brand-color-01 rounded-lg text-white"
-                : ""
-            }`}
-            style={{ textDecoration: "none" }}
-          >
-            <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
-              <div className="flex flex-row items-center justify-start py-0 pr-[13px] pl-3 gap-[8px]">
-                <img
-                  className="h-5 w-5 relative min-h-[20px]"
-                  alt=""
-                  src="/icons-1.svg"
-                />
-                <div className="relative font-medium">Profile</div>
-              </div>
-            </div>
-          </Link>
-          {/* Activities Link */}
-          <Link
-            to="/activites"
-            className={`text-black flex items-center gap-[8px] ${
-              location.pathname === "/activites"
-                ? "bg-brand-color-01 rounded-lg text-white"
-                : ""
-            }`}
-            style={{ textDecoration: "none" }}
-          >
-            <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
-              <div className="flex flex-row items-center justify-center py-0 px-1.5 gap-[8px]">
-                <img
-                  className={`h-5 w-5 relative object-contain min-h-[20px] `}
-                  alt=""
-                  src="/icons-2.svg"
-                />
-                <div className="relative text-xs font-semibold">Activities</div>
-              </div>
-            </div>
-          </Link>
 
-          {/* EEIO Link */}
-          {/* <div className="rounded-lg flex flex-col items-center justify-center py-2.5 px-6 box-border min-w-[145px] max-w-[145px]">
-            <div className="flex flex-row items-center justify-center py-0 px-[9px] gap-[8px]">
-              <img
-                className="h-5 w-5 relative min-h-[20px]"
-                alt=""
-                src="/icons-3.svg"
-              />
-              <div className="flex flex-row items-center justify-start gap-[16px]">
-                <div className="relative font-medium">EEIO</div>
-                <img
-                  className="h-1 w-2 relative"
-                  alt=""
-                  src="/vectorr-frame.svg"
-                />
-              </div>
-            </div>
-          </div> */}
-        </div>
-      </div>
-      {/* Profile and Notification Icons */}
-      <div className="flex flex-row items-start justify-start gap-[12px]">
-        <img
-          className="h-10 w-10 relative min-h-[40px] z-[1]"
-          loading="eager"
-          alt=""
-          src="/messages.svg"
-        />
-        <img
-          className="h-10 w-10 relative min-h-[40px] z-[1]"
-          loading="eager"
-          alt=""
-          src="/notification.svg"
-        />
-        {/* Profile Link */}
-        <Link to="/account">
-          <div className="h-10 w-10 relative rounded-81xl object-contain min-h-[40px] z-[1] bg-gray-100 flex items-center justify-center text-black font-semibold">
-            {userName ? userName.charAt(0).toUpperCase() : "A"}
-          </div>
+  const toggleNavVisibility = () => {
+    setIsNavVisible(!isNavVisible);
+  };
+
+  return (
+    <nav className="bg-white flex justify-between items-center h-14 shadow-lg sticky top-0 px-3 z-[1]">
+      <Logo />
+
+      {/* Navigation Links */}
+      <div className="hidden md:flex items-center gap-x-2 ">
+        <Link
+          to="/dashboard"
+          className={`text-black flex items-center gap-x-1 p-2 rounded ${
+            location.pathname === "/dashboard" ? "bg-tc-green text-white" : ""
+          }`}
+          style={{ textDecoration: "none" }}
+        >
+          <img
+            src={
+              location.pathname === "/dashboard"
+                ? "/dashboard-nav-link-icon-white.svg"
+                : "/icons.svg"
+            }
+          />
+          <div>Dashboard</div>
+        </Link>
+        <Link
+          to="/profile"
+          className={`text-black flex items-center gap-x-1 p-2 rounded ${
+            location.pathname === "/profile" ? "bg-tc-green text-white" : ""
+          }`}
+          style={{ textDecoration: "none" }}
+        >
+          <img
+            src={
+              location.pathname === "/profile"
+                ? "/profile-nav-link-icon-white.svg"
+                : "/icons-1.svg"
+            }
+          />
+          <div>Profile</div>
+        </Link>
+        <Link
+          to="/activities"
+          className={`text-black flex items-center gap-x-1 p-2 rounded ${
+            location.pathname === "/activities" ? "bg-tc-green text-white" : ""
+          }`}
+          style={{ textDecoration: "none" }}
+        >
+          <img
+            src={
+              location.pathname === "/activities"
+                ? "/activities-nav-link-icon-white.svg"
+                : "/icons-2.svg"
+            }
+          />
+          <div>Activites</div>
         </Link>
       </div>
-    </header>
+
+      {/* Profile and Notification Icons*/}
+      <div className="hidden md:flex items-center gap-x-2">
+        <img
+          alt="Messages"
+          src="/messages.svg"
+          className="border rounded-full border-slate-500"
+        />
+        <img
+          alt="Notification"
+          src="/notification.svg"
+          className="border rounded-full border-slate-500"
+        />
+        <Link
+          to="/account"
+          className="no-underline text-black bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500"
+        >
+          A
+        </Link>
+      </div>
+
+      {/* Toggle Button */}
+      <IoMenu className="md:hidden text-[24px]" onClick={toggleNavVisibility} />
+
+      {/* Mobile menu */}
+      <div
+        className={`fixed right-0 top-0 h-[100vh] md:hidden w-72 bg-white shadow-lg ${isNavVisible ? "block" : "hidden"}`}
+      >
+        {/* Close menu */}
+        <IoClose
+          className="relative top-2 left-2 text-[26px]"
+          onClick={toggleNavVisibility}
+        />
+        {/* Navigation Links */}
+        <div className="mt-3 flex flex-col gap-y-3 px-3">
+          <Link
+            to="/dashboard"
+            className={`text-black flex items-center gap-x-1 p-2 rounded-md ${
+              location.pathname === "/dashboard" ? "bg-tc-green text-white" : ""
+            }`}
+            style={{ textDecoration: "none" }}
+          >
+            <img
+              className={`${
+                location.pathname === "/dashboard" ? "text-white" : ""
+              }`}
+              loading="eager"
+              src="/icons.svg"
+            />
+            <div>Dashboard</div>
+          </Link>
+          <Link
+            to="/profile"
+            className={`text-black flex items-center gap-x-1 p-2 rounded-md ${
+              location.pathname === "/profile" ? "bg-tc-green text-white" : ""
+            }`}
+            style={{ textDecoration: "none" }}
+          >
+            <img
+              className={`${
+                location.pathname === "/profile" ? "text-white" : ""
+              }`}
+              loading="eager"
+              src="/icons-1.svg"
+            />
+            <div>Profile</div>
+          </Link>
+          <Link
+            to="/activites"
+            className={`text-black flex items-center gap-x-1 p-2 rounded-md ${
+              location.pathname === "/activites" ? "bg-tc-green text-white" : ""
+            }`}
+            style={{ textDecoration: "none" }}
+          >
+            <img
+              className={`${
+                location.pathname === "/activites" ? "text-white" : ""
+              }`}
+              loading="eager"
+              src="/icons-2.svg"
+            />
+            <div>Activites</div>
+          </Link>
+        </div>
+        {/* Profile and Notification Icons*/}
+        <div className="mt-3 flex justify-center items-center gap-x-2">
+          <img
+            alt="Messages"
+            src="/messages.svg"
+            className=" border rounded-full border-slate-500"
+          />
+          <img
+            alt="Notification"
+            src="/notification.svg"
+            className=" border rounded-full border-slate-500"
+          />
+          <Link
+            to="/account"
+            className="no-underline text-black bg-[#F7F8FA] w-10 h-10 flex justify-center items-center border rounded-full border-slate-500"
+          >
+            A
+          </Link>
+        </div>
+      </div>
+    </nav>
   );
 };
 

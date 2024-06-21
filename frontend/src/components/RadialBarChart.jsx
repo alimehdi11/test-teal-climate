@@ -1,0 +1,29 @@
+import { PureComponent } from "react";
+import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
+
+export default class Example extends PureComponent {
+  render() {
+    let data = this.props.scopes;
+    const colors = ["#197EC6", "#FFA400", "#00CC9C"];
+    data = data.map((scope, index) => {
+      return {
+        value: data.length - index,
+        // value: scope,
+        fill: colors[index],
+      };
+    });
+
+    return (
+      <ResponsiveContainer width="100%" height="100%">
+        <RadialBarChart
+          innerRadius="120%"
+          outerRadius="32%"
+          barSize={12}
+          data={data}
+        >
+          <RadialBar minAngle={15} background clockWise dataKey="value" />
+        </RadialBarChart>
+      </ResponsiveContainer>
+    );
+  }
+}

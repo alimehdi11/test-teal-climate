@@ -73,30 +73,14 @@ export default {
         "5xs-5": "7.5px",
       },
       screens: {
-        mq1325: {
-          raw: "screen and (max-width: 1325px)",
-        },
-        mq1125: {
-          raw: "screen and (max-width: 1125px)",
-        },
-        mq800: {
-          raw: "screen and (max-width: 800px)",
-        },
-        mq450: {
-          raw: "screen and (max-width: 450px)",
-        },
-        lg: {
-          max: "1200px",
-        },
-        mq1050: {
-          raw: "screen and (max-width: 1050px)",
-        },
-        mqMin800: {
-          raw: "screen and (min-width: 800px)",
-        },
-        xsm: {
-          min: "480px",
-        },
+        xs: "480px",
+        sm: "640px",
+        md: "768px",
+        mqMin800: "800px",
+        mqMin850: "850px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
       },
       fontSize: {
         sm: "14px",

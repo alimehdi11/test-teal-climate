@@ -43,15 +43,17 @@ const ApexChart = ({ scopes }) => {
   };
 
   return (
-    <div className="w-40 h-40 rounded-full overflow-hidden">
-      <ReactApexChart
-        options={options}
-        series={series}
-        type="radialBar"
-        height={170}
-        width={170}
-      />
-    </div>
+    <ReactApexChart
+      options={options}
+      series={series}
+      type="radialBar"
+      // height={170}
+      // width={170}
+      className="flex justify-center"
+      style={{
+        minHeight: "0px",
+      }}
+    />
   );
 };
 
