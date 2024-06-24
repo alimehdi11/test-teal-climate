@@ -3,13 +3,14 @@ import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
 
 export default class Example extends PureComponent {
   render() {
+    const COLORS = ["#197EC6", "#FFA400", "#00CC9C"];
+
     let data = this.props.scopes;
-    const colors = ["#197EC6", "#FFA400", "#00CC9C"];
     data = data.map((scope, index) => {
       return {
         value: data.length - index,
+        fill: COLORS[index],
         // value: scope,
-        fill: colors[index],
       };
     });
 

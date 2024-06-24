@@ -7,11 +7,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        "brand-color-01": "#00cc9c",
         "tc-green": "#00cc9c",
-        "brand-color-2": "#197ec6",
         "tc-blue": "#197ec6",
-        "tc-gray": "#e5e7eb",
+        // "tc-gray": "#e5e7eb",
         "tc-input-border": "#475569",
         "forest-green": "#32b950",
         "golden-rod": "#e6ba1f",
@@ -19,47 +17,50 @@ export default {
         "corn-flower-blue": "#a5a6f6",
         "indian-red": {
           100: "#eb5757",
-          200: "#c55757",
+          // 200: "#c55757",
         },
         "medium-aqua-marine": "#85e0ab",
         "green-1": "#219653",
         "sky-blue": "#56ccf2",
         "medium-orchid": "#bb6bd9",
-        "tc-violet": "#fd8bff",
-        /*-----------------------------------*/
-        gray: {
-          100: "#fbfbfb",
-          300: "#929292",
-          6: "#f2f2f2", // merged value from both configurations
-          5: "#e0e0e0", // merged value from second configuration
-          3: "#828282", // merged value from both configurations
-          4: "#bdbdbd", // merged value from second configuration
-        },
-        white: "#fff",
-        dark: "#111",
-        // "brand-color-2": "#197ec6",
-        // "brand-color-01": "#00cc9c",
-        silver: "#bdbdbd",
-        whitesmoke: "#f2f2f2",
-        mediumseagreen: "#00b382",
-        "not-white": "#f7f8fa",
-        gainsboro: "#dedee0",
-        indianred: {
-          100: "#eb5757",
-          200: "#c55757",
-        },
-        orange: "#ffa400",
-        gold: "#ffca2a",
-        darkcyan: "#1f8a7d",
-        forestgreen: "#32b950",
-        goldenrod: "#e6ba1f",
         violet: "#fd8bff",
-        mediumorchid: "#bb6bd9",
-        skyblue: "#56ccf2",
-        "green-1": "#219653",
-        mediumaquamarine: "#85e0ab",
-        mediumslateblue: "#5d5fef",
-        cornflowerblue: "#a5a6f6",
+        gold: "#ffca2a",
+        "dark-cyan": "#1f8a7d",
+        orange: "#ffa400",
+        /*--------------------------------------------------*/
+        // gray: {
+        //   100: "#fbfbfb",
+        //   300: "#929292",
+        //   6: "#f2f2f2", // merged value from both configurations
+        //   5: "#e0e0e0", // merged value from second configuration
+        //   3: "#828282", // merged value from both configurations
+        //   4: "#bdbdbd", // merged value from second configuration
+        // },
+        // white: "#fff",
+        // dark: "#111",
+        // // "brand-color-2": "#197ec6",
+        // // "brand-color-01": "#00cc9c",
+        // silver: "#bdbdbd",
+        // whitesmoke: "#f2f2f2",
+        // mediumseagreen: "#00b382",
+        // "not-white": "#f7f8fa",
+        // gainsboro: "#dedee0",
+        // indianred: {
+        //   100: "#eb5757",
+        //   200: "#c55757",
+        // },
+        // orange: "#ffa400",
+        // gold: "#ffca2a",
+        // darkcyan: "#1f8a7d",
+        // forestgreen: "#32b950",
+        // goldenrod: "#e6ba1f",
+        // violet: "#fd8bff",
+        // mediumorchid: "#bb6bd9",
+        // skyblue: "#56ccf2",
+        // "green-1": "#219653",
+        // mediumaquamarine: "#85e0ab",
+        // mediumslateblue: "#5d5fef",
+        // cornflowerblue: "#a5a6f6",
       },
       spacing: {},
       fontFamily: {
