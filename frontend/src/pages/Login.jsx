@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext.jsx";
 import { setToken, isLoggedIn, decodeToken } from "../utils/auth.utils.js";
 import Input from "../components/ui/Input.jsx";
@@ -190,7 +190,7 @@ const Login = () => {
       </form>
       {/* Signup link */}
       <div>
-        Do not have an account? <a href="/signup">Signup</a>
+        Do not have an account? <Link to="/signup">Signup</Link>
       </div>
     </div>
   );

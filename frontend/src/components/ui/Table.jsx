@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import editIcon from "../../assets/edit-icon.svg";
+import trashIcon from "../../assets/trash-icon.svg";
 
 /**
  * @param {number} data - Data to shoe in the table.
@@ -69,12 +71,12 @@ const Table = ({ data, column }) => {
                           className="flex justify-center items-center"
                         >
                           <img
-                            src="edit-icon.svg"
+                            src={editIcon}
                             className="p-1 rounded hover:bg-slate-300 w-7 h-7"
                           />
                         </Link>
                         <img
-                          src="trash-icon.svg"
+                          src={trashIcon}
                           className="p-1 rounded hover:bg-slate-300 w-7 h-7"
                           onClick={column.handleDelete(row.id)}
                         />

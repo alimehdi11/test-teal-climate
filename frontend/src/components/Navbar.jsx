@@ -3,6 +3,15 @@ import { Link, useLocation } from "react-router-dom";
 import Logo from "../components/ui/Logo";
 import { IoMenu } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
+import dashboardNavLinkIconBlack from "../assets/dashboard-nav-link-icon-black.svg";
+import dashboardNavLinkIconWhite from "../assets/dashboard-nav-link-icon-white.svg";
+import profileNavLinkIconBlack from "../assets/profile-nav-link-icon-black.svg";
+import profileNavLinkIconWhite from "../assets/profile-nav-link-icon-white.svg";
+import activitiesNavLinkIconBlack from "../assets/dashboard-nav-link-icon-black.svg";
+import activitiesNavLinkIconWhite from "../assets/dashboard-nav-link-icon-white.svg";
+import { IoSettingsOutline } from "react-icons/io5";
+import messagesIcon from "../assets/messages-icon.svg";
+import notificationIcon from "../assets/notification-icon.svg";
 
 const Navbar = () => {
   const [isNavVisible, setIsNavVisible] = useState(false);
@@ -28,8 +37,8 @@ const Navbar = () => {
           <img
             src={
               location.pathname === "/dashboard"
-                ? "/src/assets/dashboard-nav-link-icon-white.svg"
-                : "/src/assets/icons.svg"
+                ? dashboardNavLinkIconWhite
+                : dashboardNavLinkIconBlack
             }
           />
           <div>Dashboard</div>
@@ -44,8 +53,8 @@ const Navbar = () => {
           <img
             src={
               location.pathname === "/profile"
-                ? "/src/assets/profile-nav-link-icon-white.svg"
-                : "/src/assets/icons-1.svg"
+                ? profileNavLinkIconWhite
+                : profileNavLinkIconBlack
             }
           />
           <div>Profile</div>
@@ -60,8 +69,8 @@ const Navbar = () => {
           <img
             src={
               location.pathname === "/activities"
-                ? "/src/assets/activities-nav-link-icon-white.svg"
-                : "/src/assets/icons-2.svg"
+                ? activitiesNavLinkIconWhite
+                : activitiesNavLinkIconBlack
             }
           />
           <div>Activites</div>
@@ -71,18 +80,18 @@ const Navbar = () => {
       {/* Profile and Notification Icons*/}
       <div className="hidden md:flex items-center gap-x-2">
         <img
-          src="/src/assets/messages.svg"
+          src={messagesIcon}
           className="border rounded-full border-slate-500"
         />
         <img
-          src="/src/assets/notification.svg"
+          src={notificationIcon}
           className="border rounded-full border-slate-500"
         />
         <Link
           to="/account"
-          className="no-underline text-black bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500"
+          className="no-underline text-black bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500 text-[21px] hover:bg-tc-green"
         >
-          A
+          <IoSettingsOutline />
         </Link>
       </div>
 
@@ -91,7 +100,7 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       <div
-        className={`fixed right-0 top-0 h-[100vh] md:hidden w-72 bg-white shadow-lg ${isNavVisible ? "block" : "hidden"}`}
+        className={`fixed right-0 top-0 h-[100vh] md:hidden w-72 bg-white shadow-lg shadow-tc-blue ${isNavVisible ? "block" : "hidden"}`}
       >
         {/* Close menu */}
         <IoClose
@@ -110,8 +119,8 @@ const Navbar = () => {
             <img
               src={
                 location.pathname === "/dashboard"
-                  ? "/src/assets/dashboard-nav-link-icon-white.svg"
-                  : "/src/assets/icons.svg"
+                  ? dashboardNavLinkIconWhite
+                  : dashboardNavLinkIconBlack
               }
             />
             <div>Dashboard</div>
@@ -126,8 +135,8 @@ const Navbar = () => {
             <img
               src={
                 location.pathname === "/profile"
-                  ? "/src/assets/profile-nav-link-icon-white.svg"
-                  : "/src/assets/icons-1.svg"
+                  ? profileNavLinkIconWhite
+                  : profileNavLinkIconBlack
               }
             />
             <div>Profile</div>
@@ -144,8 +153,8 @@ const Navbar = () => {
             <img
               src={
                 location.pathname === "/activities"
-                  ? "/src/assets/activities-nav-link-icon-white.svg"
-                  : "/src/assets/icons-2.svg"
+                  ? activitiesNavLinkIconWhite
+                  : activitiesNavLinkIconBlack
               }
             />
             <div>Activites</div>
@@ -155,18 +164,18 @@ const Navbar = () => {
         {/* Profile and Notification Icons*/}
         <div className="mt-3 flex justify-center items-center gap-x-2">
           <img
-            src="/src/assets/messages.svg"
+            src={messagesIcon}
             className="border rounded-full border-slate-500"
           />
           <img
-            src="/src/assets/notification.svg"
+            src={notificationIcon}
             className="border rounded-full border-slate-500"
           />
           <Link
             to="/account"
-            className="no-underline text-black bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500"
+            className="no-underline text-black bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500 text-[21px] hover:bg-tc-green"
           >
-            A
+            <IoSettingsOutline />
           </Link>
         </div>
       </div>
