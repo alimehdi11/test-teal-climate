@@ -232,7 +232,7 @@ const AirTravelScope = () => {
   }, [companyData]);
 
   return (
-    <div className="grid grid-cols-1 mqMin850:grid-cols-2 xl:grid-cols-3 px-3 gap-3 my-4">
+    <div className="grid grid-cols-1 mqMin850:grid-cols-2 xl:grid-cols-3 px-3 gap-3 mt-4">
       {/* Card total emissions */}
       <div className="border rounded-md border-slate-500 p-3">
         <div className="font-medium text-[20px]">Total GHG Emissions</div>

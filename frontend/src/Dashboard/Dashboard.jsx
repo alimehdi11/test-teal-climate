@@ -6,7 +6,7 @@ import Top10EmissionsTable from "./Top10EmissionsTable.jsx";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRef } from "react";
-import Map from "./Map";
+import WorldMap from "./WorldMap.jsx";
 import Button from "../components/ui/Button.jsx";
 
 const Dashboard = () => {
@@ -56,8 +56,8 @@ const Dashboard = () => {
         </Button>
       </div>
       <AirTravelScope />
-      {/* <Map />
-      <Top10EmissionsTable /> */}
+      <WorldMap />
+      <Top10EmissionsTable />
     </div>
   );
 };
