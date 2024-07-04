@@ -1,12 +1,13 @@
 import { useState, useEffect, useContext } from "react";
-import FrameComponent1 from "../components/FrameComponent1.jsx";
-import FrameComponent from "../components/FrameComponent.jsx";
-import Sidebar from "../components/Sidebar.jsx";
+import ActivitesForm from "../components/ActivitesForm.jsx";
+import ActivitiesTable from "../components/ActivitiesTable.jsx";
+import ActivitiesSidebar from "../components/ActivitiesSidebar.jsx";
 import Navbar from "../components/Navbar.jsx";
 import { useParams } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { getBearerToken } from "../utils/auth.utils.js";
 import { UserContext } from "../contexts/UserContext.jsx";
+import { request } from "../utils/network.utils.js";
+import Layout from "../components/layout/Layout.jsx";
 
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState(null);
@@ -17,13 +18,9 @@ const Activities = () => {
 
   const fetchCompanyData = async () => {
     try {
-      const response = await fetch(
+      const response = await request(
         `${import.meta.env.VITE_API_BASE_URL}/companiesdata/${user.id}`,
-        {
-          headers: {
-            authorization: getBearerToken(),
-          },
-        }
+        "GET"
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -59,21 +56,48 @@ const Activities = () => {
   return (
     <>
       <Navbar />
-      <section className="flex flex-row items-start justify-start py-0 px-5 box-border gap-[24px] max-w-full mq1125:flex-wrap">
+      <Layout
+        sidebarContent={
+          <ActivitiesSidebar
+            selectedScope={selectedScope}
+            selectedLevel={selectedLevel}
+            setSelectedScope={setSelectedScope}
+            setSelectedLevel={setSelectedLevel}
+          />
+        }
+        mainContent={
+          selectedScope && selectedLevel ? (
+            <ActivitesForm
+              selectedScope={selectedScope}
+              selectedLevel={selectedLevel}
+              setSelectedScope={setSelectedScope}
+              setSelectedLevel={setSelectedLevel}
+              userId={user.id}
+              setCompanyData={setCompanyData}
+            />
+          ) : (
+            <div className="h-full bg-gray-200 flex justify-center items-center font-bold text-gray-500 rounded-md">
+              <FaArrowLeftLong className="text-[20px] me-2" /> Please select
+              scope and activity from the sidebar
+            </div>
+          )
+        }
+      />
+      {/* <section className="flex flex-row items-start justify-start py-0 px-5 box-border gap-[24px] max-w-full mq1125:flex-wrap">
         <div className="w-[362px] rounded-lg bg-white shadow-[0px_4px_60px_rgba(0,_0,_0,_0.02)] overflow-x-auto shrink-0 flex flex-row items-center justify-center min-w-[362px] max-w-full mq450:min-w-full mq1125:flex-1 hide-scroll">
           <div className="h-[656px] w-[326px] relative shrink-0 z-[1] flex ">
-            <Sidebar
+            <ActivitiesSidebar
               selectedScope={selectedScope}
               selectedLevel={selectedLevel}
               setSelectedScope={setSelectedScope}
               setSelectedLevel={setSelectedLevel}
             />
-          </div>
-        </div>
+          </div> */}
+      {/* </div> */}
 
-        {/* FORM */}
-        {selectedScope && selectedLevel ? (
-          <FrameComponent1
+      {/* FORM */}
+      {/* {selectedScope && selectedLevel ? (
+          <ActivitesForm
             selectedScope={selectedScope}
             selectedLevel={selectedLevel}
             setSelectedScope={setSelectedScope}
@@ -87,12 +111,10 @@ const Activities = () => {
             and activity from the sidebar
           </div>
         )}
-      </section>
-      {/* TABLE */}
-      <FrameComponent
+      </section> */}
+      <ActivitiesTable
         companyData={companyData}
-        setCompanyData={setCompanyData}
-        userId={user.id}
+        fetchCompanyData={fetchCompanyData}
       />
     </>
   );

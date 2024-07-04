@@ -22,7 +22,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white flex justify-between items-center h-16 shadow-lg sticky top-0 px-3 z-[1]">
+    <nav className="bg-white flex justify-between items-center h-16 shadow-lg sticky top-0 px-4 z-[1000]">
       <Logo />
 
       {/* Navigation Links */}

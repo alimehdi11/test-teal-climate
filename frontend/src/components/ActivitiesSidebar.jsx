@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { getBearerToken } from "./../utils/auth.utils.js";
+import { request } from "../utils/network.utils.js";
+import Button from "./ui/Button.jsx";
+import Input from "./ui/Input.jsx";
 
-const Sidebar = ({
+const ActivitiesSidebar = ({
   selectedScope,
   selectedLevel,
   setSelectedScope,
@@ -14,13 +16,9 @@ const Sidebar = ({
 
   const fetchScopes = async () => {
     try {
-      const response = await fetch(
+      const response = await request(
         `${import.meta.env.VITE_API_BASE_URL}/activitydata`,
-        {
-          headers: {
-            authorization: getBearerToken(),
-          },
-        }
+        "GET"
       );
 
       if (!response.ok) {
@@ -45,13 +43,9 @@ const Sidebar = ({
 
   const fetchLevel1Data = async (scope) => {
     try {
-      const response = await fetch(
+      const response = await request(
         `${import.meta.env.VITE_API_BASE_URL}/activitydata?scope=${scope}`,
-        {
-          headers: {
-            authorization: getBearerToken(),
-          },
-        }
+        "GET"
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch level1 data for ${scope}`);
@@ -79,7 +73,6 @@ const Sidebar = ({
 
   useEffect(() => {
     if (level1Data) {
-      console.log("level1Data available");
       if (searchQuery === "") {
         setFilteredScopes(level1Data);
       } else {
@@ -89,8 +82,6 @@ const Sidebar = ({
           )
         );
       }
-    } else {
-      console.log("level1Data NOT available");
     }
   }, [level1Data, searchQuery]);
 
@@ -106,15 +97,16 @@ const Sidebar = ({
   }, [selectedScope]);
 
   return (
-    <div className="bg-white absolute min-w-[300px] max-h-[656px] top-[1px] left-[40px] rounded-[8px] font-poppin">
-      <h1 className="text-2xl self-stretch rounded-lg ">Select Scope</h1>
-      <div className="flex flex-col items-start gap-4">
+    <div className="pe-1">
+      <h2 className="m-0 mb-4 text-center">Select Scope</h2>
+      <div className="flex flex-col gap-y-4">
         {scopesData?.map((scope) => (
-          <button
+          <Button
             key={scope}
-            className={`w-[150px] p-3 rounded-md bg-gray-200 text-gray-700 hover:bg-brand-color-01 hover:text-white${
-              scope === selectedScope ? " bg-brand-color-01 text-white" : ""
-            }`}
+            className={
+              "py-3" +
+              (scope === selectedScope ? " bg-tc-green text-white" : "")
+            }
             onClick={(e) => {
               if (e.target.innerText === selectedScope) {
                 // parent
@@ -126,24 +118,20 @@ const Sidebar = ({
             }}
           >
             {scope}
-          </button>
+          </Button>
         ))}
       </div>
 
-      <hr className="w-full h-[2px] bg-slate-300" />
+      <hr className="w-full h-[1px] bg-slate-500 my-2" />
 
-      <button className="w-[150px] p-3 rounded-md bg-gray-200 text-gray-700 hover:bg-brand-color-01 hover:text-white">
-        Spend Base Scope 3
-      </button>
+      <Button className="py-3 w-full">Spend Base Scope 3</Button>
 
-      <div className="mt-[20px]">
-        <h1 className="text-2xl self-stretch rounded-lg">Select Activity</h1>
+      <div className="mt-4">
+        <h2 className="m-0 mb-4 text-center">Select Activity</h2>
         <div className="relative">
-          <i className="absolute top-2 left-2 text-gray-400 fas fa-search"></i>
-          <input
+          <Input
             type="text"
             placeholder="Search..."
-            className="text-[15px] bg-gray-50 px-2 w-[240px] h-10 rounded-[8px] border border-gray-300 focus:outline-none focus:border-blue-500"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -151,34 +139,30 @@ const Sidebar = ({
       </div>
 
       {/* List */}
-      <div className="flex flex-col gap-6 py-4">
-        <ul
-          className="min-w-[280px] rounded-lg p-8 space-y-6 overflow-y-auto"
-          style={{ listStyleType: "none", padding: 0, overflowY: "hidden" }}
-        >
-          {filteredScopes.map((level, index) => (
-            <li
-              key={index}
-              className={`p-[4px] h-[20px] hover:bg-blue-400 hover:text-white rounded-md transition-colors ${
-                level === selectedLevel && "bg-blue-500 text-white "
-              }`}
-              onClick={(e) => {
-                if (e.target.innerText === selectedLevel) {
-                  // parent
-                  setSelectedLevel(null);
-                } else {
-                  // parent
-                  setSelectedLevel(level);
-                }
-              }}
-            >
-              {level}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul className="list-none m-0 my-4 p-0 flex flex-col gap-y-4">
+        {filteredScopes.map((level, index) => (
+          <li
+            key={index}
+            className={
+              "bg-gray-200 hover:bg-tc-blue hover:text-white rounded p-2" +
+              (level === selectedLevel ? " bg-tc-blue text-white" : "")
+            }
+            onClick={(e) => {
+              if (e.target.innerText === selectedLevel) {
+                // parent
+                setSelectedLevel(null);
+              } else {
+                // parent
+                setSelectedLevel(level);
+              }
+            }}
+          >
+            {level}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default Sidebar;
+export default ActivitiesSidebar;

@@ -6,8 +6,10 @@ import "./global.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <UserProvider>
-      <App />
-    </UserProvider>
+    <div className="mx-auto max-w-[1408px]">
+      <UserProvider>
+        <App />
+      </UserProvider>
+    </div>
   </React.StrictMode>
 );

@@ -1,6 +1,6 @@
 const Main = ({ children }) => {
   return (
-    <div className="w-[100vw] h-[100vh] bg-green-600 md:w-[70vw]">
+    <div className="mt-[66px] md:mt-0 w-[100vw] min-h-[100vh] md:w-[75vw]">
       {children}
     </div>
   );

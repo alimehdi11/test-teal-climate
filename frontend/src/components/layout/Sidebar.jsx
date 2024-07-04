@@ -1,4 +1,5 @@
 import { useState } from "react";
+import rightAngleIcon from "../../assets/right-angle-icon.svg";
 
 const Sidebar = ({ children }) => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -6,21 +7,29 @@ const Sidebar = ({ children }) => {
   return (
     <div
       className={(
-        "bg-blue w-[30vw] min-w-[250px] h-[100vh] absolute top-0 left-0 -translate-x-full transition-transform duration-400 ease-out md:translate-x-0 md:static md:transition-none " +
+        "w-[25vw] min-w-[250px] h-[100vh] fixed top-[64px] left-0 bottom-0 -translate-x-full transition-transform duration-400 ease-out md:translate-x-0 md:static md:transition-none z-[900] bg-white pt-4 shadow-lg shadow-tc-blue md:shadow-none md:pt-0 " +
         (sidebarVisible ? "translate-x-0" : "")
       ).trim()}
     >
-      {children}
-      <button
-        className="absolute w-[50px] top-[30px] right-[-50px] md:hidden rounded-r-lg"
-        type="button"
+      <div className="h-full overflow-y-auto hide-scroll px-4 pb-16 md:px-0 md:pb-0">
+        {children}
+      </div>
+
+      {/* Toggle sidebar */}
+      <div
+        className="bg-tc-blue hover:bg-tc-green absolute w-[50px] h-[50px] top-4 right-[-50px] flex items-center justify-center md:hidden rounded-r-full"
         onClick={() => {
           setSidebarVisible((prev) => !prev);
         }}
       >
-        <img src="/right-angle-icon.svg" className="w-7" />
-      </button>
-      sidebar
+        <img
+          src={rightAngleIcon}
+          className={(
+            "w-[80%] mb-[1px] " +
+            (sidebarVisible ? "rotate-180 -translate-x-1 mt-1" : "")
+          ).trim()}
+        />
+      </div>
     </div>
   );
 };

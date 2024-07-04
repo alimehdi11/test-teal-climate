@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import worldGeoJSON from "./data.json";
+import worldMapJson from "../data/worldMap.json";
 import { getBearerToken } from "../utils/auth.utils.js";
 import { UserContext } from "../contexts/UserContext.jsx";
 
@@ -89,7 +89,7 @@ const WorldMap = () => {
   };
 
   return (
-    <div className="px-3 flex flex-col gap-3 mt-4">
+    <div className="px-4 flex flex-col gap-3 mt-4">
       {/* Emissions bar */}
       <div className="lg:flex-1 max-w-[400px]">
         <h3 className="lg:mt-0">Location wise Emissions</h3>
@@ -106,7 +106,7 @@ const WorldMap = () => {
         </div>
       </div>
       <MapContainer
-        className="w-full h-full bg-white border border-slate-500 min-h-[300px] rounded-md lg:flex-2"
+        className="w-full h-full bg-white border border-slate-500 min-h-[300px] rounded lg:flex-2"
         center={[25, 20]}
         zoom={3}
         zoomControl={false}
@@ -117,7 +117,7 @@ const WorldMap = () => {
         attributionControl={false}
       >
         <GeoJSON
-          data={worldGeoJSON}
+          data={worldMapJson}
           style={geoJsonStyle}
           onEachFeature={onEachFeature}
         />

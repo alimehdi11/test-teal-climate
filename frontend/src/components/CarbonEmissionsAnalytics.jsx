@@ -1,13 +1,10 @@
-import ApexChart from "./ApexChart";
-import ApexChart1 from "./ApexChart1";
-import Circule from "./Circule";
-import TC_PieChartWithPaddingAngle from "../components/TC_PieChartWithPaddingAngle.jsx";
+import TC_PieChartWithPaddingAngle from "./TC_PieChartWithPaddingAngle.jsx";
 import { useState, useEffect, useContext } from "react";
-import { getBearerToken } from "./../utils/auth.utils.js";
-import TC_RadialBarChart from "../components/TC_RadialBarChart.jsx";
+import { getBearerToken } from "../utils/auth.utils.js";
+import TC_RadialBarChart from "./TC_RadialBarChart.jsx";
 import { UserContext } from "../contexts/UserContext.jsx";
 
-const AirTravelScope = () => {
+const CarbonEmissionsAnalytics = () => {
   const { user } = useContext(UserContext);
   const [companyData, setCompanyData] = useState([]);
   const [totalCO2e, setTotalCO2e] = useState(0);
@@ -224,9 +221,9 @@ const AirTravelScope = () => {
   }, [totalCO2e]);
 
   return (
-    <div className="grid grid-cols-1 mqMin850:grid-cols-2 xl:grid-cols-3 px-3 gap-3 mt-4">
+    <div className="grid grid-cols-1 mqMin850:grid-cols-2 xl:grid-cols-3 px-4 gap-4 mt-4">
       {/* Card total emissions */}
-      <div className="border rounded-md border-slate-500 p-3">
+      <div className="border rounded border-slate-500 p-3">
         <div className="font-medium text-[20px]">Total GHG Emissions</div>
         <div className="text-[2rem]">{totalCO2e.toFixed(2)}</div>
         <div className="font-medium text-gray-400">
@@ -273,7 +270,7 @@ const AirTravelScope = () => {
       </div>
 
       {/* Card scope 1*/}
-      <div className="border rounded-md border-slate-500 p-3">
+      <div className="border rounded border-slate-500 p-3">
         <div className="font-medium text-[20px]">Scope 1 Emissions</div>
         <div className="text-[2rem]">{totalScope1CO2e.toFixed(2)}</div>
         <div className="font-medium text-gray-400">
@@ -341,7 +338,7 @@ const AirTravelScope = () => {
       </div>
 
       {/* Card scope 3 */}
-      <div className="xl:row-span-2 border rounded-md border-slate-500 p-3">
+      <div className="xl:row-span-2 border rounded border-slate-500 p-3">
         <div className="font-medium text-[20px]">Scope 3 Emissions</div>
         <div className="text-[2rem]">{totalScope3CO2e.toFixed(2)}</div>
         <div className="font-medium text-gray-400">
@@ -373,7 +370,7 @@ const AirTravelScope = () => {
       </div>
 
       {/* Card scope 2 */}
-      <div className="row-start-3 mqMin850:row-start-2 xl:col-span-2 border rounded-md border-slate-500 p-3">
+      <div className="row-start-3 mqMin850:row-start-2 xl:col-span-2 border rounded border-slate-500 p-3">
         <div className="font-medium text-[20px]">Scope 2 Emissions</div>
         <div className="text-[2rem]">{totalScope2CO2e.toFixed(2)}</div>
         <div className="font-medium text-gray-400">
@@ -481,4 +478,4 @@ const AirTravelScope = () => {
   );
 };
 
-export default AirTravelScope;
+export default CarbonEmissionsAnalytics;

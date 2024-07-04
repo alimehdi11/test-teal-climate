@@ -1,21 +1,19 @@
-import GroupComponent from "./GroupComponent";
-import AirTravelScope from "./AirTravelScope";
-import ScopePurchasedServices from "./ScopePurchasedServices";
+import CarbonEmissionsAnalytics from "../components/CarbonEmissionsAnalytics.jsx";
 import Navbar from "../components/Navbar.jsx";
-import Top10EmissionsTable from "./Top10EmissionsTable.jsx";
+import Top10EmissionsTable from "../components/Top10EmissionsTable.jsx";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRef } from "react";
-import WorldMap from "./WorldMap.jsx";
+import WorldMap from "../components/WorldMap.jsx";
 import Button from "../components/ui/Button.jsx";
 
 const Dashboard = () => {
   const pdfRef = useRef();
 
   const downloadPDF = () => {
-    const input = pdfRef.current; // Fixing the assignment syntax
+    const content = pdfRef.current;
 
-    html2canvas(input).then((canvas) => {
+    html2canvas(content).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4", true);
       const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -41,7 +39,7 @@ const Dashboard = () => {
   return (
     <div ref={pdfRef}>
       <Navbar />
-      <div className="flex flex-col xs:flex-row gap-y-4 justify-between px-3 mt-4">
+      <div className="flex flex-col xs:flex-row gap-y-4 justify-between px-4 mt-4">
         <div className="flex justify-center items-center gap-x-1">
           <img className="h-6 w-6" src="/src/assets/phcalendar.svg" />
           <span className="font-medium text-gray-800">
@@ -55,7 +53,7 @@ const Dashboard = () => {
           Download PDF
         </Button>
       </div>
-      <AirTravelScope />
+      <CarbonEmissionsAnalytics />
       <WorldMap />
       <Top10EmissionsTable />
     </div>

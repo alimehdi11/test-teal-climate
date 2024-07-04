@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { getBearerToken } from "./../utils/auth.utils.js";
+import { getBearerToken } from "../utils/auth.utils.js";
 import { UserContext } from "../contexts/UserContext.jsx";
-// import Table from "../components/ui/Table.jsx";
 
 const Top10EmissionsTable = () => {
   const [top10Emissions, setTop10Emissions] = useState([]);
@@ -46,13 +45,8 @@ const Top10EmissionsTable = () => {
     );
   }, []);
 
-  // return <Table data={top10Emissions} />;
-
   return (
-    <div
-      className="mx-3 my-3 hide-scroll border-[1px] border-slate-500 border-solid rounded-md overflow-x-auto max-w-full font-poppins shadow-2xl"
-      style={{ fontSize: "16px" }}
-    >
+    <div className="mx-4 my-4 hide-scroll border border-slate-500 rounded overflow-x-auto shadow-2xl">
       <table className="border-0">
         <thead>
           <tr className="bg-tc-blue text-white border-slate-500">
@@ -85,7 +79,7 @@ const Top10EmissionsTable = () => {
           </tr>
         </thead>
         <tbody>
-          {top10Emissions &&
+          {top10Emissions.length > 0 &&
             top10Emissions.map((item, index) => (
               <tr className="border-slate-500">
                 <td className="border-slate-500 border-s-0">{index + 1}</td>

@@ -6,12 +6,12 @@ const Input = ({
   value,
   placeholder,
   onChange,
+  ...props
 }) => {
   return (
     <input
       className={(
-        "rounded border-slate-500 border px-2 py-2 w-full text-base " +
-        className
+        "h-10 rounded border-slate-500 border p-2 w-full text-base " + className
       ).trim()}
       type={type}
       name={name}
@@ -20,6 +20,7 @@ const Input = ({
       value={value}
       {...(placeholder ? (placeholder = { placeholder }) : null)}
       onChange={onChange}
+      {...props}
     />
   );
 };

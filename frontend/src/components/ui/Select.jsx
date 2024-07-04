@@ -1,10 +1,12 @@
 const Select = ({ children, className = "", id = "", onChange, value }) => {
   return (
     <select
-      className={("rounded border border-slate-600 p-3 " + className).trim()}
+      className={(
+        "text-[16px] h-10 rounded border border-slate-500 p-2 " + className
+      ).trim()}
       {...(id ? (id = { id }) : null)}
       onChange={onChange}
-      {...(value ? (value = { value }) : null)}
+      value={value}
     >
       {children}
     </select>

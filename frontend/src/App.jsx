@@ -1,6 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Dashboard from "./Dashboard/Dashboard";
-import Page from "./profile/Page";
 import ProtectedRoute from "./components/ProtectedRoute";
 // Pages
 import Login from "./pages/Login";
@@ -10,6 +8,8 @@ import SubscriptionPlans from "./pages/SubscriptionPlans";
 import Checkout from "./pages/Checkout";
 import Completion from "./pages/Completion";
 import Account from "./pages/Account";
+import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -34,10 +34,10 @@ function App() {
             element={<ProtectedRoute Component={Activities} />}
           />
         </Route>
-        <Route path="/profile" element={<ProtectedRoute Component={Page} />}>
+        <Route path="/profile" element={<ProtectedRoute Component={Profile} />}>
           <Route
             path=":id/edit"
-            element={<ProtectedRoute Component={Page} />}
+            element={<ProtectedRoute Component={Profile} />}
           />
         </Route>
         <Route
