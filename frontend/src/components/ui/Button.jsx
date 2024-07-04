@@ -15,4 +15,3 @@ const Button = ({ children, className = "", type = "", id = "", onClick }) => {
 };
 
 export default Button;
- 
