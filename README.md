@@ -54,21 +54,30 @@ tealClimate/
 │   │   ├───middlewares/
 │   │   ├───routes/
 │   │   ├───services/
-│   ├───└───app.js
+│   │   ├───app.js
+│   │   ├───.env.development
+│   ├───└───.env.production
 ├───frontend/
-│   ├───public/
 │   ├───src/
+│   │   ├───assets/
 │   │   ├───components/
-│   │   |   ├───ui/
-│   │   ├───└───layout/
+│   │   |   ├───layout/
+│   │   ├───└───ui/
 │   │   ├───contexts/
-│   ├───└───pages/
+│   │   ├───pages/
+│   │   ├───utils/
+│   │   ├───App.jsx/
+│   │   ├───global.css/
+│   ├───└───main.jsx/
 │   ├───.env.development 
 │   ├───.env.production 
+│   ├───build.sh 
 │   ├───index.html
+│   ├───postcss.config.js
 │   ├───tailwind.config.js
 │   ├───vite.config.js
 ├───.gitignore
+├───.prettierignore
 ├───eslint.config.mjs
 ├───prettier.config.mjs
 └───README.md
