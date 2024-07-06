@@ -28,8 +28,7 @@ const ActivitiesSidebar = ({
       const uniqueScopes = [
         ...new Set(jsonData.datas.map((item) => item.scope)),
       ];
-      // uniqueScopes.sort();
-      // return uniqueScopes;
+
       const sortedFirstThreeScopes = uniqueScopes.slice(0, 3).sort();
       const remainingScopes = uniqueScopes.slice(3);
       const sortedScopes = [...sortedFirstThreeScopes, ...remainingScopes];
@@ -97,15 +96,19 @@ const ActivitiesSidebar = ({
   }, [selectedScope]);
 
   return (
-    <div className="pe-1">
-      <h2 className="m-0 mb-4 text-center">Select Scope</h2>
+    <>
+      <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">
+        Select Scope
+      </h2>
       <div className="flex flex-col gap-y-4">
         {scopesData?.map((scope) => (
           <Button
             key={scope}
             className={
               "py-3" +
-              (scope === selectedScope ? " bg-tc-green text-white" : "")
+              (scope === selectedScope
+                ? " bg-tc-green text-white hover:bg-opacity-90"
+                : "")
             }
             onClick={(e) => {
               if (e.target.innerText === selectedScope) {
@@ -127,7 +130,9 @@ const ActivitiesSidebar = ({
       <Button className="py-3 w-full">Spend Base Scope 3</Button>
 
       <div className="mt-4">
-        <h2 className="m-0 mb-4 text-center">Select Activity</h2>
+        <h2 className="m-0 mb-4 text-center  font-extrabold text-2xl">
+          Select Activity
+        </h2>
         <div className="relative">
           <Input
             type="text"
@@ -145,7 +150,9 @@ const ActivitiesSidebar = ({
             key={index}
             className={
               "bg-gray-200 hover:bg-tc-blue hover:text-white rounded p-2" +
-              (level === selectedLevel ? " bg-tc-blue text-white" : "")
+              (level === selectedLevel
+                ? " bg-tc-blue text-white hover:bg-opacity-90"
+                : "")
             }
             onClick={(e) => {
               if (e.target.innerText === selectedLevel) {
@@ -161,7 +168,7 @@ const ActivitiesSidebar = ({
           </li>
         ))}
       </ul>
-    </div>
+    </>
   );
 };
 

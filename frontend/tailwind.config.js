@@ -7,7 +7,6 @@ export default {
       colors: {
         "tc-green": "#00cc9c",
         "tc-blue": "#197ec6",
-        // "tc-gray": "#e5e7eb",
         "tc-input-border": "#475569",
         "forest-green": "#32b950",
         "golden-rod": "#e6ba1f",
@@ -15,7 +14,6 @@ export default {
         "corn-flower-blue": "#a5a6f6",
         "indian-red": {
           100: "#eb5757",
-          // 200: "#c55757",
         },
         "medium-aqua-marine": "#85e0ab",
         "green-1": "#219653",

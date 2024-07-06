@@ -4,7 +4,7 @@ import trashIcon from "../assets/trash-icon.svg";
 import editIcon from "../assets/edit-icon.svg";
 import { Link } from "react-router-dom";
 
-const ProfileTable = ({ profileData, fetchProfileData }) => {
+const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
   const handleDelete = (id) => {
     return () => {
       request(`${import.meta.env.VITE_API_BASE_URL}/companies/${id}`, "DELETE")
@@ -136,6 +136,7 @@ const ProfileTable = ({ profileData, fetchProfileData }) => {
                     <Link
                       to={`/profile/${profile.id}/edit`}
                       className="flex justify-center items-center"
+                      onClick={() => setSelectedForm("Portfolio")}
                     >
                       <img
                         src={editIcon}

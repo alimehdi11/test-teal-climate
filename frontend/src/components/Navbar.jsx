@@ -21,6 +21,16 @@ const Navbar = () => {
     setIsNavVisible(!isNavVisible);
   };
 
+  const paths = {
+    isDashboardPath: location.pathname === "/dashboard",
+    isProfilePath:
+      location.pathname === "/profile" ||
+      !!location.pathname.match(/^\/profile(\/\d+\/edit)?$/),
+    isActivitiesPath:
+      location.pathname === "/activities" ||
+      !!location.pathname.match(/^\/activities(\/\d+\/edit)?$/),
+  };
+
   return (
     <nav className="bg-white flex justify-between items-center h-16 shadow-lg sticky top-0 px-4 z-[1000]">
       <Logo />
@@ -29,14 +39,14 @@ const Navbar = () => {
       <div className="hidden md:flex items-center gap-x-2 ">
         <Link
           to="/dashboard"
-          className={`text-black flex items-center gap-x-1 p-2 rounded ${
-            location.pathname === "/dashboard" ? "bg-tc-green text-white" : ""
+          className={`text-black flex items-center gap-x-1 p-2 rounded border border-white hover:border-tc-green ${
+            paths.isDashboardPath ? "bg-tc-green text-white" : ""
           }`}
           style={{ textDecoration: "none" }}
         >
           <img
             src={
-              location.pathname === "/dashboard"
+              paths.isDashboardPath
                 ? dashboardNavLinkIconWhite
                 : dashboardNavLinkIconBlack
             }
@@ -45,14 +55,14 @@ const Navbar = () => {
         </Link>
         <Link
           to="/profile"
-          className={`text-black flex items-center gap-x-1 p-2 rounded ${
-            location.pathname === "/profile" ? "bg-tc-green text-white" : ""
+          className={`text-black flex items-center gap-x-1 p-2 rounded border border-white hover:border-tc-green ${
+            paths.isProfilePath ? "bg-tc-green text-white" : ""
           }`}
           style={{ textDecoration: "none" }}
         >
           <img
             src={
-              location.pathname === "/profile"
+              paths.isProfilePath
                 ? profileNavLinkIconWhite
                 : profileNavLinkIconBlack
             }
@@ -61,14 +71,14 @@ const Navbar = () => {
         </Link>
         <Link
           to="/activities"
-          className={`text-black flex items-center gap-x-1 p-2 rounded ${
-            location.pathname === "/activities" ? "bg-tc-green text-white" : ""
+          className={`text-black flex items-center gap-x-1 p-2 rounded border border-white hover:border-tc-green ${
+            paths.isActivitiesPath ? "bg-tc-green text-white" : ""
           }`}
           style={{ textDecoration: "none" }}
         >
           <img
             src={
-              location.pathname === "/activities"
+              paths.isActivitiesPath
                 ? activitiesNavLinkIconWhite
                 : activitiesNavLinkIconBlack
             }
@@ -89,7 +99,7 @@ const Navbar = () => {
         />
         <Link
           to="/account"
-          className="no-underline text-black bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500 text-[21px] hover:bg-tc-green"
+          className="no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500 text-[21px] hover:bg-tc-green"
         >
           <IoSettingsOutline />
         </Link>
@@ -112,13 +122,13 @@ const Navbar = () => {
           <Link
             to="/dashboard"
             className={`text-black flex items-center gap-x-1 p-2 rounded ${
-              location.pathname === "/dashboard" ? "bg-tc-green text-white" : ""
+              paths.isDashboardPath ? "bg-tc-green text-white" : ""
             }`}
             style={{ textDecoration: "none" }}
           >
             <img
               src={
-                location.pathname === "/dashboard"
+                paths.isDashboardPath
                   ? dashboardNavLinkIconWhite
                   : dashboardNavLinkIconBlack
               }
@@ -128,13 +138,13 @@ const Navbar = () => {
           <Link
             to="/profile"
             className={`text-black flex items-center gap-x-1 p-2 rounded ${
-              location.pathname === "/profile" ? "bg-tc-green text-white" : ""
+              paths.isProfilePath ? "bg-tc-green text-white" : ""
             }`}
             style={{ textDecoration: "none" }}
           >
             <img
               src={
-                location.pathname === "/profile"
+                paths.isProfilePath
                   ? profileNavLinkIconWhite
                   : profileNavLinkIconBlack
               }
@@ -144,15 +154,13 @@ const Navbar = () => {
           <Link
             to="/activities"
             className={`text-black flex items-center gap-x-1 p-2 rounded ${
-              location.pathname === "/activities"
-                ? "bg-tc-green text-white"
-                : ""
+              paths.isActivitiesPath ? "bg-tc-green text-white" : ""
             }`}
             style={{ textDecoration: "none" }}
           >
             <img
               src={
-                location.pathname === "/activities"
+                paths.isActivitiesPath
                   ? activitiesNavLinkIconWhite
                   : activitiesNavLinkIconBlack
               }
@@ -173,7 +181,7 @@ const Navbar = () => {
           />
           <Link
             to="/account"
-            className="no-underline text-black bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500 text-[21px] hover:bg-tc-green"
+            className="no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500 text-[21px] hover:bg-tc-green"
           >
             <IoSettingsOutline />
           </Link>

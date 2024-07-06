@@ -94,7 +94,7 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
                 <td className="border-slate-500 border-e-0">
                   <div className="flex justify-center gap-x-1">
                     <Link
-                      to={`/activites/${item.id}/edit`}
+                      to={`/activities/${item.id}/edit`}
                       className="flex justify-center items-center"
                     >
                       <img

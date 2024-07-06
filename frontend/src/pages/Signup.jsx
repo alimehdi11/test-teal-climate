@@ -8,6 +8,9 @@ import Button from "../components/ui/Button.jsx";
 import { request } from "../utils/request.js";
 import { MdOutlineClose } from "react-icons/md";
 import Logo from "../components/ui/Logo.jsx";
+import FormControl from "../components/FormControl.jsx";
+import Label from "../components/ui/Label.jsx";
+import ErrorMessage from "../components/ErrorMessage.jsx";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -154,49 +157,45 @@ const Signup = () => {
         <form
           method="POST"
           onSubmit={handleSubmit}
-          className="rounded border-solid border-slate-600 border-[1px] min-w-[350px] max-w-[350px] overflow-hidden"
+          className="w-[350px] flex flex-col gap-y-3"
         >
-          <div className="text-center bg-tc-blue text-[24px] text-white font-bold py-2 border-b border-slate-600">
+          {/* Email */}
+          <FormControl>
+            <Label>Email</Label>
+            <Input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+            {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
+          </FormControl>
+          {/* Password */}
+          <FormControl>
+            <Label>Password</Label>
+            <Input
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
+          </FormControl>
+          <Button type="submit" className="bg-tc-blue text-white text-base">
             Signup
-          </div>
-          <div className="flex flex-col gap-y-3 p-3">
-            {/* Email */}
-            <div className="flex flex-col gap-y-1">
-              <label htmlFor="email">Email</label>
-              <Input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={handleEmailChange}
-              />
-              {/* error */}
-              {emailError && (
-                <div className="text-red-600 break-words">{emailError}</div>
-              )}
-            </div>
-            {/* Password */}
-            <div className="flex flex-col gap-y-1">
-              <label htmlFor="password">Password</label>
-              <Input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={handlePasswordChange}
-              />
-              {passwordError && (
-                <div className="text-red-600 break-words">{passwordError}</div>
-              )}
-            </div>
-            <Button type="submit" className="bg-tc-blue text-white text-base">
-              Submit
-            </Button>
-          </div>
+          </Button>
         </form>
         {/* Login link */}
         <div>
-          Already have an account? <Link to="/login">Login</Link>
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-tc-blue hover:bg-slate-300 rounded p-1"
+          >
+            Login
+          </Link>
         </div>
       </div>
     )

@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Form } from "react-router-dom";
 import { getBearerToken } from "../utils/auth.js";
 import { request } from "../utils/request.js";
+import Button from "./ui/Button.jsx";
+import FormControl from "./FormControl.jsx";
+import Input from "./ui/Input.jsx";
+import Label from "./ui/Label.jsx";
+import Select from "./ui/Select.jsx";
 
 const ActivitesForm = ({
   selectedScope,
@@ -49,7 +54,7 @@ const ActivitesForm = ({
   const [airports, setAirports] = useState([]);
 
   const { id } = useParams();
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   const fetchBusinessUnit = async () => {
     try {
@@ -430,7 +435,8 @@ const ActivitesForm = ({
     return electricVehicle;
   };
 
-  const handleFormSubmit = async () => {
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
     // console.table([
     //   userId,
     //   selectedScope,
@@ -843,7 +849,7 @@ const ActivitesForm = ({
         }
         toast.success("Data updated successfully");
         resetForm();
-        navigation("/activites");
+        navigate("/activities");
       })
       .then(() => {
         fetchCompanyData();
@@ -856,7 +862,7 @@ const ActivitesForm = ({
 
   const handleCancel = () => {
     resetForm();
-    navigation("/activites");
+    navigate("/activities");
   };
 
   const filterLevel4Options = () => {
@@ -1357,25 +1363,22 @@ const ActivitesForm = ({
 
   return (
     <>
-      <div className="self-stretch flex flex-col items-start justify-start gap-[32px] max-w-full mq450:gap-[32px]">
-        <h1 className="m-0 h-9 relative text-inherit font-semibold font-inherit inline-block z-[1] mq450:text-lgi">
-          Insert activity data here
-        </h1>
-        <div className="w-full grid grid-cols-2 text-base gap-5">
-          {selectedLevel === "Electricity" && (
-            <h3 className="text-base m-0 bg-gray-5 w-full p-2 col-span-2">
+      <form onSubmit={handleFormSubmit} className="flex flex-col gap-y-3">
+        <h3 className="text-[24px] m-0 mb-1">Insert activity data here</h3>
+        <div className="grid lg:grid-cols-2 gap-4">
+          {/* TODO: Location Based bar should be in all Scope 2 levels or only in Scope 2(Electricity) */}
+          {/* {selectedLevel === "Electricity" && (  */}
+          {selectedScope === "Scope 2" && (
+            <h4 className="bg-gray-200 col-span-full p-2 rounded">
               Location based
-            </h3>
+            </h4>
           )}
           {/* Scope Category */}
-          <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-            <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-              Scope Category
-            </h3>
-            <select
-              className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-              onChange={(e) => setScopeCategoryValue(e.target.value)}
+          <FormControl>
+            <Label>Scope Category</Label>
+            <Select
               value={scopeCategoryValue}
+              onChange={(e) => setScopeCategoryValue(e.target.value)}
             >
               <option value="">Select Option</option>
               {scopeCategories.map((option, index) => {
@@ -1385,18 +1388,15 @@ const ActivitesForm = ({
                   </option>
                 );
               })}
-            </select>
-          </div>
+            </Select>
+          </FormControl>
 
           {/* Business Unit */}
-          <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-            <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-              Business Unit
-            </h3>
-            <select
-              className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-              onChange={(e) => setBusinessUnitValue(e.target.value)}
+          <FormControl>
+            <Label>Business Unit</Label>
+            <Select
               value={businessUnitValue}
+              onChange={(e) => setBusinessUnitValue(e.target.value)}
             >
               <option value="">Select Option</option>
               {businessUnits &&
@@ -1407,8 +1407,8 @@ const ActivitesForm = ({
                     </option>
                   );
                 })}
-            </select>
-          </div>
+            </Select>
+          </FormControl>
 
           {/* Fuel Type (level2) */}
           {/* selectedLevel !== "WTT- electricity" && */}
@@ -1430,8 +1430,8 @@ const ActivitesForm = ({
             selectedLevel !== "WTT- business travel- air" &&
             selectedLevel !== "WTT- electricity (T&D)" &&
             selectedLevel !== "Electricity T&D" && (
-              <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+              <FormControl>
+                <Label>
                   {selectedLevel
                     ? selectedLevel === "Refrigerant and other"
                       ? "Refrigerant and other gas category"
@@ -1479,11 +1479,10 @@ const ActivitesForm = ({
                                                         ? "Airport From"
                                                         : `${selectedLevel} Type`
                     : "Fuel Type"}
-                </h3>
-                <select
-                  className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                  onChange={(e) => setFuelTypeValue(e.target.value)}
+                </Label>
+                <Select
                   value={fuelTypeValue}
+                  onChange={(e) => setFuelTypeValue(e.target.value)}
                 >
                   <option value="">Select Option</option>
                   {fuelTypes.map((option, index) => {
@@ -1493,14 +1492,13 @@ const ActivitesForm = ({
                       </option>
                     );
                   })}
-                </select>
-              </div>
+                </Select>
+              </FormControl>
             )}
-
           {/* Fuel Name (level3) */}
           {showFuelNamesField && (
-            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+            <FormControl>
+              <Label>
                 {selectedLevel
                   ? selectedLevel === "Bioenergy"
                     ? "Bioenergy Fuel Name"
@@ -1562,11 +1560,10 @@ const ActivitesForm = ({
                                                                 ? "Distance type"
                                                                 : `${selectedLevel} Name`
                   : "Fuel Name"}
-              </h3>
-              <select
-                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                onChange={(e) => setFuelNameValue(e.target.value)}
+              </Label>
+              <Select
                 value={fuelNameValue}
+                onChange={(e) => setFuelNameValue(e.target.value)}
               >
                 <option value="">Select Option</option>
                 {fuelNames.map((option, index) => {
@@ -1576,14 +1573,14 @@ const ActivitesForm = ({
                     </option>
                   );
                 })}
-              </select>
-            </div>
+              </Select>
+            </FormControl>
           )}
 
           {/* level4 */}
           {showLevel4Field && (
-            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+            <FormControl>
+              <Label>
                 {selectedLevel
                   ? selectedLevel === "Freighting goods"
                     ? "Capacity"
@@ -1595,8 +1592,8 @@ const ActivitesForm = ({
                         ? "Class"
                         : "Level 4"
                   : "Level 4"}
-              </h3>
-              <select
+              </Label>
+              <Select
                 className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                 onChange={(e) => setLevel4Value(e.target.value)}
                 value={level4Value}
@@ -1609,14 +1606,14 @@ const ActivitesForm = ({
                     </option>
                   );
                 })}
-              </select>
-            </div>
+              </Select>
+            </FormControl>
           )}
 
           {/* level5 */}
           {showLevel5Field && (
-            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+            <FormControl>
+              <Label>
                 {selectedLevel
                   ? selectedLevel === "Passenger vehicles"
                     ? "Fuel Type"
@@ -1651,11 +1648,10 @@ const ActivitesForm = ({
                                             ? "Class"
                                             : "Level 5"
                   : "Level 5"}
-              </h3>
-              <select
-                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                onChange={(e) => setLevel5Value(e.target.value)}
+              </Label>
+              <Select
                 value={level5Value}
+                onChange={(e) => setLevel5Value(e.target.value)}
               >
                 <option value="">Select Option</option>
                 {level5Options.map((option, index) => {
@@ -1665,19 +1661,16 @@ const ActivitesForm = ({
                     </option>
                   );
                 })}
-              </select>
-            </div>
+              </Select>
+            </FormControl>
           )}
 
           {/*  Unit of Measurement  */}
-          <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-            <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
-              Unit of measurement
-            </h3>
-            <select
-              className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-              onChange={(e) => setUnitOfMeasurementValue(e.target.value)}
+          <FormControl>
+            <Label>Unit of measurement</Label>
+            <Select
               value={unitOfMeasurementValue}
+              onChange={(e) => setUnitOfMeasurementValue(e.target.value)}
             >
               <option value="">Select Option</option>
               {unitOfMeasurements.map((option, index) => {
@@ -1687,13 +1680,13 @@ const ActivitesForm = ({
                   </option>
                 );
               })}
-            </select>
-          </div>
+            </Select>
+          </FormControl>
 
           {/* Quantity */}
           {selectedLevel !== "Business travel- air" && (
-            <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-              <h3 className="m-0 relative text-inherit capitalize font-medium font-inherit z-[1]">
+            <FormControl>
+              <Label>
                 {selectedLevel
                   ? selectedLevel === "Passenger vehicles" ||
                     selectedLevel === "Delivery vehicles" ||
@@ -1712,28 +1705,28 @@ const ActivitesForm = ({
                       ? "Number of Nights"
                       : "Quantity"
                   : "Quantity"}
-              </h3>
-              <input
+              </Label>
+              <Input
                 type="number"
-                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600 placeholder-dark"
                 value={quantityValue}
                 onChange={(e) => setQuantityValue(e.target.value)}
                 placeholder="Enter Quantity"
               />
-            </div>
+            </FormControl>
           )}
         </div>
 
+        {/* ------------------------------------------------- */}
+
         {/* For Scope 2 market based */}
         {selectedScope === "Scope 2" && (
-          <>
+          <div>
             {/* Radio buttons */}
-            <div>
-              <p className="text-base m-0">
-                Was a market based instrument purchases for this electricity
-                use?
-              </p>
-              <div className="inline ms-[-6px] me-1">
+            <p>
+              Was a market based instrument purchases for this electricity use?
+            </p>
+            <div className="flex gap-x-3">
+              <span className="flex items-center gap-x-1">
                 <input
                   type="radio"
                   id="locationBased"
@@ -1744,15 +1737,12 @@ const ActivitesForm = ({
                     setMarketBased(Boolean(Number(event.target.value)));
                   }}
                 />
-                <label
-                  htmlFor="locationBased"
-                  className="text-base font-medium"
-                >
+                <Label htmlFor="locationBased">
                   {/* Location Based */}
                   No
-                </label>
-              </div>
-              <div className="inline">
+                </Label>
+              </span>
+              <span className="flex items-center gap-x-1">
                 <input
                   type="radio"
                   id="marketBased"
@@ -1763,95 +1753,87 @@ const ActivitesForm = ({
                     setMarketBased(Boolean(Number(event.target.value)));
                   }}
                 />
-                <label htmlFor="marketBased" className="text-base font-medium">
+                <Label htmlFor="marketBased">
                   {/* Market Based */}
                   Yes
-                </label>
-              </div>
+                </Label>
+              </span>
             </div>
-            {/* Market based form */}
-            {marketBased && (
-              <div className="w-full grid grid-cols-2 gap-5">
-                <h3 className="text-base m-0 bg-gray-5 w-full p-2 col-span-2">
-                  Market based
-                </h3>
-                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                  <h3 className="text-base m-0 font-medium">
-                    Quantity Purchased
-                  </h3>
-                  <input
-                    type="number"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600 placeholder-dark"
-                    placeholder="Enter Purchased Quantity"
-                    value={quantityPurchased}
-                    onChange={(event) => {
-                      setQuantityPurchased(event.target.value);
-                    }}
-                  />
-                </div>
-                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                  <h3 className="text-base m-0 font-medium">Emission Factor</h3>
-                  <input
-                    type="number"
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600 placeholder-dark"
-                    placeholder="Enter Quantity"
-                    value={emissionFactor}
-                    onChange={(event) => {
-                      setEmissionFactor(event.target.value);
-                    }}
-                  />
-                </div>
-                <div className="self-stretch flex flex-col items-start justify-start gap-[12px]">
-                  <h3 className="text-base m-0 font-medium">
-                    Unit of Emission Factor
-                  </h3>
-                  <select
-                    className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
-                    value={unitOfEmissionFactor}
-                    onChange={(e) => setUnitOfEmissionFactor(e.target.value)}
-                  >
-                    <option value="">Select Option</option>
-                    <option value="kgco2e/kwh">kgco2e / kwh</option>
-                  </select>
-                </div>
-              </div>
-            )}
-          </>
+          </div>
         )}
 
+        {/* ------------------------------------------------- */}
+
+        {/* Market based form */}
+        {marketBased && (
+          <div className="grid lg:grid-cols-2 gap-4">
+            <h4 className="bg-gray-200 col-span-full p-2 rounded">
+              Market based
+            </h4>
+            <FormControl>
+              <Label>Quantity Purchased</Label>
+              <Input
+                type="number"
+                value={quantityPurchased}
+                onChange={(event) => {
+                  setQuantityPurchased(event.target.value);
+                }}
+                placeholder="Enter Purchased Quantity"
+              />
+            </FormControl>
+            <FormControl>
+              <Label>Emission Factor</Label>
+              <Input
+                type="number"
+                value={emissionFactor}
+                onChange={(event) => {
+                  setEmissionFactor(event.target.value);
+                }}
+                placeholder="Enter Quantity"
+              />
+            </FormControl>
+            <FormControl>
+              <Label>Unit of Emission Factor</Label>
+              <Select
+                value={unitOfEmissionFactor}
+                onChange={(e) => setUnitOfEmissionFactor(e.target.value)}
+              >
+                <option value="">Select Option</option>
+                <option value="kgco2e/kwh">kgco2e / kwh</option>
+              </Select>
+            </FormControl>
+          </div>
+        )}
+
+        {/* ------------------------------------------------- */}
+
         {/* Add, Edit, Cancel Buttons */}
-        <div className="flex flex-row items-start justify-start gap-[8px] max-w-full mq450:flex-wrap ms-auto">
-          {id ? (
-            <>
-              <button
-                className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-2 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[220px] z-[1] hover:bg-mediumseagreen"
-                onClick={handleCancel}
-              >
-                <div className="h-6 relative text-base capitalize font-medium font-poppins text-white text-center inline-block z-[2]">
-                  Cancel
-                </div>
-              </button>
-              <button
-                className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-2 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[220px] z-[1] hover:bg-mediumseagreen"
-                onClick={handleUpdateData}
-              >
-                <div className="h-6 relative text-base capitalize font-medium font-poppins text-white text-center inline-block z-[2]">
-                  Edit
-                </div>
-              </button>
-            </>
-          ) : (
-            <button
-              className="cursor-pointer py-2.5 pr-5 pl-[21px] bg-brand-color-01 flex-[0.8859] rounded-lg flex flex-row items-center justify-center box-border min-w-[220px] z-[1] hover:bg-mediumseagreen"
-              onClick={handleFormSubmit}
+        {id ? (
+          <div className="flex flex-col gap-4 md:flex-row">
+            <Button
+              type="button"
+              className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+              onClick={handleCancel}
             >
-              <div className="h-6 relative text-base capitalize font-medium font-poppins text-white text-center inline-block z-[2]">
-                Add
-              </div>
-            </button>
-          )}
-        </div>
-      </div>
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+              onClick={handleUpdateData}
+            >
+              Edit
+            </Button>
+          </div>
+        ) : (
+          <Button
+            type="submit"
+            className="text-white bg-tc-green hover:bg-opacity-90"
+          >
+            Add
+          </Button>
+        )}
+      </form>
       <ToastContainer
         theme={"colored"}
         hideProgressBar={true}

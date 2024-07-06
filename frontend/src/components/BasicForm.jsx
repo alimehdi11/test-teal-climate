@@ -149,7 +149,10 @@ const BasicForm = () => {
             />
           </FormControl>
         </div>
-        <Button className="w-full mt-4" type="submit">
+        <Button
+          className="w-full mt-4 text-white bg-tc-green hover:bg-opacity-90"
+          type="submit"
+        >
           Submit
         </Button>
       </form>

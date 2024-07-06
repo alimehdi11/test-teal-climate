@@ -38,7 +38,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div ref={pdfRef}>
+    <div ref={pdfRef} className="bg-[#efefef]">
       <Navbar />
       <div className="flex flex-col xs:flex-row gap-y-4 justify-between px-4 mt-4">
         <div className="flex justify-center items-center gap-x-1">

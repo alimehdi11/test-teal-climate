@@ -24,7 +24,7 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
   // const [businessUnits, setBusinessUnits] = useState([]);
   const [businessUnit, setBusinessUnit] = useState("");
   const { id } = useParams();
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   const fetchContinents = async () => {
     try {
@@ -177,7 +177,7 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
 
   const handleCancel = () => {
     resetForm();
-    navigation("/profile");
+    navigate("/profile");
   };
 
   const handleUpdateProfile = () => {
@@ -420,16 +420,27 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
 
         {/* Buttons */}
         {id ? (
-          <>
-            <Button type="button" onClick={handleCancel}>
+          <div className="flex flex-col mt-4 gap-4 md:flex-row">
+            <Button
+              type="button"
+              className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+              onClick={handleCancel}
+            >
               Cancel
             </Button>
-            <Button type="button" onClick={handleUpdateProfile}>
+            <Button
+              type="button"
+              className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+              onClick={handleUpdateProfile}
+            >
               Edit
             </Button>
-          </>
+          </div>
         ) : (
-          <Button className="w-full mt-4" type="submit">
+          <Button
+            className="w-full mt-4 text-white bg-tc-green hover:bg-opacity-90"
+            type="submit"
+          >
             Add
           </Button>
         )}

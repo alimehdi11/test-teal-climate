@@ -223,7 +223,7 @@ const CarbonEmissionsAnalytics = () => {
   return (
     <div className="grid grid-cols-1 mqMin850:grid-cols-2 xl:grid-cols-3 px-4 gap-4 mt-4">
       {/* Card total emissions */}
-      <div className="border rounded border-slate-500 p-3">
+      <div className="bg-white rounded shadow-xl shadow-slate-200 p-3">
         <div className="font-medium text-[20px]">Total GHG Emissions</div>
         <div className="text-[2rem]">{totalCO2e.toFixed(2)}</div>
         <div className="font-medium text-gray-400">
@@ -270,7 +270,7 @@ const CarbonEmissionsAnalytics = () => {
       </div>
 
       {/* Card scope 1*/}
-      <div className="border rounded border-slate-500 p-3">
+      <div className="bg-white rounded shadow-xl shadow-slate-200 p-3">
         <div className="font-medium text-[20px]">Scope 1 Emissions</div>
         <div className="text-[2rem]">{totalScope1CO2e.toFixed(2)}</div>
         <div className="font-medium text-gray-400">
@@ -338,7 +338,7 @@ const CarbonEmissionsAnalytics = () => {
       </div>
 
       {/* Card scope 3 */}
-      <div className="xl:row-span-2 border rounded border-slate-500 p-3">
+      <div className="xl:row-span-2 bg-white rounded shadow-xl shadow-slate-200 p-3">
         <div className="font-medium text-[20px]">Scope 3 Emissions</div>
         <div className="text-[2rem]">{totalScope3CO2e.toFixed(2)}</div>
         <div className="font-medium text-gray-400">
@@ -370,7 +370,7 @@ const CarbonEmissionsAnalytics = () => {
       </div>
 
       {/* Card scope 2 */}
-      <div className="row-start-3 mqMin850:row-start-2 xl:col-span-2 border rounded border-slate-500 p-3">
+      <div className="row-start-3 mqMin850:row-start-2 xl:col-span-2 bg-white rounded shadow-xl shadow-slate-200 p-3">
         <div className="font-medium text-[20px]">Scope 2 Emissions</div>
         <div className="text-[2rem]">{totalScope2CO2e.toFixed(2)}</div>
         <div className="font-medium text-gray-400">
@@ -413,13 +413,12 @@ const CarbonEmissionsAnalytics = () => {
               <div className="flex-1 h-36 min-w-[144px] flex items-center justify-center">
                 <TC_RadialBarChart
                   data={[
-                    // calculateC02ePercentageOfLocationBasedScopeCategory(
-                    //   "Purchased electricity"
-                    // ),
-                    // calculateC02ePercentageOfLocationBasedScopeCategory(
-                    //   "Heat and steam"
-                    // ),
-                    2, 6,
+                    calculateC02ePercentageOfLocationBasedScopeCategory(
+                      "Purchased electricity"
+                    ),
+                    calculateC02ePercentageOfLocationBasedScopeCategory(
+                      "Heat and steam"
+                    ),
                   ]}
                 />
               </div>

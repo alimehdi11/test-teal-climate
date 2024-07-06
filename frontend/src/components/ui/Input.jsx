@@ -11,7 +11,8 @@ const Input = ({
   return (
     <input
       className={(
-        "h-10 rounded border-slate-500 border p-2 w-full text-base " + className
+        "h-10 rounded border-slate-500 border p-2 w-full text-base placeholder:text-black " +
+        className
       ).trim()}
       type={type}
       name={name}

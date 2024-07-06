@@ -52,7 +52,12 @@ const Profile = () => {
     <>
       <Navbar />
       <Layout
-        sidebarContent={<ProfileSidebar setSelectedForm={setSelectedForm} />}
+        sidebarContent={
+          <ProfileSidebar
+            selectedForm={selectedForm}
+            setSelectedForm={setSelectedForm}
+          />
+        }
         mainContent={
           selectedForm ? (
             (selectedForm === "Basic" && <BasicForm />) ||
@@ -75,6 +80,7 @@ const Profile = () => {
         profileData={profileData}
         fetchProfileData={fetchProfileData}
         userId={user.id}
+        setSelectedForm={setSelectedForm}
       />
     </>
   );
