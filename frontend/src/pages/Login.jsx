@@ -2,16 +2,17 @@ import { useContext, useState, useEffect } from "react";
 import * as Yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext.jsx";
-import { setToken, isLoggedIn, decodeToken } from "../utils/auth.utils.js";
+import { setToken, isLoggedIn, decodeToken } from "../utils/auth.js";
 import Input from "../components/ui/Input.jsx";
 import Button from "../components/ui/Button.jsx";
-import { request } from "../utils/network.utils.js";
+import { request } from "../utils/request.js";
 import { MdOutlineClose } from "react-icons/md";
 import Logo from "../components/ui/Logo.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
+  const [isUserNotLoggedIn, setIsUserNotLoggedIn] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -127,72 +128,76 @@ const Login = () => {
   useEffect(() => {
     if (isLoggedIn()) {
       navigate("/dashboard");
+    } else {
+      setIsUserNotLoggedIn(true);
     }
   }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen gap-y-3">
-      {/* Logo */}
-      <Logo />
-      {/* Submit Error */}
-      {submitError && (
-        <div className="bg-red-500 min-w-[350px] max-w-[350px] break-words rounded p-3 text-white flex justify-between items-center">
-          {submitError}
-          <MdOutlineClose
-            className="text-[20px] hover:text-red-500 hover:bg-white rounded"
-            onClick={closePopup}
-          />
-        </div>
-      )}
-      {/* Form */}
-      <form
-        method="POST"
-        onSubmit={handleSubmit}
-        className="rounded border-solid border-slate-600 border-[1px] min-w-[350px] max-w-[350px] overflow-hidden"
-      >
-        <div className="text-center bg-tc-blue text-[24px] text-white font-bold py-2 border-b border-slate-600">
-          Login
-        </div>
-        <div className="flex flex-col gap-y-3 p-3">
-          {/* Email */}
-          <div className="flex flex-col gap-y-1">
-            <label htmlFor="email">Email</label>
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={handleEmailChange}
+    isUserNotLoggedIn && (
+      <div className="flex flex-col justify-center items-center h-screen gap-y-3">
+        {/* Logo */}
+        <Logo />
+        {/* Submit Error */}
+        {submitError && (
+          <div className="bg-red-500 min-w-[350px] max-w-[350px] break-words rounded p-3 text-white flex justify-between items-center">
+            {submitError}
+            <MdOutlineClose
+              className="text-[20px] hover:text-red-500 hover:bg-white rounded"
+              onClick={closePopup}
             />
-            {/* error */}
-            {emailError && (
-              <div className="text-red-600 break-words">{emailError}</div>
-            )}
           </div>
-          {/* Password */}
-          <div className="flex flex-col gap-y-1">
-            <label htmlFor="password">Password</label>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-            {passwordError && (
-              <div className="text-red-600 break-words">{passwordError}</div>
-            )}
+        )}
+        {/* Form */}
+        <form
+          method="POST"
+          onSubmit={handleSubmit}
+          className="rounded border-solid border-slate-600 border-[1px] min-w-[350px] max-w-[350px] overflow-hidden"
+        >
+          <div className="text-center bg-tc-blue text-[24px] text-white font-bold py-2 border-b border-slate-600">
+            Login
           </div>
-          <Button type="submit" className="bg-tc-blue text-white text-base">
-            Submit
-          </Button>
+          <div className="flex flex-col gap-y-3 p-3">
+            {/* Email */}
+            <div className="flex flex-col gap-y-1">
+              <label htmlFor="email">Email</label>
+              <Input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={handleEmailChange}
+              />
+              {/* error */}
+              {emailError && (
+                <div className="text-red-600 break-words">{emailError}</div>
+              )}
+            </div>
+            {/* Password */}
+            <div className="flex flex-col gap-y-1">
+              <label htmlFor="password">Password</label>
+              <Input
+                type="password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+              {passwordError && (
+                <div className="text-red-600 break-words">{passwordError}</div>
+              )}
+            </div>
+            <Button type="submit" className="bg-tc-blue text-white text-base">
+              Submit
+            </Button>
+          </div>
+        </form>
+        {/* Signup link */}
+        <div>
+          Do not have an account? <Link to="/signup">Signup</Link>
         </div>
-      </form>
-      {/* Signup link */}
-      <div>
-        Do not have an account? <Link to="/signup">Signup</Link>
       </div>
-    </div>
+    )
   );
 };
 

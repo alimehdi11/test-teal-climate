@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import { getToken, decodeToken, isLoggedIn } from "./../utils/auth.utils.js";
+import { getToken, decodeToken, isLoggedIn } from "./../utils/auth.js";
 
 const UserContext = createContext();
 

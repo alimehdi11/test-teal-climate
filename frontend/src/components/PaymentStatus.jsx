@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { useStripe } from "@stripe/react-stripe-js";
-import { request } from "./../utils/network.utils.js";
+import { request } from "./../utils/request.js";
 import { UserContext } from "./../contexts/UserContext.jsx";
 import { Link } from "react-router-dom";
-import { setToken } from "../utils/auth.utils.js";
+import { setToken } from "../utils/auth.js";
 
 const PaymentStatus = () => {
   const [message, setMessage] = useState("pending");

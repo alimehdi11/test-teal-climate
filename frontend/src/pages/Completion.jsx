@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import PaymentStatus from "../components/PaymentStatus.jsx";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import {
-  getBearerToken,
-  isLoggedIn,
-  isSubscribed,
-} from "../utils/auth.utils.js";
+import { getBearerToken, isLoggedIn, isSubscribed } from "../utils/auth.js";
 import { useNavigate } from "react-router-dom";
 
 function Completion() {

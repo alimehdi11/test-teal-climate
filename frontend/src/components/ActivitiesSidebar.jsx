@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { request } from "../utils/network.utils.js";
+import { request } from "../utils/request.js";
 import Button from "./ui/Button.jsx";
 import Input from "./ui/Input.jsx";
 

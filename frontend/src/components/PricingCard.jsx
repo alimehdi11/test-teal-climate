@@ -12,12 +12,12 @@ const PricingCard = ({
 }) => {
   return (
     <>
-      <div className="max-w-[350px] min-w-[350px] px-4 md:w-1/2 lg:w-1/3">
-        <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke border-solid bg-white px-8 py-10 dark:border-dark-3 dark:bg-dark-2 sm:p-12 lg:px-6 lg:py-10 xl:p-[50px] shadow-2xl">
+      <div className="max-w-[350px] min-w-[360px] px-4 md:w-1/2 lg:w-1/3 hover:scale-105 transition">
+        <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] bg-white px-8 py-10 p-6 lg:py-10 xl:p-[50px] shadow-gray-400 shadow-2xl border-slate-500 border">
           <span className="mb-3 block text-lg font-semibold text-primary">
             {type}
           </span>
-          <h2 className="mb-5 text-[42px] font-bold text-dark ">
+          <h2 className="mb-5 text-[42px] font-bold text-dark">
             {price}
             <span className="text-base font-medium text-body-color">
               / {subscription}
@@ -30,11 +30,11 @@ const PricingCard = ({
           <Link
             to={redirectTo}
             className={` 
-            no-underline block rounded-md border-solid border-[1px] p-3 text-center text-base font-medium
+            no-underline block rounded border p-3 text-center text-base font-medium
             ${
               active
-                ? " border-primary bg-primary text-white transition hover:bg-opacity-90"
-                : " border-stroke bg-transparent text-primary transition hover:border-primary hover:bg-primary hover:text-white dark:border-dark-3"
+                ? " border-tc-blue bg-tc-blue text-white transition hover:bg-opacity-90"
+                : " border-slate-500 bg-transparent text-primary transition hover:border-tc-blue hover:bg-tc-blue hover:text-white"
             } `}
           >
             {buttonText}

@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { PaymentElement } from "@stripe/react-stripe-js";
-import { request } from "./../utils/network.utils.js";
+import { request } from "./../utils/request.js";
 import { UserContext } from "./../contexts/UserContext.jsx";
 
 const Payment = ({ selectedPlan }) => {

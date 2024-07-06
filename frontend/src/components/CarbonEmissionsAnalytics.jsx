@@ -1,6 +1,6 @@
 import TC_PieChartWithPaddingAngle from "./TC_PieChartWithPaddingAngle.jsx";
 import { useState, useEffect, useContext } from "react";
-import { getBearerToken } from "../utils/auth.utils.js";
+import { getBearerToken } from "../utils/auth.js";
 import TC_RadialBarChart from "./TC_RadialBarChart.jsx";
 import { UserContext } from "../contexts/UserContext.jsx";
 

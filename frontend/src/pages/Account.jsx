@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { deleteToken } from "./../utils/auth.utils.js";
+import { deleteToken } from "./../utils/auth.js";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./../contexts/UserContext.jsx";
-import { request } from "./../utils/network.utils.js";
+import { request } from "./../utils/request.js";
 
 const Account = () => {
   const navigate = useNavigate();

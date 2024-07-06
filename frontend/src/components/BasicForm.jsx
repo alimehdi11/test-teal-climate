@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { request } from "../utils/network.utils";
+import { request } from "../utils/request.js";
 import FormControl from "./FormControl";
 import Label from "./ui/Label";
 import Input from "./ui/Input";
@@ -131,7 +131,7 @@ const BasicForm = () => {
             />
           </FormControl>
           <FormControl>
-            <Label>Emaily</Label>
+            <Label>Email</Label>
             <Input
               type="email"
               name="email"

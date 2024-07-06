@@ -2,39 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import worldMapJson from "../data/worldMap.json";
-import { getBearerToken } from "../utils/auth.utils.js";
+import { getBearerToken } from "../utils/auth.js";
 import { UserContext } from "../contexts/UserContext.jsx";
 
 const WorldMap = () => {
   const [emissionsData, setEmissionsData] = useState({});
   const { user } = useContext(UserContext);
-
-  // Fetch emissions data from backend upon component mount
-  useEffect(() => {
-    if (user.id) {
-      fetch(`${import.meta.env.VITE_API_BASE_URL}/worldHeatMap/${user.id}`, {
-        headers: {
-          authorization: getBearerToken(),
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          const countriesEmissions = data.reduce((acc, current) => {
-            if (acc[current.countries]) {
-              acc[current.countries] = acc[current.countries] + current.co2e;
-              return acc;
-            } else {
-              return { ...acc, [current.countries]: current.co2e };
-            }
-          }, {});
-          // console.log("===>>> countriesEmissions", countriesEmissions);
-          setEmissionsData(countriesEmissions);
-        })
-        .catch((error) =>
-          console.error("Error fetching emissions data:", error)
-        );
-    }
-  }, [user.id]);
 
   // Function to determine the style of each country based on emissions data
   const geoJsonStyle = (feature) => {
@@ -71,7 +44,6 @@ const WorldMap = () => {
 
   // Function to handle tooltip content for each country
   const onEachFeature = (feature, layer) => {
-    // console.log("onEachFeature");
     let country;
     if (emissionsData[feature.properties.formal_en]) {
       country = feature.properties.formal_en;
@@ -81,12 +53,40 @@ const WorldMap = () => {
       // for those countries whose data is not available in "emissionsData"
       country = feature.properties.name;
     }
+
     const emissionsValue = emissionsData[country];
     const tooltipContent = `<strong>${country}</strong>: ${
       emissionsValue || "Data not available"
     }`;
     layer.bindTooltip(tooltipContent);
   };
+
+  // Fetch emissions data from backend upon component mount
+  useEffect(() => {
+    if (user.id) {
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/worldHeatMap/${user.id}`, {
+        headers: {
+          authorization: getBearerToken(),
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const countriesEmissions = data.reduce((acc, current) => {
+            if (acc[current.countries]) {
+              acc[current.countries] = acc[current.countries] + current.co2e;
+              return acc;
+            } else {
+              return { ...acc, [current.countries]: current.co2e };
+            }
+          }, {});
+          console.log("===>>> countriesEmissions", countriesEmissions);
+          setEmissionsData(countriesEmissions);
+        })
+        .catch((error) =>
+          console.error("Error fetching emissions data:", error)
+        );
+    }
+  }, [user.id]);
 
   return (
     <div className="px-4 flex flex-col gap-3 mt-4">

@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { getBearerToken } from "../utils/auth.utils.js";
+import { getBearerToken } from "../utils/auth.js";
 import { UserContext } from "../contexts/UserContext.jsx";
 
 const Top10EmissionsTable = () => {

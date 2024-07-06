@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams, useNavigate } from "react-router-dom";
-import { getBearerToken } from "../utils/auth.utils.js";
-import { request } from "../utils/network.utils.js";
+import { getBearerToken } from "../utils/auth.js";
+import { request } from "../utils/request.js";
 
 const ActivitesForm = ({
   selectedScope,

@@ -3,11 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  getBearerToken,
-  isLoggedIn,
-  isSubscribed,
-} from "./../utils/auth.utils.js";
+import { getBearerToken, isLoggedIn, isSubscribed } from "./../utils/auth.js";
 import { UserContext } from "../contexts/UserContext";
 
 function Checkout() {

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { isLoggedIn, isSubscribed } from "./../utils/auth.utils.js";
+import { isLoggedIn, isSubscribed } from "./../utils/auth.js";
 
 const ProtectedRoute = ({ Component }) => {
   const [isLoggedInAndSubscribed, setIsLoggedInAndSubscribed] = useState(false);

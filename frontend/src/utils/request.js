@@ -1,4 +1,4 @@
-import { getBearerToken } from "./auth.utils.js";
+import { getBearerToken } from "./auth.js";
 
 // My custom fetch function
 const request = (url, method, body) => {

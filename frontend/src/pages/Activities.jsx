@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar.jsx";
 import { useParams } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { UserContext } from "../contexts/UserContext.jsx";
-import { request } from "../utils/network.utils.js";
+import { request } from "../utils/request.js";
 import Layout from "../components/layout/Layout.jsx";
 
 const Activities = () => {

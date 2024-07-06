@@ -2,7 +2,7 @@ import trashIcon from "../assets/trash-icon.svg";
 import editIcon from "../assets/edit-icon.svg";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { request } from "../utils/network.utils.js";
+import { request } from "../utils/request.js";
 
 const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
   const handleDelete = (id) => {

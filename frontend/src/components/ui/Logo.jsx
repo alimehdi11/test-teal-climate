@@ -3,7 +3,7 @@ import tealClimateLogo2 from "../../assets/teal-climate-logo-2.svg";
 
 const Logo = () => {
   return (
-    <div className="flex items-center gap-x-1">
+    <div className="flex justify-center items-center gap-x-1">
       <img src={tealClimateLogo1} />
       <img src={tealClimateLogo2} />
     </div>

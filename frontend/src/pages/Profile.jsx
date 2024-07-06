@@ -7,7 +7,7 @@ import ProfileTable from "../components/ProfileTable.jsx";
 import { useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { UserContext } from "../contexts/UserContext.jsx";
-import { request } from "../utils/network.utils.js";
+import { request } from "../utils/request.js";
 import Layout from "../components/layout/Layout.jsx";
 
 const Profile = () => {

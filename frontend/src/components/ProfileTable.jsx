@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { request } from "../utils/network.utils.js";
+import { request } from "../utils/request.js";
 import trashIcon from "../assets/trash-icon.svg";
 import editIcon from "../assets/edit-icon.svg";
 import { Link } from "react-router-dom";
