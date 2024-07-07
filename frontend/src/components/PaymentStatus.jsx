@@ -97,7 +97,7 @@ const PaymentStatus = () => {
 
   return (
     <>
-      <div>
+      <div className="mb-2">
         <b>Payment Status : </b> {message}
       </div>
       {message === "Success! Payment received." && (

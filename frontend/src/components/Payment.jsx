@@ -227,7 +227,7 @@ const Payment = ({ selectedPlan }) => {
         <Button
           disabled={isProcessing || !stripe || !elements}
           id="submit"
-          className="mt-4 mb-2 disabled:hover:bg-gray-200 disabled:hover:text-black"
+          className="mt-4 mb-2 disabled:hover:bg-gray-200 disabled:hover:text-gray-700"
         >
           <span id="button-text">
             {isProcessing ? "Processing ... " : "Pay now"}
