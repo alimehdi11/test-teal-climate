@@ -76,7 +76,7 @@ const Activities = () => {
               setCompanyData={setCompanyData}
             />
           ) : (
-            <div className="h-full bg-gray-200 flex justify-center items-center font-bold text-gray-500 rounded-md">
+            <div className="h-full bg-gray-200 flex justify-center items-center font-bold text-gray-500 rounded-lg">
               <FaArrowLeftLong className="text-[20px] me-2" /> Please select
               scope and activity from the sidebar
             </div>

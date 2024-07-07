@@ -1,3 +1,4 @@
+import "./configs/env.configs.js";
 import express from "express";
 import cors from "cors";
 import path from "path";
@@ -17,21 +18,6 @@ import { airportsRouter } from "./routes/airports.routes.js";
 import { electricVehiclesRouter } from "./routes/electricVehicles.routes.js";
 
 const app = express();
-
-/**
- * ---------- Log environment variables ----------
- */
-if (process.env.NODE_ENV === "development") {
-  console.table([
-    ["PORT", process.env.PORT],
-    ["NODE_ENV", process.env.NODE_ENV],
-    ["DATABASE_NAME", process.env.DATABASE_NAME],
-    ["DATABASE_USER", process.env.DATABASE_USER],
-    ["DATABASE_PASSWORD", process.env.DATABASE_PASSWORD],
-    ["DATABASE_HOST", process.env.DATABASE_HOST],
-    ["DATABASE_PORT", process.env.DATABASE_PORT],
-  ]);
-}
 
 /**
  * ---------- App configs ----------
@@ -77,9 +63,9 @@ app.get("*", (req, res) => {
 /**
  * ---------- Starting server ----------
  */
-// app.listen(process.env.PORT, () => {
-//   console.log("Server listening on ...");
-//   console.log("\x1b[33m%s\x1b[0m", `http://localhost:${process.env.PORT}`);
-// });
+app.listen(process.env.PORT, () => {
+  console.log("Server listening on ...");
+  console.log("\x1b[33m%s\x1b[0m", `http://localhost:${process.env.PORT}`);
+});
 
 export default app;

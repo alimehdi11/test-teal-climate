@@ -25,7 +25,7 @@ const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
   };
 
   return (
-    <div className="mx-4 my-4 hide-scroll border border-slate-500 rounded overflow-x-auto shadow-2xl">
+    <div className="mx-4 my-4 hide-scroll border border-slate-500 rounded-lg overflow-x-auto shadow-2xl">
       <table className="border-0">
         <thead>
           <tr className="bg-tc-blue text-white border-slate-500">

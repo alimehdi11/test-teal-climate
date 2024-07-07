@@ -223,41 +223,57 @@ const CarbonEmissionsAnalytics = () => {
   return (
     <div className="grid grid-cols-1 mqMin850:grid-cols-2 xl:grid-cols-3 px-4 gap-4 mt-4">
       {/* Card total emissions */}
-      <div className="bg-white rounded shadow-xl shadow-slate-200 p-3">
-        <div className="font-medium text-[20px]">Total GHG Emissions</div>
-        <div className="text-[2rem]">{totalCO2e.toFixed(2)}</div>
-        <div className="font-medium text-gray-400">
+      <div className="bg-white rounded-lg shadow-card p-6">
+        <div className="font-medium text-[1rem] text-[#111111]">
+          Total GHG Emissions
+        </div>
+        <div className="text-[2rem] font-medium text-[#111111]">
+          {totalCO2e.toFixed(2)}
+        </div>
+        <div className="font-medium text-[12px] text-[#828282]">
           Metric Tonnes CO<span className="text-[10px]">2</span>e
         </div>
-        <hr className="border-t-[1px] border-slate-500 h-0" />
-        <div className="flex flex-col-reverse gap-y-1 xs:flex-row xs:items-center">
+        <hr className="border-t-[1px] border-slate-500 h-0 my-4 -mx-6" />
+        <div className="flex flex-col-reverse gap-5 xs:flex-row xs:items-center">
           <div className="flex-1 flex flex-col gap-y-3">
             {/* Scope 1 */}
             <div className="flex items-center justify-between gap-x-2">
               <div className="flex items-center gap-x-1">
-                <span className="h-4 w-4 rounded-[50%] bg-tc-blue"></span>
-                <div className="text-nowrap">Scope 1</div>
+                <span className="h-3 w-3 rounded-[50%] bg-tc-blue"></span>
+                <div className="text-nowrap font-medium text-[10px] text-[#111111]">
+                  Scope 1
+                </div>
               </div>
-              <div>{calculateC02ePercentageOfGivenScope(totalScope1CO2e)}%</div>
+              <div className="font-medium text-[10px] text-[#111111]">
+                {calculateC02ePercentageOfGivenScope(totalScope1CO2e)}%
+              </div>
             </div>
             {/* Scope 2 */}
             <div className="flex items-center justify-between gap-x-2">
               <div className="flex items-center gap-x-1">
-                <div className="h-4 w-4 rounded-[50%] bg-orange" />
-                <div className="text-nowrap">Scope 2</div>
+                <div className="h-3 w-3 rounded-[50%] bg-tc-green" />
+                <div className="text-nowrap font-medium text-[10px] text-[#111111]">
+                  Scope 2
+                </div>
               </div>
-              <div>{calculateC02ePercentageOfScope2()}%</div>
+              <div className="font-medium text-[10px] text-[#111111]">
+                {calculateC02ePercentageOfScope2()}%
+              </div>
             </div>
             {/* Scope 3 */}
             <div className="flex items-center justify-between gap-x-2">
               <div className="flex items-center gap-x-1">
-                <div className="h-4 w-4 rounded-[50%] bg-tc-green" />
-                <div className="text-nowrap">Scope 3</div>
+                <div className="h-3 w-3 rounded-[50%] bg-orange" />
+                <div className="text-nowrap font-medium text-[10px] text-[#111111]">
+                  Scope 3
+                </div>
               </div>
-              <div>{calculateC02ePercentageOfGivenScope(totalScope3CO2e)}%</div>
+              <div className="font-medium text-[10px] text-[#111111]">
+                {calculateC02ePercentageOfGivenScope(totalScope3CO2e)}%
+              </div>
             </div>
           </div>
-          <div className="flex-1 h-36 min-w-[144px] flex items-center justify-center">
+          <div className="h-36 min-w-[144px] flex items-center justify-center">
             <TC_RadialBarChart
               data={[
                 calculateC02ePercentageOfGivenScope(totalScope1CO2e),
@@ -270,22 +286,28 @@ const CarbonEmissionsAnalytics = () => {
       </div>
 
       {/* Card scope 1*/}
-      <div className="bg-white rounded shadow-xl shadow-slate-200 p-3">
-        <div className="font-medium text-[20px]">Scope 1 Emissions</div>
-        <div className="text-[2rem]">{totalScope1CO2e.toFixed(2)}</div>
-        <div className="font-medium text-gray-400">
+      <div className="bg-white rounded-lg shadow-card p-6">
+        <div className="font-medium text-[1rem] text-[#111111]">
+          Scope 1 Emissions
+        </div>
+        <div className="text-[2rem] font-medium text-[#111111]">
+          {totalScope1CO2e.toFixed(2)}
+        </div>
+        <div className="font-medium text-[12px] text-[#828282]">
           Metric Tonnes CO<span className="text-[10px]">2</span>e
         </div>
-        <hr className="border-t-[1px] border-slate-500 h-0" />
-        <div className="flex flex-col-reverse gap-y-1 xs:flex-row xs:items-center">
+        <hr className="border-t-[1px] border-slate-500 h-0 my-4 -mx-6" />
+        <div className="flex flex-col-reverse gap-5 xs:flex-row xs:items-center">
           <div className="flex-1 flex flex-col gap-y-3">
             {/* Stationary Combustion */}
             <div className="flex items-center justify-between gap-x-2">
               <div className="flex items-center gap-x-1">
-                <span className="h-4 w-4 rounded-[50%] bg-tc-blue"></span>
-                <div className="text-nowrap">Stationary Combustion</div>
+                <span className="h-3 w-3 rounded-[50%] bg-tc-blue"></span>
+                <div className="text-nowrap font-medium text-[10px] text-[#111111]">
+                  Stationary Combustion
+                </div>
               </div>
-              <div>
+              <div className="font-medium text-[10px] text-[#111111]">
                 {calculateC02ePercentageOfGivenScopeCategory(
                   "Stationary combustion"
                 )}
@@ -295,10 +317,12 @@ const CarbonEmissionsAnalytics = () => {
             {/* Mobile Combustion */}
             <div className="flex items-center justify-between gap-x-2">
               <div className="flex items-center gap-x-1">
-                <span className="h-4 w-4 rounded-[50%] bg-orange"></span>
-                <div className="text-nowrap">Mobile Combustion</div>
+                <span className="h-3 w-3 rounded-[50%] bg-tc-green"></span>
+                <div className="text-nowrap font-medium text-[10px] text-[#111111]">
+                  Mobile Combustion
+                </div>
               </div>
-              <div>
+              <div className="font-medium text-[10px] text-[#111111]">
                 {calculateC02ePercentageOfGivenScopeCategory(
                   "Mobile combustion"
                 )}
@@ -308,10 +332,12 @@ const CarbonEmissionsAnalytics = () => {
             {/* Fugitive Emissions */}
             <div className="flex items-center justify-between  gap-x-2">
               <div className="flex items-center gap-x-1">
-                <div className="h-4 w-4 rounded-[50%] bg-tc-green" />
-                <div className="text-nowrap">Fugitive Emissions</div>
+                <div className="h-3 w-3 rounded-[50%] bg-orange" />
+                <div className="text-nowrap font-medium text-[10px] text-[#111111]">
+                  Fugitive Emissions
+                </div>
               </div>
-              <div>
+              <div className="font-medium text-[10px] text-[#111111]">
                 {calculateC02ePercentageOfGivenScopeCategory(
                   "Fugitive emissions"
                 )}
@@ -319,7 +345,7 @@ const CarbonEmissionsAnalytics = () => {
               </div>
             </div>
           </div>
-          <div className="flex-1 h-36 min-w-[144px] flex items-center justify-center">
+          <div className="h-36 min-w-[144px] flex items-center justify-center">
             <TC_RadialBarChart
               data={[
                 calculateC02ePercentageOfGivenScopeCategory(
@@ -338,17 +364,33 @@ const CarbonEmissionsAnalytics = () => {
       </div>
 
       {/* Card scope 3 */}
-      <div className="xl:row-span-2 bg-white rounded shadow-xl shadow-slate-200 p-3">
-        <div className="font-medium text-[20px]">Scope 3 Emissions</div>
-        <div className="text-[2rem]">{totalScope3CO2e.toFixed(2)}</div>
-        <div className="font-medium text-gray-400">
-          Metric Tonnes CO<span className="text-[10px]">2</span>e
-        </div>
-        <hr className="border-t-[1px] border-slate-500 h-0" />
-        <div className="flex flex-col gap-y-3">
-          <div className="flex items-center justify-center">
-            <TC_PieChartWithPaddingAngle data={scope3CategoriesCO2e} />
+      <div className="xl:row-span-2 bg-white rounded-lg shadow-card p-6">
+        <div className="flex justify-between">
+          <div className="self-start">
+            <div className="font-medium text-[1rem] text-[#111111]">
+              Scope 3 Emissions
+            </div>
+            <div className="text-[2rem] font-medium text-[#111111]">
+              {totalScope3CO2e.toFixed(2)}
+            </div>
+            <div className="font-medium text-[12px] text-[#828282]">
+              Metric Tonnes CO<span className="text-[10px]">2</span>e
+            </div>
           </div>
+          <div className="self-end mt-6 flex items-center justify-center">
+            <TC_PieChartWithPaddingAngle
+              data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]}
+            />
+          </div>
+        </div>
+        <hr className="border-t-[1px] border-slate-500 h-0 my-4 -mx-6" />
+        <div className="flex flex-col gap-y-3">
+          {/* <div className="flex items-center justify-center">
+            <TC_PieChartWithPaddingAngle data={scope3CategoriesCO2e} />
+            <TC_PieChartWithPaddingAngle
+              data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]}
+            />
+          </div> */}
           {scope3Categories.map((category, index) => {
             return (
               <>
@@ -356,12 +398,16 @@ const CarbonEmissionsAnalytics = () => {
                   <div className="flex items-center gap-x-1">
                     <span
                       className={
-                        "h-4 w-4 rounded-[50%] " + scope3CategoriesColors[index]
+                        "h-3 w-3 rounded-[50%] " + scope3CategoriesColors[index]
                       }
                     ></span>
-                    <div className="capitalize">{category}</div>
+                    <div className="capitalize font-medium text-[10px] text-[#111111]">
+                      {category}
+                    </div>
                   </div>
-                  <div>{scope3CategoriesCO2e[index]}%</div>
+                  <div className="font-medium text-[10px] text-[#111111]">
+                    {scope3CategoriesCO2e[index]}%
+                  </div>
                 </div>
               </>
             );
@@ -370,26 +416,32 @@ const CarbonEmissionsAnalytics = () => {
       </div>
 
       {/* Card scope 2 */}
-      <div className="row-start-3 mqMin850:row-start-2 xl:col-span-2 bg-white rounded shadow-xl shadow-slate-200 p-3">
-        <div className="font-medium text-[20px]">Scope 2 Emissions</div>
-        <div className="text-[2rem]">{totalScope2CO2e.toFixed(2)}</div>
-        <div className="font-medium text-gray-400">
+      <div className="row-start-3 mqMin850:row-start-2 mqMin850:self-start xl:self-stretch xl:col-span-2 bg-white rounded-lg shadow-card p-6">
+        <div className="font-medium text-[1rem] text-[#111111]">
+          Scope 2 Emissions
+        </div>
+        <div className="text-[2rem] font-medium text-[#111111]">
+          {totalScope2CO2e.toFixed(2)}
+        </div>
+        <div className="font-medium text-[12px] text-[#828282]">
           Metric Tonnes CO<span className="text-[10px]">2</span>e
         </div>
-        <hr className="border-t-[1px] border-slate-500 h-0" />
-        <div className="flex flex-col xl:flex-row xl:justify-between">
+        <hr className="border-t-[1px] border-slate-500 h-0 my-4 -mx-6" />
+        <div className="flex flex-col gap-7 xl:flex-row">
           {/* Location based */}
-          <div>
-            <div className="font-medium mt-2">Location based</div>
-            <div className="flex flex-col-reverse gap-y-1 xs:flex-row xs:items-center">
+          <div className="flex-1">
+            <div className="font-medium ">Location based</div>
+            <div className="flex flex-col-reverse gap-5 xs:flex-row xs:items-center">
               <div className="flex-1 flex flex-col gap-y-3">
                 {/* Purchased Electricity */}
                 <div className="flex items-center justify-between gap-x-2">
                   <div className="flex items-center gap-x-1">
-                    <span className="h-4 w-4 rounded-[50%] bg-tc-blue"></span>
-                    <div className="text-nowrap">Purchased Electricity</div>
+                    <span className="h-3 w-3 rounded-[50%] bg-tc-blue"></span>
+                    <div className="text-nowrap font-medium text-[10px] text-[#111111]">
+                      Purchased Electricity
+                    </div>
                   </div>
-                  <div>
+                  <div className="font-medium text-[10px] text-[#111111]">
                     {calculateC02ePercentageOfLocationBasedScopeCategory(
                       "Purchased electricity"
                     )}
@@ -399,10 +451,12 @@ const CarbonEmissionsAnalytics = () => {
                 {/* Heat and Steam */}
                 <div className="flex items-center justify-between gap-x-2">
                   <div className="flex items-center gap-x-1">
-                    <span className="h-4 w-4 rounded-[50%] bg-orange"></span>
-                    <div className="text-nowrap">Heat and Steam</div>
+                    <span className="h-3 w-3 rounded-[50%] bg-tc-green"></span>
+                    <div className="text-nowrap font-medium text-[10px] text-[#111111]">
+                      Heat and Steam
+                    </div>
                   </div>
-                  <div>
+                  <div className="font-medium text-[10px] text-[#111111]">
                     {calculateC02ePercentageOfLocationBasedScopeCategory(
                       "Heat and steam"
                     )}
@@ -410,7 +464,7 @@ const CarbonEmissionsAnalytics = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex-1 h-36 min-w-[144px] flex items-center justify-center">
+              <div className="h-36 min-w-[144px] flex items-center justify-center">
                 <TC_RadialBarChart
                   data={[
                     calculateC02ePercentageOfLocationBasedScopeCategory(
@@ -424,19 +478,21 @@ const CarbonEmissionsAnalytics = () => {
               </div>
             </div>
           </div>
-          <hr className="border-t-[1px] border-slate-500 h-0 w-full xl:hidden" />
+          <div className="border-r-[1px] border-slate-500 -mt-4 -mb-6"></div>
           {/* Market based */}
-          <div className="xl:border-s-[1px] xl:border-slate-500 xl:ps-9">
-            <div className="font-medium mt-2">Market based</div>
-            <div className="flex flex-col-reverse gap-y-1 xs:flex-row xs:items-center">
+          <div className="flex-1">
+            <div className="font-medium ">Market based</div>
+            <div className="flex flex-col-reverse gap-5 xs:flex-row xs:items-center">
               <div className="flex-1 flex flex-col gap-y-3">
                 {/* Electricity */}
                 <div className="flex items-center justify-between gap-x-2">
                   <div className="flex items-center gap-x-1">
-                    <span className="h-4 w-4 rounded-[50%] bg-tc-blue"></span>
-                    <div className="text-nowrap">Electricity</div>
+                    <span className="h-3 w-3 rounded-[50%] bg-tc-blue"></span>
+                    <div className="text-nowrap font-medium text-[10px] text-[#111111]">
+                      Electricity
+                    </div>
                   </div>
-                  <div>
+                  <div className="font-medium text-[10px] text-[#111111]">
                     {calculateC02ePercentageOfMarketBasedScopeCategory(
                       "Electricity"
                     )}
@@ -446,10 +502,12 @@ const CarbonEmissionsAnalytics = () => {
                 {/* Heat and Steamn */}
                 <div className="flex items-center justify-between gap-x-2">
                   <div className="flex items-center gap-x-1">
-                    <span className="h-4 w-4 rounded-[50%] bg-orange"></span>
-                    <div className="text-nowrap">Heat and Steam</div>
+                    <span className="h-3 w-3 rounded-[50%] bg-tc-green"></span>
+                    <div className="text-nowrap font-medium text-[10px] text-[#111111]">
+                      Heat and Steam
+                    </div>
                   </div>
-                  <div>
+                  <div className="font-medium text-[10px] text-[#111111]">
                     {calculateC02ePercentageOfMarketBasedScopeCategory(
                       "Heat and steam"
                     )}
@@ -457,7 +515,7 @@ const CarbonEmissionsAnalytics = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex-1 h-36 min-w-[144px] flex items-center justify-center">
+              <div className="h-36 min-w-[144px] flex items-center justify-center">
                 <TC_RadialBarChart
                   data={[
                     calculateC02ePercentageOfMarketBasedScopeCategory(

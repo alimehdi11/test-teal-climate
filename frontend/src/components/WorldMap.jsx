@@ -90,7 +90,7 @@ const WorldMap = () => {
 
   return (
     Object.keys(emissionsData).length > 0 && (
-      <div className="px-4 flex flex-col lg:flex-row gap-4 mt-4">
+      <div className="mx-4 p-4 flex flex-col lg:flex-row gap-4 mt-4 rounded-lg bg-white">
         {/* Emissions bar */}
         <div className="lg:flex-1 max-w-[400px]">
           <h3 className="lg:mt-0">Location wise Emissions</h3>
@@ -107,8 +107,8 @@ const WorldMap = () => {
           </div>
         </div>
         <MapContainer
-          className="w-full h-full bg-white min-h-[300px] md:min-h-[500px] rounded lg:flex-2"
-          center={[25, 20]}
+          className="w-full h-full min-h-[300px] bg-white md:min-h-[600px] rounded-lg lg:flex-2"
+          center={[55, 20]}
           zoom={2}
           zoomControl={true}
           scrollWheelZoom={true}

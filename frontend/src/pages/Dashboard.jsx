@@ -38,21 +38,21 @@ const Dashboard = () => {
   };
 
   return (
-    <div ref={pdfRef} className="bg-[#efefef]">
+    <div ref={pdfRef}>
       <Navbar />
-      <div className="flex flex-col xs:flex-row gap-y-4 justify-between px-4 mt-4">
-        <div className="flex justify-center items-center gap-x-1">
-          <img className="h-6 w-6" src={calendarIcon} />
-          <span className="font-medium text-gray-800">
-            Jan 01, 2024 - Dec 11, 2024
-          </span>
-        </div>
+      <div className="flex flex-col-reverse xs:flex-row gap-y-4 justify-between px-4 mt-4">
         <Button
           className="bg-tc-green text-white text-base"
           onClick={downloadPDF}
         >
           Download PDF
         </Button>
+        <div className="flex justify-center items-center gap-x-1 bg-white p-2 rounded-lg">
+          <img className="h-6 w-6" src={calendarIcon} />
+          <span className="font-medium text-gray-800">
+            Jan 01, 2024 - Dec 11, 2024
+          </span>
+        </div>
       </div>
       <CarbonEmissionsAnalytics />
       <WorldMap />

@@ -2,7 +2,7 @@ const Button = ({ children, className = "", type = "", id = "", onClick }) => {
   return (
     <button
       className={(
-        "flex justify-center items-center text-base h-10 cursor-pointer rounded bg-gray-200 text-gray-700 p-2 hover:bg-tc-green hover:text-white " +
+        "flex justify-center items-center text-base h-10 cursor-pointer rounded-lg bg-gray-200 text-gray-700 p-2 hover:bg-tc-green hover:text-white " +
         className
       ).trim()}
       {...(type ? (type = { type }) : null)}

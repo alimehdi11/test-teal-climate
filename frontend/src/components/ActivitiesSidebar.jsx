@@ -149,7 +149,7 @@ const ActivitiesSidebar = ({
           <li
             key={index}
             className={
-              "bg-gray-200 hover:bg-tc-blue hover:text-white rounded p-2" +
+              "bg-gray-200 hover:bg-tc-blue hover:text-white rounded-lg p-2" +
               (level === selectedLevel
                 ? " bg-tc-blue text-white hover:bg-opacity-90"
                 : "")

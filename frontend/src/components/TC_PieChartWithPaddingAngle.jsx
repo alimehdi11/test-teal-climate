@@ -58,7 +58,7 @@ const TC_PieChart = ({ data }) => {
   // }
 
   return (
-    <PieChart width={160} height={160} fill="#EEEEEE">
+    <PieChart width={160} height={160} fill="#EEEEEE" className="-m-3">
       <Pie data={data} innerRadius={50} outerRadius={66} dataKey="value">
         {data.map((entry, index) => (
           <Cell key={`cell-${index}`} fill={COLORS[index]} />

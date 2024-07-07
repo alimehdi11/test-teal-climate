@@ -39,7 +39,7 @@ const Navbar = () => {
       <div className="hidden md:flex items-center gap-x-2 ">
         <Link
           to="/dashboard"
-          className={`text-black flex items-center gap-x-1 p-2 rounded border border-white hover:border-tc-green ${
+          className={`text-black flex items-center gap-x-1 p-2 rounded-lg border border-white hover:border-tc-green ${
             paths.isDashboardPath ? "bg-tc-green text-white" : ""
           }`}
           style={{ textDecoration: "none" }}
@@ -55,7 +55,7 @@ const Navbar = () => {
         </Link>
         <Link
           to="/profile"
-          className={`text-black flex items-center gap-x-1 p-2 rounded border border-white hover:border-tc-green ${
+          className={`text-black flex items-center gap-x-1 p-2 rounded-lg border border-white hover:border-tc-green ${
             paths.isProfilePath ? "bg-tc-green text-white" : ""
           }`}
           style={{ textDecoration: "none" }}
@@ -71,7 +71,7 @@ const Navbar = () => {
         </Link>
         <Link
           to="/activities"
-          className={`text-black flex items-center gap-x-1 p-2 rounded border border-white hover:border-tc-green ${
+          className={`text-black flex items-center gap-x-1 p-2 rounded-lg border border-white hover:border-tc-green ${
             paths.isActivitiesPath ? "bg-tc-green text-white" : ""
           }`}
           style={{ textDecoration: "none" }}
@@ -89,17 +89,11 @@ const Navbar = () => {
 
       {/* Profile and Notification Icons*/}
       <div className="hidden md:flex items-center gap-x-2">
-        <img
-          src={messagesIcon}
-          className="border rounded-full border-slate-500"
-        />
-        <img
-          src={notificationIcon}
-          className="border rounded-full border-slate-500"
-        />
+        <img src={messagesIcon} className="rounded-full" />
+        <img src={notificationIcon} className="rounded-full" />
         <Link
           to="/account"
-          className="no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500 text-[21px] hover:bg-tc-green"
+          className="no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center text-[21px] hover:bg-tc-green"
         >
           <IoSettingsOutline />
         </Link>
@@ -121,7 +115,7 @@ const Navbar = () => {
         <div className="mt-3 flex flex-col gap-y-3 px-3">
           <Link
             to="/dashboard"
-            className={`text-black flex items-center gap-x-1 p-2 rounded ${
+            className={`text-black flex items-center gap-x-1 p-2 rounded-lg ${
               paths.isDashboardPath ? "bg-tc-green text-white" : ""
             }`}
             style={{ textDecoration: "none" }}
@@ -137,7 +131,7 @@ const Navbar = () => {
           </Link>
           <Link
             to="/profile"
-            className={`text-black flex items-center gap-x-1 p-2 rounded ${
+            className={`text-black flex items-center gap-x-1 p-2 rounded-lg ${
               paths.isProfilePath ? "bg-tc-green text-white" : ""
             }`}
             style={{ textDecoration: "none" }}
@@ -153,7 +147,7 @@ const Navbar = () => {
           </Link>
           <Link
             to="/activities"
-            className={`text-black flex items-center gap-x-1 p-2 rounded ${
+            className={`text-black flex items-center gap-x-1 p-2 rounded-lg ${
               paths.isActivitiesPath ? "bg-tc-green text-white" : ""
             }`}
             style={{ textDecoration: "none" }}
@@ -171,17 +165,11 @@ const Navbar = () => {
 
         {/* Profile and Notification Icons*/}
         <div className="mt-3 flex justify-center items-center gap-x-2">
-          <img
-            src={messagesIcon}
-            className="border rounded-full border-slate-500"
-          />
-          <img
-            src={notificationIcon}
-            className="border rounded-full border-slate-500"
-          />
+          <img src={messagesIcon} className="rounded-full" />
+          <img src={notificationIcon} className="rounded-full" />
           <Link
             to="/account"
-            className="no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center border border-slate-500 text-[21px] hover:bg-tc-green"
+            className="no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center text-[21px] hover:bg-tc-green"
           >
             <IoSettingsOutline />
           </Link>

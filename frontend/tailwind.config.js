@@ -34,6 +34,12 @@ export default {
         xl: "1280px",
         "2xl": "1536px",
       },
+      boxShadow: {
+        card: "0px 4px 60px 0px #00000005",
+      },
+      fontFamily: {
+        "sf-pro-display": "SF Pro Display",
+      },
     },
   },
 };
