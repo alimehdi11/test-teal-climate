@@ -32,7 +32,7 @@ const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
             <th className="border-t-0 border-slate-500 border-s-0">S.No</th>
             <th className="border-t-0 border-slate-500">Business Unit</th>
             <th className="border-t-0 border-slate-500">Continent</th>
-            <th className="border-t-0 border-slate-500">Countries</th>
+            <th className="border-t-0 border-slate-500">Country</th>
             <th className="border-t-0 border-slate-500">Region</th>
             <th className="border-t-0 border-slate-500">Employees</th>
             <th className="border-t-0 border-slate-500">Production</th>
