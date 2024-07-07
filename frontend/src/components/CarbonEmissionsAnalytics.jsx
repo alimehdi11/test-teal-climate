@@ -380,7 +380,7 @@ const CarbonEmissionsAnalytics = () => {
         <div className="flex flex-col xl:flex-row xl:justify-between">
           {/* Location based */}
           <div>
-            <div className="font-medium">Location based</div>
+            <div className="font-medium mt-2">Location based</div>
             <div className="flex flex-col-reverse gap-y-1 xs:flex-row xs:items-center">
               <div className="flex-1 flex flex-col gap-y-3">
                 {/* Purchased Electricity */}
@@ -427,7 +427,7 @@ const CarbonEmissionsAnalytics = () => {
           <hr className="border-t-[1px] border-slate-500 h-0 w-full xl:hidden" />
           {/* Market based */}
           <div className="xl:border-s-[1px] xl:border-slate-500 xl:ps-9">
-            <div className="font-medium">Market based</div>
+            <div className="font-medium mt-2">Market based</div>
             <div className="flex flex-col-reverse gap-y-1 xs:flex-row xs:items-center">
               <div className="flex-1 flex flex-col gap-y-3">
                 {/* Electricity */}

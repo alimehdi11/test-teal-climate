@@ -20,7 +20,7 @@ const TC_PieChart = ({ data }) => {
     "#ffa400", // orange
   ];
 
-  const scope3Categories = [
+  const SCOPE_3_CATEGORIES = [
     "Purchased goods and services",
     "Capital goods", // TODO : This scope category is not available in database
     "Fuel- and energy- related activities",
@@ -38,12 +38,24 @@ const TC_PieChart = ({ data }) => {
     "Investments", // TODO : This scope category is not available in database
   ];
 
+  {
+    /* Filtering data if any of the scope 3 categories data avaiable render cells with colors otherwise render empty cell */
+  }
+  // const isDataAvaiable =
+  //   data.filter((value) => {
+  //     return value > 0;
+  //   }).length > 0;
+
+  // console.log("isDataAvaiable", isDataAvaiable);
+
+  // if (isDataAvaiable) {
   data = data.map((value, index) => {
     return {
       value: Number(value),
-      name: scope3Categories[index],
+      name: SCOPE_3_CATEGORIES[index],
     };
   });
+  // }
 
   return (
     <PieChart width={160} height={160} fill="#EEEEEE">
