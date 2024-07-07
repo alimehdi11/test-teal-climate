@@ -67,12 +67,12 @@ function Checkout() {
 
   return (
     <>
-      <div className="flex p-10">
-        <div className="flex-1">
+      <div className="flex justify-center items-center min-h-[100vh] flex-col md:flex-row">
+        <div className="flex-1 flex-col min-h-[200px] flex justify-center items-center">
           <h2 className="text-center">Selected Plan : {selectedPlan}</h2>
           <h2 className="text-center">Amount: {amount}/month</h2>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 flex justify-center items-center p-10">
           <div className="max-w-[400px] mx-auto border-solid border-gray-5 border-[1px] p-3 rounded">
             {selectedPlan && stripePromise && (
               <Elements

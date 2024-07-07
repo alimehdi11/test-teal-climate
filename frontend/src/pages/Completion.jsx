@@ -40,8 +40,8 @@ function Completion() {
 
   return (
     <>
-      <div className="flex flex-col items-center">
-        <h1>Thank you! 🎉</h1>
+      <div className="flex flex-col justify-center items-center h-[100vh]">
+        <h1 className="mb-2">Thank you! 🎉</h1>
         {stripePromise && (
           <Elements stripe={stripePromise}>
             <PaymentStatus />

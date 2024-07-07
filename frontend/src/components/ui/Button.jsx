@@ -1,4 +1,11 @@
-const Button = ({ children, className = "", type = "", id = "", onClick }) => {
+const Button = ({
+  children,
+  className = "",
+  type = "",
+  id = "",
+  onClick,
+  ...props
+}) => {
   return (
     <button
       className={(
@@ -8,6 +15,7 @@ const Button = ({ children, className = "", type = "", id = "", onClick }) => {
       {...(type ? (type = { type }) : null)}
       {...(id ? (id = { id }) : null)}
       onClick={onClick}
+      {...props}
     >
       {children}
     </button>

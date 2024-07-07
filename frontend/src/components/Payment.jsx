@@ -3,6 +3,7 @@ import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { request } from "./../utils/request.js";
 import { UserContext } from "./../contexts/UserContext.jsx";
+import Button from "../components/ui/Button.jsx";
 
 const Payment = ({ selectedPlan }) => {
   const stripe = useStripe();
@@ -223,15 +224,15 @@ const Payment = ({ selectedPlan }) => {
     <>
       <form id="payment-form" onSubmit={handleSubmit}>
         <PaymentElement id="payment-element" />
-        <button
+        <Button
           disabled={isProcessing || !stripe || !elements}
           id="submit"
-          className="bg-brand-color-01 rounded-md px-5 py-3 mt-[16px] text-white font-bold hover:bg-mediumseagreen disabled:bg-gray-4"
+          className="mt-4 mb-2 disabled:hover:bg-gray-200 disabled:hover:text-black"
         >
           <span id="button-text">
             {isProcessing ? "Processing ... " : "Pay now"}
           </span>
-        </button>
+        </Button>
         {/* Show any error or success messages */}
         {errorMessage && <div id="payment-message">{errorMessage}</div>}
       </form>

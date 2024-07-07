@@ -4,6 +4,7 @@ import { request } from "./../utils/request.js";
 import { UserContext } from "./../contexts/UserContext.jsx";
 import { Link } from "react-router-dom";
 import { setToken } from "../utils/auth.js";
+import Button from "./ui/Button.jsx";
 
 const PaymentStatus = () => {
   const [message, setMessage] = useState("pending");
@@ -101,12 +102,7 @@ const PaymentStatus = () => {
       </div>
       {message === "Success! Payment received." && (
         <Link to="/dashboard">
-          <button
-            type="button"
-            className="rounded bg-brand-color-01 text-white p-4 mt-4 hover:bg-brand-color-2"
-          >
-            Dashboard
-          </button>
+          <Button type="button">Dashboard</Button>
         </Link>
       )}
     </>
