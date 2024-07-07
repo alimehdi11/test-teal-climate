@@ -12,7 +12,7 @@ const PricingCard = ({
 }) => {
   return (
     <>
-      <div className="max-w-[350px] min-w-[360px] px-4 md:w-1/2 lg:w-1/3 hover:scale-105 transition">
+      <div className="max-w-[440px] min-w-[360px] px-4 md:w-1/2 lg:w-1/3 hover:scale-105 transition">
         <div className="relative z-10 mb-10 overflow-hidden rounded-[10px] bg-white px-8 py-10 p-6 lg:py-10 xl:p-[50px] shadow-gray-400 shadow-2xl border-slate-500 border">
           <span className="mb-3 block text-lg font-semibold text-primary">
             {type}
