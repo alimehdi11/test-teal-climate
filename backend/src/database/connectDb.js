@@ -10,7 +10,7 @@ const poolOptions = {
 
 if (process.env.NODE_ENV === "production") {
   poolOptions.ssl = {
-    rejectUnauthorized: true, // Set to true to reject unauthorized connections
+    rejectUnauthorized: false, // Set to true to reject unauthorized connections
   };
 }
 
