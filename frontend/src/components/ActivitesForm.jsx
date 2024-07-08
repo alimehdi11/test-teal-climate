@@ -241,6 +241,11 @@ const ActivitesForm = ({
           co2eofn2o = item.ghgconversion;
         }
       }
+
+      if (co2e && co2eofco2 && co2eofch4 && co2eofn2o) {
+        // If all 4 values are found not need to loop any more
+        break;
+      }
     }
 
     // Now co2e, co2eofco2, co2eofch4, and co2eofn2o contain the respective values
@@ -287,6 +292,11 @@ const ActivitesForm = ({
           co2eofn2o = item.ghgconversion;
         }
       }
+
+      if (co2e && co2eofco2 && co2eofch4 && co2eofn2o) {
+        // If all 4 values are found not need to loop any more
+        break;
+      }
     }
 
     return {
@@ -330,6 +340,11 @@ const ActivitesForm = ({
         } else if (item.ghg === ghgValues[3]) {
           co2eofn2o = item.ghgconversion;
         }
+      }
+
+      if (co2e && co2eofco2 && co2eofch4 && co2eofn2o) {
+        // If all 4 values are found not need to loop any more
+        break;
       }
     }
 
@@ -665,8 +680,6 @@ const ActivitesForm = ({
       // console.table(payload);
       // return;
     } else {
-      ghgconversions = calculateConversionGHG();
-
       payload = {
         ids: userId,
         uom: unitOfMeasurementValue,
@@ -679,8 +692,16 @@ const ActivitesForm = ({
         scope: selectedScope,
         level4: level4Value || null,
         level5: level5Value || null,
-        ...ghgconversions,
+        // ...ghgconversions,
       };
+
+      if (selectedLevel !== "Business travel- air") {
+        ghgconversions = calculateConversionGHG();
+      } else if (selectedLevel === "Business travel- air") {
+        ghgconversions = calculateConversionGHGForBusinessTravelAir(payload);
+      }
+
+      payload = { ...payload, ...ghgconversions };
 
       /**
        * For "Passenger Evs", "Delivery Evs"
@@ -1028,21 +1049,71 @@ const ActivitesForm = ({
     };
   };
 
+  const calculateConversionGHGForBusinessTravelAir = (payload) => {
+    let co2e = null;
+    let co2eofco2 = null;
+    let co2eofch4 = null;
+    let co2eofn2o = null;
+
+    const ghgValues = [
+      "kg CO2e",
+      "kg CO2e of CO2 per unit",
+      "kg CO2e of CH4 per unit",
+      "kg CO2e of N2O per unit",
+    ];
+
+    for (let i = 0; i < activitesData?.datas.length; i++) {
+      const item = activitesData?.datas[i];
+
+      if (
+        item.scope === selectedScope &&
+        item.level1 === selectedLevel &&
+        // In database level4(fuelNameValue) is at level3 (should be consistent)
+        item.level3 === payload.level4 &&
+        // In database level5 is at level4 (should be consistent)
+        item.level4 === payload.level5 &&
+        item.uom === unitOfMeasurementValue
+      ) {
+        if (item.ghg === ghgValues[0]) {
+          co2e = item.ghgconversion;
+        } else if (item.ghg === ghgValues[1]) {
+          co2eofco2 = item.ghgconversion;
+        } else if (item.ghg === ghgValues[2]) {
+          co2eofch4 = item.ghgconversion;
+        } else if (item.ghg === ghgValues[3]) {
+          co2eofn2o = item.ghgconversion;
+        }
+      }
+      if (co2e && co2eofco2 && co2eofch4 && co2eofn2o) {
+        // If all 4 values are found not need to loop any more
+        break;
+      }
+    }
+
+    return {
+      co2e,
+      co2eofco2,
+      co2eofch4,
+      co2eofn2o,
+    };
+  };
+
   useEffect(() => {
     // data comes on second render because userId is coming from parent component
-    if (userId) {
-      fetchActivitesData().then((activitiesData) => {
-        setActivitesData(activitiesData);
-      });
-      fetchBusinessUnit().then((businessUnits) => {
-        businessUnits = businessUnits.map((item) => item.unitname);
-        setBusinessUnits(businessUnits);
-      });
-      fetchScopeCategoriesData().then((scopeCategoriesData) => {
-        setScopeCategoriesData(scopeCategoriesData);
-      });
-    }
-  }, [userId]);
+    // if (userId) {
+    fetchActivitesData().then((activitiesData) => {
+      setActivitesData(activitiesData);
+    });
+    fetchBusinessUnit().then((businessUnits) => {
+      businessUnits = businessUnits.map((item) => item.unitname);
+      setBusinessUnits(businessUnits);
+    });
+    fetchScopeCategoriesData().then((scopeCategoriesData) => {
+      setScopeCategoriesData(scopeCategoriesData);
+    });
+    // }
+    // }, [userId]);
+  }, []);
 
   useEffect(() => {
     if (!id) {

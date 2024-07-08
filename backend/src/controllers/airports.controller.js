@@ -9,10 +9,7 @@ const getAirportByName = async (req, res) => {
       : `SELECT * FROM airport`;
     const result = await pool.query(query);
     const airport = airportName ? result.rows[0] : result.rows;
-    console.log(airportName);
-    console.log(query);
-    console.log(airport);
-    console.log(result);
+
     return res.send(airport);
   } catch (error) {
     console.log("error getting airport by name\n", error.message);
