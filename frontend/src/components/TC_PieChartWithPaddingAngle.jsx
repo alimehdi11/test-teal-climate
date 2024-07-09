@@ -41,29 +41,40 @@ const TC_PieChart = ({ data }) => {
   {
     /* Filtering data if any of the scope 3 categories data avaiable render cells with colors otherwise render empty cell */
   }
-  // const isDataAvaiable =
-  //   data.filter((value) => {
-  //     return value > 0;
-  //   }).length > 0;
+  const isDataAvaiable =
+    data.filter((value) => {
+      return value > 0;
+    }).length > 0;
 
-  // console.log("isDataAvaiable", isDataAvaiable);
-
-  // if (isDataAvaiable) {
-  data = data.map((value, index) => {
-    return {
-      value: Number(value),
-      name: SCOPE_3_CATEGORIES[index],
-    };
-  });
-  // }
+  if (isDataAvaiable) {
+    data = data.map((value, index) => {
+      return {
+        value: Number(value),
+        name: SCOPE_3_CATEGORIES[index],
+      };
+    });
+  }
 
   return (
-    <PieChart width={160} height={160} fill="#EEEEEE" className="-m-3">
-      <Pie data={data} innerRadius={50} outerRadius={66} dataKey="value">
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index]} />
-        ))}
-      </Pie>
+    <PieChart width={160} height={160} className="-m-3">
+      {isDataAvaiable ? (
+        <Pie data={data} innerRadius={50} outerRadius={66} dataKey="value">
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index]} />
+          ))}
+        </Pie>
+      ) : (
+        <Pie
+          data={[{ value: 1 }]}
+          innerRadius={50}
+          outerRadius={66}
+          dataKey="value"
+        >
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill="#EEEEEE" />
+          ))}
+        </Pie>
+      )}
     </PieChart>
   );
 };

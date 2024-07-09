@@ -11,13 +11,18 @@ const TC_RadialBarChart = ({ data }) => {
     };
   });
 
+  data.unshift({
+    fill: "#fff",
+    value: 100,
+  });
+
   /**
    *  Making sure data array has 3 elements so it can render 3 radials.
    *  If data argument array is passed with less then 3 elements.
    */
-  while (data.length < 3) {
-    data.push(0);
-  }
+  // while (data.length < 4) {
+  //   data.push(0);
+  // }
 
   data.reverse();
 
@@ -25,11 +30,17 @@ const TC_RadialBarChart = ({ data }) => {
     <ResponsiveContainer width="100%" height="100%" className="-mx-6">
       <RadialBarChart
         innerRadius="50%"
-        outerRadius="120%"
+        outerRadius="150%"
         barSize={9}
         data={data}
       >
-        <RadialBar minAngle={15} background clockWise dataKey="value" />
+        <RadialBar
+          cornerRadius="50%"
+          minAngle={100}
+          background
+          clockWise
+          dataKey="value"
+        />
       </RadialBarChart>
     </ResponsiveContainer>
   );

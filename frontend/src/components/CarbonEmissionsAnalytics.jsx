@@ -377,20 +377,12 @@ const CarbonEmissionsAnalytics = () => {
               Metric Tonnes CO<span className="text-[10px]">2</span>e
             </div>
           </div>
-          <div className="self-end mt-6 flex items-center justify-center">
-            <TC_PieChartWithPaddingAngle
-              data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]}
-            />
+          <div className="self-end mt-6 flex items-center justify-center -rotate-90">
+            <TC_PieChartWithPaddingAngle data={scope3CategoriesCO2e} />
           </div>
         </div>
         <hr className="border-t-[1px] border-slate-500 h-0 my-4 -mx-6" />
         <div className="flex flex-col gap-y-3">
-          {/* <div className="flex items-center justify-center">
-            <TC_PieChartWithPaddingAngle data={scope3CategoriesCO2e} />
-            <TC_PieChartWithPaddingAngle
-              data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]}
-            />
-          </div> */}
           {scope3Categories.map((category, index) => {
             return (
               <>
