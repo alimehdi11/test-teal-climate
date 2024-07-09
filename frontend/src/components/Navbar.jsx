@@ -29,6 +29,7 @@ const Navbar = () => {
     isActivitiesPath:
       location.pathname === "/activities" ||
       !!location.pathname.match(/^\/activities(\/\d+\/edit)?$/),
+    isAccountPath: location.pathname === "/account",
   };
 
   return (
@@ -93,7 +94,10 @@ const Navbar = () => {
         <img src={notificationIcon} className="rounded-full" />
         <Link
           to="/account"
-          className="no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center text-[21px] hover:bg-tc-green"
+          className={
+            "no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center text-[21px] hover:bg-tc-green" +
+            (paths.isAccountPath ? " text-white bg-tc-green" : "")
+          }
         >
           <IoSettingsOutline />
         </Link>
@@ -169,7 +173,10 @@ const Navbar = () => {
           <img src={notificationIcon} className="rounded-full" />
           <Link
             to="/account"
-            className="no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center text-[21px] hover:bg-tc-green"
+            className={
+              "no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center text-[21px] hover:bg-tc-green" +
+              (paths.isAccountPath ? " text-white bg-tc-green" : "")
+            }
           >
             <IoSettingsOutline />
           </Link>

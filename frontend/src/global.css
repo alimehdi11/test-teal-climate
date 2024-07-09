@@ -50,6 +50,11 @@ body {
   .hide-scroll::-webkit-scrollbar-thumb:hover {
     background-color: rgba(155, 155, 155, 0.8);
   }
+
+  /* Layout component height */
+  .layout {
+    height: calc(100vh - 64px);
+  }
 }
 
 table {
@@ -57,6 +62,7 @@ table {
   border: 1px solid rgba(0, 0, 0, 0.3);
   width: 100%; /* Set table width to 100% */
 }
+
 th,
 td {
   border: 1px solid rgba(0, 0, 0, 0.3);

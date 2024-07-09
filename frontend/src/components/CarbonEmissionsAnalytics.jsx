@@ -466,6 +466,7 @@ const CarbonEmissionsAnalytics = () => {
                       "Heat and steam"
                     ),
                   ]}
+                  innerRadius="78%"
                 />
               </div>
             </div>
@@ -517,6 +518,7 @@ const CarbonEmissionsAnalytics = () => {
                       "Heat and steam"
                     ),
                   ]}
+                  innerRadius="78%"
                 />
               </div>
             </div>

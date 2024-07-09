@@ -3,6 +3,9 @@ import { deleteToken } from "./../utils/auth.js";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./../contexts/UserContext.jsx";
 import { request } from "./../utils/request.js";
+import Button from "./../components/ui/Button.jsx";
+import Layout from "./../components/layout/Layout.jsx";
+import Navbar from "../components/Navbar.jsx";
 
 const Account = () => {
   const navigate = useNavigate();
@@ -123,68 +126,68 @@ const Account = () => {
 
   return (
     <>
-      <div className="flex font-poppins">
-        {/* Sidebar Content */}
-        <div className="text-white w-1/4 h-screen flex flex-col justify-between p-3 max-h-[100vh] box-border border-solid border-r-[2px] border-gray-200">
-          <div className="text-black">
-            <h2 className="text-xl font-bold text-center m-0 mt-5">Settings</h2>
-            <ul className="list-none p-[0px] m-[0px] mt-5">
-              <li className="p-3 rounded-md bg-brand-color-01 text-white text-center">
-                Subscription
-              </li>
-            </ul>
+      <Navbar />
+      <Layout
+        sidebarContent={
+          <div className="h-full flex flex-col justify-between">
+            <div className="text-black">
+              <h2 className="m-0 mb-4 font-extrabold text-2xl text-center">
+                Settings
+              </h2>
+              <ul className="list-none p-[0px] m-[0px] mt-5">
+                <li>
+                  <Button className="w-full bg-tc-green text-white hover:bg-opacity-90">
+                    Subscription
+                  </Button>
+                </li>
+              </ul>
+            </div>
+            <Button className="mb-4" onClick={handleLogout}>
+              Log out
+            </Button>
           </div>
-          <button
-            onClick={handleLogout}
-            className="p-3 rounded-md bg-gray-200 text-gray-700 hover:bg-brand-color-01 hover:text-white w-[100%] font-bold"
-          >
-            Log out
-          </button>
-        </div>
-        {/* Content Area */}
-        <div className="flex-1 p-4">
-          <h2 className="text-xl font-bold mb-0">Subscription Details</h2>
-          <div className="mt-4">
-            <p>
-              {"Your next invoive will be on "} <b>{nextInvoiceData}</b>
-            </p>
-            <button
-              type="button"
-              className="p-3 rounded-md bg-gray-200 text-gray-700 hover:bg-brand-color-01 hover:text-white font-bold text-base"
-              onClick={openModal}
+        }
+        mainContent={
+          <>
+            <div>
+              <h2 className="m-0 mb-4 font-extrabold text-2xl">
+                Subscription Details
+              </h2>
+              <div className="mt-4">
+                <p>
+                  {"Your next invoive will be on "} <b>{nextInvoiceData}</b>
+                </p>
+                <Button type="button" className="mt-4" onClick={openModal}>
+                  Unsubscribe
+                </Button>
+              </div>
+            </div>
+            {/* Modal */}
+            <div
+              className={`bg-slate-500 opacity-80 fixed top-0 left-0 right-0 bottom-0 text-black flex justify-center items-center ${
+                !isModalOpen && "hidden"
+              }`}
             >
-              Unsubscribe
-            </button>
-          </div>
-        </div>
-      </div>
-      {/* Modal */}
-      <div
-        className={`bg-gray-3 opacity-80 fixed top-0 left-0 right-0 bottom-0 text-black flex justify-center items-center ${
-          !isModalOpen && "hidden"
-        }`}
-      >
-        <div className="bg-white w-[40%] h-[40%] max-w-[400px] max-h-[200px] rounded-lg flex justify-center items-center font-poppins flex-col gap-3 opacity-100">
-          Are you sure you want to unsubscribe?
-          <div>
-            <button
-              type="button"
-              className="py-3 px-10 bg-gray-200 text-gray-700 hover:bg-brand-color-01 hover:text-white rounded-lg ml-2 font-bold"
-              onClick={closeModal}
-            >
-              No
-            </button>
-            <button
-              disabled={subscriptionId ? false : true}
-              type="button"
-              className="py-3 px-10 bg-gray-200 text-gray-700 hover:bg-brand-color-01 hover:text-white rounded-lg ml-2 font-bold"
-              onClick={handleUnsubscribe}
-            >
-              Yes
-            </button>
-          </div>
-        </div>
-      </div>
+              <div className="bg-white w-[40%] h-[40%] max-w-[400px] max-h-[200px] rounded-lg flex justify-center items-center font-poppins flex-col gap-3 opacity-100">
+                Are you sure you want to unsubscribe?
+                <div className="flex gap-2">
+                  <Button type="button" className="w-28" onClick={closeModal}>
+                    No
+                  </Button>
+                  <Button
+                    disabled={subscriptionId ? false : true}
+                    type="button"
+                    className="w-28"
+                    onClick={handleUnsubscribe}
+                  >
+                    Yes
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </>
+        }
+      />
     </>
   );
 };

@@ -1435,7 +1435,9 @@ const ActivitesForm = ({
   return (
     <>
       <form onSubmit={handleFormSubmit} className="flex flex-col gap-y-3">
-        <h3 className="text-[24px] m-0 mb-1">Insert activity data here</h3>
+        <h3 className="m-0 font-extrabold text-2xl">
+          Insert activity data here
+        </h3>
         <div className="grid lg:grid-cols-2 gap-4">
           {/* TODO: Location Based bar should be in all Scope 2 levels or only in Scope 2(Electricity) */}
           {/* {selectedLevel === "Electricity" && (  */}

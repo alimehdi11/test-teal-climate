@@ -80,7 +80,7 @@ const BasicForm = () => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <h3 className="text-[24px] m-0 mb-4">Introduction</h3>
+        <h3 className="m-0 mb-4 font-extrabold text-2xl">Introduction</h3>
         <div className="grid lg:grid-cols-2 gap-4">
           <FormControl>
             <Label>Company Name</Label>
@@ -119,7 +119,7 @@ const BasicForm = () => {
             />
           </FormControl>
         </div>
-        <h3 className="text-[24px] m-0 my-4">Contact</h3>
+        <h3 className="m-0 my-4 font-extrabold text-2xl">Contact</h3>
         <div className="grid lg:grid-cols-2 gap-4">
           <FormControl>
             <Label>Sustainability Manager</Label>

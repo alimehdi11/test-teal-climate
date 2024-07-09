@@ -294,7 +294,9 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
   return (
     <>
       <form onSubmit={handleFormSubmit}>
-        <h3 className="text-[24px] m-0 mb-4"> Create Your Profile</h3>
+        <h3 className="m-0 mb-4 font-extrabold text-2xl">
+          Create Your Profile
+        </h3>
         <div className="grid lg:grid-cols-2 gap-4">
           {/* Fuel Category Dropdown */}
           <FormControl>

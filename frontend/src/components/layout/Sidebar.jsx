@@ -7,7 +7,7 @@ const Sidebar = ({ children }) => {
   return (
     <div
       className={(
-        "w-[25vw] min-w-[250px] h-[100vh] fixed top-[64px] left-0 bottom-0 -translate-x-full transition-transform duration-400 ease-out md:translate-x-0 md:static md:transition-none z-[900] bg-white pt-4 shadow-lg shadow-tc-blue md:shadow-none md:pt-0 " +
+        "w-[25vw] min-w-[250px] h-full fixed top-[64px] left-0 bottom-0 -translate-x-full transition-transform duration-400 ease-out md:translate-x-0 md:static md:transition-none z-[900] bg-white pt-4 shadow-lg shadow-tc-blue md:shadow-none md:pt-0 " +
         (sidebarVisible ? "translate-x-0" : "")
       ).trim()}
     >

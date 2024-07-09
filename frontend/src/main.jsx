@@ -6,7 +6,7 @@ import "./global.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <div className="mx-auto max-w-[1408px] bg-[#FBFBFB]">
+    <div className="bg-[#FBFBFB]">
       <UserProvider>
         <App />
       </UserProvider>
