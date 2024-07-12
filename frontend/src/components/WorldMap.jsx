@@ -108,13 +108,13 @@ const WorldMap = () => {
         </div>
         <MapContainer
           className="w-full h-full min-h-[300px] bg-white md:min-h-[600px] rounded-lg lg:flex-2"
-          center={[55, 20]}
+          center={[50, 20]}
           zoom={2}
-          zoomControl={true}
-          scrollWheelZoom={true}
+          zoomControl={false}
+          scrollWheelZoom={false}
           doubleClickZoom={false}
           touchZoom={false}
-          dragging={true}
+          dragging={false}
           attributionControl={false}
         >
           <GeoJSON

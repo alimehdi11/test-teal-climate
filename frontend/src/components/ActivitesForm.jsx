@@ -627,9 +627,9 @@ const ActivitesForm = ({
       selectedLevel === "District heat and steam TandD" ||
       selectedLevel === "WTT- heat and steam" ||
       selectedLevel === "WTT- district heat and steam distribution" ||
-      selectedLevel === "Hotel stay" ||
-      // selectedLevel === "Business travel- air" ||
-      selectedLevel === "WTT- business travel- air"
+      selectedLevel === "Hotel stay"
+      // || selectedLevel === "Business travel- air"
+      // || selectedLevel === "WTT- business travel- air"
     ) {
       payload = {
         ids: userId,
@@ -695,10 +695,19 @@ const ActivitesForm = ({
         // ...ghgconversions,
       };
 
-      if (selectedLevel !== "Business travel- air") {
+      if (
+        selectedLevel !== "Business travel- air" &&
+        selectedLevel !== "WTT- business travel- air"
+      ) {
         ghgconversions = calculateConversionGHG();
-      } else if (selectedLevel === "Business travel- air") {
-        ghgconversions = calculateConversionGHGForBusinessTravelAir(payload);
+      } else if (
+        selectedLevel === "Business travel- air" ||
+        selectedLevel === "WTT- business travel- air"
+      ) {
+        ghgconversions =
+          calculateConversionGHGForBusinessTravelAirOrWTTBusinessTravelAir(
+            payload
+          );
       }
 
       payload = { ...payload, ...ghgconversions };
@@ -1049,7 +1058,9 @@ const ActivitesForm = ({
     };
   };
 
-  const calculateConversionGHGForBusinessTravelAir = (payload) => {
+  const calculateConversionGHGForBusinessTravelAirOrWTTBusinessTravelAir = (
+    payload
+  ) => {
     let co2e = null;
     let co2eofco2 = null;
     let co2eofch4 = null;
@@ -1155,11 +1166,15 @@ const ActivitesForm = ({
           selectedLevel !== "WTT- heat and steam" &&
           selectedLevel !== "Hotel stay"
         ) {
-          if (selectedLevel !== "Business travel- air") {
+          if (
+            selectedLevel !== "Business travel- air" &&
+            selectedLevel !== "WTT- business travel- air"
+          ) {
             setShowLevel4Field(isLevel4Available());
           }
           setShowLevel5Field(
-            selectedLevel === "Business travel- air"
+            selectedLevel === "Business travel- air" ||
+              selectedLevel === "WTT- business travel- air"
               ? true
               : isLevel5Available()
           );
@@ -1178,7 +1193,14 @@ const ActivitesForm = ({
         selectedLevel === "WTT- district heat and steam distribution" ||
         selectedLevel === "Managed assets- electricity" ||
         selectedLevel === "WTT- electricity (T&D)" ||
-        selectedLevel === "Electricity T&D"
+        selectedLevel === "Electricity T&D" ||
+        selectedLevel === "Delivery Evs" ||
+        selectedLevel === "Heat and steam" ||
+        selectedLevel === "Electricity TandD for delivery Evs" ||
+        selectedLevel === "WTT- heat and steam" ||
+        selectedLevel === "Hotel stay" ||
+        selectedLevel === "Business travel- air" ||
+        selectedLevel === "WTT- business travel- air"
       ) {
         const unitOfMeasurements =
           filterUnitOfMeasurementsBasedOnScopeAndLevel1();
@@ -1194,36 +1216,35 @@ const ActivitesForm = ({
         selectedLevel === "Business travel- air" ||
         selectedLevel === "WTT- business travel- air"
       ) {
-        const unitOfMeasurements =
-          filterUnitOfMeasurementsBasedOnScopeAndLevel1();
-        setUnitOfMeasurements(unitOfMeasurements);
-
-        if (selectedLevel !== "Business travel- air") {
+        if (
+          selectedLevel !== "Business travel- air" &&
+          selectedLevel !== "WTT- business travel- air"
+        ) {
           const level3 = filterLevel3BasedOnScopeAndLevel1();
           setFuelNames(level3);
         }
 
-        if (
-          // selectedLevel === "Business travel- air" ||
-          selectedLevel === "WTT- business travel- air"
-        ) {
-          const level4Options = (() => {
-            let level4Options = [];
-            activitesData?.datas.forEach((item) => {
-              if (
-                item.scope === selectedScope &&
-                item.level1 === selectedLevel &&
-                item.level4 !== "null" &&
-                item.level4
-              ) {
-                level4Options.push(item.level4);
-              }
-            });
-            level4Options = [...new Set(level4Options)];
-            return level4Options;
-          })();
-          setLevel4Options(level4Options);
-        }
+        // if (
+        // selectedLevel === "Business travel- air" ||
+        // selectedLevel === "WTT- business travel- air"
+        // ) {
+        const level4Options = (() => {
+          let level4Options = [];
+          activitesData?.datas.forEach((item) => {
+            if (
+              item.scope === selectedScope &&
+              item.level1 === selectedLevel &&
+              item.level4 !== "null" &&
+              item.level4
+            ) {
+              level4Options.push(item.level4);
+            }
+          });
+          level4Options = [...new Set(level4Options)];
+          return level4Options;
+        })();
+        setLevel4Options(level4Options);
+        // }
       }
     }
   }, [selectedLevel, scopeCategoriesData, activitesData, businessUnits]);
@@ -1232,7 +1253,11 @@ const ActivitesForm = ({
    * level2
    */
   useEffect(() => {
-    if (!id && selectedLevel !== "Business travel- air") {
+    if (
+      !id &&
+      selectedLevel !== "Business travel- air" &&
+      selectedLevel !== "WTT- business travel- air"
+    ) {
       setFuelTypes([]);
       setFuelTypeValue("");
       setUnitOfMeasurementValue("");
@@ -1276,7 +1301,11 @@ const ActivitesForm = ({
       // setUnitOfMeasurements([]);
     }
 
-    if (fuelTypeValue !== "" && selectedLevel !== "Business travel- air") {
+    if (
+      fuelTypeValue !== "" &&
+      selectedLevel !== "Business travel- air" &&
+      selectedLevel !== "WTT- business travel- air"
+    ) {
       const unitsOfMeasurement = filterUnitOfMeasurements();
       setUnitOfMeasurements(unitsOfMeasurement);
       if (
@@ -1293,7 +1322,10 @@ const ActivitesForm = ({
       }
     }
 
-    if (selectedLevel === "Business travel- air") {
+    if (
+      selectedLevel === "Business travel- air" ||
+      selectedLevel === "WTT- business travel- air"
+    ) {
       const airportsName = filterAirportsName(airports);
       const airportsNameExceptSelectedInLevel2 = airportsName.filter(
         (airportName) => {
@@ -1331,7 +1363,10 @@ const ActivitesForm = ({
       setLevel5Options(level5Options);
     }
 
-    if (selectedLevel === "Business travel- air") {
+    if (
+      selectedLevel === "Business travel- air" ||
+      selectedLevel === "WTT- business travel- air"
+    ) {
       // Filtering level5 options
       let level5 = [];
       activitesData?.datas.forEach((item) => {
@@ -1339,9 +1374,10 @@ const ActivitesForm = ({
           item.scope === selectedScope &&
           item.level1 === selectedLevel &&
           /**
-           * For "Business travel- air" there will be no airport value
+           * For "Business travel- air" & "WTT- business travel- air"
+           * there will be no airport value
            * for level2 and level3 in activitydata table.
-           * We are fetching from airport table add assigning them.
+           * We are fetching from airport table and assigning them.
            */
           // item.level2 === fuelTypeValue &&
           // item.level3 === fuelNameValue &&
@@ -1383,10 +1419,13 @@ const ActivitesForm = ({
   }, [fuelNameValue]);
 
   /**
-   * Business travel- air
+   * Business travel- air & "WTT- business travel- air"
    */
   useEffect(() => {
-    if (selectedLevel === "Business travel- air") {
+    if (
+      selectedLevel === "Business travel- air" ||
+      selectedLevel === "WTT- business travel- air"
+    ) {
       fetchAirports()
         .then((airports) => {
           setAirports(airports);
@@ -1398,10 +1437,14 @@ const ActivitesForm = ({
   }, []);
 
   /**
-   * Only for "Business travel- air"
+   * "Business travel- air" & "WTT- business travel- air"
    */
   useEffect(() => {
-    if (unitOfMeasurementValue && selectedLevel === "Business travel- air") {
+    if (
+      unitOfMeasurementValue &&
+      (selectedLevel === "Business travel- air" ||
+        selectedLevel === "WTT- business travel- air")
+    ) {
       // If selected in km then update it otherwise it will default in miles
       if (unitOfMeasurementValue === "passenger.km") {
         setQuantityValue(Number((quantityValue * 1.609344).toFixed(2)));
@@ -1500,58 +1543,59 @@ const ActivitesForm = ({
             selectedLevel !== "Hotel stay" &&
             selectedLevel !== "Managed assets- electricity" &&
             // selectedLevel !== "Business travel- air" &&
-            selectedLevel !== "WTT- business travel- air" &&
+            // selectedLevel !== "WTT- business travel- air" &&
             selectedLevel !== "WTT- electricity (T&D)" &&
             selectedLevel !== "Electricity T&D" && (
               <FormControl>
                 <Label>
-                  {selectedLevel
-                    ? selectedLevel === "Refrigerant and other"
-                      ? "Refrigerant and other gas category"
-                      : selectedLevel === "Passenger vehicles"
-                        ? "Passenger Vehicle Category"
-                        : selectedLevel === "Delivery vehicles"
-                          ? "Delivery Vehicle Category"
-                          : selectedLevel === "Passenger Evs"
-                            ? "Passenger EV Category"
-                            : selectedLevel === "Delivery Evs"
-                              ? "Delivery Vehicle Category"
-                              : selectedLevel === "WTT- fuels"
-                                ? "Fuel Type"
-                                : selectedLevel === "WTT- bioenergy"
-                                  ? "Bioenergy Type"
-                                  : selectedLevel ===
-                                      "Electricity TandD for passenger EVs"
-                                    ? "Passenger EV Category"
-                                    : selectedLevel === "Business travel- land"
-                                      ? "Passenger Vehicle Category"
-                                      : selectedLevel === "Material use"
-                                        ? "Material Type"
-                                        : selectedLevel === "Waste disposal"
-                                          ? "Waste Type"
+                  {selectedLevel && selectedLevel === "Refrigerant and other"
+                    ? "Refrigerant and other gas category"
+                    : selectedLevel === "Passenger vehicles"
+                      ? "Passenger Vehicle Category"
+                      : selectedLevel === "Delivery vehicles"
+                        ? "Delivery Vehicle Category"
+                        : selectedLevel === "Passenger Evs"
+                          ? "Passenger EV Category"
+                          : selectedLevel === "Delivery Evs"
+                            ? "Delivery Vehicle Category"
+                            : selectedLevel === "WTT- fuels"
+                              ? "Fuel Type"
+                              : selectedLevel === "WTT- bioenergy"
+                                ? "Bioenergy Type"
+                                : selectedLevel ===
+                                    "Electricity TandD for passenger EVs"
+                                  ? "Passenger EV Category"
+                                  : selectedLevel === "Business travel- land"
+                                    ? "Passenger Vehicle Category"
+                                    : selectedLevel === "Material use"
+                                      ? "Material Type"
+                                      : selectedLevel === "Waste disposal"
+                                        ? "Waste Type"
+                                        : selectedLevel ===
+                                            "Business travel- sea"
+                                          ? "Boat / Ship Type"
                                           : selectedLevel ===
-                                              "Business travel- sea"
+                                              "WTT- business travel- sea"
                                             ? "Boat / Ship Type"
                                             : selectedLevel ===
-                                                "WTT- business travel- sea"
-                                              ? "Boat / Ship Type"
+                                                "WTT- pass vehs and travel- land"
+                                              ? "Passenger Vehicle Category"
                                               : selectedLevel ===
-                                                  "WTT- pass vehs and travel- land"
-                                                ? "Passenger Vehicle Category"
+                                                  "Freighting goods"
+                                                ? "Freighting medium"
                                                 : selectedLevel ===
-                                                    "Freighting goods"
+                                                    "WTT- delivery vehs and freight"
                                                   ? "Freighting medium"
                                                   : selectedLevel ===
-                                                      "WTT- delivery vehs and freight"
-                                                    ? "Freighting medium"
+                                                      "Managed assets- vehicles"
+                                                    ? "Vehicle Category"
                                                     : selectedLevel ===
-                                                        "Managed assets- vehicles"
-                                                      ? "Vehicle Category"
+                                                        "Business travel- air"
+                                                      ? "Airport From"
                                                       : selectedLevel ===
-                                                          "Business travel- air"
+                                                          "WTT- business travel- air"
                                                         ? "Airport From"
-                                                        : `${selectedLevel} Type`
-                    : "Fuel Type"}
+                                                        : `${selectedLevel} Type`}
                 </Label>
                 <Select
                   value={fuelTypeValue}
@@ -1572,67 +1616,63 @@ const ActivitesForm = ({
           {showFuelNamesField && (
             <FormControl>
               <Label>
-                {selectedLevel
-                  ? selectedLevel === "Bioenergy"
-                    ? "Bioenergy Fuel Name"
-                    : selectedLevel === "Refrigerant and other"
-                      ? "Refrigerant and other gas name"
-                      : selectedLevel === "Passenger vehicles"
-                        ? "Passenger Vehicle Segment / Size"
-                        : selectedLevel === "Delivery vehicles"
-                          ? "Delivery Vehicle Class / Category"
-                          : selectedLevel === "Passenger Evs"
-                            ? "Passenger EV Segment / Size"
-                            : selectedLevel === "Delivery Evs"
-                              ? "Delivery Vehicle Segment / Size"
-                              : selectedLevel === "Heat and steam"
-                                ? "Onsite / Offsite"
-                                : selectedLevel === "WTT- fuels"
-                                  ? "Fuel Name"
-                                  : selectedLevel === "WTT- bioenergy"
-                                    ? "Bioenergy Fuel Name"
-                                    : selectedLevel ===
-                                        "Electricity TandD for passenger EVs"
-                                      ? "Passenger EV Segment /Size"
-                                      : selectedLevel ===
-                                          "Business travel- land"
-                                        ? "Passenger Vehicle Segment /Size"
-                                        : selectedLevel ===
-                                            "WTT- heat and steam"
-                                          ? "Onsite / Offsite"
-                                          : selectedLevel === "Material use"
-                                            ? "Material Name"
-                                            : selectedLevel === "Waste disposal"
-                                              ? "Waste Name"
+                {selectedLevel && selectedLevel === "Bioenergy"
+                  ? "Bioenergy Fuel Name"
+                  : selectedLevel === "Refrigerant and other"
+                    ? "Refrigerant and other gas name"
+                    : selectedLevel === "Passenger vehicles"
+                      ? "Passenger Vehicle Segment / Size"
+                      : selectedLevel === "Delivery vehicles"
+                        ? "Delivery Vehicle Class / Category"
+                        : selectedLevel === "Passenger Evs"
+                          ? "Passenger EV Segment / Size"
+                          : selectedLevel === "Delivery Evs"
+                            ? "Delivery Vehicle Segment / Size"
+                            : selectedLevel === "Heat and steam"
+                              ? "Onsite / Offsite"
+                              : selectedLevel === "WTT- fuels"
+                                ? "Fuel Name"
+                                : selectedLevel === "WTT- bioenergy"
+                                  ? "Bioenergy Fuel Name"
+                                  : selectedLevel ===
+                                      "Electricity TandD for passenger EVs"
+                                    ? "Passenger EV Segment /Size"
+                                    : selectedLevel === "Business travel- land"
+                                      ? "Passenger Vehicle Segment /Size"
+                                      : selectedLevel === "WTT- heat and steam"
+                                        ? "Onsite / Offsite"
+                                        : selectedLevel === "Material use"
+                                          ? "Material Name"
+                                          : selectedLevel === "Waste disposal"
+                                            ? "Waste Name"
+                                            : selectedLevel ===
+                                                "Business travel- sea"
+                                              ? "Passenger Type"
                                               : selectedLevel ===
-                                                  "Business travel- sea"
+                                                  "WTT- business travel- sea"
                                                 ? "Passenger Type"
                                                 : selectedLevel ===
-                                                    "WTT- business travel- sea"
-                                                  ? "Passenger Type"
+                                                    "WTT- pass vehs and travel- land"
+                                                  ? "Passenger Vehicle Segment / Size"
                                                   : selectedLevel ===
-                                                      "WTT- pass vehs and travel- land"
-                                                    ? "Passenger Vehicle Segment / Size"
+                                                      "Freighting goods"
+                                                    ? "Class / Type / Haul"
                                                     : selectedLevel ===
-                                                        "Freighting goods"
+                                                        "WTT- delivery vehs and freight"
                                                       ? "Class / Type / Haul"
                                                       : selectedLevel ===
-                                                          "WTT- delivery vehs and freight"
-                                                        ? "Class / Type / Haul"
+                                                          "Hotel stay"
+                                                        ? "Name of Country"
                                                         : selectedLevel ===
-                                                            "Hotel stay"
-                                                          ? "Name of Country"
+                                                            "Managed assets- vehicles"
+                                                          ? "Vehicle Segment / Size"
                                                           : selectedLevel ===
-                                                              "Managed assets- vehicles"
-                                                            ? "Vehicle Segment / Size"
+                                                              "Business travel- air"
+                                                            ? "Airport To"
                                                             : selectedLevel ===
-                                                                "Business travel- air"
+                                                                "WTT- business travel- air"
                                                               ? "Airport To"
-                                                              : selectedLevel ===
-                                                                  "WTT- business travel- air"
-                                                                ? "Distance type"
-                                                                : `${selectedLevel} Name`
-                  : "Fuel Name"}
+                                                              : `${selectedLevel} Name`}
               </Label>
               <Select
                 value={fuelNameValue}
@@ -1661,13 +1701,12 @@ const ActivitesForm = ({
                       ? "Capacity"
                       : // : selectedLevel === "Business travel- air"
                         // ? "Class"
-                        selectedLevel === "WTT- business travel- air"
-                        ? "Class"
-                        : "Level 4"
+                        // selectedLevel === "WTT- business travel- air"
+                        // ? "Class"
+                        "Level 4"
                   : "Level 4"}
               </Label>
               <Select
-                className="w-full bg-not-white self-stretch h-10 rounded-lg overflow-hidden shrink-0 flex flex-row items-center justify-start pt-2.5 px-3 pb-[9px] box-border font-poppins text-sm min-w-[248px] z-[1] border-[1px] border-solid border-slate-600"
                 onChange={(e) => setLevel4Value(e.target.value)}
                 value={level4Value}
               >
@@ -1687,40 +1726,41 @@ const ActivitesForm = ({
           {showLevel5Field && (
             <FormControl>
               <Label>
-                {selectedLevel
-                  ? selectedLevel === "Passenger vehicles"
-                    ? "Fuel Type"
-                    : selectedLevel === "Delivery vehicles"
-                      ? "Fuel Type / Laden Percent"
-                      : selectedLevel === "Passenger Evs"
-                        ? "EV Type"
-                        : selectedLevel === "Delivery Evs"
-                          ? "Fuel Type"
-                          : selectedLevel ===
-                              "Electricity TandD for passenger EVs"
-                            ? "EV Type"
-                            : selectedLevel === "Business travel- land"
-                              ? "Fuel Type"
-                              : selectedLevel === "Material use"
-                                ? "Source of material"
-                                : selectedLevel === "Waste disposal"
-                                  ? "Waste Treatment Type"
-                                  : selectedLevel ===
-                                      "WTT- pass vehs and travel- land"
-                                    ? "Fuel Type"
-                                    : selectedLevel === "Freighting goods"
+                {selectedLevel && selectedLevel === "Passenger vehicles"
+                  ? "Fuel Type"
+                  : selectedLevel === "Delivery vehicles"
+                    ? "Fuel Type / Laden Percent"
+                    : selectedLevel === "Passenger Evs"
+                      ? "EV Type"
+                      : selectedLevel === "Delivery Evs"
+                        ? "Fuel Type"
+                        : selectedLevel ===
+                            "Electricity TandD for passenger EVs"
+                          ? "EV Type"
+                          : selectedLevel === "Business travel- land"
+                            ? "Fuel Type"
+                            : selectedLevel === "Material use"
+                              ? "Source of material"
+                              : selectedLevel === "Waste disposal"
+                                ? "Waste Treatment Type"
+                                : selectedLevel ===
+                                    "WTT- pass vehs and travel- land"
+                                  ? "Fuel Type"
+                                  : selectedLevel === "Freighting goods"
+                                    ? "Fuel / Laden"
+                                    : selectedLevel ===
+                                        "WTT- delivery vehs and freight"
                                       ? "Fuel / Laden"
                                       : selectedLevel ===
-                                          "WTT- delivery vehs and freight"
-                                        ? "Fuel / Laden"
+                                          "Managed assets- vehicles"
+                                        ? "Fuel Type / Laden"
                                         : selectedLevel ===
-                                            "Managed assets- vehicles"
-                                          ? "Fuel Type / Laden"
+                                            "Business travel- air"
+                                          ? "Class"
                                           : selectedLevel ===
-                                              "Business travel- air"
+                                              "WTT- business travel- air"
                                             ? "Class"
-                                            : "Level 5"
-                  : "Level 5"}
+                                            : "Level 5"}
               </Label>
               <Select
                 value={level5Value}
@@ -1757,36 +1797,37 @@ const ActivitesForm = ({
           </FormControl>
 
           {/* Quantity */}
-          {selectedLevel !== "Business travel- air" && (
-            <FormControl>
-              <Label>
-                {selectedLevel
-                  ? selectedLevel === "Passenger vehicles" ||
-                    selectedLevel === "Delivery vehicles" ||
-                    selectedLevel === "Passenger Evs" ||
-                    selectedLevel === "Delivery Evs" ||
-                    selectedLevel === "Electricity TandD for passenger EVs" ||
-                    selectedLevel === "Business travel- land" ||
-                    selectedLevel === "Business travel- sea" ||
-                    selectedLevel === "WTT- business travel- sea" ||
-                    selectedLevel === "WTT- pass vehs and travel- land" ||
-                    selectedLevel === "Managed assets- vehicles" ||
-                    selectedLevel === "Business travel- air" ||
-                    selectedLevel === "WTT- business travel- air"
-                    ? "Distance Travelled"
-                    : selectedLevel === "Hotel stay"
-                      ? "Number of Nights"
-                      : "Quantity"
-                  : "Quantity"}
-              </Label>
-              <Input
-                type="number"
-                value={quantityValue}
-                onChange={(e) => setQuantityValue(e.target.value)}
-                placeholder="Enter Quantity"
-              />
-            </FormControl>
-          )}
+          {selectedLevel !== "Business travel- air" &&
+            selectedLevel !== "WTT- business travel- air" && (
+              <FormControl>
+                <Label>
+                  {selectedLevel
+                    ? selectedLevel === "Passenger vehicles" ||
+                      selectedLevel === "Delivery vehicles" ||
+                      selectedLevel === "Passenger Evs" ||
+                      selectedLevel === "Delivery Evs" ||
+                      selectedLevel === "Electricity TandD for passenger EVs" ||
+                      selectedLevel === "Business travel- land" ||
+                      selectedLevel === "Business travel- sea" ||
+                      selectedLevel === "WTT- business travel- sea" ||
+                      selectedLevel === "WTT- pass vehs and travel- land" ||
+                      selectedLevel === "Managed assets- vehicles" ||
+                      selectedLevel === "Business travel- air" ||
+                      selectedLevel === "WTT- business travel- air"
+                      ? "Distance Travelled"
+                      : selectedLevel === "Hotel stay"
+                        ? "Number of Nights"
+                        : "Quantity"
+                    : "Quantity"}
+                </Label>
+                <Input
+                  type="number"
+                  value={quantityValue}
+                  onChange={(e) => setQuantityValue(e.target.value)}
+                  placeholder="Enter Quantity"
+                />
+              </FormControl>
+            )}
         </div>
 
         {/* ------------------------------------------------- */}
