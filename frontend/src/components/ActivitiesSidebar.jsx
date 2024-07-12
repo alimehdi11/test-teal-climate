@@ -144,7 +144,7 @@ const ActivitiesSidebar = ({
       </div>
 
       {/* List */}
-      <ul className="list-none m-0 my-4 p-0 flex flex-col gap-y-4">
+      <ul className="list-none m-0 my-4 md:mb-0 p-0 flex flex-col gap-y-4">
         {filteredScopes.map((level, index) => (
           <li
             key={index}

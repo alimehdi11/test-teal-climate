@@ -8,7 +8,7 @@ const Layout = ({ sidebarContent, mainContent, className = "" }) => {
         "flex flex-nowrap w-full relative pt-4 px-4 gap-x-4 " + className
       ).trim()}
       style={{
-        height: "calc(100vh - 64px)",
+        minHeight: "calc(100vh - 64px)",
       }}
     >
       <Sidebar>{sidebarContent}</Sidebar>

@@ -229,7 +229,10 @@ const ActivitesForm = ({
         item.level1 === selectedLevel &&
         item.level2 === fuelTypeValue &&
         item.level3 === fuelNameValue &&
-        item.uom === unitOfMeasurementValue
+        item.uom === unitOfMeasurementValue &&
+        (selectedLevel === "Material use" || selectedLevel === "Waste disposal"
+          ? item.level5 === level5Value
+          : true)
       ) {
         if (item.ghg === ghgValues[0]) {
           co2e = item.ghgconversion;

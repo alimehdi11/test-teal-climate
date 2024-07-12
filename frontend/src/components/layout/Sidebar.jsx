@@ -11,7 +11,12 @@ const Sidebar = ({ children }) => {
         (sidebarVisible ? "translate-x-0" : "")
       ).trim()}
     >
-      <div className="h-full overflow-y-auto hide-scroll px-4 pb-16 md:px-0 md:pb-0">
+      <div
+        className="h-full overflow-y-auto hide-scroll px-4 md:px-0"
+        style={{
+          height: "calc(100vh - 64px - 16px)",
+        }}
+      >
         {children}
       </div>
 
