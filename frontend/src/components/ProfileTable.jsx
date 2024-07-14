@@ -3,6 +3,15 @@ import { request } from "../utils/request.js";
 import trashIcon from "../assets/trash-icon.svg";
 import editIcon from "../assets/edit-icon.svg";
 import { Link } from "react-router-dom";
+import {
+  TableContainer,
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "./ui/Table.jsx";
 
 const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
   const handleDelete = (id) => {
@@ -25,113 +34,42 @@ const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
   };
 
   return (
-    <div className="mx-4 my-4 hide-scroll border border-slate-500 rounded-lg overflow-x-auto shadow-2xl">
-      <table className="border-0">
-        <thead>
-          <tr className="bg-tc-blue text-white border-slate-500">
-            <th className="border-t-0 border-slate-500 border-s-0">S.No</th>
-            <th className="border-t-0 border-slate-500">Business Unit</th>
-            <th className="border-t-0 border-slate-500">Continent</th>
-            <th className="border-t-0 border-slate-500">Country</th>
-            <th className="border-t-0 border-slate-500">Region</th>
-            <th className="border-t-0 border-slate-500">Employees</th>
-            <th className="border-t-0 border-slate-500">Production</th>
-            <th className="border-t-0 border-slate-500">Revenue</th>
-            <th className="border-t-0 border-slate-500">Notes</th>
-            <th className="border-t-0 border-slate-500">Partnership</th>
-            <th className="border-t-0 border-slate-500 border-e-0">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+    <TableContainer className="my-4">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {[
+              "S.No",
+              "Business Unit",
+              "Continent",
+              "Country",
+              "Region",
+              "Employees",
+              "Production",
+              "Revenue",
+              "Notes",
+              "Partnership",
+              "Actions",
+            ].map((item) => (
+              <TableHead>{item}</TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {profileData.length > 0 &&
             profileData.map((profile, index) => (
-              <tr className="border-slate-500">
-                <td
-                  className={
-                    "border-slate-500 border-s-0" +
-                    (index === profileData.length - 1 ? " border-b-0" : "")
-                  }
-                >
-                  {index + 1}
-                </td>
-                <td
-                  className={
-                    "border-slate-500" +
-                    (index === profileData.length - 1 ? " border-b-0" : "")
-                  }
-                >
-                  {profile.unitname}
-                </td>
-                <td
-                  className={
-                    "border-slate-500" +
-                    (index === profileData.length - 1 ? " border-b-0" : "")
-                  }
-                >
-                  {profile.continent}
-                </td>
-                <td
-                  className={
-                    "border-slate-500" +
-                    (index === profileData.length - 1 ? " border-b-0" : "")
-                  }
-                >
-                  {profile.countries}
-                </td>
-                <td
-                  className={
-                    "border-slate-500" +
-                    (index === profileData.length - 1 ? " border-b-0" : "")
-                  }
-                >
-                  {profile.region}
-                </td>
-                <td
-                  className={
-                    "border-slate-500" +
-                    (index === profileData.length - 1 ? " border-b-0" : "")
-                  }
-                >
-                  {profile.employees}
-                </td>
-                <td
-                  className={
-                    "border-slate-500" +
-                    (index === profileData.length - 1 ? " border-b-0" : "")
-                  }
-                >
-                  {profile.production}
-                </td>
-                <td
-                  className={
-                    "border-slate-500" +
-                    (index === profileData.length - 1 ? " border-b-0" : "")
-                  }
-                >
-                  {profile.revenue}
-                </td>
-                <td
-                  className={
-                    "border-slate-500" +
-                    (index === profileData.length - 1 ? " border-b-0" : "")
-                  }
-                >
-                  {profile.notes}
-                </td>
-                <td
-                  className={
-                    "border-slate-500" +
-                    (index === profileData.length - 1 ? " border-b-0" : "")
-                  }
-                >
-                  {profile.partnership}
-                </td>
-                <td
-                  className={
-                    "border-slate-500 border-e-0" +
-                    (index === profileData.length - 1 ? " border-b-0" : "")
-                  }
-                >
+              <TableRow>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{profile.unitname}</TableCell>
+                <TableCell>{profile.continent}</TableCell>
+                <TableCell>{profile.countries}</TableCell>
+                <TableCell>{profile.region}</TableCell>
+                <TableCell>{profile.employees}</TableCell>
+                <TableCell>{profile.production}</TableCell>
+                <TableCell>{profile.revenue}</TableCell>
+                <TableCell>{profile.notes}</TableCell>
+                <TableCell>{profile.partnership}</TableCell>
+                <TableCell>
                   <div className="flex justify-center gap-x-1">
                     <Link
                       to={`/profile/${profile.id}/edit`}
@@ -140,21 +78,21 @@ const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
                     >
                       <img
                         src={editIcon}
-                        className="p-1 rounded hover:bg-slate-300 w-7 h-7"
+                        className="p-1 rounded hover:bg-slate-300 size-7"
                       />
                     </Link>
                     <img
                       src={trashIcon}
-                      className="p-1 rounded hover:bg-slate-300 w-7 h-7"
+                      className="p-1 rounded hover:bg-slate-300 size-7"
                       onClick={handleDelete(profile.id)}
                     />
                   </div>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-        </tbody>
-      </table>
-    </div>
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

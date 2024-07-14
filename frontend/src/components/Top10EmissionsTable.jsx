@@ -1,6 +1,15 @@
 import { useState, useEffect, useContext } from "react";
 import { getBearerToken } from "../utils/auth.js";
 import { UserContext } from "../contexts/UserContext.jsx";
+import {
+  TableContainer,
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "../components/ui/Table.jsx";
 
 const Top10EmissionsTable = () => {
   const [top10Emissions, setTop10Emissions] = useState([]);
@@ -46,68 +55,49 @@ const Top10EmissionsTable = () => {
   }, []);
 
   return (
-    <div className="mx-4 my-4 hide-scroll border border-slate-500 rounded-lg overflow-x-auto shadow-2xl">
-      <table className="border-0">
-        <thead>
-          <tr className="bg-tc-blue text-white border-slate-500">
-            <th className="border-t-0 border-slate-500 border-s-0">S.No</th>
-            <th className="border-t-0 border-slate-500">Scope</th>
-            <th className="border-t-0 border-slate-500">Business Unit</th>
-            <th className="border-t-0 border-slate-500">Scope Category</th>
-            <th className="border-t-0 border-slate-500">Level 1</th>
-            <th className="border-t-0 border-slate-500">Level 2</th>
-            <th className="border-t-0 border-slate-500">Level 3</th>
-            <th className="border-t-0 border-slate-500">Level 4</th>
-            {/* <th className="border-t-0">Level 5</th> */}
-            <th className="border-t-0 border-slate-500">uom</th>
-            <th className="border-t-0 border-slate-500">Quantity</th>
-            <th className="border-t-0 border-slate-500">
-              kg CO<span style={{ fontSize: "0.6em" }}>2</span>e
-            </th>
-            {/* <th className="border-t-0">
-              kg CO<span style={{ fontSize: "0.6em" }}>2</span>e of CO
-              <span style={{ fontSize: "0.6em" }}>2</span>
-            </th>
-            <th className="border-t-0">
-              kg CO<span style={{ fontSize: "0.6em" }}>2</span>e of CH
-              <span style={{ fontSize: "0.6em" }}>4</span>
-            </th>
-            <th className="border-t-0">
-              kg CO<span style={{ fontSize: "0.6em" }}>2</span>e of N
-              <span style={{ fontSize: "0.6em" }}>2</span>O
-            </th> */}
-          </tr>
-        </thead>
-        <tbody>
+    <TableContainer className="my-4">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {[
+              "S.No",
+              "Scope",
+              "Business Unit",
+              "Scope Category",
+              "Level 1",
+              "Level 2",
+              "Level 3",
+              "Level 4",
+              "uom",
+              "Quantity",
+              <>
+                kg CO<span style={{ fontSize: "0.6em" }}>2</span>e
+              </>,
+            ].map((item) => (
+              <TableHead>{item}</TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {top10Emissions.length > 0 &&
             top10Emissions.map((item, index) => (
-              <tr className="border-slate-500">
-                <td className="border-slate-500 border-s-0">{index + 1}</td>
-                <td className="border-slate-500">{item.scope || "-"}</td>
-                <td className="border-slate-500">{item.businessunit || "-"}</td>
-                <td className="border-slate-500">
-                  {item.fuel_category || "-"}
-                </td>
-                <td className="border-slate-500">{item.level1 || "-"}</td>
-                <td className="border-slate-500">{item.level2 || "-"}</td>
-                <td className="border-slate-500">{item.level3 || "-"}</td>
-                <td className="border-slate-500">{item.level4 || "-"}</td>
-                {/* <td className="border-slate-500">{item.level5 || "-"}</td> */}
-                <td className="border-slate-500">{item.uom || "-"}</td>
-                <td className="border-slate-500">{item.quantity || "-"}</td>
-                <td className="border-slate-500 border-e-0">
-                  {item.co2e.toFixed(2) || "-"}
-                </td>
-                {/* <td className="border-slate-500">{item.co2eofco2.toFixed(2) || "-"}</td>
-                <td className="border-slate-500">{item.co2eofch4.toFixed(2) || "-"}</td>
-                <td className="border-slate-500" className="border-e-0">
-                  {item.co2eofn2o.toFixed(2) || "-"}
-                </td> */}
-              </tr>
+              <TableRow>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{item.scope || "-"}</TableCell>
+                <TableCell>{item.businessunit || "-"}</TableCell>
+                <TableCell>{item.fuel_category || "-"}</TableCell>
+                <TableCell>{item.level1 || "-"}</TableCell>
+                <TableCell>{item.level2 || "-"}</TableCell>
+                <TableCell>{item.level3 || "-"}</TableCell>
+                <TableCell>{item.level4 || "-"}</TableCell>
+                <TableCell>{item.uom || "-"}</TableCell>
+                <TableCell>{item.quantity || "-"}</TableCell>
+                <TableCell>{item.co2e.toFixed(2) || "-"}</TableCell>
+              </TableRow>
             ))}
-        </tbody>
-      </table>
-    </div>
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
