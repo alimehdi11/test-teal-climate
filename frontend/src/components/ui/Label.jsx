@@ -1,6 +1,9 @@
 const Label = ({ className = "", children, ...props }) => {
   return (
-    <label className={("font-medium " + className).trim()} {...props}>
+    <label
+      className={("font-medium leading-none " + className).trim()}
+      {...props}
+    >
       {children}
     </label>
   );
