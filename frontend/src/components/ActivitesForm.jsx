@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useParams, useNavigate, Form } from "react-router-dom";
-import { getBearerToken } from "../utils/auth.js";
+import { useParams, useNavigate } from "react-router-dom";
 import { request } from "../utils/request.js";
 import Button from "./ui/Button.jsx";
 import FormControl from "./FormControl.jsx";
 import Input from "./ui/Input.jsx";
 import Label from "./ui/Label.jsx";
 import Select from "./ui/Select.jsx";
+import { DataContext } from "./../contexts/DataContext.jsx";
 
 const ActivitesForm = ({
   selectedScope,
@@ -27,10 +27,9 @@ const ActivitesForm = ({
   const [level4Value, setLevel4Value] = useState("");
   const [level5Value, setLevel5Value] = useState("");
 
-  const [activitesData, setActivitesData] = useState(null);
-
+  // const [activitiesData, setActivitiesData] = useState(null);
   const [businessUnits, setBusinessUnits] = useState([]);
-  const [scopeCategoriesData, setScopeCategoriesData] = useState(null);
+  // const [scopeCategoriesData, setScopeCategoriesData] = useState(null);
 
   const [unitOfMeasurements, setUnitOfMeasurements] = useState([]);
   const [scopeCategories, setScopeCategories] = useState([]);
@@ -56,15 +55,16 @@ const ActivitesForm = ({
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const data = useContext(DataContext);
+
+  const activitiesData = data.activitiesData;
+  const scopeCategoriesData = data.scopeCategoriesData;
+
   const fetchBusinessUnit = async () => {
     try {
-      const response = await fetch(
+      const response = await request(
         `${import.meta.env.VITE_API_BASE_URL}/companies/${userId}?column=unitname`,
-        {
-          headers: {
-            authorization: getBearerToken(),
-          },
-        }
+        "GET"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -75,66 +75,58 @@ const ActivitesForm = ({
     }
   };
 
-  const fetchActivitesData = async () => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/activitydata`,
-        {
-          headers: {
-            authorization: getBearerToken(),
-          },
-        }
-      );
+  // const fetchActivitesData = async () => {
+  //   try {
+  //     const response = await request(
+  //       `${import.meta.env.VITE_API_BASE_URL}/activitydata`,
+  //       "GET"
+  //     );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const jsonData = await response.json();
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch data");
+  //     }
+  //     const jsonData = await response.json();
 
-      // const uniqueFuels = [
-      //   ...new Set(jsonData.companiesdatas.map((item) => item.fuel_category)),
-      // ];
+  //     // const uniqueFuels = [
+  //     //   ...new Set(jsonData.companiesdatas.map((item) => item.fuel_category)),
+  //     // ];
 
-      // const uniqueFuelTypes = [
-      //   ...new Set(jsonData.datas.map((item) => item.level2)),
-      // ];
+  //     // const uniqueFuelTypes = [
+  //     //   ...new Set(jsonData.datas.map((item) => item.level2)),
+  //     // ];
 
-      // const uniqueFuelNames = [
-      //   ...new Set(jsonData.datas.map((item) => item.level3)),
-      // ];
+  //     // const uniqueFuelNames = [
+  //     //   ...new Set(jsonData.datas.map((item) => item.level3)),
+  //     // ];
 
-      // const uniqueUOM = [...new Set(jsonData.datas.map((item) => item.uom))];
+  //     // const uniqueUOM = [...new Set(jsonData.datas.map((item) => item.uom))];
 
-      // const businessUnit = [
-      //   ...new Set(jsonData.companiesdatas.map((item) => item.businessunit)),
-      // ];
+  //     // const businessUnit = [
+  //     //   ...new Set(jsonData.companiesdatas.map((item) => item.businessunit)),
+  //     // ];
 
-      return jsonData;
-    } catch (error) {
-      console.error("Error fetching Fuel Category:", error);
-    }
-  };
+  //     return jsonData;
+  //   } catch (error) {
+  //     console.error("Error fetching Fuel Category:", error);
+  //   }
+  // };
 
-  const fetchScopeCategoriesData = async () => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/categories`,
-        {
-          headers: {
-            authorization: getBearerToken(),
-          },
-        }
-      );
+  // const fetchScopeCategoriesData = async () => {
+  //   try {
+  //     const response = await request(
+  //       `${import.meta.env.VITE_API_BASE_URL}/categories`,
+  //       "GET"
+  //     );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const jsonData = await response.json();
-      return jsonData;
-    } catch (error) {
-      console.error("Error fetching categories data:", error);
-    }
-  };
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch data");
+  //     }
+  //     const jsonData = await response.json();
+  //     return jsonData;
+  //   } catch (error) {
+  //     console.error("Error fetching categories data:", error);
+  //   }
+  // };
 
   const fetchAirports = async () => {
     try {
@@ -166,7 +158,7 @@ const ActivitesForm = ({
 
   const filterUnitOfMeasurements = () => {
     let unitsOfMeasurement = [];
-    activitesData?.datas.forEach((item) => {
+    activitiesData?.datas.forEach((item) => {
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -183,7 +175,8 @@ const ActivitesForm = ({
 
   const filterFuelTypes = () => {
     let fuelTypes = [];
-    activitesData?.datas.forEach((item) => {
+    console.log("+++", activitiesData);
+    activitiesData?.datas.forEach((item) => {
       if (item.scope === selectedScope && item.level1 === selectedLevel) {
         fuelTypes.push(item.level2);
       }
@@ -194,7 +187,7 @@ const ActivitesForm = ({
 
   const filterFuelNames = () => {
     let fuelNames = [];
-    activitesData?.datas.forEach((item) => {
+    activitiesData?.datas.forEach((item) => {
       if (
         item.level2 === fuelTypeValue &&
         item.level1 === selectedLevel &&
@@ -221,8 +214,8 @@ const ActivitesForm = ({
       "kg CO2e of N2O per unit",
     ];
 
-    for (let i = 0; i < activitesData?.datas.length; i++) {
-      const item = activitesData?.datas[i];
+    for (let i = 0; i < activitiesData?.datas.length; i++) {
+      const item = activitiesData?.datas[i];
 
       if (
         item.scope === selectedScope &&
@@ -274,8 +267,8 @@ const ActivitesForm = ({
       "kg CO2e of N2O per unit",
     ];
 
-    for (let i = 0; i < activitesData?.datas.length; i++) {
-      const item = activitesData?.datas[i];
+    for (let i = 0; i < activitiesData?.datas.length; i++) {
+      const item = activitiesData?.datas[i];
 
       if (
         item.scope === selectedScope &&
@@ -323,8 +316,8 @@ const ActivitesForm = ({
       "kg CO2e of N2O per unit",
     ];
 
-    for (let i = 0; i < activitesData?.datas.length; i++) {
-      const item = activitesData?.datas[i];
+    for (let i = 0; i < activitiesData?.datas.length; i++) {
+      const item = activitiesData?.datas[i];
 
       if (
         item.scope === selectedScope &&
@@ -394,13 +387,9 @@ const ActivitesForm = ({
 
   const fetchCompanyData = async () => {
     try {
-      const response = await fetch(
+      const response = await request(
         `${import.meta.env.VITE_API_BASE_URL}/companiesdata/${userId}`,
-        {
-          headers: {
-            authorization: getBearerToken(),
-          },
-        }
+        "GET"
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -414,13 +403,9 @@ const ActivitesForm = ({
 
   const fetchCompanyDataOfGivenId = async (id) => {
     try {
-      const response = await fetch(
+      const response = await request(
         `${import.meta.env.VITE_API_BASE_URL}/companiesdata/activites/${id}`,
-        {
-          headers: {
-            authorization: getBearerToken(),
-          },
-        }
+        "GET"
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -434,7 +419,7 @@ const ActivitesForm = ({
 
   const filterLevel5BasedOnScopeAndLevel1 = () => {
     let level5 = [];
-    activitesData?.datas.forEach((item) => {
+    activitiesData?.datas.forEach((item) => {
       if (
         item.scope === selectedScope &&
         // here selectedLevel === Electricity
@@ -530,13 +515,9 @@ const ActivitesForm = ({
       //  fetching companies data and filtering country from that based on business unit is selected
       const fetchCompanyDataAndFilterCountryAndRegion = async () => {
         try {
-          const response = await fetch(
+          const response = await request(
             `${import.meta.env.VITE_API_BASE_URL}/companies/${userId}`,
-            {
-              headers: {
-                authorization: getBearerToken(),
-              },
-            }
+            "GET"
           );
           if (!response.ok) {
             throw new Error(`Failed to fetch data: ${response.statusText}`);
@@ -557,8 +538,8 @@ const ActivitesForm = ({
       };
 
       const filterLevel2 = (payload) => {
-        for (let index = 0; index < activitesData?.datas.length; index++) {
-          const item = activitesData?.datas[index];
+        for (let index = 0; index < activitiesData?.datas.length; index++) {
+          const item = activitiesData?.datas[index];
           if (
             item.scope === selectedScope &&
             item.level1 === selectedLevel &&
@@ -570,7 +551,7 @@ const ActivitesForm = ({
           }
         }
         // let level2 = [];
-        // activitesData?.datas.forEach((item) => {
+        // activitiesData?.datas.forEach((item) => {
         //   if (
         //     item.scope === selectedScope &&
         //     item.level1 === selectedLevel &&
@@ -653,7 +634,7 @@ const ActivitesForm = ({
       if (selectedLevel === "WTT- district heat and steam distribution") {
         payload.level3 = ((payload) => {
           let level3 = [];
-          activitesData?.datas.forEach((item) => {
+          activitiesData?.datas.forEach((item) => {
             if (
               item.scope === payload.scope &&
               item.level1 === payload.level1 &&
@@ -759,14 +740,11 @@ const ActivitesForm = ({
     // console.table(payload);
     // console.table(marketBasedPayload);
     // return;
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/companiesdata`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: getBearerToken(),
-      },
-      body: JSON.stringify(payload),
-    })
+    request(
+      `${import.meta.env.VITE_API_BASE_URL}/companiesdata`,
+      "POST",
+      payload
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error();
@@ -792,14 +770,11 @@ const ActivitesForm = ({
      * For Scope 2 market based
      */
     if (selectedScope === "Scope 2" && marketBased) {
-      fetch(`${import.meta.env.VITE_API_BASE_URL}/companiesdata`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: getBearerToken(),
-        },
-        body: JSON.stringify(marketBasedPayload),
-      })
+      request(
+        `${import.meta.env.VITE_API_BASE_URL}/companiesdata`,
+        "POST",
+        marketBasedPayload
+      )
         .then((response) => {
           if (!response.ok) {
             throw new Error();
@@ -867,15 +842,11 @@ const ActivitesForm = ({
 
     // console.table(payload);
     // return;
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/companiesdata/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        accept: "application/json",
-        authorization: getBearerToken(),
-      },
-      body: JSON.stringify(payload),
-    })
+    request(
+      `${import.meta.env.VITE_API_BASE_URL}/companiesdata/${id}`,
+      "PUT",
+      payload
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error();
@@ -900,7 +871,7 @@ const ActivitesForm = ({
 
   const filterLevel4Options = () => {
     let level4Options = [];
-    activitesData?.datas.forEach((item) => {
+    activitiesData?.datas.forEach((item) => {
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -918,7 +889,7 @@ const ActivitesForm = ({
 
   const filterLevel5Options = () => {
     let level5 = [];
-    activitesData?.datas.forEach((item) => {
+    activitiesData?.datas.forEach((item) => {
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -936,8 +907,8 @@ const ActivitesForm = ({
 
   const isFuelNamesAvaialble = () => {
     // let fuelNames = [];
-    for (let i = 0; i < activitesData?.datas.length; i++) {
-      const item = activitesData?.datas[i];
+    for (let i = 0; i < activitiesData?.datas.length; i++) {
+      const item = activitiesData?.datas[i];
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -956,8 +927,8 @@ const ActivitesForm = ({
   };
 
   const isLevel4Available = () => {
-    for (let i = 0; i < activitesData?.datas.length; i++) {
-      const item = activitesData?.datas[i];
+    for (let i = 0; i < activitiesData?.datas.length; i++) {
+      const item = activitiesData?.datas[i];
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -968,7 +939,7 @@ const ActivitesForm = ({
       }
     }
     // let level4 = [];
-    // activitesData?.datas.forEach((item) => {
+    // activitiesData?.datas.forEach((item) => {
     //   if (
     //     item.scope === selectedScope &&
     //     item.level1 === selectedLevel
@@ -987,8 +958,8 @@ const ActivitesForm = ({
   };
 
   const isLevel5Available = () => {
-    for (let i = 0; i < activitesData?.datas.length; i++) {
-      const item = activitesData?.datas[i];
+    for (let i = 0; i < activitiesData?.datas.length; i++) {
+      const item = activitiesData?.datas[i];
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -1000,7 +971,7 @@ const ActivitesForm = ({
     }
     return false;
     // let level5 = [];
-    // activitesData?.datas.forEach((item) => {
+    // activitiesData?.datas.forEach((item) => {
     //   if (
     //     item.scope === selectedScope &&
     //     item.level1 === selectedLevel
@@ -1019,7 +990,7 @@ const ActivitesForm = ({
 
   const filterUnitOfMeasurementsBasedOnScopeAndLevel1 = () => {
     let unitsOfMeasurement = [];
-    activitesData?.datas.forEach((item) => {
+    activitiesData?.datas.forEach((item) => {
       if (item.scope === selectedScope && item.level1 === selectedLevel) {
         unitsOfMeasurement.push(item.uom);
       }
@@ -1030,7 +1001,7 @@ const ActivitesForm = ({
 
   const filterLevel3BasedOnScopeAndLevel1 = () => {
     let level3 = [];
-    activitesData?.datas.forEach((item) => {
+    activitiesData?.datas.forEach((item) => {
       if (
         item.scope === selectedScope &&
         // here selectedLevel === Electricity
@@ -1076,8 +1047,8 @@ const ActivitesForm = ({
       "kg CO2e of N2O per unit",
     ];
 
-    for (let i = 0; i < activitesData?.datas.length; i++) {
-      const item = activitesData?.datas[i];
+    for (let i = 0; i < activitiesData?.datas.length; i++) {
+      const item = activitiesData?.datas[i];
 
       if (
         item.scope === selectedScope &&
@@ -1113,20 +1084,18 @@ const ActivitesForm = ({
   };
 
   useEffect(() => {
-    // data comes on second render because userId is coming from parent component
-    // if (userId) {
-    fetchActivitesData().then((activitiesData) => {
-      setActivitesData(activitiesData);
-    });
+    // fetchActivitesData().then((activitiesData) => {
+    //   setActivitiesData(activitiesData);
+    // });
+    // setActivitiesData(data.activitiesData);
     fetchBusinessUnit().then((businessUnits) => {
       businessUnits = businessUnits.map((item) => item.unitname);
       setBusinessUnits(businessUnits);
     });
-    fetchScopeCategoriesData().then((scopeCategoriesData) => {
-      setScopeCategoriesData(scopeCategoriesData);
-    });
-    // }
-    // }, [userId]);
+    // fetchScopeCategoriesData().then((scopeCategoriesData) => {
+    //   setScopeCategoriesData(scopeCategoriesData);
+    // });
+    // setScopeCategoriesData(data.scopeCategoriesData);
   }, []);
 
   useEffect(() => {
@@ -1138,10 +1107,10 @@ const ActivitesForm = ({
       setUnitOfMeasurementValue("");
       setUnitOfMeasurements([]);
     }
-    // initialialy blocking not to filter if scopeCategoriesData is empty
+    // initialialy blocking not to filter if scopeCategoriesData or activitiesData or businessUnits is empty
     if (
       scopeCategoriesData !== null &&
-      activitesData !== null &&
+      activitiesData !== null &&
       businessUnits.length > 0
     ) {
       const scopeCategories = filterScopeCategories();
@@ -1233,7 +1202,7 @@ const ActivitesForm = ({
         // ) {
         const level4Options = (() => {
           let level4Options = [];
-          activitesData?.datas.forEach((item) => {
+          activitiesData?.datas.forEach((item) => {
             if (
               item.scope === selectedScope &&
               item.level1 === selectedLevel &&
@@ -1250,7 +1219,7 @@ const ActivitesForm = ({
         // }
       }
     }
-  }, [selectedLevel, scopeCategoriesData, activitesData, businessUnits]);
+  }, [selectedLevel, /*scopeCategoriesData, activitiesData,*/ businessUnits]);
 
   /**
    * level2
@@ -1372,7 +1341,7 @@ const ActivitesForm = ({
     ) {
       // Filtering level5 options
       let level5 = [];
-      activitesData?.datas.forEach((item) => {
+      activitiesData?.datas.forEach((item) => {
         if (
           item.scope === selectedScope &&
           item.level1 === selectedLevel &&
@@ -1456,7 +1425,7 @@ const ActivitesForm = ({
   }, [unitOfMeasurementValue]);
 
   useEffect(() => {
-    if (id && activitesData) {
+    if (id && activitiesData) {
       fetchCompanyDataOfGivenId(id)
         .then((companyDataOfGivenId) => {
           setSelectedScope(companyDataOfGivenId[0].scope);

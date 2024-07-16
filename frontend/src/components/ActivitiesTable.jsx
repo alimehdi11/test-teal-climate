@@ -98,7 +98,7 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
                 <TableCell>
                   <div className="flex justify-center gap-x-1">
                     <Link
-                      to={`/profile/${item.id}/edit`}
+                      to={`/activities/${item.id}/edit`}
                       className="flex justify-center items-center"
                       onClick={() => setSelectedForm("Portfolio")}
                     >
