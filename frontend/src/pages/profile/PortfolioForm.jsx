@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { request } from "../utils/request.js";
-import Button from "./ui/Button.jsx";
-import FormControl from "./FormControl.jsx";
-import Input from "./ui/Input.jsx";
-import Label from "./ui/Label.jsx";
-import Select from "./ui/Select.jsx";
+import { request } from "../../utils/request.js";
+import Button from "../../components/ui/Button.jsx";
+import FormControl from "../../components/FormControl.jsx";
+import Input from "../../components/ui/Input.jsx";
+import Label from "../../components/ui/Label.jsx";
+import Select from "../../components/ui/Select.jsx";
 
 const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
   const [countries, setCountries] = useState([]);

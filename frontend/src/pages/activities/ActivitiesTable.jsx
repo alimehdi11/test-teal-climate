@@ -1,8 +1,8 @@
-import trashIcon from "../assets/trash-icon.svg";
-import editIcon from "../assets/edit-icon.svg";
+import trashIcon from "../../assets/trash-icon.svg";
+import editIcon from "../../assets/edit-icon.svg";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { request } from "../utils/request.js";
+import { request } from "../../utils/request.js";
 import {
   TableContainer,
   Table,
@@ -11,7 +11,7 @@ import {
   TableHead,
   TableRow,
   TableCell,
-} from "./ui/Table.jsx";
+} from "../../components/ui/Table.jsx";
 
 const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
   const handleDelete = (id) => {
@@ -38,7 +38,7 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
   };
 
   return (
-    <TableContainer className="my-4">
+    <TableContainer>
       <Table>
         <TableHeader>
           <TableRow>

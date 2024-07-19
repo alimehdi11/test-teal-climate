@@ -16,6 +16,7 @@ import { stripeRouter } from "./routes/stripe.routes.js";
 // import { handleWebhookEvents } from "./controllers/webhook.controllers.js";
 import { airportsRouter } from "./routes/airports.routes.js";
 import { electricVehiclesRouter } from "./routes/electricVehicles.routes.js";
+import { eeioRouter } from "./routes/eeio.routes.js";
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use("/subscriptions", verifyToken, subscriptionsRouter);
 app.use("/stripe", verifyToken, stripeRouter);
 app.use("/airports", verifyToken, airportsRouter);
 app.use("/electricVehicles", electricVehiclesRouter);
+app.use("/eeios", verifyToken, eeioRouter);
 
 // TODO : check webhook setup needed or not
 // app.post(

@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from "react";
-import ActivitesForm from "../components/ActivitesForm.jsx";
-import ActivitiesTable from "../components/ActivitiesTable.jsx";
-import ActivitiesSidebar from "../components/ActivitiesSidebar.jsx";
-import Navbar from "../components/Navbar.jsx";
+import ActivitesForm from "./ActivitesForm.jsx";
+import ActivitiesTable from "./ActivitiesTable.jsx";
+import ActivitiesSidebar from "./ActivitiesSidebar.jsx";
+import Navbar from "../../components/Navbar.jsx";
 import { useParams } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { UserContext } from "../contexts/UserContext.jsx";
-import { request } from "../utils/request.js";
-import Layout from "../components/layout/Layout.jsx";
+import { UserContext } from "../../contexts/UserContext.jsx";
+import { request } from "../../utils/request.js";
+import Layout from "../../components/layout/Layout.jsx";
 
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState(null);

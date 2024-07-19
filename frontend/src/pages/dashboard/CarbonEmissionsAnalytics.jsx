@@ -1,8 +1,8 @@
-import TC_PieChartWithPaddingAngle from "./TC_PieChartWithPaddingAngle.jsx";
+import TC_PieChartWithPaddingAngle from "../../components/TC_PieChartWithPaddingAngle.jsx";
 import { useState, useEffect, useContext } from "react";
-import { getBearerToken } from "../utils/auth.js";
-import TC_RadialBarChart from "./TC_RadialBarChart.jsx";
-import { UserContext } from "../contexts/UserContext.jsx";
+import { getBearerToken } from "../../utils/auth.js";
+import TC_RadialBarChart from "../../components/TC_RadialBarChart.jsx";
+import { UserContext } from "../../contexts/UserContext.jsx";
 
 const CarbonEmissionsAnalytics = () => {
   const { user } = useContext(UserContext);

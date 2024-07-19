@@ -2,13 +2,13 @@ import { useState, useEffect, useContext } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams, useNavigate } from "react-router-dom";
-import { request } from "../utils/request.js";
-import Button from "./ui/Button.jsx";
-import FormControl from "./FormControl.jsx";
-import Input from "./ui/Input.jsx";
-import Label from "./ui/Label.jsx";
-import Select from "./ui/Select.jsx";
-import { DataContext } from "./../contexts/DataContext.jsx";
+import { request } from "../../utils/request.js";
+import Button from "../../components/ui/Button.jsx";
+import FormControl from "../../components/FormControl.jsx";
+import Input from "../../components/ui/Input.jsx";
+import Label from "../../components/ui/Label.jsx";
+import Select from "../../components/ui/Select.jsx";
+import { DataContext } from "../../contexts/DataContext.jsx";
 
 const ActivitesForm = ({
   selectedScope,
@@ -27,9 +27,7 @@ const ActivitesForm = ({
   const [level4Value, setLevel4Value] = useState("");
   const [level5Value, setLevel5Value] = useState("");
 
-  // const [activitiesData, setActivitiesData] = useState(null);
   const [businessUnits, setBusinessUnits] = useState([]);
-  // const [scopeCategoriesData, setScopeCategoriesData] = useState(null);
 
   const [unitOfMeasurements, setUnitOfMeasurements] = useState([]);
   const [scopeCategories, setScopeCategories] = useState([]);
@@ -74,59 +72,6 @@ const ActivitesForm = ({
       console.error("Error fetching companies businessunits:", error);
     }
   };
-
-  // const fetchActivitesData = async () => {
-  //   try {
-  //     const response = await request(
-  //       `${import.meta.env.VITE_API_BASE_URL}/activitydata`,
-  //       "GET"
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch data");
-  //     }
-  //     const jsonData = await response.json();
-
-  //     // const uniqueFuels = [
-  //     //   ...new Set(jsonData.companiesdatas.map((item) => item.fuel_category)),
-  //     // ];
-
-  //     // const uniqueFuelTypes = [
-  //     //   ...new Set(jsonData.datas.map((item) => item.level2)),
-  //     // ];
-
-  //     // const uniqueFuelNames = [
-  //     //   ...new Set(jsonData.datas.map((item) => item.level3)),
-  //     // ];
-
-  //     // const uniqueUOM = [...new Set(jsonData.datas.map((item) => item.uom))];
-
-  //     // const businessUnit = [
-  //     //   ...new Set(jsonData.companiesdatas.map((item) => item.businessunit)),
-  //     // ];
-
-  //     return jsonData;
-  //   } catch (error) {
-  //     console.error("Error fetching Fuel Category:", error);
-  //   }
-  // };
-
-  // const fetchScopeCategoriesData = async () => {
-  //   try {
-  //     const response = await request(
-  //       `${import.meta.env.VITE_API_BASE_URL}/categories`,
-  //       "GET"
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch data");
-  //     }
-  //     const jsonData = await response.json();
-  //     return jsonData;
-  //   } catch (error) {
-  //     console.error("Error fetching categories data:", error);
-  //   }
-  // };
 
   const fetchAirports = async () => {
     try {

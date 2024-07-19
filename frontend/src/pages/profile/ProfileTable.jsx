@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
-import { request } from "../utils/request.js";
-import trashIcon from "../assets/trash-icon.svg";
-import editIcon from "../assets/edit-icon.svg";
+import { request } from "../../utils/request.js";
+import trashIcon from "../../assets/trash-icon.svg";
+import editIcon from "../../assets/edit-icon.svg";
 import { Link } from "react-router-dom";
 import {
   TableContainer,
@@ -11,7 +11,7 @@ import {
   TableHead,
   TableRow,
   TableCell,
-} from "./ui/Table.jsx";
+} from "../../components/ui/Table.jsx";
 
 const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
   const handleDelete = (id) => {
@@ -34,7 +34,7 @@ const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
   };
 
   return (
-    <TableContainer className="my-4">
+    <TableContainer>
       <Table>
         <TableHeader>
           <TableRow>

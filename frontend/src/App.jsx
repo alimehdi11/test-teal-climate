@@ -3,13 +3,14 @@ import ProtectedRoute from "./components/ProtectedRoute";
 // Pages
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Activities from "./pages/Activities";
+import Activities from "./pages/activities/Activities";
 import SubscriptionPlans from "./pages/SubscriptionPlans";
 import Checkout from "./pages/Checkout";
 import Completion from "./pages/Completion";
 import Account from "./pages/Account";
-import Profile from "./pages/Profile";
-import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/profile/Profile";
+import Dashboard from "./pages/dashboard/Dashboard";
+import Eeio from "./pages/eeio/Eeio";
 
 function App() {
   return (
@@ -38,6 +39,12 @@ function App() {
           <Route
             path=":id/edit"
             element={<ProtectedRoute Component={Profile} />}
+          />
+        </Route>
+        <Route path="/eeio" element={<ProtectedRoute Component={Eeio} />}>
+          <Route
+            path=":id/:pi/edit"
+            element={<ProtectedRoute Component={Eeio} />}
           />
         </Route>
         <Route

@@ -1,14 +1,14 @@
 import { useEffect, useContext } from "react";
-import ProfileSidebar from "../components/ProfileSidebar.jsx";
-import PortfolioForm from "../components/PortfolioForm.jsx";
-import BasicForm from "../components/BasicForm.jsx";
-import Navbar from "../components/Navbar.jsx";
-import ProfileTable from "../components/ProfileTable.jsx";
+import ProfileSidebar from "./ProfileSidebar.jsx";
+import PortfolioForm from "./PortfolioForm.jsx";
+import BasicForm from "./BasicForm.jsx";
+import Navbar from "../../components/Navbar.jsx";
+import ProfileTable from "./ProfileTable.jsx";
 import { useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { UserContext } from "../contexts/UserContext.jsx";
-import { request } from "../utils/request.js";
-import Layout from "../components/layout/Layout.jsx";
+import { UserContext } from "../../contexts/UserContext.jsx";
+import { request } from "../../utils/request.js";
+import Layout from "../../components/layout/Layout.jsx";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState([]);

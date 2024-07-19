@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { request } from "../utils/request.js";
-import Button from "./ui/Button.jsx";
-import Input from "./ui/Input.jsx";
+import { request } from "../../utils/request.js";
+import Button from "../../components/ui/Button.jsx";
+import Input from "../../components/ui/Input.jsx";
 
 const ActivitiesSidebar = ({
   selectedScope,
@@ -130,7 +130,7 @@ const ActivitiesSidebar = ({
       <Button className="py-3 w-full">Spend Base Scope 3</Button>
 
       <div className="mt-4">
-        <h2 className="m-0 mb-4 text-center  font-extrabold text-2xl">
+        <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">
           Select Activity
         </h2>
         <div className="relative">

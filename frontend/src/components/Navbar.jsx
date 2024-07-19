@@ -9,6 +9,8 @@ import profileNavLinkIconBlack from "../assets/profile-nav-link-icon-black.svg";
 import profileNavLinkIconWhite from "../assets/profile-nav-link-icon-white.svg";
 import activitiesNavLinkIconBlack from "../assets/dashboard-nav-link-icon-black.svg";
 import activitiesNavLinkIconWhite from "../assets/dashboard-nav-link-icon-white.svg";
+import eeioNavLinkIconBlack from "../assets/eeio-nav-link-icon-black.svg";
+import eeioNavLinkIconWhite from "../assets/eeio-nav-link-icon-white.svg";
 import { IoSettingsOutline } from "react-icons/io5";
 import messagesIcon from "../assets/messages-icon.svg";
 import notificationIcon from "../assets/notification-icon.svg";
@@ -30,6 +32,9 @@ const Navbar = () => {
       location.pathname === "/activities" ||
       !!location.pathname.match(/^\/activities(\/\d+\/edit)?$/),
     isAccountPath: location.pathname === "/account",
+    isEeioPath:
+      location.pathname === "/eeio" ||
+      !!location.pathname.match(/^\/eeio(\/\d+\/\d+\/edit)?$/),
   };
 
   return (
@@ -86,6 +91,18 @@ const Navbar = () => {
           />
           <div>Activites</div>
         </Link>
+        <Link
+          to="/eeio"
+          className={`text-black flex items-center gap-x-1 p-2 rounded-lg border border-white hover:border-tc-green ${
+            paths.isEeioPath ? "bg-tc-green text-white" : ""
+          }`}
+          style={{ textDecoration: "none" }}
+        >
+          <img
+            src={paths.isEeioPath ? eeioNavLinkIconWhite : eeioNavLinkIconBlack}
+          />
+          <div>Eeio</div>
+        </Link>
       </div>
 
       {/* Profile and Notification Icons*/}
@@ -112,14 +129,14 @@ const Navbar = () => {
       >
         {/* Close menu */}
         <IoClose
-          className="relative top-2 left-2 text-[26px]"
+          className="relative top-2 left-4 text-[26px] rounded-lg border border-white hover:border-tc-green"
           onClick={toggleNavVisibility}
         />
         {/* Navigation Links */}
-        <div className="mt-3 flex flex-col gap-y-3 px-3">
+        <div className="mt-4 flex flex-col gap-y-3 px-3">
           <Link
             to="/dashboard"
-            className={`text-black flex items-center gap-x-1 p-2 rounded-lg ${
+            className={`text-black flex items-center gap-x-1 p-2 rounded-lg border border-white hover:border-tc-green ${
               paths.isDashboardPath ? "bg-tc-green text-white" : ""
             }`}
             style={{ textDecoration: "none" }}
@@ -135,7 +152,7 @@ const Navbar = () => {
           </Link>
           <Link
             to="/profile"
-            className={`text-black flex items-center gap-x-1 p-2 rounded-lg ${
+            className={`text-black flex items-center gap-x-1 p-2 rounded-lg border border-white hover:border-tc-green ${
               paths.isProfilePath ? "bg-tc-green text-white" : ""
             }`}
             style={{ textDecoration: "none" }}
@@ -151,7 +168,7 @@ const Navbar = () => {
           </Link>
           <Link
             to="/activities"
-            className={`text-black flex items-center gap-x-1 p-2 rounded-lg ${
+            className={`text-black flex items-center gap-x-1 p-2 rounded-lg border border-white hover:border-tc-green ${
               paths.isActivitiesPath ? "bg-tc-green text-white" : ""
             }`}
             style={{ textDecoration: "none" }}
@@ -164,6 +181,20 @@ const Navbar = () => {
               }
             />
             <div>Activites</div>
+          </Link>
+          <Link
+            to="/eeio"
+            className={`text-black flex items-center gap-x-1 p-2 rounded-lg border border-white hover:border-tc-green ${
+              paths.isEeioPath ? "bg-tc-green text-white" : ""
+            }`}
+            style={{ textDecoration: "none" }}
+          >
+            <img
+              src={
+                paths.isEeioPath ? eeioNavLinkIconWhite : eeioNavLinkIconBlack
+              }
+            />
+            <div>Eeio</div>
           </Link>
         </div>
 

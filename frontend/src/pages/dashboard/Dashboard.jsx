@@ -1,12 +1,12 @@
-import CarbonEmissionsAnalytics from "../components/CarbonEmissionsAnalytics.jsx";
-import Navbar from "../components/Navbar.jsx";
-import Top10EmissionsTable from "../components/Top10EmissionsTable.jsx";
+import CarbonEmissionsAnalytics from "./CarbonEmissionsAnalytics.jsx";
+import Navbar from "../../components/Navbar.jsx";
+import Top10EmissionsTable from "./Top10EmissionsTable.jsx";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRef } from "react";
-import WorldMap from "../components/WorldMap.jsx";
-import Button from "../components/ui/Button.jsx";
-import calendarIcon from "../assets/calendar-icon.svg";
+import WorldMap from "./WorldMap.jsx";
+import Button from "../../components/ui/Button.jsx";
+import calendarIcon from "../../assets/calendar-icon.svg";
 
 const Dashboard = () => {
   const pdfRef = useRef();

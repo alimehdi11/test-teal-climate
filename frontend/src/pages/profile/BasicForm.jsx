@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { request } from "../utils/request.js";
-import FormControl from "./FormControl";
-import Label from "./ui/Label";
-import Input from "./ui/Input";
-import Button from "./ui/Button";
-import { UserContext } from "../contexts/UserContext";
+import { request } from "../../utils/request.js";
+import FormControl from "../../components/FormControl.jsx";
+import Label from "../../components/ui/Label.jsx";
+import Input from "../../components/ui/Input.jsx";
+import Button from "../../components/ui/Button.jsx";
+import { UserContext } from "../../contexts/UserContext.jsx";
 
 const BasicForm = () => {
   const { user } = useContext(UserContext);

@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { getBearerToken } from "../utils/auth.js";
-import { UserContext } from "../contexts/UserContext.jsx";
+import { getBearerToken } from "../../utils/auth.js";
+import { UserContext } from "../../contexts/UserContext.jsx";
 import {
   TableContainer,
   Table,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableRow,
   TableCell,
-} from "../components/ui/Table.jsx";
+} from "../../components/ui/Table.jsx";
 
 const Top10EmissionsTable = () => {
   const [top10Emissions, setTop10Emissions] = useState([]);
@@ -55,7 +55,7 @@ const Top10EmissionsTable = () => {
   }, []);
 
   return (
-    <TableContainer className="my-4">
+    <TableContainer>
       <Table>
         <TableHeader>
           <TableRow>

@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import worldMapJson from "../data/worldMap.json";
-import { getBearerToken } from "../utils/auth.js";
-import { UserContext } from "../contexts/UserContext.jsx";
+import worldMapJson from "../../data/worldMap.json";
+import { getBearerToken } from "../../utils/auth.js";
+import { UserContext } from "../../contexts/UserContext.jsx";
 
 const WorldMap = () => {
   const [emissionsData, setEmissionsData] = useState({});
