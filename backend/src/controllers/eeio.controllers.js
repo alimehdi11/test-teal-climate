@@ -330,7 +330,7 @@ const insertEeioData = async (req, res) => {
       "SELECT * FROM companies WHERE userid = $1 AND unitname= $2";
     const fetchValues1 = [userId, businessUnitsvalue];
     const fetchResult1 = await pool.query(fetchQuery1, fetchValues1);
-
+    console.log(1);
     if (fetchResult1.rows.length === 0) {
       return res
         .status(404)
@@ -341,6 +341,9 @@ const insertEeioData = async (req, res) => {
     const continent = userData[0].continent;
     const country = userData[0].countries;
     const region = userData[0].region;
+    console.log(continent);
+    console.log(country);
+    console.log(2);
     // Assuming you need to fetch some data before inserting
     const fetchQuery =
       "SELECT * FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5 AND level5 = $6 AND sector = $7 AND continent = $8 AND country = $9";
@@ -356,12 +359,15 @@ const insertEeioData = async (req, res) => {
       country,
     ];
     const fetchResult = await pool.query(fetchQuery, fetchValues);
+    console.log(3);
 
     if (fetchResult.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "No data found for the given user id" });
+      // return res
+      //   .status(404)
+      //   .json({ error: "No data found for the given user id" });
+      res.status(500).json({ error: "Something went wrong" });
     }
+    console.log(4);
     const datas = fetchResult.rows;
 
     let co2e = null;
@@ -377,7 +383,7 @@ const insertEeioData = async (req, res) => {
       "kg CO2e of N2O",
       "kg CO2e of Other",
     ];
-
+    console.log(5);
     datas.forEach((data) => {
       if (data.ghg == ghgValues[0]) {
         co2e = data.pereuro * quantity;
@@ -401,7 +407,7 @@ const insertEeioData = async (req, res) => {
     });
 
     console.table([co2e, co2eofco2, co2eofch4, co2eofn2o, co2eofother]);
-    const exiobasecode = datas[0].exiobasecode;
+    const exiobasecode = datas[0]?.exiobasecode;
     const scope = "scope 3";
     const insertQuery =
       "INSERT INTO eeioentry (scope, continent, country, usercountry, pi, level1, level2, level3, level4, level5, sector, exiobasecode, uom, quantity, userid, co2e, co2eofco2, co2eofch4, co2eofn2o, co2eofother, unitname) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING *";

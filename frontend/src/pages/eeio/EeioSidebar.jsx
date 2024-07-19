@@ -43,7 +43,7 @@ const Sidebar = ({
       </div>
 
       <h2 className="m-0 my-4 text-center font-extrabold text-2xl">
-        Select Level 1
+        Select Category
       </h2>
 
       {/* List */}

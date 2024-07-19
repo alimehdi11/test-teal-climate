@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,17 +8,18 @@ import FormControl from "../../components/FormControl.jsx";
 import Input from "../../components/ui/Input.jsx";
 import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
+import { UserContext } from "../../contexts/UserContext.jsx";
 
 const EeoiForm = ({
   selectedForm,
-  setSelectedForm,
+  // setSelectedForm,
   selectedlevel1,
   setSelectedlevel1,
-  tableupdate,
-  setTableUdate,
+  // tableupdate,
+  // setTableUdate,
   setEeiodata,
 }) => {
-  const [userId, setUserId] = useState("");
+  const { user } = useContext(UserContext);
 
   const [businessUnitsoption, setBusinessUnits] = useState("");
   const [businessUnitsvalue, setBusinessUnitsvalue] = useState("");
@@ -42,7 +43,7 @@ const EeoiForm = ({
   const fetchEeioData = async () => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/eeiodata/${userId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/eeios/eeiodata/${user.id}`,
         "GET"
       );
       if (!response.ok) {
@@ -60,7 +61,7 @@ const EeoiForm = ({
   const fetchEditData = async (id, userId) => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/fetchEeioEditData/${id}/${userId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/eeios/fetchEeioEditData/${id}/${user.id}`,
         "GET"
       );
       if (!response.ok) {
@@ -93,7 +94,7 @@ const EeoiForm = ({
     event.preventDefault();
     // Validate form fields
     if (
-      !userId ||
+      !user.id ||
       !businessUnitsvalue ||
       !selectedForm ||
       !selectedlevel1 ||
@@ -111,7 +112,7 @@ const EeoiForm = ({
 
     // Create payload
     const payload = {
-      userId,
+      userId: user.id,
       businessUnitsvalue,
       selectedForm,
       selectedlevel1,
@@ -131,11 +132,12 @@ const EeoiForm = ({
         "POST",
         payload
       )
-        .then((response) => {
+        .then(async (response) => {
           if (!response.ok) {
-            throw new Error();
+            const res = await response.json();
+            console.log(res);
+            toast.success(res);
           }
-          toast.success("Data submitted successfully");
           resetForm();
         })
         .then(() => {
@@ -215,7 +217,7 @@ const EeoiForm = ({
   const fetchBusinessUnit = async () => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/companies/${userId}?column=unitname`,
+        `${import.meta.env.VITE_API_BASE_URL}/companies/${user.id}?column=unitname`,
         "GET"
       );
       if (!response.ok) {
@@ -312,22 +314,11 @@ const EeoiForm = ({
   };
 
   useEffect(() => {
-    // Fetch userID from localStorage
-    const storedUserId = localStorage.getItem("userId");
-    if (storedUserId) {
-      setUserId(storedUserId);
-    }
-  }, []);
-
-  useEffect(() => {
-    // data comes on second render because userId is coming from parent component
-    if (userId) {
-      fetchBusinessUnit().then((businessUnits) => {
-        // businessUnits = businessUnits.map((item) => item.unitname);
-        setBusinessUnits(businessUnits);
-      });
-    }
-  }, [userId]);
+    fetchBusinessUnit().then((businessUnits) => {
+      // businessUnits = businessUnits.map((item) => item.unitname);
+      setBusinessUnits(businessUnits);
+    });
+  });
 
   useEffect(() => {
     fetchLevel2Data();
@@ -368,7 +359,7 @@ const EeoiForm = ({
           console.error("Error fetching edit data:", error);
         });
     }
-  }, [userId, id]);
+  }, [user.id, id]);
 
   return (
     <>
@@ -501,9 +492,7 @@ const EeoiForm = ({
               value={currencyvalue}
               onChange={(e) => setCurrencyValue(e.target.value)}
             >
-              <option value="pereuro" disabled>
-                Per Euro
-              </option>
+              <option value="pereuro">Per Euro</option>
             </Select>
           </FormControl>
 
