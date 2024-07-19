@@ -100,7 +100,6 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
                     <Link
                       to={`/activities/${item.id}/edit`}
                       className="flex justify-center items-center"
-                      onClick={() => setSelectedForm("Portfolio")}
                     >
                       <img
                         src={editIcon}
