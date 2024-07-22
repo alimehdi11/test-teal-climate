@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Slide, ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { request } from "../../utils/request.js";
 import FormControl from "../../components/FormControl.jsx";
@@ -78,97 +78,83 @@ const BasicForm = () => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <h3 className="m-0 mb-4 font-extrabold text-2xl">Introduction</h3>
-        <div className="grid lg:grid-cols-2 gap-4">
-          <FormControl>
-            <Label>Company Name</Label>
-            <Input
-              type="text"
-              name="companyName"
-              value={formData.companyName}
-              onChange={(event) => handleInputChange(event)}
-            />
-          </FormControl>
-          <FormControl>
-            <Label>Country</Label>
-            <Input
-              type="text"
-              name="country"
-              value={formData.country}
-              onChange={(event) => handleInputChange(event)}
-            />
-          </FormControl>
-          <FormControl>
-            <Label>Select Primary Industry</Label>
-            <Input
-              type="text"
-              name="primaryIndustry"
-              value={formData.primaryIndustry}
-              onChange={(event) => handleInputChange(event)}
-            />
-          </FormControl>
-          <FormControl>
-            <Label>Select Secondary Industry</Label>
-            <Input
-              type="text"
-              name="secondaryIndustry"
-              value={formData.secondaryIndustry}
-              onChange={(event) => handleInputChange(event)}
-            />
-          </FormControl>
-        </div>
-        <h3 className="m-0 my-4 font-extrabold text-2xl">Contact</h3>
-        <div className="grid lg:grid-cols-2 gap-4">
-          <FormControl>
-            <Label>Sustainability Manager</Label>
-            <Input
-              type="text"
-              name="sustainabilityManager"
-              value={formData.sustainabilityManager}
-              onChange={(event) => handleInputChange(event)}
-            />
-          </FormControl>
-          <FormControl>
-            <Label>Email</Label>
-            <Input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={(event) => handleInputChange(event)}
-            />
-          </FormControl>
-          <FormControl>
-            <Label>Phone Number</Label>
-            <Input
-              type="text"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={(event) => handleInputChange(event)}
-            />
-          </FormControl>
-        </div>
-        <Button
-          className="w-full mt-4 text-white bg-tc-green hover:bg-opacity-90"
-          type="submit"
-        >
-          Submit
-        </Button>
-      </form>
-      <ToastContainer
-        theme={"colored"}
-        hideProgressBar={true}
-        transition={Slide}
-        autoClose={1500}
-        pauseOnFocusLoss={false}
-        style={{
-          "--toastify-font-family": "Poppins",
-          "--toastify-color-success": "#00CC9CFF",
-          "--toastify-color-warning": "#e74c3c",
-        }}
-      />
-    </>
+    <form onSubmit={handleSubmit}>
+      <h3 className="m-0 mb-4 font-extrabold text-2xl">Introduction</h3>
+      <div className="grid lg:grid-cols-2 gap-4">
+        <FormControl>
+          <Label>Company Name</Label>
+          <Input
+            type="text"
+            name="companyName"
+            value={formData.companyName}
+            onChange={(event) => handleInputChange(event)}
+          />
+        </FormControl>
+        <FormControl>
+          <Label>Country</Label>
+          <Input
+            type="text"
+            name="country"
+            value={formData.country}
+            onChange={(event) => handleInputChange(event)}
+          />
+        </FormControl>
+        <FormControl>
+          <Label>Select Primary Industry</Label>
+          <Input
+            type="text"
+            name="primaryIndustry"
+            value={formData.primaryIndustry}
+            onChange={(event) => handleInputChange(event)}
+          />
+        </FormControl>
+        <FormControl>
+          <Label>Select Secondary Industry</Label>
+          <Input
+            type="text"
+            name="secondaryIndustry"
+            value={formData.secondaryIndustry}
+            onChange={(event) => handleInputChange(event)}
+          />
+        </FormControl>
+      </div>
+      <h3 className="m-0 my-4 font-extrabold text-2xl">Contact</h3>
+      <div className="grid lg:grid-cols-2 gap-4">
+        <FormControl>
+          <Label>Sustainability Manager</Label>
+          <Input
+            type="text"
+            name="sustainabilityManager"
+            value={formData.sustainabilityManager}
+            onChange={(event) => handleInputChange(event)}
+          />
+        </FormControl>
+        <FormControl>
+          <Label>Email</Label>
+          <Input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={(event) => handleInputChange(event)}
+          />
+        </FormControl>
+        <FormControl>
+          <Label>Phone Number</Label>
+          <Input
+            type="text"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={(event) => handleInputChange(event)}
+          />
+        </FormControl>
+      </div>
+      <Button
+        className="w-full mt-4 text-white bg-tc-green hover:bg-opacity-90"
+        type="submit"
+      >
+        Submit
+      </Button>
+    </form>
   );
 };
 

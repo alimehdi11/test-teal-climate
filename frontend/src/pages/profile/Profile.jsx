@@ -2,7 +2,6 @@ import { useEffect, useContext } from "react";
 import ProfileSidebar from "./ProfileSidebar.jsx";
 import PortfolioForm from "./PortfolioForm.jsx";
 import BasicForm from "./BasicForm.jsx";
-import Navbar from "../../components/Navbar.jsx";
 import ProfileTable from "./ProfileTable.jsx";
 import { useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
@@ -32,25 +31,12 @@ const Profile = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (user.id) {
-  //     fetchProfileData();
-  //   }
-  // }, [user.id]);
-
-  /**
-   * Above commented useEffect was previously used. It has [user.id] as dependency.
-   * I change it to no dependency. I do not why developer who added this as a dependency.
-   * For safety purpose I comment it so we can go back easily.
-   */
-
   useEffect(() => {
     fetchProfileData();
   }, []);
 
   return (
     <>
-      <Navbar />
       <Layout
         sidebarContent={
           <ProfileSidebar

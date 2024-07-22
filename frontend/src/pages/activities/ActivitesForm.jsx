@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { Slide, ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { request } from "../../utils/request.js";
@@ -16,7 +16,7 @@ const ActivitesForm = ({
   setSelectedScope,
   setSelectedLevel,
   userId,
-  setCompanyData,
+  fetchCompanyData,
 }) => {
   const [scopeCategoryValue, setScopeCategoryValue] = useState("");
   const [fuelTypeValue, setFuelTypeValue] = useState(""); // level2
@@ -328,22 +328,6 @@ const ActivitesForm = ({
     setEmissionFactor("");
     setQuantityPurchased("");
     setUnitOfEmissionFactor("");
-  };
-
-  const fetchCompanyData = async () => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/companiesdata/${userId}`,
-        "GET"
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
-      }
-      const jsonData = await response.json();
-      setCompanyData(jsonData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
   };
 
   const fetchCompanyDataOfGivenId = async (id) => {
@@ -1028,19 +1012,17 @@ const ActivitesForm = ({
     };
   };
 
+  // const possibleFuelTypeLabels = {
+  //   "Refrigerant and other": "Refrigerant and other gas category",
+  //   "Passenger vehicles": "Passenger Vehicle Category",
+  //   "Delivery vehicles": "Delivery Vehicle Category",
+  // };
+
   useEffect(() => {
-    // fetchActivitesData().then((activitiesData) => {
-    //   setActivitiesData(activitiesData);
-    // });
-    // setActivitiesData(data.activitiesData);
     fetchBusinessUnit().then((businessUnits) => {
       businessUnits = businessUnits.map((item) => item.unitname);
       setBusinessUnits(businessUnits);
     });
-    // fetchScopeCategoriesData().then((scopeCategoriesData) => {
-    //   setScopeCategoriesData(scopeCategoriesData);
-    // });
-    // setScopeCategoriesData(data.scopeCategoriesData);
   }, []);
 
   useEffect(() => {
@@ -1393,210 +1375,130 @@ const ActivitesForm = ({
   }, [id]);
 
   return (
-    <>
-      <form onSubmit={handleFormSubmit} className="flex flex-col gap-y-3">
-        <h3 className="m-0 font-extrabold text-2xl">
-          Insert activity data here
-        </h3>
-        <div className="grid lg:grid-cols-2 gap-4">
-          {/* TODO: Location Based bar should be in all Scope 2 levels or only in Scope 2(Electricity) */}
-          {/* {selectedLevel === "Electricity" && (  */}
-          {selectedScope === "Scope 2" && (
-            <h4 className="bg-gray-200 col-span-full p-2 rounded">
-              Location based
-            </h4>
-          )}
-          {/* Scope Category */}
-          <FormControl>
-            <Label>Scope Category</Label>
-            <Select
-              value={scopeCategoryValue}
-              onChange={(e) => setScopeCategoryValue(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {scopeCategories.map((option, index) => {
+    <form onSubmit={handleFormSubmit} className="flex flex-col gap-y-3">
+      <h3 className="m-0 font-extrabold text-2xl">Insert activity data here</h3>
+      <div className="grid lg:grid-cols-2 gap-4">
+        {/* TODO: Location Based bar should be in all Scope 2 levels or only in Scope 2(Electricity) */}
+        {/* {selectedLevel === "Electricity" && (  */}
+        {selectedScope === "Scope 2" && (
+          <h4 className="bg-gray-200 col-span-full p-2 rounded">
+            Location based
+          </h4>
+        )}
+
+        {/* Scope Category */}
+        <FormControl>
+          <Label>Scope Category</Label>
+          <Select
+            value={scopeCategoryValue}
+            onChange={(e) => setScopeCategoryValue(e.target.value)}
+          >
+            <option value="">Select Option</option>
+            {scopeCategories.map((option, index) => {
+              return (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              );
+            })}
+          </Select>
+        </FormControl>
+
+        {/* Business Unit */}
+        <FormControl>
+          <Label>Business Unit</Label>
+          <Select
+            value={businessUnitValue}
+            onChange={(e) => setBusinessUnitValue(e.target.value)}
+          >
+            <option value="">Select Option</option>
+            {businessUnits &&
+              businessUnits.map((option, index) => {
                 return (
                   <option key={index} value={option}>
                     {option}
                   </option>
                 );
               })}
-            </Select>
-          </FormControl>
+          </Select>
+        </FormControl>
 
-          {/* Business Unit */}
-          <FormControl>
-            <Label>Business Unit</Label>
-            <Select
-              value={businessUnitValue}
-              onChange={(e) => setBusinessUnitValue(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {businessUnits &&
-                businessUnits.map((option, index) => {
-                  return (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  );
-                })}
-            </Select>
-          </FormControl>
-
-          {/* Fuel Type (level2) */}
-          {/* selectedLevel !== "WTT- electricity" && */}
-          {selectedLevel !== "Electricity" &&
-            selectedLevel !== "Electricity TandD" &&
-            selectedLevel !== "WTT- electricity (generation)" &&
-            selectedLevel !== "WTT- electricity (TandD)" &&
-            selectedLevel !== "Water supply" &&
-            selectedLevel !== "Water treatment" &&
-            selectedLevel !== "Delivery Evs" &&
-            selectedLevel !== "Heat and steam" &&
-            selectedLevel !== "District heat and steam TandD" &&
-            selectedLevel !== "Electricity TandD for delivery Evs" &&
-            selectedLevel !== "WTT- heat and steam" &&
-            selectedLevel !== "WTT- district heat and steam distribution" &&
-            selectedLevel !== "Hotel stay" &&
-            selectedLevel !== "Managed assets- electricity" &&
-            // selectedLevel !== "Business travel- air" &&
-            // selectedLevel !== "WTT- business travel- air" &&
-            selectedLevel !== "WTT- electricity (T&D)" &&
-            selectedLevel !== "Electricity T&D" && (
-              <FormControl>
-                <Label>
-                  {selectedLevel && selectedLevel === "Refrigerant and other"
-                    ? "Refrigerant and other gas category"
-                    : selectedLevel === "Passenger vehicles"
-                      ? "Passenger Vehicle Category"
-                      : selectedLevel === "Delivery vehicles"
-                        ? "Delivery Vehicle Category"
-                        : selectedLevel === "Passenger Evs"
-                          ? "Passenger EV Category"
-                          : selectedLevel === "Delivery Evs"
-                            ? "Delivery Vehicle Category"
-                            : selectedLevel === "WTT- fuels"
-                              ? "Fuel Type"
-                              : selectedLevel === "WTT- bioenergy"
-                                ? "Bioenergy Type"
-                                : selectedLevel ===
-                                    "Electricity TandD for passenger EVs"
-                                  ? "Passenger EV Category"
-                                  : selectedLevel === "Business travel- land"
-                                    ? "Passenger Vehicle Category"
-                                    : selectedLevel === "Material use"
-                                      ? "Material Type"
-                                      : selectedLevel === "Waste disposal"
-                                        ? "Waste Type"
-                                        : selectedLevel ===
-                                            "Business travel- sea"
-                                          ? "Boat / Ship Type"
-                                          : selectedLevel ===
-                                              "WTT- business travel- sea"
-                                            ? "Boat / Ship Type"
-                                            : selectedLevel ===
-                                                "WTT- pass vehs and travel- land"
-                                              ? "Passenger Vehicle Category"
-                                              : selectedLevel ===
-                                                  "Freighting goods"
-                                                ? "Freighting medium"
-                                                : selectedLevel ===
-                                                    "WTT- delivery vehs and freight"
-                                                  ? "Freighting medium"
-                                                  : selectedLevel ===
-                                                      "Managed assets- vehicles"
-                                                    ? "Vehicle Category"
-                                                    : selectedLevel ===
-                                                        "Business travel- air"
-                                                      ? "Airport From"
-                                                      : selectedLevel ===
-                                                          "WTT- business travel- air"
-                                                        ? "Airport From"
-                                                        : `${selectedLevel} Type`}
-                </Label>
-                <Select
-                  value={fuelTypeValue}
-                  onChange={(e) => setFuelTypeValue(e.target.value)}
-                >
-                  <option value="">Select Option</option>
-                  {fuelTypes.map((option, index) => {
-                    return (
-                      <option key={index} value={option}>
-                        {option}
-                      </option>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            )}
-          {/* Fuel Name (level3) */}
-          {showFuelNamesField && (
+        {/* Fuel Type (level2) */}
+        {/* selectedLevel !== "WTT- electricity" && */}
+        {selectedLevel !== "Electricity" &&
+          selectedLevel !== "Electricity TandD" &&
+          selectedLevel !== "WTT- electricity (generation)" &&
+          selectedLevel !== "WTT- electricity (TandD)" &&
+          selectedLevel !== "Water supply" &&
+          selectedLevel !== "Water treatment" &&
+          selectedLevel !== "Delivery Evs" &&
+          selectedLevel !== "Heat and steam" &&
+          selectedLevel !== "District heat and steam TandD" &&
+          selectedLevel !== "Electricity TandD for delivery Evs" &&
+          selectedLevel !== "WTT- heat and steam" &&
+          selectedLevel !== "WTT- district heat and steam distribution" &&
+          selectedLevel !== "Hotel stay" &&
+          selectedLevel !== "Managed assets- electricity" &&
+          // selectedLevel !== "Business travel- air" &&
+          // selectedLevel !== "WTT- business travel- air" &&
+          selectedLevel !== "WTT- electricity (T&D)" &&
+          selectedLevel !== "Electricity T&D" && (
             <FormControl>
               <Label>
-                {selectedLevel && selectedLevel === "Bioenergy"
-                  ? "Bioenergy Fuel Name"
-                  : selectedLevel === "Refrigerant and other"
-                    ? "Refrigerant and other gas name"
-                    : selectedLevel === "Passenger vehicles"
-                      ? "Passenger Vehicle Segment / Size"
-                      : selectedLevel === "Delivery vehicles"
-                        ? "Delivery Vehicle Class / Category"
-                        : selectedLevel === "Passenger Evs"
-                          ? "Passenger EV Segment / Size"
-                          : selectedLevel === "Delivery Evs"
-                            ? "Delivery Vehicle Segment / Size"
-                            : selectedLevel === "Heat and steam"
-                              ? "Onsite / Offsite"
-                              : selectedLevel === "WTT- fuels"
-                                ? "Fuel Name"
-                                : selectedLevel === "WTT- bioenergy"
-                                  ? "Bioenergy Fuel Name"
-                                  : selectedLevel ===
-                                      "Electricity TandD for passenger EVs"
-                                    ? "Passenger EV Segment /Size"
-                                    : selectedLevel === "Business travel- land"
-                                      ? "Passenger Vehicle Segment /Size"
-                                      : selectedLevel === "WTT- heat and steam"
-                                        ? "Onsite / Offsite"
-                                        : selectedLevel === "Material use"
-                                          ? "Material Name"
-                                          : selectedLevel === "Waste disposal"
-                                            ? "Waste Name"
+                {selectedLevel && selectedLevel === "Refrigerant and other"
+                  ? "Refrigerant and other gas category"
+                  : selectedLevel === "Passenger vehicles"
+                    ? "Passenger Vehicle Category"
+                    : selectedLevel === "Delivery vehicles"
+                      ? "Delivery Vehicle Category"
+                      : selectedLevel === "Passenger Evs"
+                        ? "Passenger EV Category"
+                        : selectedLevel === "Delivery Evs"
+                          ? "Delivery Vehicle Category"
+                          : selectedLevel === "WTT- fuels"
+                            ? "Fuel Type"
+                            : selectedLevel === "WTT- bioenergy"
+                              ? "Bioenergy Type"
+                              : selectedLevel ===
+                                  "Electricity TandD for passenger EVs"
+                                ? "Passenger EV Category"
+                                : selectedLevel === "Business travel- land"
+                                  ? "Passenger Vehicle Category"
+                                  : selectedLevel === "Material use"
+                                    ? "Material Type"
+                                    : selectedLevel === "Waste disposal"
+                                      ? "Waste Type"
+                                      : selectedLevel === "Business travel- sea"
+                                        ? "Boat / Ship Type"
+                                        : selectedLevel ===
+                                            "WTT- business travel- sea"
+                                          ? "Boat / Ship Type"
+                                          : selectedLevel ===
+                                              "WTT- pass vehs and travel- land"
+                                            ? "Passenger Vehicle Category"
                                             : selectedLevel ===
-                                                "Business travel- sea"
-                                              ? "Passenger Type"
+                                                "Freighting goods"
+                                              ? "Freighting medium"
                                               : selectedLevel ===
-                                                  "WTT- business travel- sea"
-                                                ? "Passenger Type"
+                                                  "WTT- delivery vehs and freight"
+                                                ? "Freighting medium"
                                                 : selectedLevel ===
-                                                    "WTT- pass vehs and travel- land"
-                                                  ? "Passenger Vehicle Segment / Size"
+                                                    "Managed assets- vehicles"
+                                                  ? "Vehicle Category"
                                                   : selectedLevel ===
-                                                      "Freighting goods"
-                                                    ? "Class / Type / Haul"
+                                                      "Business travel- air"
+                                                    ? "Airport From"
                                                     : selectedLevel ===
-                                                        "WTT- delivery vehs and freight"
-                                                      ? "Class / Type / Haul"
-                                                      : selectedLevel ===
-                                                          "Hotel stay"
-                                                        ? "Name of Country"
-                                                        : selectedLevel ===
-                                                            "Managed assets- vehicles"
-                                                          ? "Vehicle Segment / Size"
-                                                          : selectedLevel ===
-                                                              "Business travel- air"
-                                                            ? "Airport To"
-                                                            : selectedLevel ===
-                                                                "WTT- business travel- air"
-                                                              ? "Airport To"
-                                                              : `${selectedLevel} Name`}
+                                                        "WTT- business travel- air"
+                                                      ? "Airport From"
+                                                      : `${selectedLevel} Type`}
               </Label>
               <Select
-                value={fuelNameValue}
-                onChange={(e) => setFuelNameValue(e.target.value)}
+                value={fuelTypeValue}
+                onChange={(e) => setFuelTypeValue(e.target.value)}
               >
                 <option value="">Select Option</option>
-                {fuelNames.map((option, index) => {
+                {fuelTypes.map((option, index) => {
                   return (
                     <option key={index} value={option}>
                       {option}
@@ -1607,277 +1509,340 @@ const ActivitesForm = ({
             </FormControl>
           )}
 
-          {/* level4 */}
-          {showLevel4Field && (
+        {/* Fuel Name (level3) */}
+        {showFuelNamesField && (
+          <FormControl>
+            <Label>
+              {selectedLevel && selectedLevel === "Bioenergy"
+                ? "Bioenergy Fuel Name"
+                : selectedLevel === "Refrigerant and other"
+                  ? "Refrigerant and other gas name"
+                  : selectedLevel === "Passenger vehicles"
+                    ? "Passenger Vehicle Segment / Size"
+                    : selectedLevel === "Delivery vehicles"
+                      ? "Delivery Vehicle Class / Category"
+                      : selectedLevel === "Passenger Evs"
+                        ? "Passenger EV Segment / Size"
+                        : selectedLevel === "Delivery Evs"
+                          ? "Delivery Vehicle Segment / Size"
+                          : selectedLevel === "Heat and steam"
+                            ? "Onsite / Offsite"
+                            : selectedLevel === "WTT- fuels"
+                              ? "Fuel Name"
+                              : selectedLevel === "WTT- bioenergy"
+                                ? "Bioenergy Fuel Name"
+                                : selectedLevel ===
+                                    "Electricity TandD for passenger EVs"
+                                  ? "Passenger EV Segment /Size"
+                                  : selectedLevel === "Business travel- land"
+                                    ? "Passenger Vehicle Segment /Size"
+                                    : selectedLevel === "WTT- heat and steam"
+                                      ? "Onsite / Offsite"
+                                      : selectedLevel === "Material use"
+                                        ? "Material Name"
+                                        : selectedLevel === "Waste disposal"
+                                          ? "Waste Name"
+                                          : selectedLevel ===
+                                              "Business travel- sea"
+                                            ? "Passenger Type"
+                                            : selectedLevel ===
+                                                "WTT- business travel- sea"
+                                              ? "Passenger Type"
+                                              : selectedLevel ===
+                                                  "WTT- pass vehs and travel- land"
+                                                ? "Passenger Vehicle Segment / Size"
+                                                : selectedLevel ===
+                                                    "Freighting goods"
+                                                  ? "Class / Type / Haul"
+                                                  : selectedLevel ===
+                                                      "WTT- delivery vehs and freight"
+                                                    ? "Class / Type / Haul"
+                                                    : selectedLevel ===
+                                                        "Hotel stay"
+                                                      ? "Name of Country"
+                                                      : selectedLevel ===
+                                                          "Managed assets- vehicles"
+                                                        ? "Vehicle Segment / Size"
+                                                        : selectedLevel ===
+                                                            "Business travel- air"
+                                                          ? "Airport To"
+                                                          : selectedLevel ===
+                                                              "WTT- business travel- air"
+                                                            ? "Airport To"
+                                                            : `${selectedLevel} Name`}
+            </Label>
+            <Select
+              value={fuelNameValue}
+              onChange={(e) => setFuelNameValue(e.target.value)}
+            >
+              <option value="">Select Option</option>
+              {fuelNames.map((option, index) => {
+                return (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                );
+              })}
+            </Select>
+          </FormControl>
+        )}
+
+        {/* level4 */}
+        {showLevel4Field && (
+          <FormControl>
+            <Label>
+              {selectedLevel
+                ? selectedLevel === "Freighting goods"
+                  ? "Capacity"
+                  : selectedLevel === "WTT- delivery vehs and freight"
+                    ? "Capacity"
+                    : // : selectedLevel === "Business travel- air"
+                      // ? "Class"
+                      // selectedLevel === "WTT- business travel- air"
+                      // ? "Class"
+                      "Level 4"
+                : "Level 4"}
+            </Label>
+            <Select
+              onChange={(e) => setLevel4Value(e.target.value)}
+              value={level4Value}
+            >
+              <option value="">Select Option</option>
+              {level4Options.map((option, index) => {
+                return (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                );
+              })}
+            </Select>
+          </FormControl>
+        )}
+
+        {/* level5 */}
+        {showLevel5Field && (
+          <FormControl>
+            <Label>
+              {selectedLevel && selectedLevel === "Passenger vehicles"
+                ? "Fuel Type"
+                : selectedLevel === "Delivery vehicles"
+                  ? "Fuel Type / Laden Percent"
+                  : selectedLevel === "Passenger Evs"
+                    ? "EV Type"
+                    : selectedLevel === "Delivery Evs"
+                      ? "Fuel Type"
+                      : selectedLevel === "Electricity TandD for passenger EVs"
+                        ? "EV Type"
+                        : selectedLevel === "Business travel- land"
+                          ? "Fuel Type"
+                          : selectedLevel === "Material use"
+                            ? "Source of material"
+                            : selectedLevel === "Waste disposal"
+                              ? "Waste Treatment Type"
+                              : selectedLevel ===
+                                  "WTT- pass vehs and travel- land"
+                                ? "Fuel Type"
+                                : selectedLevel === "Freighting goods"
+                                  ? "Fuel / Laden"
+                                  : selectedLevel ===
+                                      "WTT- delivery vehs and freight"
+                                    ? "Fuel / Laden"
+                                    : selectedLevel ===
+                                        "Managed assets- vehicles"
+                                      ? "Fuel Type / Laden"
+                                      : selectedLevel === "Business travel- air"
+                                        ? "Class"
+                                        : selectedLevel ===
+                                            "WTT- business travel- air"
+                                          ? "Class"
+                                          : "Level 5"}
+            </Label>
+            <Select
+              value={level5Value}
+              onChange={(e) => setLevel5Value(e.target.value)}
+            >
+              <option value="">Select Option</option>
+              {level5Options.map((option, index) => {
+                return (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                );
+              })}
+            </Select>
+          </FormControl>
+        )}
+
+        {/*  Unit of Measurement  */}
+        <FormControl>
+          <Label>Unit of measurement</Label>
+          <Select
+            value={unitOfMeasurementValue}
+            onChange={(e) => setUnitOfMeasurementValue(e.target.value)}
+          >
+            <option value="">Select Option</option>
+            {unitOfMeasurements.map((option, index) => {
+              return (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              );
+            })}
+          </Select>
+        </FormControl>
+
+        {/* Quantity */}
+        {selectedLevel !== "Business travel- air" &&
+          selectedLevel !== "WTT- business travel- air" && (
             <FormControl>
               <Label>
                 {selectedLevel
-                  ? selectedLevel === "Freighting goods"
-                    ? "Capacity"
-                    : selectedLevel === "WTT- delivery vehs and freight"
-                      ? "Capacity"
-                      : // : selectedLevel === "Business travel- air"
-                        // ? "Class"
-                        // selectedLevel === "WTT- business travel- air"
-                        // ? "Class"
-                        "Level 4"
-                  : "Level 4"}
+                  ? selectedLevel === "Passenger vehicles" ||
+                    selectedLevel === "Delivery vehicles" ||
+                    selectedLevel === "Passenger Evs" ||
+                    selectedLevel === "Delivery Evs" ||
+                    selectedLevel === "Electricity TandD for passenger EVs" ||
+                    selectedLevel === "Business travel- land" ||
+                    selectedLevel === "Business travel- sea" ||
+                    selectedLevel === "WTT- business travel- sea" ||
+                    selectedLevel === "WTT- pass vehs and travel- land" ||
+                    selectedLevel === "Managed assets- vehicles" ||
+                    selectedLevel === "Business travel- air" ||
+                    selectedLevel === "WTT- business travel- air"
+                    ? "Distance Travelled"
+                    : selectedLevel === "Hotel stay"
+                      ? "Number of Nights"
+                      : "Quantity"
+                  : "Quantity"}
               </Label>
-              <Select
-                onChange={(e) => setLevel4Value(e.target.value)}
-                value={level4Value}
-              >
-                <option value="">Select Option</option>
-                {level4Options.map((option, index) => {
-                  return (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          )}
-
-          {/* level5 */}
-          {showLevel5Field && (
-            <FormControl>
-              <Label>
-                {selectedLevel && selectedLevel === "Passenger vehicles"
-                  ? "Fuel Type"
-                  : selectedLevel === "Delivery vehicles"
-                    ? "Fuel Type / Laden Percent"
-                    : selectedLevel === "Passenger Evs"
-                      ? "EV Type"
-                      : selectedLevel === "Delivery Evs"
-                        ? "Fuel Type"
-                        : selectedLevel ===
-                            "Electricity TandD for passenger EVs"
-                          ? "EV Type"
-                          : selectedLevel === "Business travel- land"
-                            ? "Fuel Type"
-                            : selectedLevel === "Material use"
-                              ? "Source of material"
-                              : selectedLevel === "Waste disposal"
-                                ? "Waste Treatment Type"
-                                : selectedLevel ===
-                                    "WTT- pass vehs and travel- land"
-                                  ? "Fuel Type"
-                                  : selectedLevel === "Freighting goods"
-                                    ? "Fuel / Laden"
-                                    : selectedLevel ===
-                                        "WTT- delivery vehs and freight"
-                                      ? "Fuel / Laden"
-                                      : selectedLevel ===
-                                          "Managed assets- vehicles"
-                                        ? "Fuel Type / Laden"
-                                        : selectedLevel ===
-                                            "Business travel- air"
-                                          ? "Class"
-                                          : selectedLevel ===
-                                              "WTT- business travel- air"
-                                            ? "Class"
-                                            : "Level 5"}
-              </Label>
-              <Select
-                value={level5Value}
-                onChange={(e) => setLevel5Value(e.target.value)}
-              >
-                <option value="">Select Option</option>
-                {level5Options.map((option, index) => {
-                  return (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          )}
-
-          {/*  Unit of Measurement  */}
-          <FormControl>
-            <Label>Unit of measurement</Label>
-            <Select
-              value={unitOfMeasurementValue}
-              onChange={(e) => setUnitOfMeasurementValue(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {unitOfMeasurements.map((option, index) => {
-                return (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                );
-              })}
-            </Select>
-          </FormControl>
-
-          {/* Quantity */}
-          {selectedLevel !== "Business travel- air" &&
-            selectedLevel !== "WTT- business travel- air" && (
-              <FormControl>
-                <Label>
-                  {selectedLevel
-                    ? selectedLevel === "Passenger vehicles" ||
-                      selectedLevel === "Delivery vehicles" ||
-                      selectedLevel === "Passenger Evs" ||
-                      selectedLevel === "Delivery Evs" ||
-                      selectedLevel === "Electricity TandD for passenger EVs" ||
-                      selectedLevel === "Business travel- land" ||
-                      selectedLevel === "Business travel- sea" ||
-                      selectedLevel === "WTT- business travel- sea" ||
-                      selectedLevel === "WTT- pass vehs and travel- land" ||
-                      selectedLevel === "Managed assets- vehicles" ||
-                      selectedLevel === "Business travel- air" ||
-                      selectedLevel === "WTT- business travel- air"
-                      ? "Distance Travelled"
-                      : selectedLevel === "Hotel stay"
-                        ? "Number of Nights"
-                        : "Quantity"
-                    : "Quantity"}
-                </Label>
-                <Input
-                  type="number"
-                  value={quantityValue}
-                  onChange={(e) => setQuantityValue(e.target.value)}
-                  placeholder="Enter Quantity"
-                />
-              </FormControl>
-            )}
-        </div>
-
-        {/* ------------------------------------------------- */}
-
-        {/* For Scope 2 market based */}
-        {selectedScope === "Scope 2" && (
-          <div>
-            {/* Radio buttons */}
-            <p>
-              Was a market based instrument purchases for this electricity use?
-            </p>
-            <div className="flex gap-x-3">
-              <span className="flex items-center gap-x-1">
-                <input
-                  type="radio"
-                  id="locationBased"
-                  name="electricityBased"
-                  value="0" // False
-                  checked={!marketBased}
-                  onChange={(event) => {
-                    setMarketBased(Boolean(Number(event.target.value)));
-                  }}
-                />
-                <Label htmlFor="locationBased">
-                  {/* Location Based */}
-                  No
-                </Label>
-              </span>
-              <span className="flex items-center gap-x-1">
-                <input
-                  type="radio"
-                  id="marketBased"
-                  name="electricityBased"
-                  value="1"
-                  checked={marketBased}
-                  onChange={(event) => {
-                    setMarketBased(Boolean(Number(event.target.value)));
-                  }}
-                />
-                <Label htmlFor="marketBased">
-                  {/* Market Based */}
-                  Yes
-                </Label>
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* ------------------------------------------------- */}
-
-        {/* Market based form */}
-        {marketBased && (
-          <div className="grid lg:grid-cols-2 gap-4">
-            <h4 className="bg-gray-200 col-span-full p-2 rounded">
-              Market based
-            </h4>
-            <FormControl>
-              <Label>Quantity Purchased</Label>
               <Input
                 type="number"
-                value={quantityPurchased}
-                onChange={(event) => {
-                  setQuantityPurchased(event.target.value);
-                }}
-                placeholder="Enter Purchased Quantity"
-              />
-            </FormControl>
-            <FormControl>
-              <Label>Emission Factor</Label>
-              <Input
-                type="number"
-                value={emissionFactor}
-                onChange={(event) => {
-                  setEmissionFactor(event.target.value);
-                }}
+                value={quantityValue}
+                onChange={(e) => setQuantityValue(e.target.value)}
                 placeholder="Enter Quantity"
               />
             </FormControl>
-            <FormControl>
-              <Label>Unit of Emission Factor</Label>
-              <Select
-                value={unitOfEmissionFactor}
-                onChange={(e) => setUnitOfEmissionFactor(e.target.value)}
-              >
-                <option value="">Select Option</option>
-                <option value="kgco2e/kwh">kgco2e / kwh</option>
-              </Select>
-            </FormControl>
-          </div>
-        )}
+          )}
+      </div>
 
-        {/* ------------------------------------------------- */}
+      {/* ------------------------------------------------- */}
 
-        {/* Add, Edit, Cancel Buttons */}
-        {id ? (
-          <div className="flex flex-col gap-4 md:flex-row">
-            <Button
-              type="button"
-              className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
-              onClick={handleUpdateData}
-            >
-              Edit
-            </Button>
+      {/* For Scope 2 market based */}
+      {selectedScope === "Scope 2" && (
+        <div>
+          {/* Radio buttons */}
+          <p>
+            Was a market based instrument purchases for this electricity use?
+          </p>
+          <div className="flex gap-x-3">
+            <span className="flex items-center gap-x-1">
+              <input
+                type="radio"
+                id="locationBased"
+                name="electricityBased"
+                value="0" // False
+                checked={!marketBased}
+                onChange={(event) => {
+                  setMarketBased(Boolean(Number(event.target.value)));
+                }}
+              />
+              <Label htmlFor="locationBased">
+                {/* Location Based */}
+                No
+              </Label>
+            </span>
+            <span className="flex items-center gap-x-1">
+              <input
+                type="radio"
+                id="marketBased"
+                name="electricityBased"
+                value="1"
+                checked={marketBased}
+                onChange={(event) => {
+                  setMarketBased(Boolean(Number(event.target.value)));
+                }}
+              />
+              <Label htmlFor="marketBased">
+                {/* Market Based */}
+                Yes
+              </Label>
+            </span>
           </div>
-        ) : (
+        </div>
+      )}
+
+      {/* ------------------------------------------------- */}
+
+      {/* Market based form */}
+      {marketBased && (
+        <div className="grid lg:grid-cols-2 gap-4">
+          <h4 className="bg-gray-200 col-span-full p-2 rounded">
+            Market based
+          </h4>
+          <FormControl>
+            <Label>Quantity Purchased</Label>
+            <Input
+              type="number"
+              value={quantityPurchased}
+              onChange={(event) => {
+                setQuantityPurchased(event.target.value);
+              }}
+              placeholder="Enter Purchased Quantity"
+            />
+          </FormControl>
+          <FormControl>
+            <Label>Emission Factor</Label>
+            <Input
+              type="number"
+              value={emissionFactor}
+              onChange={(event) => {
+                setEmissionFactor(event.target.value);
+              }}
+              placeholder="Enter Quantity"
+            />
+          </FormControl>
+          <FormControl>
+            <Label>Unit of Emission Factor</Label>
+            <Select
+              value={unitOfEmissionFactor}
+              onChange={(e) => setUnitOfEmissionFactor(e.target.value)}
+            >
+              <option value="">Select Option</option>
+              <option value="kgco2e/kwh">kgco2e / kwh</option>
+            </Select>
+          </FormControl>
+        </div>
+      )}
+
+      {/* ------------------------------------------------- */}
+
+      {/* Add, Edit, Cancel Buttons */}
+      {id ? (
+        <div className="flex flex-col gap-4 md:flex-row">
           <Button
-            type="submit"
-            className="text-white bg-tc-green hover:bg-opacity-90"
+            type="button"
+            className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+            onClick={handleCancel}
           >
-            Add
+            Cancel
           </Button>
-        )}
-      </form>
-      <ToastContainer
-        theme={"colored"}
-        hideProgressBar={true}
-        transition={Slide}
-        autoClose={1500}
-        pauseOnFocusLoss={false}
-        style={{
-          "--toastify-font-family": "Poppins",
-          "--toastify-color-success": "#00CC9CFF",
-          "--toastify-color-warning": "#e74c3c",
-        }}
-      />
-    </>
+          <Button
+            type="button"
+            className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+            onClick={handleUpdateData}
+          >
+            Edit
+          </Button>
+        </div>
+      ) : (
+        <Button
+          type="submit"
+          className="text-white bg-tc-green hover:bg-opacity-90"
+        >
+          Add
+        </Button>
+      )}
+    </form>
   );
 };
 

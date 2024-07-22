@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Slide, ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";
@@ -12,12 +12,9 @@ import { UserContext } from "../../contexts/UserContext.jsx";
 
 const EeoiForm = ({
   selectedForm,
-  // setSelectedForm,
   selectedlevel1,
   setSelectedlevel1,
-  // tableupdate,
-  // setTableUdate,
-  setEeiodata,
+  fetchEeioData,
 }) => {
   const { user } = useContext(UserContext);
 
@@ -40,24 +37,6 @@ const EeoiForm = ({
 
   const navigation = useNavigate();
 
-  const fetchEeioData = async () => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/eeiodata/${user.id}`,
-        "GET"
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
-      }
-      const jsonData = await response.json();
-      console.log("data", jsonData);
-
-      setEeiodata(jsonData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   const fetchEditData = async (id, userId) => {
     try {
       const response = await request(
@@ -73,7 +52,7 @@ const EeoiForm = ({
 
       return jsonData;
 
-      setEeiodata(jsonData);
+      // setEeioData(jsonData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -110,7 +89,6 @@ const EeoiForm = ({
       return;
     }
 
-    // Create payload
     const payload = {
       userId: user.id,
       businessUnitsvalue,
@@ -125,29 +103,25 @@ const EeoiForm = ({
       quantity,
     };
 
-    try {
-      // Send request to the server
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/insertEeioData`,
-        "POST",
-        payload
-      )
-        .then(async (response) => {
-          if (!response.ok) {
-            const res = await response.json();
-            console.log(res);
-            toast.success(res);
-          }
-          resetForm();
-        })
-        .then(() => {
-          fetchEeioData();
-        });
-    } catch (error) {
-      // Handle error
-      toast.error("Error adding data");
-      console.error("Couldn't submit data", error);
-    }
+    await request(
+      `${import.meta.env.VITE_API_BASE_URL}/eeios/insertEeioData`,
+      "POST",
+      payload
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error();
+        }
+        resetForm();
+      })
+      .then(() => {
+        toast.success("Data submitted successfully");
+        fetchEeioData();
+      })
+      .catch((error) => {
+        toast.error("Error adding data");
+        console.error("Couldn't submit data", error);
+      });
   };
 
   const handleUpdateData = async () => {
@@ -318,31 +292,33 @@ const EeoiForm = ({
       // businessUnits = businessUnits.map((item) => item.unitname);
       setBusinessUnits(businessUnits);
     });
-  });
+  }, []);
 
   useEffect(() => {
-    fetchLevel2Data();
+    if (selectedlevel1) {
+      fetchLevel2Data();
+    }
   }, [selectedlevel1]);
 
   useEffect(() => {
     fetchLevel3Data();
-  }, [Level2value, level2options]);
+  }, [Level2value /*, level2options */]);
 
   useEffect(() => {
     fetchLevel4Data();
-  }, [Level3value, Level3option]);
+  }, [Level3value /*, Level3option */]);
 
   useEffect(() => {
     fetchLevel5Data();
-  }, [Level4value, Level4option]);
+  }, [Level4value /*, Level4option */]);
 
   useEffect(() => {
     fetchSectorData();
-  }, [Level5value, Level5option]);
+  }, [Level5value /*, Level5option */]);
 
   useEffect(() => {
-    if (id && userId) {
-      fetchEditData(id, userId)
+    if (id && user.id) {
+      fetchEditData(id, user.id)
         .then((editData) => {
           console.warn(editData);
 
@@ -534,19 +510,6 @@ const EeoiForm = ({
           </Button>
         )}
       </form>
-
-      <ToastContainer
-        theme={"colored"}
-        hideProgressBar={true}
-        transition={Slide}
-        autoClose={1500}
-        pauseOnFocusLoss={false}
-        style={{
-          "--toastify-font-family": "Poppins",
-          "--toastify-color-success": "#00CC9CFF",
-          "--toastify-color-warning": "#e74c3c",
-        }}
-      />
     </>
   );
 };

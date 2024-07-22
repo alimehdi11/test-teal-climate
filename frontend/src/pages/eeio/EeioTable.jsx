@@ -13,23 +13,7 @@ import {
   TableCell,
 } from "../../components/ui/Table.jsx";
 
-const EeioTable = ({ eeiodata, setEeiodata, userId }) => {
-  const fetchEeioData = async () => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/eeiodata/${userId}`,
-        "GET"
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
-      }
-      const jsonData = await response.json();
-      setEeiodata(jsonData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
+const EeioTable = ({ eeioData, fetchEeioData, userId }) => {
   const handleDelete = (id) => {
     return () => {
       request(
@@ -37,13 +21,14 @@ const EeioTable = ({ eeiodata, setEeiodata, userId }) => {
         "DELETE"
       )
         .then((response) => {
+          console.log("=====>>>>>", response);
           if (!response.ok) {
             throw new Error();
           }
           toast.success("Data delete successfully");
         })
         .then(() => {
-          // row deleted fetched data again
+          // Row deleted fetched data again
           fetchEeioData();
         })
         .catch((error) => {
@@ -59,6 +44,7 @@ const EeioTable = ({ eeiodata, setEeiodata, userId }) => {
         <TableHeader>
           <TableRow>
             {[
+              "S.No",
               "Scope",
               "pi",
               "Business Unit",
@@ -93,15 +79,16 @@ const EeioTable = ({ eeiodata, setEeiodata, userId }) => {
               "Country",
               "User Country",
               "Actions",
-            ].map((item) => (
-              <TableHead>{item}</TableHead>
+            ].map((item, index) => (
+              <TableHead key={index}>{item}</TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {eeiodata.length > 0 &&
-            eeiodata.map((eeio, index) => (
-              <TableRow>
+          {eeioData.length > 0 &&
+            eeioData.map((eeio, index) => (
+              <TableRow key={index}>
+                <TableCell>{index + 1}</TableCell>
                 <TableCell>{eeio.scope || "-"}</TableCell>
                 <TableCell>{eeio.pi || "-"}</TableCell>
                 <TableCell>{eeio.unitname || "-"}</TableCell>

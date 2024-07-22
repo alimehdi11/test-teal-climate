@@ -8,7 +8,6 @@ const DataProvider = ({ children }) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    console.log("DataProvider");
     (async () => {
       const fetchActivitesData = async () => {
         try {

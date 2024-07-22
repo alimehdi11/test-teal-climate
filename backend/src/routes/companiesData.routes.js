@@ -14,7 +14,7 @@ const companiesDataRouter = express.Router();
 companiesDataRouter.post("/", createCompaniesData);
 
 // Get a companiesdata by given id
-companiesDataRouter.get("/activites/:id", getCompaniesDataById);
+companiesDataRouter.get("/activites/:id", getCompaniesDataById); //====>
 
 // Update a companiesdata by given id
 companiesDataRouter.put("/:id", updateCompaniesDataById);
@@ -23,7 +23,7 @@ companiesDataRouter.put("/:id", updateCompaniesDataById);
 companiesDataRouter.delete("/:id", deleteCompaniesDataById);
 
 // Get all companiesdata for given userId
-companiesDataRouter.get("/:userId", getCompaniesDataByUserId);
+companiesDataRouter.get("/:userId", getCompaniesDataByUserId); //====>
 
 // Get top 10 emissions companiesdata by given userId
 companiesDataRouter.get("/top10/:userId", getTop10EmissionsByUserId);

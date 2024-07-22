@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import ActivitesForm from "./ActivitesForm.jsx";
 import ActivitiesTable from "./ActivitiesTable.jsx";
 import ActivitiesSidebar from "./ActivitiesSidebar.jsx";
-import Navbar from "../../components/Navbar.jsx";
 import { useParams } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { UserContext } from "../../contexts/UserContext.jsx";
@@ -32,17 +31,6 @@ const Activities = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (user.id) {
-  //     fetchCompanyData();
-  //   }
-  // }, [user.id]);
-
-  /**
-   * Above commented useEffect was previously used. It has [user.id] as dependency.
-   * I change it to no dependency. I do not why developer who added this as a dependency.
-   * For safety purpose I comment it so we can go back easily.
-   */
   useEffect(() => {
     fetchCompanyData();
   }, []);
@@ -55,7 +43,6 @@ const Activities = () => {
 
   return (
     <>
-      <Navbar />
       <Layout
         sidebarContent={
           <ActivitiesSidebar
@@ -73,7 +60,7 @@ const Activities = () => {
               setSelectedScope={setSelectedScope}
               setSelectedLevel={setSelectedLevel}
               userId={user.id}
-              setCompanyData={setCompanyData}
+              fetchCompanyData={fetchCompanyData}
             />
           ) : (
             <div

@@ -23,20 +23,19 @@ const isLoggedIn = () => {
   const token = getToken();
   if (token) {
     const payload = decodeToken(token);
-    return payload.exp > Date.now() / 1000 ? true : false;
-  } else {
-    return false;
+    return payload.exp > Date.now() / 1000;
   }
+  return false;
 };
 
 const isSubscribed = () => {
-  const token = getToken();
-  if (token) {
-    const payload = decodeToken(token);
-    return payload.subscribed ? true : false;
-  } else {
-    return false;
-  }
+  // const token = getToken();
+  // if (token) {
+  //   const payload = decodeToken(token);
+  //   return payload.subscribed;
+  // }
+  // return false;
+  return true;
 };
 
 const getBearerToken = () => {

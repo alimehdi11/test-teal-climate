@@ -27,7 +27,7 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
           toast.success("Data delete successfully");
         })
         .then(() => {
-          // row deleted fetched data again
+          // Row deleted fetched data again
           fetchCompanyData();
         })
         .catch((error) => {
@@ -43,6 +43,7 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
         <TableHeader>
           <TableRow>
             {[
+              "S.No",
               "Scope",
               "Business Unit",
               "Scope Category",
@@ -72,15 +73,16 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
                 <span style={{ fontSize: "0.6em" }}>2</span>O
               </>,
               "Actions",
-            ].map((item) => (
-              <TableHead>{item}</TableHead>
+            ].map((item, index) => (
+              <TableHead key={index}>{item}</TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
           {companyData.length > 0 &&
             companyData.map((item, index) => (
-              <TableRow>
+              <TableRow key={index}>
+                <TableCell>{index + 1}</TableCell>
                 <TableCell>{item.scope || "-"}</TableCell>
                 <TableCell>{item.businessunit || "-"}</TableCell>
                 <TableCell>{item.fuel_category || "-"}</TableCell>

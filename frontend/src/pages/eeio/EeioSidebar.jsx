@@ -1,17 +1,12 @@
-import { useEffect } from "react";
 import Button from "../../components/ui/Button";
 
-const Sidebar = ({
+const EeioSidebar = ({
   selectedForm,
   setSelectedForm,
   level1Options,
   selectedlevel1,
   setSelectedlevel1,
 }) => {
-  useEffect(() => {
-    setSelectedlevel1("");
-  }, [selectedForm]);
-
   return (
     <>
       <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">
@@ -73,4 +68,4 @@ const Sidebar = ({
   );
 };
 
-export default Sidebar;
+export default EeioSidebar;

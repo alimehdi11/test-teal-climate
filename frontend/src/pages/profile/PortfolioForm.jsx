@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Slide, ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { request } from "../../utils/request.js";
@@ -292,175 +292,156 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
   }, [id]);
 
   return (
-    <>
-      <form onSubmit={handleFormSubmit}>
-        <h3 className="m-0 mb-4 font-extrabold text-2xl">
-          Create Your Profile
-        </h3>
-        <div className="grid lg:grid-cols-2 gap-4">
-          {/* Fuel Category Dropdown */}
-          <FormControl>
-            <Label>Business Unit</Label>
-            <Input
-              type="text"
-              value={businessUnit}
-              onChange={(e) => setBusinessUnit(e.target.value)}
-            />
-          </FormControl>
+    <form onSubmit={handleFormSubmit}>
+      <h3 className="m-0 mb-4 font-extrabold text-2xl">Create Your Profile</h3>
+      <div className="grid lg:grid-cols-2 gap-4">
+        {/* Fuel Category Dropdown */}
+        <FormControl>
+          <Label>Business Unit</Label>
+          <Input
+            type="text"
+            value={businessUnit}
+            onChange={(e) => setBusinessUnit(e.target.value)}
+          />
+        </FormControl>
 
-          {/* Continent */}
-          <FormControl>
-            <Label>Continent</Label>
-            <Select
-              value={selectedContinent}
-              onChange={(e) => setSelectedContinent(e.target.value)}
-            >
-              <option value="">Select Continent</option>
-              {continents.map((continent, index) => (
-                <option key={index} value={continent}>
-                  {continent}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* Country */}
-          <FormControl>
-            <Label>Country</Label>
-            <Select
-              value={selectedCountry}
-              onChange={(e) => setSelectedCountry(e.target.value)}
-            >
-              <option value="">Select Country</option>
-              {countries.map((country, index) => (
-                <option key={index} value={country}>
-                  {country}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* Region */}
-          <FormControl>
-            <Label>Region</Label>
-            <Select
-              value={selectedRegion}
-              onChange={(e) => setSelectedRegion(e.target.value)}
-            >
-              <option value="">Select Region</option>
-              {regions.map((region, index) => (
-                <option key={index} value={region}>
-                  {region}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* Revenu */}
-          <FormControl>
-            <Label>Revenue (optional)</Label>
-            <Input
-              type="number"
-              value={revenue}
-              min="0"
-              onChange={(e) => setRevenue(e.target.value)}
-            />
-          </FormControl>
-
-          {/* No. of employees  */}
-          <FormControl>
-            <Label>No. of employees (optional)</Label>
-            <Input
-              type="number"
-              value={employees}
-              min="0"
-              onChange={(e) => setEmployees(e.target.value)}
-            />
-          </FormControl>
-
-          {/* Notes */}
-          <FormControl>
-            <Label>Notes (optional)</Label>
-            <Input
-              type="text"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-          </FormControl>
-
-          {/* Production / Clients */}
-          <FormControl>
-            <Label>Production / Clients (optional)</Label>
-            <Input
-              type="number"
-              value={productionClients}
-              min="0"
-              onChange={(e) => setProductionClients(e.target.value)}
-            />
-          </FormControl>
-
-          {/* Quantity Dropdown */}
-          <FormControl>
-            <Label>Ownership / Partnership %</Label>
-            <Input
-              type="number"
-              value={
-                ownershipPercentage || ownershipPercentage === 0
-                  ? ownershipPercentage
-                  : 100
-              }
-              min={0}
-              max={100}
-              onChange={(e) =>
-                setOwnershipPercentage(
-                  Math.min(100, Math.max(0, e.target.value))
-                )
-              }
-            />
-          </FormControl>
-        </div>
-
-        {/* Buttons */}
-        {id ? (
-          <div className="flex flex-col mt-4 gap-4 md:flex-row">
-            <Button
-              type="button"
-              className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
-              onClick={handleUpdateProfile}
-            >
-              Edit
-            </Button>
-          </div>
-        ) : (
-          <Button
-            className="w-full mt-4 text-white bg-tc-green hover:bg-opacity-90"
-            type="submit"
+        {/* Continent */}
+        <FormControl>
+          <Label>Continent</Label>
+          <Select
+            value={selectedContinent}
+            onChange={(e) => setSelectedContinent(e.target.value)}
           >
-            Add
-          </Button>
-        )}
-      </form>
+            <option value="">Select Continent</option>
+            {continents.map((continent, index) => (
+              <option key={index} value={continent}>
+                {continent}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
 
-      <ToastContainer
-        theme={"colored"}
-        hideProgressBar={true}
-        transition={Slide}
-        autoClose={1500}
-        pauseOnFocusLoss={false}
-        style={{
-          "--toastify-font-family": "Poppins",
-          "--toastify-color-success": "#00CC9CFF",
-          "--toastify-color-warning": "#e74c3c",
-        }}
-      />
-    </>
+        {/* Country */}
+        <FormControl>
+          <Label>Country</Label>
+          <Select
+            value={selectedCountry}
+            onChange={(e) => setSelectedCountry(e.target.value)}
+          >
+            <option value="">Select Country</option>
+            {countries.map((country, index) => (
+              <option key={index} value={country}>
+                {country}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+
+        {/* Region */}
+        <FormControl>
+          <Label>Region</Label>
+          <Select
+            value={selectedRegion}
+            onChange={(e) => setSelectedRegion(e.target.value)}
+          >
+            <option value="">Select Region</option>
+            {regions.map((region, index) => (
+              <option key={index} value={region}>
+                {region}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+
+        {/* Revenu */}
+        <FormControl>
+          <Label>Revenue (optional)</Label>
+          <Input
+            type="number"
+            value={revenue}
+            min="0"
+            onChange={(e) => setRevenue(e.target.value)}
+          />
+        </FormControl>
+
+        {/* No. of employees  */}
+        <FormControl>
+          <Label>No. of employees (optional)</Label>
+          <Input
+            type="number"
+            value={employees}
+            min="0"
+            onChange={(e) => setEmployees(e.target.value)}
+          />
+        </FormControl>
+
+        {/* Notes */}
+        <FormControl>
+          <Label>Notes (optional)</Label>
+          <Input
+            type="text"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
+        </FormControl>
+
+        {/* Production / Clients */}
+        <FormControl>
+          <Label>Production / Clients (optional)</Label>
+          <Input
+            type="number"
+            value={productionClients}
+            min="0"
+            onChange={(e) => setProductionClients(e.target.value)}
+          />
+        </FormControl>
+
+        {/* Quantity Dropdown */}
+        <FormControl>
+          <Label>Ownership / Partnership %</Label>
+          <Input
+            type="number"
+            value={
+              ownershipPercentage || ownershipPercentage === 0
+                ? ownershipPercentage
+                : 100
+            }
+            min={0}
+            max={100}
+            onChange={(e) =>
+              setOwnershipPercentage(Math.min(100, Math.max(0, e.target.value)))
+            }
+          />
+        </FormControl>
+      </div>
+
+      {/* Buttons */}
+      {id ? (
+        <div className="flex flex-col mt-4 gap-4 md:flex-row">
+          <Button
+            type="button"
+            className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+            onClick={handleUpdateProfile}
+          >
+            Edit
+          </Button>
+        </div>
+      ) : (
+        <Button
+          className="w-full mt-4 text-white bg-tc-green hover:bg-opacity-90"
+          type="submit"
+        >
+          Add
+        </Button>
+      )}
+    </form>
   );
 };
 

@@ -1,318 +1,201 @@
 import { pool } from "./../database/connectDb.js";
 
-const getEeioByName = async (req, resp) => {
+const getEeioByName = async (req, res) => {
   const pi = req.params.name;
   if (!pi) {
-    return resp.redirect("/eeio");
+    return res.status(400).json({ error: "Invalid param" });
   }
   pool
-    .connect()
-    .then((client) => {
-      return client
-        .query("SELECT level1 FROM eeio WHERE pi = $1", [pi])
-        .then((eeioDataResult) => {
-          const eeiodatas = eeioDataResult.rows;
-          const level1Data = eeiodatas.map((item) => ({ level1: item.level1 }));
-
-          const seenNames = new Set();
-          const uniqueObjects = [];
-
-          for (const obj of level1Data) {
-            if (!seenNames.has(obj.level1)) {
-              seenNames.add(obj.level1);
-              uniqueObjects.push(obj);
-            }
-          }
-
-          resp.status(200).json(uniqueObjects);
-        })
-        .catch((error) => {
-          console.error("activatedata Error:", error);
-          resp.status(500).send("Error fetching data");
-        })
-        .finally(() => {
-          client.release(); // Release the connection back to the pool in all cases
-        });
+    .query("SELECT level1 FROM eeio WHERE pi = $1", [pi])
+    .then((eeioDataResult) => {
+      const eeiodatas = eeioDataResult.rows;
+      const level1Data = eeiodatas.map((item) => ({ level1: item.level1 }));
+      const seenNames = new Set();
+      const uniqueObjects = [];
+      for (const obj of level1Data) {
+        if (!seenNames.has(obj.level1)) {
+          seenNames.add(obj.level1);
+          uniqueObjects.push(obj);
+        }
+      }
+      res.status(200).json(uniqueObjects);
     })
     .catch((error) => {
       console.error("activatedata Error:", error);
-      resp.status(500).send("Error connecting to the database");
+      res.status(500).send("Error fetching data");
     });
 };
 
-const getEeioLevel2 = async (req, resp) => {
+const getEeioLevel2 = async (req, res) => {
   const selectedForm = req.params.selectedForm;
   const selectedlevel1 = req.params.selectedlevel1;
-
   pool
-    .connect()
-    .then((client) => {
-      return client
-        .query("SELECT level2 FROM eeio WHERE pi = $1 AND level1 = $2", [
-          selectedForm,
-          selectedlevel1,
-        ])
+    .query("SELECT level2 FROM eeio WHERE pi = $1 AND level1 = $2", [
+      selectedForm,
+      selectedlevel1,
+    ])
+    .then((eeioLevel2Result) => {
+      const eeioLevel2Data = eeioLevel2Result.rows;
+      const Level2Data = eeioLevel2Data.map((item) => ({
+        level2: item.level2,
+      }));
+      const seenNames = new Set();
+      const uniqueObjects = [];
 
-        .then((eeioLevel2Result) => {
-          const eeioLevel2Data = eeioLevel2Result.rows;
-          const Level2Data = eeioLevel2Data.map((item) => ({
-            level2: item.level2,
-          }));
-          const seenNames = new Set();
-          const uniqueObjects = [];
-
-          for (const obj of Level2Data) {
-            if (!seenNames.has(obj.level2)) {
-              seenNames.add(obj.level2);
-              uniqueObjects.push(obj);
-            }
-          }
-          resp.status(200).json(uniqueObjects);
-        })
-        .catch((error) => {
-          console.error("activatedata Error:", error);
-          resp.status(500).send("Error fetching data");
-        })
-        .finally(() => {
-          client.release(); // Release the connection back to the pool in all cases
-        });
+      for (const obj of Level2Data) {
+        if (!seenNames.has(obj.level2)) {
+          seenNames.add(obj.level2);
+          uniqueObjects.push(obj);
+        }
+      }
+      res.status(200).json(uniqueObjects);
     })
     .catch((error) => {
       console.error("activatedata Error:", error);
-      resp.status(500).send("Error connecting to the database");
+      res.status(500).send("Error fetching data");
     });
 };
 
-const getEeioLevel3 = (req, resp) => {
+const getEeioLevel3 = (req, res) => {
   const selectlevel2 = req.params.level2;
   const selectedForm = req.params.selectedForm;
   const selectedlevel1 = req.params.selectedlevel1;
-
   pool
-    .connect()
-    .then((client) => {
-      return client
-        .query(
-          "SELECT level3 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3",
-          [selectedForm, selectedlevel1, selectlevel2]
-        )
-        .then((eeioLevel3Result) => {
-          const eeioLevel3Data = eeioLevel3Result.rows;
+    .query(
+      "SELECT level3 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3",
+      [selectedForm, selectedlevel1, selectlevel2]
+    )
+    .then((eeioLevel3Result) => {
+      const eeioLevel3Data = eeioLevel3Result.rows;
 
-          const Level3Data = eeioLevel3Data.map((item) => ({
-            level3: item.level3,
-          }));
+      const Level3Data = eeioLevel3Data.map((item) => ({
+        level3: item.level3,
+      }));
 
-          const seenNames = new Set();
-          const uniqueObjects = [];
+      const seenNames = new Set();
+      const uniqueObjects = [];
 
-          for (const obj of Level3Data) {
-            if (!seenNames.has(obj.level3)) {
-              seenNames.add(obj.level3);
-              uniqueObjects.push(obj);
-            }
-          }
-
-          resp.status(200).json(uniqueObjects);
-        })
-        .catch((error) => {
-          console.error("activatedata level2 Error:", error);
-          resp.status(500).send("Error fetching data");
-        })
-        .finally(() => {
-          client.release(); // Release the connection back to the pool in all cases
-        });
+      for (const obj of Level3Data) {
+        if (!seenNames.has(obj.level3)) {
+          seenNames.add(obj.level3);
+          uniqueObjects.push(obj);
+        }
+      }
+      res.status(200).json(uniqueObjects);
     })
     .catch((error) => {
-      console.error("activatedata Error:", error);
-      resp.status(500).send("Error connecting to the database");
+      console.error("activatedata level2 Error:", error);
+      res.status(500).send("Error fetching data");
     });
 };
 
-const getEeioLevel4 = (req, resp) => {
+const getEeioLevel4 = (req, res) => {
   const selectlevel3 = req.params.level3;
-
   const selectlevel2 = req.params.level2;
   const selectedForm = req.params.selectedForm;
   const selectedlevel1 = req.params.selectedlevel1;
-
   pool
-    .connect()
-    .then((client) => {
-      return client
-        .query(
-          "SELECT level4 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4",
-          [selectedForm, selectedlevel1, selectlevel2, selectlevel3]
-        )
-        .then((eeioLevel4Result) => {
-          const eeioLevel4Data = eeioLevel4Result.rows;
+    .query(
+      "SELECT level4 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4",
+      [selectedForm, selectedlevel1, selectlevel2, selectlevel3]
+    )
+    .then((eeioLevel4Result) => {
+      const eeioLevel4Data = eeioLevel4Result.rows;
 
-          const Level4Data = eeioLevel4Data.map((item) => ({
-            level4: item.level4,
-          }));
-
-          const seenNames = new Set();
-          const uniqueObjects = [];
-
-          for (const obj of Level4Data) {
-            if (!seenNames.has(obj.level4)) {
-              seenNames.add(obj.level4);
-              uniqueObjects.push(obj);
-            }
-          }
-
-          resp.status(200).json(uniqueObjects);
-        })
-        .catch((error) => {
-          console.error("activatedata level2 Error:", error);
-          resp.status(500).send("Error fetching data");
-        })
-        .finally(() => {
-          client.release(); // Release the connection back to the pool in all cases
-        });
+      const Level4Data = eeioLevel4Data.map((item) => ({
+        level4: item.level4,
+      }));
+      const seenNames = new Set();
+      const uniqueObjects = [];
+      for (const obj of Level4Data) {
+        if (!seenNames.has(obj.level4)) {
+          seenNames.add(obj.level4);
+          uniqueObjects.push(obj);
+        }
+      }
+      res.status(200).json(uniqueObjects);
     })
     .catch((error) => {
-      console.error("activatedata Error:", error);
-      resp.status(500).send("Error connecting to the database");
+      console.error("activatedata level2 Error:", error);
+      res.status(500).send("Error fetching data");
     });
 };
 
-const getEeioLevel5 = (req, resp) => {
+const getEeioLevel5 = (req, res) => {
   const selectlevel4 = req.params.level4;
-
   const selectlevel3 = req.params.level3;
-
   const selectlevel2 = req.params.level2;
   const selectedForm = req.params.selectedForm;
   const selectedlevel1 = req.params.selectedlevel1;
-
   pool
-    .connect()
-    .then((client) => {
-      return client
-        .query(
-          "SELECT Level5 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5",
-          [
-            selectedForm,
-            selectedlevel1,
-            selectlevel2,
-            selectlevel3,
-            selectlevel4,
-          ]
-        )
-        .then((eeioLevel5Result) => {
-          const eeioLevel5Data = eeioLevel5Result.rows;
-
-          const level5Data = eeioLevel5Data.map((item) => ({
-            level5: item.level5,
-          }));
-
-          const seenNames = new Set();
-          const uniqueObjects = [];
-
-          for (const obj of level5Data) {
-            if (!seenNames.has(obj.level5)) {
-              seenNames.add(obj.level5);
-              uniqueObjects.push(obj);
-            }
-          }
-
-          resp.status(200).json(uniqueObjects);
-        })
-        .catch((error) => {
-          console.error("activatedata level2 Error:", error);
-          resp.status(500).send("Error fetching data");
-        })
-        .finally(() => {
-          client.release(); // Release the connection back to the pool in all cases
-        });
+    .query(
+      "SELECT Level5 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5",
+      [selectedForm, selectedlevel1, selectlevel2, selectlevel3, selectlevel4]
+    )
+    .then((eeioLevel5Result) => {
+      const eeioLevel5Data = eeioLevel5Result.rows;
+      const level5Data = eeioLevel5Data.map((item) => ({
+        level5: item.level5,
+      }));
+      const seenNames = new Set();
+      const uniqueObjects = [];
+      for (const obj of level5Data) {
+        if (!seenNames.has(obj.level5)) {
+          seenNames.add(obj.level5);
+          uniqueObjects.push(obj);
+        }
+      }
+      res.status(200).json(uniqueObjects);
     })
     .catch((error) => {
-      console.error("activatedata Error:", error);
-      resp.status(500).send("Error connecting to the database");
+      console.error("activatedata level2 Error:", error);
+      res.status(500).send("Error fetching data");
     });
 };
 
-const getEeiosector = (req, resp) => {
+const getEeiosector = (req, res) => {
   const selectedlevel5 = req.params.level5;
-
   const selectlevel4 = req.params.level4;
-
   const selectlevel3 = req.params.level3;
-
   const selectlevel2 = req.params.level2;
   const selectedForm = req.params.selectedForm;
   const selectedlevel1 = req.params.selectedlevel1;
-
   pool
-    .connect()
-    .then((client) => {
-      return client
-        .query(
-          "SELECT sector FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5 AND level5 = $6",
-          [
-            selectedForm,
-            selectedlevel1,
-            selectlevel2,
-            selectlevel3,
-            selectlevel4,
-            selectedlevel5,
-          ]
-        )
-        .then((eeioSectorResult) => {
-          const eeioSectorData = eeioSectorResult.rows;
-
-          const sectorData = eeioSectorData.map((item) => ({
-            sector: item.sector,
-          }));
-
-          const seenNames = new Set();
-          const uniqueObjects = [];
-
-          for (const obj of sectorData) {
-            if (!seenNames.has(obj.sector)) {
-              seenNames.add(obj.sector);
-              uniqueObjects.push(obj);
-            }
-          }
-
-          resp.status(200).json(uniqueObjects);
-        })
-        .catch((error) => {
-          console.error("activatedata level2 Error:", error);
-          resp.status(500).send("Error fetching data");
-        })
-        .finally(() => {
-          client.release(); // Release the connection back to the pool in all cases
-        });
+    .query(
+      "SELECT sector FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5 AND level5 = $6",
+      [
+        selectedForm,
+        selectedlevel1,
+        selectlevel2,
+        selectlevel3,
+        selectlevel4,
+        selectedlevel5,
+      ]
+    )
+    .then((eeioSectorResult) => {
+      const eeioSectorData = eeioSectorResult.rows;
+      const sectorData = eeioSectorData.map((item) => ({
+        sector: item.sector,
+      }));
+      const seenNames = new Set();
+      const uniqueObjects = [];
+      for (const obj of sectorData) {
+        if (!seenNames.has(obj.sector)) {
+          seenNames.add(obj.sector);
+          uniqueObjects.push(obj);
+        }
+      }
+      res.status(200).json(uniqueObjects);
     })
     .catch((error) => {
-      console.error("activatedata Error:", error);
-      resp.status(500).send("Error connecting to the database");
+      console.error("activatedata level2 Error:", error);
+      res.status(500).send("Error fetching data");
     });
 };
 
 const insertEeioData = async (req, res) => {
-  const {
-    userId,
-    businessUnitsvalue,
-    selectedForm,
-    selectedlevel1,
-    Level2value,
-    Level3value,
-    Level4value,
-    Level5value,
-    Sectorvalue,
-    currencyvalue,
-    quantity,
-  } = req.body;
-
-  if (!userId) {
-    return res.status(401).json({ error: "User id is required" });
-  }
-
   try {
-    console.table({
+    const {
       userId,
       businessUnitsvalue,
       selectedForm,
@@ -324,27 +207,21 @@ const insertEeioData = async (req, res) => {
       Sectorvalue,
       currencyvalue,
       quantity,
-    });
-
+    } = req.body;
     const fetchQuery1 =
       "SELECT * FROM companies WHERE userid = $1 AND unitname= $2";
     const fetchValues1 = [userId, businessUnitsvalue];
     const fetchResult1 = await pool.query(fetchQuery1, fetchValues1);
-    console.log(1);
     if (fetchResult1.rows.length === 0) {
+      console.log("hi");
       return res
         .status(404)
         .json({ error: "No data found for the given user id" });
     }
     const userData = fetchResult1.rows;
-
     const continent = userData[0].continent;
     const country = userData[0].countries;
-    const region = userData[0].region;
-    console.log(continent);
-    console.log(country);
-    console.log(2);
-    // Assuming you need to fetch some data before inserting
+    // const region = userData[0].region;
     const fetchQuery =
       "SELECT * FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5 AND level5 = $6 AND sector = $7 AND continent = $8 AND country = $9";
     const fetchValues = [
@@ -359,23 +236,15 @@ const insertEeioData = async (req, res) => {
       country,
     ];
     const fetchResult = await pool.query(fetchQuery, fetchValues);
-    console.log(3);
-
     if (fetchResult.rows.length === 0) {
-      // return res
-      //   .status(404)
-      //   .json({ error: "No data found for the given user id" });
-      res.status(500).json({ error: "Something went wrong" });
+      return res.status(500).json({ error: "Something went wrong" });
     }
-    console.log(4);
     const datas = fetchResult.rows;
-
     let co2e = null;
     let co2eofco2 = null;
     let co2eofch4 = null;
     let co2eofn2o = null;
     let co2eofother = null;
-
     const ghgValues = [
       "kg CO2e",
       "kg CO2e of CO2",
@@ -383,30 +252,23 @@ const insertEeioData = async (req, res) => {
       "kg CO2e of N2O",
       "kg CO2e of Other",
     ];
-    console.log(5);
     datas.forEach((data) => {
       if (data.ghg == ghgValues[0]) {
         co2e = data.pereuro * quantity;
       }
-
       if (data.ghg == ghgValues[1]) {
         co2eofco2 = data.pereuro * quantity;
       }
-
       if (data.ghg == ghgValues[2]) {
         co2eofch4 = data.pereuro * quantity;
       }
-
       if (data.ghg == ghgValues[3]) {
         co2eofn2o = data.pereuro * quantity;
       }
-
       if (data.ghg == ghgValues[4]) {
         co2eofother = data.pereuro * quantity;
       }
     });
-
-    console.table([co2e, co2eofco2, co2eofch4, co2eofn2o, co2eofother]);
     const exiobasecode = datas[0]?.exiobasecode;
     const scope = "scope 3";
     const insertQuery =
@@ -436,8 +298,7 @@ const insertEeioData = async (req, res) => {
     ];
 
     const insertResult = await pool.query(insertQuery, values);
-
-    console.log("Data inserted successfully");
+    console.log("Companies data inserted successfully");
     res.status(200).json({
       message: "Companies data inserted successfully",
       data: insertResult.rows[0],
@@ -448,82 +309,45 @@ const insertEeioData = async (req, res) => {
   }
 };
 
-const getEeiodata = async (req, resp) => {
+const getEeiodata = async (req, res) => {
   const userid = req.params.userid;
-
   if (!userid) {
-    return resp.redirect("/eeio");
+    return res.status(400).json({ error: "Invalid param" });
   }
   pool
-    .connect()
-    .then((client) => {
-      return client
-        .query("SELECT * FROM eeioentry WHERE userid = $1", [userid])
-        .then((eeioDataResult) => {
-          const eeiodatas = eeioDataResult.rows;
+    .query("SELECT * FROM eeioentry WHERE userid = $1", [userid])
+    .then((eeioDataResult) => {
+      const eeiodatas = eeioDataResult.rows;
 
-          // const seenNames = new Set();
-          // const uniqueObjects = [];
-
-          // for (const obj of eeiodatas) {
-          //     if (!seenNames.has(obj.level1)) {
-          //         seenNames.add(obj.level1);
-          //         uniqueObjects.push(obj);
-          //     }
-          // }
-
-          resp.status(200).json(eeiodatas);
-        })
-        .catch((error) => {
-          console.error("activatedata Error:", error);
-          resp.status(500).send("Error fetching data");
-        })
-        .finally(() => {
-          client.release(); // Release the connection back to the pool in all cases
-        });
+      res.status(200).json(eeiodatas);
     })
     .catch((error) => {
       console.error("activatedata Error:", error);
-      resp.status(500).send("Error connecting to the database");
+      res.status(500).send("Error fetching data");
     });
 };
 
-const fetchEeioEditData = async (req, resp) => {
+const fetchEeioEditData = async (req, res) => {
   const userid = req.params.userid;
   const id = req.params.id;
 
   if (!userid) {
-    return resp.redirect("/eeio");
+    return res.status(400).json({ error: "Invalid param" });
   }
   pool
-    .connect()
-    .then((client) => {
-      return client
-        .query("SELECT * FROM eeioentry WHERE userid = $1 AND id =$2", [
-          userid,
-          id,
-        ])
-        .then((eeioEditDataResult) => {
-          const eeioEditData = eeioEditDataResult.rows;
+    .query("SELECT * FROM eeioentry WHERE userid = $1 AND id =$2", [userid, id])
+    .then((eeioEditDataResult) => {
+      const eeioEditData = eeioEditDataResult.rows;
 
-          resp.status(200).json(eeioEditData);
-        })
-        .catch((error) => {
-          console.error("activatedata Error:", error);
-          resp.status(500).send("Error fetching data");
-        })
-        .finally(() => {
-          client.release(); // Release the connection back to the pool in all cases
-        });
+      res.status(200).json(eeioEditData);
     })
     .catch((error) => {
       console.error("activatedata Error:", error);
-      resp.status(500).send("Error connecting to the database");
+      res.status(500).send("Error fetching data");
     });
 };
 
 const editEeioData = async (req, res) => {
-  console.log("edit");
   const id = req.params.id;
 
   const {
@@ -545,20 +369,6 @@ const editEeioData = async (req, res) => {
   }
 
   try {
-    console.table({
-      userId,
-      businessUnitsvalue,
-      selectedForm,
-      selectedlevel1,
-      Level2value,
-      Level3value,
-      Level4value,
-      Level5value,
-      Sectorvalue,
-      currencyvalue,
-      quantity,
-    });
-
     const fetchQuery1 =
       "SELECT * FROM companies WHERE userid = $1 AND unitname= $2";
     const fetchValues1 = [userId, businessUnitsvalue];
@@ -632,7 +442,6 @@ const editEeioData = async (req, res) => {
       }
     });
 
-    console.table([co2e, co2eofco2, co2eofch4, co2eofn2o, co2eofother]);
     const exiobasecode = datas[0].exiobasecode;
     const scope = "scope 3";
     const updateQuery = `
@@ -707,16 +516,15 @@ const editEeioData = async (req, res) => {
 
 const deleteEeioData = (req, res) => {
   const { id, userid } = req.params;
-  console.log(id, userid);
 
   const query = "DELETE FROM eeioentry WHERE id = $1 AND userid = $2";
 
   pool.query(query, [id, userid], (error) => {
     if (error) {
       console.error("Error deleting data:", error);
-      res.status(500).json({ errorMessage: "Error deleting data" });
+      res.status(500).json({ error: "Error deleting data" });
     } else {
-      res.status(200).json({ successMessage: "Data deleted successfully" });
+      res.status(200).json({ message: "Data deleted successfully" });
     }
   });
 };
