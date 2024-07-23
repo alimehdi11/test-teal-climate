@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
+import { Link } from "react-router-dom";
 
 const ActivitiesSidebar = ({
   selectedScope,
@@ -127,7 +128,9 @@ const ActivitiesSidebar = ({
 
       <hr className="w-full h-[1px] bg-slate-500 my-2" />
 
-      <Button className="py-3 w-full">Spend Base Scope 3</Button>
+      <Link to="/eeio" style={{ textDecoration: "none" }}>
+        <Button className="py-3 w-full">Spend Base Scope 3</Button>
+      </Link>
 
       <div className="mt-4">
         <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">

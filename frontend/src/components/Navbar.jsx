@@ -9,8 +9,8 @@ import profileNavLinkIconBlack from "../assets/profile-nav-link-icon-black.svg";
 import profileNavLinkIconWhite from "../assets/profile-nav-link-icon-white.svg";
 import activitiesNavLinkIconBlack from "../assets/dashboard-nav-link-icon-black.svg";
 import activitiesNavLinkIconWhite from "../assets/dashboard-nav-link-icon-white.svg";
-import eeioNavLinkIconBlack from "../assets/eeio-nav-link-icon-black.svg";
-import eeioNavLinkIconWhite from "../assets/eeio-nav-link-icon-white.svg";
+// import eeioNavLinkIconBlack from "../assets/eeio-nav-link-icon-black.svg";
+// import eeioNavLinkIconWhite from "../assets/eeio-nav-link-icon-white.svg";
 import { IoSettingsOutline } from "react-icons/io5";
 import messagesIcon from "../assets/messages-icon.svg";
 import notificationIcon from "../assets/notification-icon.svg";
@@ -91,7 +91,7 @@ const Navbar = () => {
           />
           <div>Activites</div>
         </Link>
-        <Link
+        {/* <Link
           to="/eeio"
           className={`text-black flex items-center gap-x-1 p-2 rounded-lg border border-white hover:border-tc-green ${
             paths.isEeioPath ? "bg-tc-green text-white" : ""
@@ -102,7 +102,7 @@ const Navbar = () => {
             src={paths.isEeioPath ? eeioNavLinkIconWhite : eeioNavLinkIconBlack}
           />
           <div>Eeio</div>
-        </Link>
+        </Link> */}
       </div>
 
       {/* Profile and Notification Icons*/}
@@ -182,7 +182,7 @@ const Navbar = () => {
             />
             <div>Activites</div>
           </Link>
-          <Link
+          {/* <Link
             to="/eeio"
             className={`text-black flex items-center gap-x-1 p-2 rounded-lg border border-white hover:border-tc-green ${
               paths.isEeioPath ? "bg-tc-green text-white" : ""
@@ -195,7 +195,7 @@ const Navbar = () => {
               }
             />
             <div>Eeio</div>
-          </Link>
+          </Link> */}
         </div>
 
         {/* Profile and Notification Icons*/}

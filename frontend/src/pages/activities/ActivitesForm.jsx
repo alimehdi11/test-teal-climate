@@ -146,7 +146,7 @@ const ActivitesForm = ({
     return fuelNames;
   };
 
-  const calculateConversionGHG = () => {
+  const ghgCalculator = (condition) => {
     let co2e = null;
     let co2eofco2 = null;
     let co2eofch4 = null;
@@ -162,7 +162,35 @@ const ActivitesForm = ({
     for (let i = 0; i < activitiesData?.datas.length; i++) {
       const item = activitiesData?.datas[i];
 
-      if (
+      if (condition(item)) {
+        if (item.ghg === ghgValues[0]) {
+          co2e = item.ghgconversion;
+        } else if (item.ghg === ghgValues[1]) {
+          co2eofco2 = item.ghgconversion;
+        } else if (item.ghg === ghgValues[2]) {
+          co2eofch4 = item.ghgconversion;
+        } else if (item.ghg === ghgValues[3]) {
+          co2eofn2o = item.ghgconversion;
+        }
+      }
+
+      if (co2e && co2eofco2 && co2eofch4 && co2eofn2o) {
+        // If all 4 values are found not need to loop any more
+        break;
+      }
+    }
+
+    return {
+      co2e,
+      co2eofco2,
+      co2eofch4,
+      co2eofn2o,
+    };
+  };
+
+  const calculateConversionGHG = () => {
+    const condition = (item) => {
+      return (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
         item.level2 === fuelTypeValue &&
@@ -171,130 +199,55 @@ const ActivitesForm = ({
         (selectedLevel === "Material use" || selectedLevel === "Waste disposal"
           ? item.level5 === level5Value
           : true)
-      ) {
-        if (item.ghg === ghgValues[0]) {
-          co2e = item.ghgconversion;
-        } else if (item.ghg === ghgValues[1]) {
-          co2eofco2 = item.ghgconversion;
-        } else if (item.ghg === ghgValues[2]) {
-          co2eofch4 = item.ghgconversion;
-        } else if (item.ghg === ghgValues[3]) {
-          co2eofn2o = item.ghgconversion;
-        }
-      }
-
-      if (co2e && co2eofco2 && co2eofch4 && co2eofn2o) {
-        // If all 4 values are found not need to loop any more
-        break;
-      }
-    }
-
-    // Now co2e, co2eofco2, co2eofch4, and co2eofn2o contain the respective values
-
-    return {
-      co2e,
-      co2eofco2,
-      co2eofch4,
-      co2eofn2o,
+      );
     };
+    return ghgCalculator(condition);
   };
 
   const calculateConversionGHGForElectricity = (payload) => {
-    let co2e = null;
-    let co2eofco2 = null;
-    let co2eofch4 = null;
-    let co2eofn2o = null;
-
-    const ghgValues = [
-      "kg CO2e",
-      "kg CO2e of CO2 per unit",
-      "kg CO2e of CH4 per unit",
-      "kg CO2e of N2O per unit",
-    ];
-
-    for (let i = 0; i < activitiesData?.datas.length; i++) {
-      const item = activitiesData?.datas[i];
-
-      if (
+    const condition = (item) => {
+      return (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
         item.level2 === payload.level2 &&
         item.level3 === payload.level3 &&
         (item.level4 === payload.level4 || item.level4 === "null") &&
         item.uom === unitOfMeasurementValue
-      ) {
-        if (item.ghg === ghgValues[0]) {
-          co2e = item.ghgconversion;
-        } else if (item.ghg === ghgValues[1]) {
-          co2eofco2 = item.ghgconversion;
-        } else if (item.ghg === ghgValues[2]) {
-          co2eofch4 = item.ghgconversion;
-        } else if (item.ghg === ghgValues[3]) {
-          co2eofn2o = item.ghgconversion;
-        }
-      }
-
-      if (co2e && co2eofco2 && co2eofch4 && co2eofn2o) {
-        // If all 4 values are found not need to loop any more
-        break;
-      }
-    }
-
-    return {
-      co2e,
-      co2eofco2,
-      co2eofch4,
-      co2eofn2o,
+      );
     };
+    return ghgCalculator(condition);
   };
 
   const calculateConversionGHGForDeliveryEvs = (payload) => {
-    let co2e = null;
-    let co2eofco2 = null;
-    let co2eofch4 = null;
-    let co2eofn2o = null;
-
-    const ghgValues = [
-      "kg CO2e",
-      "kg CO2e of CO2 per unit",
-      "kg CO2e of CH4 per unit",
-      "kg CO2e of N2O per unit",
-    ];
-
-    for (let i = 0; i < activitiesData?.datas.length; i++) {
-      const item = activitiesData?.datas[i];
-
-      if (
+    const condition = (item) => {
+      return (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
         item.level2 === payload.level2 &&
         item.level3 === payload.level3 &&
         item.level5 === payload.level5 &&
         item.uom === unitOfMeasurementValue
-      ) {
-        if (item.ghg === ghgValues[0]) {
-          co2e = item.ghgconversion;
-        } else if (item.ghg === ghgValues[1]) {
-          co2eofco2 = item.ghgconversion;
-        } else if (item.ghg === ghgValues[2]) {
-          co2eofch4 = item.ghgconversion;
-        } else if (item.ghg === ghgValues[3]) {
-          co2eofn2o = item.ghgconversion;
-        }
-      }
-
-      if (co2e && co2eofco2 && co2eofch4 && co2eofn2o) {
-        // If all 4 values are found not need to loop any more
-        break;
-      }
-    }
-
-    return {
-      co2e,
-      co2eofco2,
-      co2eofch4,
-      co2eofn2o,
+      );
     };
+
+    return ghgCalculator(condition);
+  };
+
+  const calculateConversionGHGForBusinessTravelAirOrWTTBusinessTravelAir = (
+    payload
+  ) => {
+    const condition = (item) => {
+      return (
+        item.scope === selectedScope &&
+        item.level1 === selectedLevel &&
+        // In database level4(fuelNameValue) is at level3 (should be consistent)
+        item.level3 === payload.level4 &&
+        // In database level5 is at level4 (should be consistent)
+        item.level4 === payload.level5 &&
+        item.uom === unitOfMeasurementValue
+      );
+    };
+    return ghgCalculator(condition);
   };
 
   const resetForm = () => {
@@ -365,6 +318,43 @@ const ActivitesForm = ({
     const url = `${import.meta.env.VITE_API_BASE_URL}/electricVehicles?scope=${selectedScope}&level1=${selectedLevel}&level2=${fuelTypeValue}&level3=${fuelNameValue}&uom=${unitOfMeasurementValue}&unit=kWh`;
     const electricVehicle = await request(url, "GET");
     return electricVehicle;
+  };
+
+  const fetchCompanyDataAndFilterCountryAndRegion = async () => {
+    try {
+      const response = await request(
+        `${import.meta.env.VITE_API_BASE_URL}/companies/${userId}`,
+        "GET"
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data: ${response.statusText}`);
+      }
+      const jsonData = await response.json();
+      let country, region;
+      for (let i = 0; i < jsonData.length; i++) {
+        if (jsonData[i].unitname === businessUnitValue) {
+          country = jsonData[i].countries;
+          region = jsonData[i].region;
+          break;
+        }
+      }
+      return { country, region };
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const filterLevel2 = (payload) => {
+    for (let index = 0; index < activitiesData?.datas.length; index++) {
+      const item = activitiesData?.datas[index];
+      if (
+        item.scope === selectedScope &&
+        item.level1 === selectedLevel &&
+        item.level2
+      ) {
+        return item.level2;
+      }
+    }
   };
 
   const handleFormSubmit = async (event) => {
@@ -442,59 +432,6 @@ const ActivitesForm = ({
       selectedLevel === "Electricity T&D"
     ) {
       //  fetching companies data and filtering country from that based on business unit is selected
-      const fetchCompanyDataAndFilterCountryAndRegion = async () => {
-        try {
-          const response = await request(
-            `${import.meta.env.VITE_API_BASE_URL}/companies/${userId}`,
-            "GET"
-          );
-          if (!response.ok) {
-            throw new Error(`Failed to fetch data: ${response.statusText}`);
-          }
-          const jsonData = await response.json();
-          let country, region;
-          for (let i = 0; i < jsonData.length; i++) {
-            if (jsonData[i].unitname === businessUnitValue) {
-              country = jsonData[i].countries;
-              region = jsonData[i].region;
-              break;
-            }
-          }
-          return { country, region };
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-
-      const filterLevel2 = (payload) => {
-        for (let index = 0; index < activitiesData?.datas.length; index++) {
-          const item = activitiesData?.datas[index];
-          if (
-            item.scope === selectedScope &&
-            item.level1 === selectedLevel &&
-            // item.level3 === payload.level3 &&
-            // item.level4 === payload.level4 &&
-            item.level2
-          ) {
-            return item.level2;
-          }
-        }
-        // let level2 = [];
-        // activitiesData?.datas.forEach((item) => {
-        //   if (
-        //     item.scope === selectedScope &&
-        //     item.level1 === selectedLevel &&
-        //     item.level3 === payload.country &&
-        //     item.level4 === payload.region &&
-        //     item.level2
-        //   ) {
-        // level2.push(item.level2);
-        //     return item.level2;
-        //   }
-        // });
-        // console.log(new Set(level2));
-        // return [...new Set(level2)][0];
-      };
 
       payload = {
         ids: userId,
@@ -534,7 +471,7 @@ const ActivitesForm = ({
       // console.table(payload);
       // return;
     } else if (
-      selectedLevel === "Delivery Evs" ||
+      selectedLevel === "Delivery Evs" || // TODO: this should be removed when data added in db
       selectedLevel === "Heat and steam" ||
       selectedLevel === "Electricity TandD for delivery Evs" ||
       selectedLevel === "District heat and steam TandD" ||
@@ -608,12 +545,13 @@ const ActivitesForm = ({
         // ...ghgconversions,
       };
 
+      // if (
+      //   selectedLevel !== "Business travel- air" &&
+      //   selectedLevel !== "WTT- business travel- air"
+      // ) {
+      //   ghgconversions = calculateConversionGHG();
+      // } else
       if (
-        selectedLevel !== "Business travel- air" &&
-        selectedLevel !== "WTT- business travel- air"
-      ) {
-        ghgconversions = calculateConversionGHG();
-      } else if (
         selectedLevel === "Business travel- air" ||
         selectedLevel === "WTT- business travel- air"
       ) {
@@ -621,6 +559,8 @@ const ActivitesForm = ({
           calculateConversionGHGForBusinessTravelAirOrWTTBusinessTravelAir(
             payload
           );
+      } else {
+        ghgconversions = calculateConversionGHG();
       }
 
       payload = { ...payload, ...ghgconversions };
@@ -639,6 +579,9 @@ const ActivitesForm = ({
         let electricityConsumptionPerUnit =
           electricVehicle.electricityConsumptionPerUnit;
         payload.co2e = payload.co2e * electricityConsumptionPerUnit;
+        payload.co2eofco2 = payload.co2eofco2 * electricityConsumptionPerUnit;
+        payload.co2eofch4 = payload.co2eofch4 * electricityConsumptionPerUnit;
+        payload.co2eofn2o = payload.co2eofn2o * electricityConsumptionPerUnit;
 
         /** TODO : "activitydata" table column values should be corrected.
          * "level5" data should be in level4. And level5 should be null.
@@ -961,62 +904,53 @@ const ActivitesForm = ({
     };
   };
 
-  const calculateConversionGHGForBusinessTravelAirOrWTTBusinessTravelAir = (
-    payload
-  ) => {
-    let co2e = null;
-    let co2eofco2 = null;
-    let co2eofch4 = null;
-    let co2eofn2o = null;
-
-    const ghgValues = [
-      "kg CO2e",
-      "kg CO2e of CO2 per unit",
-      "kg CO2e of CH4 per unit",
-      "kg CO2e of N2O per unit",
-    ];
-
-    for (let i = 0; i < activitiesData?.datas.length; i++) {
-      const item = activitiesData?.datas[i];
-
-      if (
-        item.scope === selectedScope &&
-        item.level1 === selectedLevel &&
-        // In database level4(fuelNameValue) is at level3 (should be consistent)
-        item.level3 === payload.level4 &&
-        // In database level5 is at level4 (should be consistent)
-        item.level4 === payload.level5 &&
-        item.uom === unitOfMeasurementValue
-      ) {
-        if (item.ghg === ghgValues[0]) {
-          co2e = item.ghgconversion;
-        } else if (item.ghg === ghgValues[1]) {
-          co2eofco2 = item.ghgconversion;
-        } else if (item.ghg === ghgValues[2]) {
-          co2eofch4 = item.ghgconversion;
-        } else if (item.ghg === ghgValues[3]) {
-          co2eofn2o = item.ghgconversion;
-        }
-      }
-      if (co2e && co2eofco2 && co2eofch4 && co2eofn2o) {
-        // If all 4 values are found not need to loop any more
-        break;
-      }
-    }
-
-    return {
-      co2e,
-      co2eofco2,
-      co2eofch4,
-      co2eofn2o,
-    };
+  const possibleFuelTypeLabels = {
+    "Refrigerant and other": "Refrigerant and other gas category",
+    "Passenger vehicles": "Passenger Vehicle Category",
+    "Delivery vehicles": "Delivery Vehicle Category",
+    "Passenger Evs": "Passenger EV Category",
+    "Delivery Evs": "Delivery Vehicle Category",
+    "WTT- fuels": "Fuel Type",
+    "WTT- bioenergy": "Bioenergy Type",
+    "Electricity TandD for passenger EVs": "Passenger EV Category",
+    "Business travel- land": "Passenger Vehicle Category",
+    "Material use": "Material Type",
+    "Waste disposal": "Waste Type",
+    "Business travel- sea": "Boat / Ship Type",
+    "WTT- business travel- sea": "Boat / Ship Type",
+    "WTT- pass vehs and travel- land": "Passenger Vehicle Category",
+    "Freighting goods": "Freighting medium",
+    "WTT- delivery vehs and freight": "Freighting medium",
+    "Managed assets- vehicles": "Vehicle Category",
+    "Business travel- air": "Airport From",
+    "WTT- business travel- air": "Airport From",
   };
 
-  // const possibleFuelTypeLabels = {
-  //   "Refrigerant and other": "Refrigerant and other gas category",
-  //   "Passenger vehicles": "Passenger Vehicle Category",
-  //   "Delivery vehicles": "Delivery Vehicle Category",
-  // };
+  const possibleFuelNameLabels = {
+    Bioenergy: "Bioenergy Fuel Name",
+    "Refrigerant and other": "Refrigerant and other gas name",
+    "Passenger vehicles": "Passenger Vehicle Segment / Size",
+    "Delivery vehicles": "Delivery Vehicle Class / Category",
+    "Passenger Evs": "Passenger EV Segment / Size",
+    "Delivery Evs": "Delivery Vehicle Segment / Size",
+    "Heat and steam": "Onsite / Offsite",
+    "WTT- fuels": "Fuel Name",
+    "WTT- bioenergy": "Bioenergy Fuel Name",
+    "Electricity TandD for passenger EVs": "Passenger EV Segment / Size",
+    "Business travel- land": "Passenger Vehicle Segment / Size",
+    "WTT- heat and steam": "Onsite / Offsite",
+    "Material use": "Material Name",
+    "Waste disposal": "Waste Name",
+    "Business travel- sea": "Passenger Type",
+    "WTT- business travel- sea": "Passenger Type",
+    "WTT- pass vehs and travel- land": "Passenger Vehicle Segment / Size",
+    "Freighting goods": "Class / Type / Haul",
+    "WTT- delivery vehs and freight": "Class / Type / Haul",
+    "Hotel stay": "Name of Country",
+    "Managed assets- vehicles": "Vehicle Segment / Size",
+    "Business travel- air": "Airport To",
+    "WTT- business travel- air": "Airport To",
+  };
 
   useEffect(() => {
     fetchBusinessUnit().then((businessUnits) => {
@@ -1424,74 +1358,32 @@ const ActivitesForm = ({
         </FormControl>
 
         {/* Fuel Type (level2) */}
-        {/* selectedLevel !== "WTT- electricity" && */}
-        {selectedLevel !== "Electricity" &&
-          selectedLevel !== "Electricity TandD" &&
-          selectedLevel !== "WTT- electricity (generation)" &&
-          selectedLevel !== "WTT- electricity (TandD)" &&
-          selectedLevel !== "Water supply" &&
-          selectedLevel !== "Water treatment" &&
-          selectedLevel !== "Delivery Evs" &&
-          selectedLevel !== "Heat and steam" &&
-          selectedLevel !== "District heat and steam TandD" &&
-          selectedLevel !== "Electricity TandD for delivery Evs" &&
-          selectedLevel !== "WTT- heat and steam" &&
-          selectedLevel !== "WTT- district heat and steam distribution" &&
-          selectedLevel !== "Hotel stay" &&
-          selectedLevel !== "Managed assets- electricity" &&
-          // selectedLevel !== "Business travel- air" &&
-          // selectedLevel !== "WTT- business travel- air" &&
-          selectedLevel !== "WTT- electricity (T&D)" &&
-          selectedLevel !== "Electricity T&D" && (
+        {
+          /* Not operator here ==>*/ ![
+            // "WTT- electricity",
+            "Electricity",
+            "Electricity TandD",
+            "WTT- electricity (generation)",
+            "WTT- electricity (TandD)",
+            "Water supply",
+            "Water treatment",
+            "Delivery Evs",
+            "Heat and steam",
+            "District heat and steam TandD",
+            "Electricity TandD for delivery Evs",
+            "WTT- heat and steam",
+            "WTT- district heat and steam distribution",
+            "Hotel stay",
+            "Managed assets- electricity",
+            // "Business travel- air",
+            // "WTT- business travel- air",
+            "WTT- electricity (T&D)",
+            "Electricity T&D",
+          ].includes(selectedLevel) && (
             <FormControl>
               <Label>
-                {selectedLevel && selectedLevel === "Refrigerant and other"
-                  ? "Refrigerant and other gas category"
-                  : selectedLevel === "Passenger vehicles"
-                    ? "Passenger Vehicle Category"
-                    : selectedLevel === "Delivery vehicles"
-                      ? "Delivery Vehicle Category"
-                      : selectedLevel === "Passenger Evs"
-                        ? "Passenger EV Category"
-                        : selectedLevel === "Delivery Evs"
-                          ? "Delivery Vehicle Category"
-                          : selectedLevel === "WTT- fuels"
-                            ? "Fuel Type"
-                            : selectedLevel === "WTT- bioenergy"
-                              ? "Bioenergy Type"
-                              : selectedLevel ===
-                                  "Electricity TandD for passenger EVs"
-                                ? "Passenger EV Category"
-                                : selectedLevel === "Business travel- land"
-                                  ? "Passenger Vehicle Category"
-                                  : selectedLevel === "Material use"
-                                    ? "Material Type"
-                                    : selectedLevel === "Waste disposal"
-                                      ? "Waste Type"
-                                      : selectedLevel === "Business travel- sea"
-                                        ? "Boat / Ship Type"
-                                        : selectedLevel ===
-                                            "WTT- business travel- sea"
-                                          ? "Boat / Ship Type"
-                                          : selectedLevel ===
-                                              "WTT- pass vehs and travel- land"
-                                            ? "Passenger Vehicle Category"
-                                            : selectedLevel ===
-                                                "Freighting goods"
-                                              ? "Freighting medium"
-                                              : selectedLevel ===
-                                                  "WTT- delivery vehs and freight"
-                                                ? "Freighting medium"
-                                                : selectedLevel ===
-                                                    "Managed assets- vehicles"
-                                                  ? "Vehicle Category"
-                                                  : selectedLevel ===
-                                                      "Business travel- air"
-                                                    ? "Airport From"
-                                                    : selectedLevel ===
-                                                        "WTT- business travel- air"
-                                                      ? "Airport From"
-                                                      : `${selectedLevel} Type`}
+                {(selectedLevel && possibleFuelTypeLabels[selectedLevel]) ||
+                  `${selectedLevel} Type`}
               </Label>
               <Select
                 value={fuelTypeValue}
@@ -1507,69 +1399,15 @@ const ActivitesForm = ({
                 })}
               </Select>
             </FormControl>
-          )}
+          )
+        }
 
         {/* Fuel Name (level3) */}
         {showFuelNamesField && (
           <FormControl>
             <Label>
-              {selectedLevel && selectedLevel === "Bioenergy"
-                ? "Bioenergy Fuel Name"
-                : selectedLevel === "Refrigerant and other"
-                  ? "Refrigerant and other gas name"
-                  : selectedLevel === "Passenger vehicles"
-                    ? "Passenger Vehicle Segment / Size"
-                    : selectedLevel === "Delivery vehicles"
-                      ? "Delivery Vehicle Class / Category"
-                      : selectedLevel === "Passenger Evs"
-                        ? "Passenger EV Segment / Size"
-                        : selectedLevel === "Delivery Evs"
-                          ? "Delivery Vehicle Segment / Size"
-                          : selectedLevel === "Heat and steam"
-                            ? "Onsite / Offsite"
-                            : selectedLevel === "WTT- fuels"
-                              ? "Fuel Name"
-                              : selectedLevel === "WTT- bioenergy"
-                                ? "Bioenergy Fuel Name"
-                                : selectedLevel ===
-                                    "Electricity TandD for passenger EVs"
-                                  ? "Passenger EV Segment /Size"
-                                  : selectedLevel === "Business travel- land"
-                                    ? "Passenger Vehicle Segment /Size"
-                                    : selectedLevel === "WTT- heat and steam"
-                                      ? "Onsite / Offsite"
-                                      : selectedLevel === "Material use"
-                                        ? "Material Name"
-                                        : selectedLevel === "Waste disposal"
-                                          ? "Waste Name"
-                                          : selectedLevel ===
-                                              "Business travel- sea"
-                                            ? "Passenger Type"
-                                            : selectedLevel ===
-                                                "WTT- business travel- sea"
-                                              ? "Passenger Type"
-                                              : selectedLevel ===
-                                                  "WTT- pass vehs and travel- land"
-                                                ? "Passenger Vehicle Segment / Size"
-                                                : selectedLevel ===
-                                                    "Freighting goods"
-                                                  ? "Class / Type / Haul"
-                                                  : selectedLevel ===
-                                                      "WTT- delivery vehs and freight"
-                                                    ? "Class / Type / Haul"
-                                                    : selectedLevel ===
-                                                        "Hotel stay"
-                                                      ? "Name of Country"
-                                                      : selectedLevel ===
-                                                          "Managed assets- vehicles"
-                                                        ? "Vehicle Segment / Size"
-                                                        : selectedLevel ===
-                                                            "Business travel- air"
-                                                          ? "Airport To"
-                                                          : selectedLevel ===
-                                                              "WTT- business travel- air"
-                                                            ? "Airport To"
-                                                            : `${selectedLevel} Name`}
+              {(selectedLevel && possibleFuelNameLabels[selectedLevel]) ||
+                `${selectedLevel} Name`}
             </Label>
             <Select
               value={fuelNameValue}
