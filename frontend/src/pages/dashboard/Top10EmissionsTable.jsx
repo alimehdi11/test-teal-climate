@@ -73,15 +73,15 @@ const Top10EmissionsTable = () => {
               <>
                 kg CO<span style={{ fontSize: "0.6em" }}>2</span>e
               </>,
-            ].map((item) => (
-              <TableHead>{item}</TableHead>
+            ].map((item, index) => (
+              <TableHead key={index}>{item}</TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
           {top10Emissions.length > 0 &&
             top10Emissions.map((item, index) => (
-              <TableRow>
+              <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{item.scope || "-"}</TableCell>
                 <TableCell>{item.businessunit || "-"}</TableCell>

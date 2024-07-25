@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import worldMapJson from "../../data/worldMap.json";
-import { getBearerToken } from "../../utils/auth.js";
 import { UserContext } from "../../contexts/UserContext.jsx";
+import { request } from "../../utils/request.js";
 
 const WorldMap = () => {
   const [emissionsData, setEmissionsData] = useState({});
@@ -63,30 +63,24 @@ const WorldMap = () => {
 
   // Fetch emissions data from backend upon component mount
   useEffect(() => {
-    if (user.id) {
-      fetch(`${import.meta.env.VITE_API_BASE_URL}/worldHeatMap/${user.id}`, {
-        headers: {
-          authorization: getBearerToken(),
-        },
+    request(
+      `${import.meta.env.VITE_API_BASE_URL}/worldHeatMap/${user.id}`,
+      "GET"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const countriesEmissions = data.reduce((acc, current) => {
+          if (acc[current.countries]) {
+            acc[current.countries] = acc[current.countries] + current.co2e;
+            return acc;
+          } else {
+            return { ...acc, [current.countries]: current.co2e };
+          }
+        }, {});
+        setEmissionsData(countriesEmissions);
       })
-        .then((response) => response.json())
-        .then((data) => {
-          const countriesEmissions = data.reduce((acc, current) => {
-            if (acc[current.countries]) {
-              acc[current.countries] = acc[current.countries] + current.co2e;
-              return acc;
-            } else {
-              return { ...acc, [current.countries]: current.co2e };
-            }
-          }, {});
-          console.log("===>>> countriesEmissions", countriesEmissions);
-          setEmissionsData(countriesEmissions);
-        })
-        .catch((error) =>
-          console.error("Error fetching emissions data:", error)
-        );
-    }
-  }, [user.id]);
+      .catch((error) => console.error("Error fetching emissions data:", error));
+  }, []);
 
   return (
     Object.keys(emissionsData).length > 0 && (

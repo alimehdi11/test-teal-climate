@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
 import { Link } from "react-router-dom";
+import { DataContext } from "../../contexts/DataContext.jsx";
 
 const ActivitiesSidebar = ({
   selectedScope,
@@ -10,91 +11,31 @@ const ActivitiesSidebar = ({
   setSelectedScope,
   setSelectedLevel,
 }) => {
-  const [scopesData, setScopesData] = useState([]);
-  const [level1Data, setLevel1Data] = useState([]);
+  const [level1, setLevel1] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredScopes, setFilteredScopes] = useState([]);
 
-  const fetchScopes = async () => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/activitydata`,
-        "GET"
-      );
+  const { activitiesData } = useContext(DataContext);
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const jsonData = await response.json();
-      const uniqueScopes = [
-        ...new Set(jsonData.datas.map((item) => item.scope)),
-      ];
+  const filterLevel1 = (selectedScope) => {
+    let level1 = activitiesData.datas
+      .filter((item) => item.scope === selectedScope)
+      .map((item) => item.level1);
 
-      const sortedFirstThreeScopes = uniqueScopes.slice(0, 3).sort();
-      const remainingScopes = uniqueScopes.slice(3);
-      const sortedScopes = [...sortedFirstThreeScopes, ...remainingScopes];
-
-      return sortedScopes;
-    } catch (error) {
-      console.log("ERROR FETCHING ACTIVITY DATA");
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const fetchLevel1Data = async (scope) => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/activitydata?scope=${scope}`,
-        "GET"
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to fetch level1 data for ${scope}`);
-      }
-      const jsonData = await response.json();
-
-      // Extract level1 data for the selected scope
-      const level1Items = jsonData.datas
-        .filter((item) => item.scope === scope)
-        .map((item) => item.level1);
-
-      const uniqueLevel1Items = [...new Set(level1Items)];
-
-      return uniqueLevel1Items;
-    } catch (error) {
-      console.error("Error fetching level1 data:", error);
-    }
+    level1 = [...new Set(level1)];
+    return level1;
   };
 
   useEffect(() => {
-    fetchScopes().then((uniqueScopes) => {
-      setScopesData(uniqueScopes);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (level1Data) {
-      if (searchQuery === "") {
-        setFilteredScopes(level1Data);
-      } else {
-        setFilteredScopes(
-          level1Data.filter((level) =>
-            level.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-        );
-      }
-    }
-  }, [level1Data, searchQuery]);
-
-  useEffect(() => {
-    // selectedScope can be null when user unselect the selectedScope
-    if (selectedScope !== null) {
-      fetchLevel1Data(selectedScope).then((uniqueLevel1Items) => {
-        setLevel1Data(uniqueLevel1Items);
-      });
+    if (selectedScope && searchQuery === "") {
+      setLevel1(filterLevel1(selectedScope));
     } else {
-      setLevel1Data([]);
+      setLevel1(
+        filterLevel1(selectedScope).filter((level) =>
+          level.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
     }
-  }, [selectedScope]);
+  }, [selectedScope, searchQuery]);
 
   return (
     <>
@@ -102,7 +43,7 @@ const ActivitiesSidebar = ({
         Select Scope
       </h2>
       <div className="flex flex-col gap-y-4">
-        {scopesData?.map((scope) => (
+        {["Scope 1", "Scope 2", "Scope 3"]?.map((scope) => (
           <Button
             key={scope}
             className={
@@ -113,11 +54,11 @@ const ActivitiesSidebar = ({
             }
             onClick={(e) => {
               if (e.target.innerText === selectedScope) {
-                // parent
+                // Parent component re-render
                 setSelectedScope(null);
               } else {
-                // parent
-                setSelectedScope(scope);
+                // Parent component re-render
+                setSelectedScope(e.target.innerText);
               }
             }}
           >
@@ -148,7 +89,7 @@ const ActivitiesSidebar = ({
 
       {/* List */}
       <ul className="list-none m-0 my-4 md:mb-0 p-0 flex flex-col gap-y-4">
-        {filteredScopes.map((level, index) => (
+        {level1.map((level, index) => (
           <li
             key={index}
             className={
@@ -159,11 +100,11 @@ const ActivitiesSidebar = ({
             }
             onClick={(e) => {
               if (e.target.innerText === selectedLevel) {
-                // parent
+                // Parent component re-render
                 setSelectedLevel(null);
               } else {
-                // parent
-                setSelectedLevel(level);
+                // Parent component re-render
+                setSelectedLevel(e.target.innerText);
               }
             }}
           >

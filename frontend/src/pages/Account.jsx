@@ -126,7 +126,6 @@ const Account = () => {
 
   return (
     <>
-      <Navbar />
       <Layout
         sidebarContent={
           <div className="h-full flex flex-col justify-between">
