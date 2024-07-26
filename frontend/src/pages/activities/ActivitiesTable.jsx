@@ -93,10 +93,24 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
                 <TableCell>{item.level5 || "-"}</TableCell>
                 <TableCell>{item.uom || "-"}</TableCell>
                 <TableCell>{item.quantity || "-"}</TableCell>
-                <TableCell>{item.co2e?.toFixed(2) || "-"}</TableCell>
-                <TableCell>{item.co2eofco2?.toFixed(2) || "-"}</TableCell>
-                <TableCell>{item.co2eofch4?.toFixed(2) || "-"}</TableCell>
-                <TableCell>{item.co2eofn2o?.toFixed(2) || "-"}</TableCell>
+                <TableCell>
+                  {item.co2e === 0 ? "-" : item.co2e?.toFixed(2) || "-"}
+                </TableCell>
+                <TableCell>
+                  {item.co2eofco2 === 0
+                    ? "-"
+                    : item.co2eofco2?.toFixed(2) || "-"}
+                </TableCell>
+                <TableCell>
+                  {item.co2eofch4 === 0
+                    ? "-"
+                    : item.co2eofch4?.toFixed(2) || "-"}
+                </TableCell>
+                <TableCell>
+                  {item.co2eofn2o === 0
+                    ? "-"
+                    : item.co2eofn2o?.toFixed(2) || "-"}
+                </TableCell>
                 <TableCell>
                   <div className="flex justify-center gap-x-1">
                     <Link

@@ -6,7 +6,6 @@ import { Slide, ToastContainer } from "react-toastify";
 const Layout = ({ sidebarContent, mainContent, className = "" }) => {
   return (
     <>
-      {console.log("Layout")}
       <Navbar />
       <div
         className={(

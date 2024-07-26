@@ -120,7 +120,6 @@ const ActivitesForm = ({
 
   const filterFuelTypes = () => {
     let fuelTypes = [];
-    console.log("+++", activitiesData);
     activitiesData?.datas.forEach((item) => {
       if (item.scope === selectedScope && item.level1 === selectedLevel) {
         fuelTypes.push(item.level2);
@@ -146,7 +145,7 @@ const ActivitesForm = ({
     return fuelNames;
   };
 
-  const ghgCalculator = (condition) => {
+  const filterGHGEmissions = (condition) => {
     let co2e = null;
     let co2eofco2 = null;
     let co2eofch4 = null;
@@ -201,7 +200,7 @@ const ActivitesForm = ({
           : true)
       );
     };
-    return ghgCalculator(condition);
+    return filterGHGEmissions(condition);
   };
 
   const calculateConversionGHGForElectricity = (payload) => {
@@ -215,7 +214,7 @@ const ActivitesForm = ({
         item.uom === unitOfMeasurementValue
       );
     };
-    return ghgCalculator(condition);
+    return filterGHGEmissions(condition);
   };
 
   const calculateConversionGHGForDeliveryEvs = (payload) => {
@@ -230,7 +229,7 @@ const ActivitesForm = ({
       );
     };
 
-    return ghgCalculator(condition);
+    return filterGHGEmissions(condition);
   };
 
   const calculateConversionGHGForBusinessTravelAirOrWTTBusinessTravelAir = (
@@ -247,7 +246,7 @@ const ActivitesForm = ({
         item.uom === unitOfMeasurementValue
       );
     };
-    return ghgCalculator(condition);
+    return filterGHGEmissions(condition);
   };
 
   const resetForm = () => {
@@ -471,7 +470,6 @@ const ActivitesForm = ({
       // console.table(payload);
       // return;
     } else if (
-      selectedLevel === "Delivery Evs" || // TODO: this should be removed when data added in db
       selectedLevel === "Heat and steam" ||
       selectedLevel === "Electricity TandD for delivery Evs" ||
       selectedLevel === "District heat and steam TandD" ||
@@ -529,6 +527,61 @@ const ActivitesForm = ({
       payload = { ...payload, ...ghgconversions };
       // console.table(payload);
       // return;
+    } else if (
+      selectedLevel === "Passenger Evs" ||
+      selectedLevel === "Delivery Evs"
+    ) {
+      payload = {
+        ids: userId,
+        uom: unitOfMeasurementValue,
+        businessunit: businessUnitValue,
+        quantity: quantityValue,
+        fuel_category: scopeCategoryValue,
+        level1: selectedLevel,
+        level2: fuelTypeValue || "Vans", // We only have 1 option for "Delivery Evs" so hard coding here
+        level3: fuelNameValue,
+        scope: selectedScope,
+        level4: level4Value || null,
+        level5: level5Value || "Battery Electric Vehicle", // We only have 1 option for "Delivery Evs" so hard coding here
+      };
+      /**
+       * Formula:
+       * Distance travelled in km/miles (quantityValue)
+       *  x Electricity consumption per km/miles (fetch from electricVehicle table)
+       *  x Electricity emission factor of the country/region
+       *  (fetch country/region from companies table based on businessUnitValue
+       *   after that filter emission factors from activitiesData
+       *   based on Electricity and country/region)
+       *
+       */
+      const electricVehicle = await (await fetchElectricVehicle())
+        .json()
+        .catch((error) => console.log(error));
+
+      let electricityConsumptionPerUnit =
+        electricVehicle.electricityConsumptionPerUnit;
+
+      const { country, region } =
+        await fetchCompanyDataAndFilterCountryAndRegion();
+
+      const { co2e, co2eofco2, co2eofch4, co2eofn2o } =
+        filterElectricityEmissionsBasedOnContryAndRegion(country, region);
+
+      payload.co2e = !co2e ? null : co2e * electricityConsumptionPerUnit;
+      payload.co2eofco2 = !co2eofco2
+        ? null
+        : co2eofco2 * electricityConsumptionPerUnit;
+      payload.co2eofch4 = !co2eofch4
+        ? null
+        : co2eofch4 * electricityConsumptionPerUnit;
+      payload.co2eofn2o = !co2eofn2o
+        ? null
+        : co2eofn2o * electricityConsumptionPerUnit;
+
+      /** TODO : "activitydata" table column values should be corrected.
+       * "level5" data should be in level4. And level5 should be null.
+       */
+      payload.level4 = payload.level5;
     } else {
       payload = {
         ids: userId,
@@ -545,12 +598,6 @@ const ActivitesForm = ({
         // ...ghgconversions,
       };
 
-      // if (
-      //   selectedLevel !== "Business travel- air" &&
-      //   selectedLevel !== "WTT- business travel- air"
-      // ) {
-      //   ghgconversions = calculateConversionGHG();
-      // } else
       if (
         selectedLevel === "Business travel- air" ||
         selectedLevel === "WTT- business travel- air"
@@ -564,37 +611,13 @@ const ActivitesForm = ({
       }
 
       payload = { ...payload, ...ghgconversions };
-
-      /**
-       * For "Passenger Evs", "Delivery Evs"
-       */
-      if (
-        selectedLevel === "Passenger Evs" ||
-        selectedLevel === "Delivery Evs"
-      ) {
-        const electricVehicle = await (await fetchElectricVehicle())
-          .json()
-          .catch((error) => console.log(error));
-
-        let electricityConsumptionPerUnit =
-          electricVehicle.electricityConsumptionPerUnit;
-        payload.co2e = payload.co2e * electricityConsumptionPerUnit;
-        payload.co2eofco2 = payload.co2eofco2 * electricityConsumptionPerUnit;
-        payload.co2eofch4 = payload.co2eofch4 * electricityConsumptionPerUnit;
-        payload.co2eofn2o = payload.co2eofn2o * electricityConsumptionPerUnit;
-
-        /** TODO : "activitydata" table column values should be corrected.
-         * "level5" data should be in level4. And level5 should be null.
-         */
-        payload.level4 = payload.level5;
-      }
     }
 
     /**
      * For Scope 2 market based
      */
     if (selectedScope === "Scope 2") {
-      // explicitly setting marketBased here
+      // explicitly setting market based here
       payload.level5 = "locationBased";
     }
 
@@ -902,6 +925,24 @@ const ActivitesForm = ({
       latitude: filteredAirport.latitude,
       longitude: filteredAirport.longitude,
     };
+  };
+
+  const filterElectricityEmissionsBasedOnContryAndRegion = (
+    country,
+    region
+  ) => {
+    const condition = (item) => {
+      return (
+        item.scope === "Scope 2" &&
+        item.level1 === "Electricity" &&
+        item.level2 === "Electricity generated" &&
+        item.level3 === country &&
+        item.level4 === region &&
+        item.level5 === null &&
+        item.uom === "kWh"
+      );
+    };
+    return filterGHGEmissions(condition);
   };
 
   const possibleFuelTypeLabels = {

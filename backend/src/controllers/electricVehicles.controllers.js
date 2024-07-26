@@ -38,7 +38,7 @@ const getElectricVehicle = async (req, res) => {
     ];
 
     queryParams.forEach((param, index) => {
-      if (param !== undefined) {
+      if (param !== undefined && param !== "") {
         passedQueryParams.push(`"${columnNames[index]}" = '${param}'`);
       }
     });
@@ -48,7 +48,6 @@ const getElectricVehicle = async (req, res) => {
       (passedQueryParams.length > 0
         ? ` WHERE ${passedQueryParams.join(" AND ")}`
         : ``);
-
     const result = await pool.query(query);
     const electricVehicle = result.rows[0];
     return res.send(electricVehicle);
