@@ -1,4 +1,4 @@
-# This workflow will build the frontend, copy build artifacts to the backend, and manage the server with PM2
+# This workflow will build the frontend, copy build artifacts to the backend, run tests, and manage the server with PM2
 
 name: Node.js CI/CD
 
@@ -11,14 +11,10 @@ on:
 
 jobs:
   build-and-deploy:
-
-    # Runs on a self-hosted runner (you can switch to 'ubuntu-latest' if using GitHub-hosted runners)
     runs-on: self-hosted
-
     strategy:
       matrix:
         node-version: [21.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v4
@@ -30,8 +26,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    - name: Install dependencies
+    # Install dependencies and run tests in frontend
+    - name: Install frontend dependencies
+      working-directory: frontend
       run: npm ci
+
 
     - name: Build frontend
       working-directory: frontend
@@ -39,6 +38,13 @@ jobs:
 
     - name: Copy build artifacts to backend
       run: bash frontend/build.sh
+
+    # Install dependencies and run tests in backend
+    - name: Install backend dependencies
+      working-directory: backend
+      run: npm ci
+
+
 
     - name: Run backend script
       working-directory: backend/src
