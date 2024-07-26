@@ -50,10 +50,10 @@ jobs:
     - name: Stop pm2 server
       run: sudo pm2 stop WebApp || true
 
-    - name: Start or restart WebApp
+    - name: Start or restart Web-App
       run: |
-        if pm2 list | grep -q "WebApp"; then
-          pm2 restart WebApp --update-env
+        if pm2 list | grep -q "Web-App"; then
+          pm2 restart Web-App --update-env
         else
-          pm2 start backend/src/index.js --name "WebApp"
+          pm2 start backend/src/index.js --name "Web-App"
         fi
