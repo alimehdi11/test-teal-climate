@@ -1,10 +1,8 @@
-# This workflow will build the frontend, copy build artifacts to the backend, run tests, and manage the server with PM2
-
 name: Node.js CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "v1" ]
   # Uncomment the following lines to trigger the workflow on pull requests as well
   # pull_request:
   #   branches: [ "main" ]
@@ -14,11 +12,17 @@ jobs:
     runs-on: self-hosted
     strategy:
       matrix:
-        node-version: [21.x]
+        node-version: ['21.x']
 
     steps:
-    - uses: actions/checkout@v4
-      name: Checkout code
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Debug - Check runner status
+      run: echo "Runner is online and working"
+
+    - name: Debug - List root directory
+      run: ls -la
 
     - name: Set up Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
@@ -30,6 +34,10 @@ jobs:
     - name: Install frontend dependencies
       working-directory: frontend
       run: npm ci
+
+    - name: Debug - List frontend directory
+      working-directory: frontend
+      run: ls -la
 
 
     - name: Build frontend
@@ -44,6 +52,9 @@ jobs:
       working-directory: backend
       run: npm ci
 
+    - name: Debug - List backend directory
+      working-directory: backend
+      run: ls -la
 
 
     - name: Run backend script
