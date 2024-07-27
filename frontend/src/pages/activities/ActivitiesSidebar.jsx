@@ -24,16 +24,19 @@ const ActivitiesSidebar = ({
     level1 = [...new Set(level1)];
     return level1;
   };
-
   useEffect(() => {
-    if (selectedScope && searchQuery === "") {
-      setLevel1(filterLevel1(selectedScope));
+    if (selectedScope) {
+      if (searchQuery === "") {
+        setLevel1(filterLevel1(selectedScope));
+      } else {
+        setLevel1(
+          level1.filter((level) =>
+            level.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        );
+      }
     } else {
-      setLevel1(
-        filterLevel1(selectedScope).filter((level) =>
-          level.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      );
+      setLevel1([]);
     }
   }, [selectedScope, searchQuery]);
 
@@ -73,45 +76,50 @@ const ActivitiesSidebar = ({
         <Button className="py-3 w-full">Spend Base Scope 3</Button>
       </Link>
 
-      <div className="mt-4">
-        <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">
-          Select Activity
-        </h2>
-        <div className="relative">
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-      </div>
+      {level1.length > 0 && (
+        <>
+          <div className="mt-4">
+            <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">
+              Select Activity
+            </h2>
+            {/* Search query input */}
+            <div>
+              <Input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
 
-      {/* List */}
-      <ul className="list-none m-0 my-4 md:mb-0 p-0 flex flex-col gap-y-4">
-        {level1.map((level, index) => (
-          <li
-            key={index}
-            className={
-              "bg-gray-200 hover:bg-tc-blue hover:text-white rounded-lg p-2" +
-              (level === selectedLevel
-                ? " bg-tc-blue text-white hover:bg-opacity-90"
-                : "")
-            }
-            onClick={(e) => {
-              if (e.target.innerText === selectedLevel) {
-                // Parent component re-render
-                setSelectedLevel(null);
-              } else {
-                // Parent component re-render
-                setSelectedLevel(e.target.innerText);
-              }
-            }}
-          >
-            {level}
-          </li>
-        ))}
-      </ul>
+          {/* List */}
+          <ul className="list-none m-0 my-4 md:mb-0 p-0 flex flex-col gap-y-4">
+            {level1.map((level, index) => (
+              <li
+                key={index}
+                className={
+                  "bg-gray-200 hover:bg-tc-blue hover:text-white rounded-lg p-2" +
+                  (level === selectedLevel
+                    ? " bg-tc-blue text-white hover:bg-opacity-90"
+                    : "")
+                }
+                onClick={(e) => {
+                  if (e.target.innerText === selectedLevel) {
+                    // Parent component re-render
+                    setSelectedLevel(null);
+                  } else {
+                    // Parent component re-render
+                    setSelectedLevel(e.target.innerText);
+                  }
+                }}
+              >
+                {level}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </>
   );
 };
