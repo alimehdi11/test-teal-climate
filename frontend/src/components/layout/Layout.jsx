@@ -19,8 +19,6 @@ const Layout = ({ sidebarContent, mainContent, className = "" }) => {
         <Main>{mainContent}</Main>
       </div>
 
-
-      
       <ToastContainer
         theme={"colored"}
         hideProgressBar={true}
