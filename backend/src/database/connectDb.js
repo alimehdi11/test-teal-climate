@@ -1,19 +1,42 @@
-import pg from "pg";
+import { Sequelize, DataTypes } from "sequelize";
 
-const poolOptions = {
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  host: process.env.DATABASE_HOST,
-  port: process.env.DATABASE_PORT,
-  database: process.env.DATABASE_NAME,
-};
+const sequelize = new Sequelize(
+  "test" || process.env.DATABASE_NAME,
+  process.env.DATABASE_USER,
+  process.env.DATABASE_PASSWORD,
+  {
+    host: process.env.DATABASE_HOST,
+    dialect: "postgres",
+    logging: false,
+  }
+);
 
-if (process.env.NODE_ENV === "production") {
-  poolOptions.ssl = {
-    rejectUnauthorized: false, // Set to true to reject unauthorized connections
-  };
+try {
+  await sequelize.authenticate();
+  console.log("Database connection has been established successfully.");
+} catch (error) {
+  console.error("Unable to connect to the database:", error);
 }
 
-const pool = new pg.Pool(poolOptions);
+const User = sequelize.define(
+  "User",
+  {
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+    },
+  },
+  {
+    // tableName: "Users",
+    // freezeTableName: true,
+    // timestamps: false,
+  }
+);
 
-export { pool };
+await User.sync({ force: true });
+User.drop();
+
+export { sequelize as pool };
