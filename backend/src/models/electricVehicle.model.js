@@ -33,7 +33,6 @@ const ElectricVehicle = sequelize.define(
     unitOfMeasurement: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "unit_of_measurement",
     },
     unit: {
       type: DataTypes.STRING,
@@ -42,16 +41,12 @@ const ElectricVehicle = sequelize.define(
     electricityConsumptionPerUnit: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      // field: "electricity_consumption_per_unit",
     },
   },
   {
     timestamps: false,
     tableName: "electricVehicles",
-    // tableName: "electric_vehicles",
   }
 );
-
-// await ElectricVehicle.sync();
 
 export { ElectricVehicle };

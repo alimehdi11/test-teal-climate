@@ -45,27 +45,22 @@ const Eeio = sequelize.define(
     exioBaseCode: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "exio_base_code",
     },
     greenHouseGas: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "green_house_gas",
     },
     greenHouseGasEmissionFactor: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      // field: "green_house_gas_emission_factor",
     },
     productOrIndustry: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "product_or_industry",
     },
     perEuro: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      // field: "per_euro",
     },
     reference: {
       type: DataTypes.STRING,
@@ -77,7 +72,5 @@ const Eeio = sequelize.define(
     tableName: "eeios",
   }
 );
-
-// await Eeio.sync();
 
 export { Eeio };

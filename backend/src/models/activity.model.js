@@ -36,15 +36,12 @@ const Activity = sequelize.define(
     },
     unitOfMeasurement: {
       type: DataTypes.STRING,
-      // field: "unit_of_measurement",
     },
     greenHouseGas: {
       type: DataTypes.STRING,
-      // field: "green_house_gas",
     },
     greenHouseGasEmissionFactor: {
       type: DataTypes.FLOAT,
-      // field: "green_house_gas_emission_factor",
     },
   },
   {
@@ -52,7 +49,5 @@ const Activity = sequelize.define(
     tableName: "activities",
   }
 );
-
-// await Activity.sync();
 
 export { Activity };

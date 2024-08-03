@@ -15,7 +15,6 @@ const BusinessUnitEeio = sequelize.define(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      // field: "user_id",
       field: "userId",
       references: {
         model: User,
@@ -26,7 +25,6 @@ const BusinessUnitEeio = sequelize.define(
     businessUnitName: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "business_unit_name",
       field: "businessUnitName",
       references: {
         model: BusinessUnit,
@@ -73,7 +71,6 @@ const BusinessUnitEeio = sequelize.define(
     unitOfMeasurement: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "unit_of_measurment",
     },
     quantity: {
       type: DataTypes.INTEGER,
@@ -82,17 +79,14 @@ const BusinessUnitEeio = sequelize.define(
     exioBaseCode: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "exio_base_code",
     },
     greenHouseGas: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "green_house_gas",
     },
     productOrIndustry: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "product_or_industry",
     },
     reference: {
       type: DataTypes.STRING,
@@ -120,12 +114,8 @@ const BusinessUnitEeio = sequelize.define(
     },
   },
   {
-    // timestamps: false,
-    // tableName: "business_units_eeios",
     tableName: "businessUnitsEeios",
   }
 );
-
-// await BusinessUnitEeio.sync();
 
 export { BusinessUnitEeio };

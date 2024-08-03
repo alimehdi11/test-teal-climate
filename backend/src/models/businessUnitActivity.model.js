@@ -1,6 +1,5 @@
 import { DataTypes, Deferrable } from "sequelize";
 import { sequelize } from "../database/connectDb.js";
-// import { Level1Category } from "./level1Category.model.js";
 import { User } from "./user.model.js";
 import { BusinessUnit } from "./businessUnit.model.js";
 
@@ -16,7 +15,6 @@ const BusinessUnitActivity = sequelize.define(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      // field: "user_id",
       field: "userId",
       references: {
         model: User,
@@ -27,7 +25,6 @@ const BusinessUnitActivity = sequelize.define(
     businessUnitName: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "business_unit_name",
       field: "businessUnitName",
       references: {
         model: BusinessUnit,
@@ -62,7 +59,6 @@ const BusinessUnitActivity = sequelize.define(
     unitOfMeasurement: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "unit_of_measurment",
     },
     quantity: {
       type: DataTypes.INTEGER,
@@ -87,21 +83,11 @@ const BusinessUnitActivity = sequelize.define(
     level1Category: {
       type: DataTypes.STRING,
       allowNull: false,
-      // field: "level1_category",
-      // references: {
-      //   model: Level1Category,
-      //   key: "category",
-      //   deferrable: Deferrable.INITIALLY_IMMEDIATE,
-      // },
     },
   },
   {
-    // timestamps: false,
-    // tableName: "business_units_activities",
     tableName: "businessUnitsActivities",
   }
 );
-
-// await BusinessUnitActivity.sync();
 
 export { BusinessUnitActivity };

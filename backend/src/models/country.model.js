@@ -29,6 +29,4 @@ const Country = sequelize.define(
   }
 );
 
-// await Country.sync();
-
 export { Country };

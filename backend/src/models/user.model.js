@@ -13,6 +13,7 @@ const User = sequelize.define(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -20,34 +21,26 @@ const User = sequelize.define(
     },
     companyName: {
       type: DataTypes.STRING,
-      // field: "company_name",
     },
     country: {
       type: DataTypes.STRING,
     },
     primaryIndustry: {
       type: DataTypes.STRING,
-      // field: "primary_industry",
     },
     secondaryIndustry: {
       type: DataTypes.STRING,
-      // field: "secondary_industry",
     },
     sustainabilityManager: {
       type: DataTypes.STRING,
-      // field: "sustainability_manager",
     },
     phoneNumber: {
       type: DataTypes.STRING,
-      // field: "phone_number",
     },
   },
   {
-    // timestamps: false,
     tableName: "users",
   }
 );
-
-// await User.sync();
 
 export { User };

@@ -21,11 +21,8 @@ const Level1Category = sequelize.define(
   },
   {
     timestamps: false,
-    // tableName: "level1_categories",
     tableName: "level1Categories",
   }
 );
-
-// await Level1Category.sync();
 
 export { Level1Category };

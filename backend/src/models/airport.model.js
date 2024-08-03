@@ -29,6 +29,4 @@ const Airport = sequelize.define(
   }
 );
 
-// await Airport.sync();
-
 export { Airport };

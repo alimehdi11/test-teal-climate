@@ -15,7 +15,6 @@ const BusinessUnit = sequelize.define(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      // field: "user_id",
       field: "userId",
       references: {
         model: User,
@@ -31,33 +30,17 @@ const BusinessUnit = sequelize.define(
     country: {
       type: DataTypes.STRING,
       allowNull: false,
-      // references: {
-      //   model: Country,
-      //   key: "name",
-      //   deferrable: Deferrable.INITIALLY_IMMEDIATE,
-      // },
     },
     continent: {
       type: DataTypes.STRING,
       allowNull: false,
-      // references: {
-      //   model: Country,
-      //   key: "continent",
-      //   deferrable: Deferrable.INITIALLY_IMMEDIATE,
-      // },
     },
     region: {
       type: DataTypes.STRING,
       allowNull: false,
-      // references: {
-      //   model: Country,
-      //   key: "region",
-      //   deferrable: Deferrable.INITIALLY_IMMEDIATE,
-      // },
     },
     noOfEmployees: {
       type: DataTypes.STRING,
-      // field: "no_of_employees",
     },
     production: {
       type: DataTypes.STRING,
@@ -74,12 +57,8 @@ const BusinessUnit = sequelize.define(
     },
   },
   {
-    // timestamps: false,
-    // tableName: "business_units",
     tableName: "businessUnits",
   }
 );
-
-// await BusinessUnit.sync();
 
 export { BusinessUnit };
