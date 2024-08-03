@@ -2,81 +2,81 @@ name: Node.js CI/CD
 
 on:
   push:
-    branches: [ "v1" ]
+    branches: ["v1"]
 
 jobs:
   build-and-deploy:
     runs-on: self-hosted
     strategy:
       matrix:
-        node-version: ['21.x']
+        node-version: ["21.x"]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Debug - Check runner status
-      run: echo "Runner is online and working"
+      - name: Debug - Check runner status
+        run: echo "Runner is online and working"
 
-    - name: Debug - List root directory
-      run: ls -la
+      - name: Debug - List root directory
+        run: ls -la
 
-    - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
-    # Install dependencies and run tests in frontend
-    - name: Install frontend dependencies
-      working-directory: frontend
-      run: npm ci
+      # Install dependencies and run tests in frontend
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
 
-    - name: Debug - List frontend directory
-      working-directory: frontend
-      run: ls -la
+      - name: Debug - List frontend directory
+        working-directory: frontend
+        run: ls -la
 
-    - name: Build frontend
-      working-directory: frontend
-      run: npm run build
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
 
-    - name: Install pm2 if not already installed
-      run: npm install -g pm2
+      - name: Install pm2 if not already installed
+        run: npm install -g pm2
 
-    - name: Stop pm2 server for frontend
-      run: sudo pm2 stop Web-App-frontend || true
+      - name: Stop pm2 server for frontend
+        run: sudo pm2 stop Web-App-frontend || true
 
-    - name: Start or restart Web-App-frontend
-      run: |
-        if pm2 list | grep -q "Web-App-frontend"; then
-          pm2 restart Web-App-frontend --update-env
-        else
-          pm2 start frontend/dist/index.html --name "Web-App-frontend"
-        fi
+      - name: Start or restart Web-App-frontend
+        run: |
+          if pm2 list | grep -q "Web-App-frontend"; then
+            pm2 restart Web-App-frontend --update-env
+          else
+            pm2 start frontend/dist/index.html --name "Web-App-frontend"
+          fi
 
-    # - name: Copy build artifacts to backend
-    #   run: bash frontend/build.sh
+      # - name: Copy build artifacts to backend
+      #   run: bash frontend/build.sh
 
-    # Install dependencies and run tests in backend
-    - name: Install backend dependencies
-      working-directory: backend
-      run: npm ci
+      # Install dependencies and run tests in backend
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
 
-    - name: Debug - List backend directory
-      working-directory: backend
-      run: ls -la
+      - name: Debug - List backend directory
+        working-directory: backend
+        run: ls -la
 
-    - name: Run backend script
-      working-directory: backend/src
-      run: node index.js
+      - name: Run backend script
+        working-directory: backend/src
+        run: node index.js
 
-    - name: Stop pm2 server for backend
-      run: sudo pm2 stop Web-App-backend || true
+      - name: Stop pm2 server for backend
+        run: sudo pm2 stop Web-App-backend || true
 
-    - name: Start or restart Web-App-backend
-      run: |
-        if pm2 list | grep -q "Web-App-backend"; then
-          pm2 restart Web-App-backend --update-env
-        else
-          pm2 start backend/src/index.js --name "Web-App-backend"
-        fi
+      - name: Start or restart Web-App-backend
+        run: |
+          if pm2 list | grep -q "Web-App-backend"; then
+            pm2 restart Web-App-backend --update-env
+          else
+            pm2 start backend/src/index.js --name "Web-App-backend"
+          fi
