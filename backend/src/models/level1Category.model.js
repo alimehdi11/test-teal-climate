@@ -7,45 +7,25 @@ const Level1Category = sequelize.define(
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    email: {
+    level1: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
+    category: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    companyName: {
-      type: DataTypes.STRING,
-      field: "company_name",
-    },
-    country: {
-      type: DataTypes.STRING,
-    },
-    primaryIndustry: {
-      type: DataTypes.STRING,
-      field: "primary_industry",
-    },
-    secondaryIndustry: {
-      type: DataTypes.STRING,
-      field: "secondary_industry",
-    },
-    sustainabilityManager: {
-      type: DataTypes.STRING,
-      field: "sustainability_manager",
-    },
-    phoneNumber: {
-      type: DataTypes.STRING,
-      field: "phone_number",
     },
   },
   {
     timestamps: false,
-    tableName: "level1_category",
+    // tableName: "level1_categories",
+    tableName: "level1Categories",
   }
 );
 
-await Level1Category.sync();
+// await Level1Category.sync();
 
 export { Level1Category };

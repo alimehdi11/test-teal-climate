@@ -1,51 +1,83 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/connectDb.js";
 
-const Eeios = sequelize.define(
-  "Eeios",
+const Eeio = sequelize.define(
+  "Eeio",
   {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    companyName: {
-      type: DataTypes.STRING,
-      field: "company_name",
+      primaryKey: true,
+      autoIncrement: true,
     },
     country: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
-    primaryIndustry: {
+    continent: {
       type: DataTypes.STRING,
-      field: "primary_industry",
+      allowNull: false,
     },
-    secondaryIndustry: {
+    level1: {
       type: DataTypes.STRING,
-      field: "secondary_industry",
+      allowNull: false,
     },
-    sustainabilityManager: {
+    level2: {
       type: DataTypes.STRING,
-      field: "sustainability_manager",
+      allowNull: false,
     },
-    phoneNumber: {
+    level3: {
       type: DataTypes.STRING,
-      field: "phone_number",
+      allowNull: false,
+    },
+    level4: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    level5: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    sector: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    exioBaseCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      // field: "exio_base_code",
+    },
+    greenHouseGas: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      // field: "green_house_gas",
+    },
+    greenHouseGasEmissionFactor: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      // field: "green_house_gas_emission_factor",
+    },
+    productOrIndustry: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      // field: "product_or_industry",
+    },
+    perEuro: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      // field: "per_euro",
+    },
+    reference: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
     timestamps: false,
-    tableName: "Eeios",
+    tableName: "eeios",
   }
 );
 
-await Eeios.sync();
+// await Eeio.sync();
 
-export { Eeios };
+export { Eeio };

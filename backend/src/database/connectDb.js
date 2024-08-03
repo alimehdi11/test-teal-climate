@@ -9,6 +9,7 @@ const connectDb = async () => {
     process.env.DATABASE_PASSWORD,
     {
       host: process.env.DATABASE_HOST,
+      port: process.env.DATABASE_PORT,
       dialect: "postgres",
       logging: false,
     }
@@ -22,6 +23,6 @@ const connectDb = async () => {
   }
 };
 
-connectDb();
+await connectDb();
 
 export { sequelize };

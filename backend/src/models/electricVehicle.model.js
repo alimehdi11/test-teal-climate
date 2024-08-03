@@ -7,45 +7,51 @@ const ElectricVehicle = sequelize.define(
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    email: {
+    scope: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
+    level1: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    companyName: {
+    level2: {
       type: DataTypes.STRING,
-      field: "company_name",
+      allowNull: false,
     },
-    country: {
+    level3: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
-    primaryIndustry: {
+    level4: {
       type: DataTypes.STRING,
-      field: "primary_industry",
+      allowNull: false,
     },
-    secondaryIndustry: {
+    unitOfMeasurement: {
       type: DataTypes.STRING,
-      field: "secondary_industry",
+      allowNull: false,
+      // field: "unit_of_measurement",
     },
-    sustainabilityManager: {
+    unit: {
       type: DataTypes.STRING,
-      field: "sustainability_manager",
+      allowNull: false,
     },
-    phoneNumber: {
-      type: DataTypes.STRING,
-      field: "phone_number",
+    electricityConsumptionPerUnit: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      // field: "electricity_consumption_per_unit",
     },
   },
   {
     timestamps: false,
-    tableName: "electric_vehicles",
+    tableName: "electricVehicles",
+    // tableName: "electric_vehicles",
   }
 );
 
-await ElectricVehicle.sync();
+// await ElectricVehicle.sync();
 
 export { ElectricVehicle };

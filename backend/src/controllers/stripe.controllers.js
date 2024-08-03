@@ -1,5 +1,5 @@
 import stripeConfig from "stripe";
-import { pool } from "./../database/connectDb.js";
+import { sequelize } from "./../database/connectDb.js";
 
 const stripe = stripeConfig(process.env.STRIPE_SECRET_KEY);
 

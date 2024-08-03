@@ -1,5 +1,8 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Deferrable } from "sequelize";
 import { sequelize } from "../database/connectDb.js";
+// import { Level1Category } from "./level1Category.model.js";
+import { User } from "./user.model.js";
+import { BusinessUnit } from "./businessUnit.model.js";
 
 const BusinessUnitActivity = sequelize.define(
   "BusinessUnitActivity",
@@ -7,45 +10,98 @@ const BusinessUnitActivity = sequelize.define(
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    email: {
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      // field: "user_id",
+      field: "userId",
+      references: {
+        model: User,
+        key: "id",
+        deferrable: Deferrable.INITIALLY_IMMEDIATE,
+      },
+    },
+    businessUnitName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      // field: "business_unit_name",
+      field: "businessUnitName",
+      references: {
+        model: BusinessUnit,
+        key: "businessUnitName",
+        deferrable: Deferrable.INITIALLY_IMMEDIATE,
+      },
+    },
+    scope: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
+    level1: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    companyName: {
+    level2: {
       type: DataTypes.STRING,
-      field: "company_name",
+      allowNull: false,
     },
-    country: {
+    level3: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
-    primaryIndustry: {
+    level4: {
       type: DataTypes.STRING,
-      field: "primary_industry",
+      allowNull: false,
     },
-    secondaryIndustry: {
+    level5: {
       type: DataTypes.STRING,
-      field: "secondary_industry",
+      allowNull: false,
     },
-    sustainabilityManager: {
+    unitOfMeasurement: {
       type: DataTypes.STRING,
-      field: "sustainability_manager",
+      allowNull: false,
+      // field: "unit_of_measurment",
     },
-    phoneNumber: {
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    CO2e: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    CO2e_of_CO2: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    CO2e_of_CH4: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    CO2e_of_N2O: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    level1Category: {
       type: DataTypes.STRING,
-      field: "phone_number",
+      allowNull: false,
+      // field: "level1_category",
+      // references: {
+      //   model: Level1Category,
+      //   key: "category",
+      //   deferrable: Deferrable.INITIALLY_IMMEDIATE,
+      // },
     },
   },
   {
-    timestamps: false,
-    tableName: "business_units_activities",
+    // timestamps: false,
+    // tableName: "business_units_activities",
+    tableName: "businessUnitsActivities",
   }
 );
 
-await BusinessUnitActivity.sync();
+// await BusinessUnitActivity.sync();
 
 export { BusinessUnitActivity };

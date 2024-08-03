@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../database/connectDb.js";
+import { sequelize } from "./../database/connectDb.js";
 
 const User = sequelize.define(
   "User",
@@ -7,6 +7,8 @@ const User = sequelize.define(
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -18,34 +20,34 @@ const User = sequelize.define(
     },
     companyName: {
       type: DataTypes.STRING,
-      field: "company_name",
+      // field: "company_name",
     },
     country: {
       type: DataTypes.STRING,
     },
     primaryIndustry: {
       type: DataTypes.STRING,
-      field: "primary_industry",
+      // field: "primary_industry",
     },
     secondaryIndustry: {
       type: DataTypes.STRING,
-      field: "secondary_industry",
+      // field: "secondary_industry",
     },
     sustainabilityManager: {
       type: DataTypes.STRING,
-      field: "sustainability_manager",
+      // field: "sustainability_manager",
     },
     phoneNumber: {
       type: DataTypes.STRING,
-      field: "phone_number",
+      // field: "phone_number",
     },
   },
   {
-    timestamps: false,
+    // timestamps: false,
     tableName: "users",
   }
 );
 
-await User.sync();
+// await User.sync();
 
 export { User };

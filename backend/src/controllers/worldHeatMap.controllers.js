@@ -1,4 +1,4 @@
-import { pool } from "./../database/connectDb.js";
+import { sequelize } from "./../database/connectDb.js";
 
 const getWorldHeatMapDataByUserId = async (req, res) => {
   const { userId } = req.params;

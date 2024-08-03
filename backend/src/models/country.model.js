@@ -7,37 +7,20 @@ const Country = sequelize.define(
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    email: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
+    continent: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    companyName: {
+    region: {
       type: DataTypes.STRING,
-      field: "company_name",
-    },
-    country: {
-      type: DataTypes.STRING,
-    },
-    primaryIndustry: {
-      type: DataTypes.STRING,
-      field: "primary_industry",
-    },
-    secondaryIndustry: {
-      type: DataTypes.STRING,
-      field: "secondary_industry",
-    },
-    sustainabilityManager: {
-      type: DataTypes.STRING,
-      field: "sustainability_manager",
-    },
-    phoneNumber: {
-      type: DataTypes.STRING,
-      field: "phone_number",
+      allowNull: false,
     },
   },
   {
@@ -46,6 +29,6 @@ const Country = sequelize.define(
   }
 );
 
-await Country.sync();
+// await Country.sync();
 
 export { Country };

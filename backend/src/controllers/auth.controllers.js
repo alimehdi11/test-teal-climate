@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { pool } from "./../database/connectDb.js";
+import { sequelize } from "./../database/connectDb.js";
 import { issueJWT } from "./../services/auth.services.js";
 import {
   getSubscriptionFromStripe,

@@ -1,4 +1,5 @@
-import { pool } from "./../database/connectDb.js";
+import { sequelize } from "./../database/connectDb.js";
+import { Subscription } from "./../models/subscription.model.js";
 import stripeConfig from "stripe";
 
 const stripe = stripeConfig(process.env.STRIPE_SECRET_KEY);

@@ -1,5 +1,6 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../database/connectDb.js";
+import { DataTypes, Deferrable } from "sequelize";
+import { sequelize } from "./../database/connectDb.js";
+import { User } from "./../models/user.model.js";
 
 const Subscription = sequelize.define(
   "Subscription",
@@ -7,45 +8,47 @@ const Subscription = sequelize.define(
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    email: {
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      // field: "user_id",
+      field: "userId",
+      references: {
+        model: User,
+        key: "id",
+        deferrable: Deferrable.INITIALLY_IMMEDIATE,
+      },
+    },
+    customerId: {
       type: DataTypes.STRING,
       allowNull: false,
+      // field: "customer_id",
     },
-    password: {
+    subscriptionId: {
       type: DataTypes.STRING,
       allowNull: false,
+      // field: "subscription_id",
     },
-    companyName: {
+    paymenIntenId: {
       type: DataTypes.STRING,
-      field: "company_name",
+      allowNull: false,
+      // field: "payment_intent_id",
     },
-    country: {
+    clientSecret: {
       type: DataTypes.STRING,
-    },
-    primaryIndustry: {
-      type: DataTypes.STRING,
-      field: "primary_industry",
-    },
-    secondaryIndustry: {
-      type: DataTypes.STRING,
-      field: "secondary_industry",
-    },
-    sustainabilityManager: {
-      type: DataTypes.STRING,
-      field: "sustainability_manager",
-    },
-    phoneNumber: {
-      type: DataTypes.STRING,
-      field: "phone_number",
+      allowNull: false,
+      // field: "client_secret",
     },
   },
   {
-    timestamps: false,
+    // timestamps: false,
     tableName: "subscriptions",
   }
 );
 
-await Subscription.sync();
+// await Subscription.sync();
 
 export { Subscription };
