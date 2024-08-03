@@ -1,4 +1,4 @@
-import { pool } from "./../database/connectDb.js";
+import { sequelize } from "./../database/connectDb.js";
 
 const createCompaniesData = (req, res) => {
   const {

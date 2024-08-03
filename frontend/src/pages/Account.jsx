@@ -5,7 +5,6 @@ import { UserContext } from "./../contexts/UserContext.jsx";
 import { request } from "./../utils/request.js";
 import Button from "./../components/ui/Button.jsx";
 import Layout from "./../components/layout/Layout.jsx";
-import Navbar from "../components/Navbar.jsx";
 
 const Account = () => {
   const navigate = useNavigate();

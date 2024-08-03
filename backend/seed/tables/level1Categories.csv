@@ -1,0 +1,51 @@
+level1,category
+Fuels,Stationary combustion
+Fuels,Mobile combustion
+Bioenergy,Stationary combustion
+Bioenergy,Mobile combustion
+Refrigerant and other,Fugitive emissions
+Passenger vehicles,Mobile combustion
+Delivery vehicles,Mobile combustion
+Electricity,Purchased electricity
+Passenger Evs,Purchased electricity
+Delivery Evs,Purchased electricity
+Heat and steam,Heat and steam
+WTT- fuels,Fuel- and energy- related activities
+WTT- bioenergy,Fuel- and energy- related activities
+Electricity TandD,Fuel- and energy- related activities
+Electricity TandD for passenger EVs,Fuel- and energy- related activities
+Electricity TandD for delivery Evs,Fuel- and energy- related activities
+WTT- electricity,Fuel- and energy- related activities
+WTT- heat and steam,Fuel- and energy- related activities
+WTT- district heat and steam distribution,Fuel- and energy- related activities
+Water supply,Purchased goods and services
+Water treatment,Purchased goods and services
+Material use,Purchased goods and services
+Waste disposal,Waste generated in operations
+Waste disposal,Use of sold products
+Waste disposal,End-of-life treatment of sold products
+Business travel- sea,Business travel
+Business travel- sea,Employee commuting
+WTT- business travel- sea,Business travel
+WTT- business travel- sea,Employee commuting
+Business travel- land,Business travel
+Business travel- land,Employee commuting
+WTT- pass vehs and travel- land,Business travel
+WTT- pass vehs and travel- land,Employee commuting
+Freighting goods,Upstream transportation and distribution
+Freighting goods,Downstream transportation and distribution
+WTT- delivery vehs and freight,Upstream transportation and distribution
+WTT- delivery vehs and freight,Downstream transportation and distribution
+Hotel stay,Business travel
+Managed assets- electricity,Downstream leased assets
+Managed assets- vehicles,Downstream leased assets
+Homeworking,Employee Commuting
+Outside of scopes,Outside of scopes
+Electricity T&D,Fuel- and energy- related activities
+WTT- electricity (generation),Fuel- and energy- related activities
+WTT- electricity (T&D),Fuel- and energy- related activities
+Business travel- air,Business travel
+Business travel- air,Employee commuting
+WTT- business travel- air,Business travel
+WTT- business travel- air,Employee commuting
+District heat and steam TandD,Fuel- and energy- related activities

@@ -1,0 +1,323 @@
+name,continent,region
+Afghanistan,Asia,Afghanistan
+Aland Islands,Europe,Aland Islands
+Albania,Europe,Albania
+Algeria,Africa,Algeria
+American Samoa,Oceania,American Samoa
+Andorra,Europe,Andorra
+Angola,Africa,Angola
+Anguilla,Americas,Anguilla
+Antarctica,Antarctica,Antarctica
+Antigua and Barbuda,Americas,Antigua and Barbuda
+Argentina,Americas,Argentina
+Armenia,Asia,Armenia
+Aruba,Americas,Aruba
+Australia,Oceania,New South Wales and Australian Capital Territory
+Australia,Oceania,Victoria
+Australia,Oceania,Queensland
+Australia,Oceania,South Australia
+Australia,Oceania,Western Australia -
+Australia,Oceania,South West Interconnected System (SWIS) 
+Australia,Oceania,Tasmania
+Australia,Oceania,Northern territory -
+Australia,Oceania,Darwin Katherine Interconnected System (DKIS) 
+Australia,Oceania,Western Australia - North Western Interconnected System (NWIS) 
+Austria,Europe,Austria
+Azerbaijan,Asia,Azerbaijan
+Bahamas,Americas,Bahamas
+Bahrain,Asia,Bahrain
+Bangladesh,Asia,Bangladesh
+Barbados,Americas,Barbados
+Belarus,Europe,Belarus
+Belgium,Europe,Belgium
+Belize,Americas,Belize
+Benin,Africa,Benin
+Bermuda,Americas,Bermuda
+Bhutan,Asia,Bhutan
+Bolivia (Plurinational State of),Americas,Bolivia (Plurinational State of)
+"Bonaire, Sint Eustatius and Saba",Americas,"Bonaire, Sint Eustatius and Saba"
+Bosnia and Herzegovina,Europe,Bosnia and Herzegovina
+Botswana,Africa,Botswana
+Bouvet Island,Americas,Bouvet Island
+Brazil,Americas,Brazil
+British Indian Ocean Territory,Africa,British Indian Ocean Territory
+Brunei Darussalam,Asia,Brunei Darussalam
+Bulgaria,Europe,Bulgaria
+Burkina Faso,Africa,Burkina Faso
+Burundi,Africa,Burundi
+Cabo Verde,Africa,Cabo Verde
+Cambodia,Asia,Cambodia
+Cameroon,Africa,Cameroon
+Canada,Americas,Alberta (AB)
+Canada,Americas,British Columbia (BC)
+Canada,Americas,Manitoba (MT)
+Canada,Americas,New Brunswick (NB)
+Canada,Americas,Newfoundland and Labrador (NL)
+Canada,Americas,Nova Scotia (NS)
+Canada,Americas,Northwest Territories (NT)
+Canada,Americas,Nunavut (NU)
+Canada,Americas,Ontario (ON)
+Canada,Americas,Prince Edward Island (PE)
+Canada,Americas,Quebec (QC)
+Canada,Americas,Saskatchewan (SK)
+Canada,Americas,Yukon Territory (YT)
+Cayman Islands,Americas,Cayman Islands
+Central African Republic,Africa,Central African Republic
+Chad,Africa,Chad
+Chile,Americas,Chile
+China,Asia,China
+Christmas Island,Oceania,Christmas Island
+Cocos (Keeling) Islands,Oceania,Cocos (Keeling) Islands
+Colombia,Americas,Colombia
+Comoros,Africa,Comoros
+Congo,Africa,Congo
+"Congo, Democratic Republic of the",Africa,"Congo, Democratic Republic of the"
+Cook Islands,Oceania,Cook Islands
+Costa Rica,Americas,Costa Rica
+Cote d'Ivoire,Africa,Cote d'Ivoire
+Croatia,Europe,Croatia
+Cuba,Americas,Cuba
+Curacao,Americas,Curacao
+Cyprus,Asia,Cyprus
+Czechia,Europe,Czechia
+Denmark,Europe,Denmark
+Djibouti,Africa,Djibouti
+Dominica,Americas,Dominica
+Dominican Republic,Americas,Dominican Republic
+Ecuador,Americas,Ecuador
+Egypt,Africa,Egypt
+El Salvador,Americas,El Salvador
+Equatorial Guinea,Africa,Equatorial Guinea
+Eritrea,Africa,Eritrea
+Estonia,Europe,Estonia
+Eswatini,Africa,Eswatini
+Ethiopia,Africa,Ethiopia
+Falkland Islands (Malvinas),Americas,Falkland Islands (Malvinas)
+Faroe Islands,Europe,Faroe Islands
+Fiji,Oceania,Fiji
+Finland,Europe,Finland
+France,Europe,France
+French Guiana,Americas,French Guiana
+French Polynesia,Oceania,French Polynesia
+French Southern Territories,Africa,French Southern Territories
+Gabon,Africa,Gabon
+Gambia,Africa,Gambia
+Georgia,Asia,Georgia
+Germany,Europe,Germany
+Ghana,Africa,Ghana
+Gibraltar,Europe,Gibraltar
+Greece,Europe,Greece
+Greenland,Americas,Greenland
+Grenada,Americas,Grenada
+Guadeloupe,Americas,Guadeloupe
+Guam,Oceania,Guam
+Guatemala,Americas,Guatemala
+Guernsey,Europe,Guernsey
+Guinea,Africa,Guinea
+Guinea-Bissau,Africa,Guinea-Bissau
+Guyana,Americas,Guyana
+Haiti,Americas,Haiti
+Heard Island and McDonald Islands,Oceania,Heard Island and McDonald Islands
+Holy See,Europe,Holy See
+Honduras,Americas,Honduras
+Hong Kong,Asia,Hong Kong
+Hungary,Europe,Hungary
+Iceland,Europe,Iceland
+India,Asia,India
+Indonesia,Asia,Indonesia
+Iran (Islamic Republic of),Asia,Iran (Islamic Republic of)
+Iraq,Asia,Iraq
+Ireland,Europe,Ireland
+Isle of Man,Europe,Isle of Man
+Israel,Asia,Israel
+Italy,Europe,Italy
+Jamaica,Americas,Jamaica
+Japan,Asia,Japan
+Jersey,Europe,Jersey
+Jordan,Asia,Jordan
+Kazakhstan,Asia,Kazakhstan
+Kenya,Africa,Kenya
+Kiribati,Oceania,Kiribati
+Korea (Democratic People's Republic of),Asia,Korea (Democratic People's Republic of)
+"Korea, Republic of",Asia,"Korea, Republic of"
+Kuwait,Asia,Kuwait
+Kyrgyzstan,Asia,Kyrgyzstan
+Lao People's Democratic Republic,Asia,Lao People's Democratic Republic
+Latvia,Europe,Latvia
+Lebanon,Asia,Lebanon
+Lesotho,Africa,Lesotho
+Liberia,Africa,Liberia
+Libya,Africa,Libya
+Liechtenstein,Europe,Liechtenstein
+Lithuania,Europe,Lithuania
+Luxembourg,Europe,Luxembourg
+Macao,Asia,Macao
+Madagascar,Africa,Madagascar
+Malawi,Africa,Malawi
+Malaysia,Asia,Malaysia
+Maldives,Asia,Maldives
+Mali,Africa,Mali
+Malta,Europe,Malta
+Marshall Islands,Oceania,Marshall Islands
+Martinique,Americas,Martinique
+Mauritania,Africa,Mauritania
+Mauritius,Africa,Mauritius
+Mayotte,Africa,Mayotte
+Mexico,Americas,Mexico
+Micronesia (Federated States of),Oceania,Micronesia (Federated States of)
+"Moldova, Republic of",Europe,"Moldova, Republic of"
+Monaco,Europe,Monaco
+Mongolia,Asia,Mongolia
+Montenegro,Europe,Montenegro
+Montserrat,Americas,Montserrat
+Morocco,Africa,Morocco
+Mozambique,Africa,Mozambique
+Myanmar,Asia,Myanmar
+Namibia,Africa,Namibia
+Nauru,Oceania,Nauru
+Nepal,Asia,Nepal
+Netherlands,Europe,Netherlands
+New Caledonia,Oceania,New Caledonia
+New Zealand,Oceania,New Zealand
+Nicaragua,Americas,Nicaragua
+Niger,Africa,Niger
+Nigeria,Africa,Nigeria
+Niue,Oceania,Niue
+Norfolk Island,Oceania,Norfolk Island
+North Macedonia,Europe,North Macedonia
+Northern Mariana Islands,Oceania,Northern Mariana Islands
+Norway,Europe,Norway
+Oman,Asia,Oman
+Pakistan,Asia,Pakistan
+Palau,Oceania,Palau
+"Palestine, State of",Asia,"Palestine, State of"
+Panama,Americas,Panama
+Papua New Guinea,Oceania,Papua New Guinea
+Paraguay,Americas,Paraguay
+Peru,Americas,Peru
+Philippines,Asia,Philippines
+Pitcairn,Oceania,Pitcairn
+Poland,Europe,Poland
+Portugal,Europe,Portugal
+Puerto Rico,Americas,Puerto Rico
+Qatar,Asia,Qatar
+Reunion,Africa,Reunion
+Romania,Europe,Romania
+Russian Federation,Europe,Russian Federation
+Rwanda,Africa,Rwanda
+Saint Barthelemy,Americas,Saint Barthelemy
+"Saint Helena, Ascension and Tristan da Cunha",Africa,"Saint Helena, Ascension and Tristan da Cunha"
+Saint Kitts and Nevis,Americas,Saint Kitts and Nevis
+Saint Lucia,Americas,Saint Lucia
+Saint Martin (French part),Americas,Saint Martin (French part)
+Saint Pierre and Miquelon,Americas,Saint Pierre and Miquelon
+Saint Vincent and the Grenadines,Americas,Saint Vincent and the Grenadines
+Samoa,Oceania,Samoa
+San Marino,Europe,San Marino
+Sao Tome and Principe,Africa,Sao Tome and Principe
+Saudi Arabia,Asia,Saudi Arabia
+Senegal,Africa,Senegal
+Serbia,Europe,Serbia
+Seychelles,Africa,Seychelles
+Sierra Leone,Africa,Sierra Leone
+Singapore,Asia,Singapore
+Sint Maarten (Dutch part),Americas,Sint Maarten (Dutch part)
+Slovakia,Europe,Slovakia
+Slovenia,Europe,Slovenia
+Solomon Islands,Oceania,Solomon Islands
+Somalia,Africa,Somalia
+South Africa,Africa,South Africa
+South Georgia and the South Sandwich Islands,Americas,South Georgia and the South Sandwich Islands
+South Sudan,Africa,South Sudan
+Spain,Europe,Spain
+Sri Lanka,Asia,Sri Lanka
+Sudan,Africa,Sudan
+Suriname,Americas,Suriname
+Svalbard and Jan Mayen,Europe,Svalbard and Jan Mayen
+Sweden,Europe,Sweden
+Switzerland,Europe,Switzerland
+Syrian Arab Republic,Asia,Syrian Arab Republic
+"Taiwan, Province of China",Asia,"Taiwan, Province of China"
+Tajikistan,Asia,Tajikistan
+"Tanzania, United Republic of",Africa,"Tanzania, United Republic of"
+Thailand,Asia,Thailand
+Timor-Leste,Asia,Timor-Leste
+Togo,Africa,Togo
+Tokelau,Oceania,Tokelau
+Tonga,Oceania,Tonga
+Trinidad and Tobago,Americas,Trinidad and Tobago
+Tunisia,Africa,Tunisia
+Turkey,Asia,Turkey
+Turkmenistan,Asia,Turkmenistan
+Turks and Caicos Islands,Americas,Turks and Caicos Islands
+Tuvalu,Oceania,Tuvalu
+Uganda,Africa,Uganda
+Ukraine,Europe,Ukraine
+United Arab Emirates,Asia,United Arab Emirates
+United Kingdom of Great Britain and Northern Ireland,Europe,United Kingdom of Great Britain and Northern Ireland
+United States of America,Americas,Alaska
+United States of America,Americas,Alabama
+United States of America,Americas,Arkansas
+United States of America,Americas,Arizona
+United States of America,Americas,California
+United States of America,Americas,Colorado
+United States of America,Americas,Connecticut
+United States of America,Americas,District of Columbia
+United States of America,Americas,Delaware
+United States of America,Americas,Florida
+United States of America,Americas,Georgia
+United States of America,Americas,Hawaii
+United States of America,Americas,Iowa
+United States of America,Americas,Idaho
+United States of America,Americas,Illinois
+United States of America,Americas,Indiana
+United States of America,Americas,Kansas
+United States of America,Americas,Kentucky
+United States of America,Americas,Louisiana
+United States of America,Americas,Massachusetts
+United States of America,Americas,Maryland
+United States of America,Americas,Maine
+United States of America,Americas,Michigan
+United States of America,Americas,Minnesota
+United States of America,Americas,Missouri
+United States of America,Americas,Mississippi
+United States of America,Americas,Montana
+United States of America,Americas,North Carolina
+United States of America,Americas,North Dakota
+United States of America,Americas,Nebraska
+United States of America,Americas,New Hampshire
+United States of America,Americas,New Jersey
+United States of America,Americas,New Mexico
+United States of America,Americas,Nevada
+United States of America,Americas,New York
+United States of America,Americas,Ohio
+United States of America,Americas,Oklahoma
+United States of America,Americas,Oregon
+United States of America,Americas,Pennsylvania
+United States of America,Americas,Puerto Rico
+United States of America,Americas,Rhode Island
+United States of America,Americas,South Carolina
+United States of America,Americas,South Dakota
+United States of America,Americas,Tennessee
+United States of America,Americas,Texas
+United States of America,Americas,Utah
+United States of America,Americas,Virginia
+United States of America,Americas,Vermont
+United States of America,Americas,Washington
+United States of America,Americas,Wisconsin
+United States of America,Americas,West Virginia
+United States of America,Americas,Wyoming
+United States of America,Americas,United States of America
+United States Minor Outlying Islands,Oceania,United States Minor Outlying Islands
+Uruguay,Americas,Uruguay
+Uzbekistan,Asia,Uzbekistan
+Vanuatu,Oceania,Vanuatu
+Venezuela (Bolivarian Republic of),Americas,Venezuela (Bolivarian Republic of)
+Viet Nam,Asia,Viet Nam
+Virgin Islands (British),Americas,Virgin Islands (British)
+Virgin Islands (U.S.),Americas,Virgin Islands (U.S.)
+Wallis and Futuna,Oceania,Wallis and Futuna
+Western Sahara,Africa,Western Sahara
+Yemen,Asia,Yemen
+Zambia,Africa,Zambia
+Zimbabwe,Africa,Zimbabwe

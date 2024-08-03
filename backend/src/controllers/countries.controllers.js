@@ -1,4 +1,4 @@
-import { pool } from "./../database/connectDb.js";
+import { sequelize } from "./../database/connectDb.js";
 
 const getCountries = (req, res) => {
   const id = 19;
