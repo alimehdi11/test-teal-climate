@@ -1,4 +1,3 @@
-import { sequelize } from "./../database/connectDb.js";
 import { Subscription } from "./../models/subscription.model.js";
 import stripeConfig from "stripe";
 
@@ -24,10 +23,10 @@ const getSubscription = async (userId) => {
       throw new Error("userId is required");
     }
 
-    const query = `SELECT * FROM subscriptions WHERE "userId" = '${userId}'`;
-
-    const result = await pool.query(query);
-    const subscription = result.rows[0];
+    // const query = `SELECT * FROM subscriptions WHERE "userId" = '${userId}'`;
+    // const result = await pool.query(query);
+    // const subscription = result.rows[0];
+    const subscription = Subscription.findOne({ where: { userId } });
     return subscription;
   } catch (error) {
     console.log("Could not getSubscriptionFromStripe");

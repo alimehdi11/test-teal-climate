@@ -1,7 +1,6 @@
 import { DataTypes, Deferrable } from "sequelize";
 import { sequelize } from "./../database/connectDb.js";
 import { User } from "./../models/user.model.js";
-import { defaultValueSchemable } from "sequelize/lib/utils";
 
 const Subscription = sequelize.define(
   "Subscription",
@@ -15,7 +14,6 @@ const Subscription = sequelize.define(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: "userId",
       references: {
         model: User,
         key: "id",

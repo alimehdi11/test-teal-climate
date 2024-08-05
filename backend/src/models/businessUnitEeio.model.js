@@ -15,7 +15,6 @@ const BusinessUnitEeio = sequelize.define(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: "userId",
       references: {
         model: User,
         key: "id",
@@ -25,12 +24,6 @@ const BusinessUnitEeio = sequelize.define(
     businessUnitName: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "businessUnitName",
-      references: {
-        model: BusinessUnit,
-        key: "businessUnitName",
-        deferrable: Deferrable.INITIALLY_IMMEDIATE,
-      },
     },
     country: {
       type: DataTypes.STRING,

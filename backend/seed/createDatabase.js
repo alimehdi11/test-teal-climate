@@ -17,6 +17,19 @@ const createDatabase = async () => {
   try {
     await client.connect();
     console.log("Client connected to PostgreSQL");
+
+    // Check if the database exists
+    const res = await client.query(
+      `SELECT 1 FROM pg_database WHERE datname='${databaseName}'`
+    );
+
+    if (res.rows.length > 0) {
+      // Database exists, so drop it
+      console.log(`Database ${databaseName} exists. Dropping it...`);
+      await client.query(`DROP DATABASE ${databaseName};`);
+      console.log(`Database ${databaseName} dropped successfully`);
+    }
+
     await client.query(`CREATE DATABASE ${databaseName};`);
     console.log(`Database ${databaseName} created successfully`);
   } catch (err) {

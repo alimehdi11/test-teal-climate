@@ -1,0 +1,39 @@
+import express from "express";
+import {
+  getEeioByName,
+  getEeioLevel2,
+  getEeioLevel3,
+  getEeioLevel4,
+  getEeioLevel5,
+  getEeiosector,
+  insertEeioData,
+  getEeiodata,
+  fetchEeioEditData,
+  editEeioData,
+  deleteEeioData,
+} from "../controllers/eeio.controllers.js";
+
+const eeiosRouter = express.Router();
+
+eeiosRouter.get("/:name", getEeioByName);
+eeiosRouter.get("/level2/:selectedForm/:selectedlevel1", getEeioLevel2);
+eeiosRouter.get("/level3/:selectedForm/:selectedlevel1/:level2", getEeioLevel3);
+eeiosRouter.get(
+  "/level4/:selectedForm/:selectedlevel1/:level2/:level3",
+  getEeioLevel4
+);
+eeiosRouter.get(
+  "/level5/:selectedForm/:selectedlevel1/:level2/:level3/:level4",
+  getEeioLevel5
+);
+eeiosRouter.get(
+  "/sector/:selectedForm/:selectedlevel1/:level2/:level3/:level4/:level5",
+  getEeiosector
+);
+eeiosRouter.post("/insertEeioData", insertEeioData);
+eeiosRouter.get("/eeiodata/:userid", getEeiodata);
+eeiosRouter.get("/fetchEeioEditData/:id/:userid", fetchEeioEditData);
+eeiosRouter.put("/editEeioData/:id", editEeioData);
+eeiosRouter.delete("/deleteEeioData/:id/:userid", deleteEeioData);
+
+export { eeiosRouter };

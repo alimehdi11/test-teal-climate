@@ -24,15 +24,12 @@ const Activity = sequelize.define(
     },
     level3: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     level4: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     level5: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     unitOfMeasurement: {
       type: DataTypes.STRING,

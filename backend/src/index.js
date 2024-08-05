@@ -11,20 +11,20 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { authRouter } from "./routes/auth.routes.js";
-import { companiesRouter } from "./routes/companies.routes.js";
-import { companiesDataRouter } from "./routes/companiesData.routes.js";
+import { businessUnitsRouter } from "./routes/businessUnits.routes.js";
+import { businessUnitsActivitiesRouter } from "./routes/businessUnitsActivities.routes.js";
 import { getWorldHeatMapDataByUserId } from "./controllers/worldHeatMap.controllers.js";
-import { createCompanyIntro } from "./controllers/companyIntro.controllers.js";
-import { getActivityeData } from "./controllers/activityData.controllers.js";
-import { getCategories } from "./controllers/categories.controllers.js";
-import { getCountries } from "./controllers/countries.controllers.js";
+import { getAllActivities } from "./controllers/activities.controllers.js";
+import { getAllLevel1Categories } from "./controllers/level1Categories.controllers.js";
+import { getAllCountries } from "./controllers/countries.controllers.js";
 import { verifyToken } from "./middlewares/auth.middlewares.js";
 import { subscriptionsRouter } from "./routes/subscriptions.routes.js";
 import { stripeRouter } from "./routes/stripe.routes.js";
 // import { handleWebhookEvents } from "./controllers/webhook.controllers.js";
 import { airportsRouter } from "./routes/airports.routes.js";
 import { electricVehiclesRouter } from "./routes/electricVehicles.routes.js";
-import { eeioRouter } from "./routes/eeio.routes.js";
+import { eeiosRouter } from "./routes/eeios.routes.js";
+import { usersRouter } from "./routes/users.routes.js";
 
 const app = express();
 
@@ -46,18 +46,30 @@ app.use(express.static(path.join(process.cwd(), "public")));
  * ---------- Routes ----------
  */
 app.use("/auth", authRouter);
-app.get("/activitydata", verifyToken, getActivityeData);
-app.get("/categories", verifyToken, getCategories);
-app.get("/countries", verifyToken, getCountries);
-app.use("/companies", verifyToken, companiesRouter);
-app.use("/companiesdata", verifyToken, companiesDataRouter);
-app.post("/companyIntro", verifyToken, createCompanyIntro);
+
+// app.get("/activitydata", verifyToken, getAllActivities); // TODO : this line should removed when frontend side uri updated from activitydata -> activities
+app.get("/activities", verifyToken, getAllActivities);
+
+// app.get("/categories", verifyToken, getAllLevel1Categories); // TODO : this line should removed when frontend side uri updated from categories -> level1Categories
+app.get("/level1Categories", verifyToken, getAllLevel1Categories);
+
+app.get("/countries", verifyToken, getAllCountries);
+
+// app.use("/companies", verifyToken, businessUnitsRouter); // TODO : this line should removed when frontend side uri updated from companies -> businessUnits
+app.use("/businessUnits", verifyToken, businessUnitsRouter);
+
+// users route is created to get users businessUnits by thier userid
+app.use("/users", verifyToken, usersRouter);
+
+// app.use("/companiesdata", verifyToken, businessUnitsActivitiesRouter); // TODO : this line should removed when frontend side uri updated from companiesdata -> businessUnitsActivities
+app.use("/businessUnitsActivities", verifyToken, businessUnitsActivitiesRouter);
+
 app.get("/worldHeatMap/:userId", verifyToken, getWorldHeatMapDataByUserId);
 app.use("/subscriptions", verifyToken, subscriptionsRouter);
 app.use("/stripe", verifyToken, stripeRouter);
 app.use("/airports", verifyToken, airportsRouter);
 app.use("/electricVehicles", electricVehiclesRouter);
-app.use("/eeios", verifyToken, eeioRouter);
+app.use("/eeios", verifyToken, eeiosRouter);
 
 // TODO : check webhook setup needed or not
 // app.post(

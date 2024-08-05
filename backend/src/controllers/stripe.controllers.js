@@ -1,5 +1,4 @@
 import stripeConfig from "stripe";
-import { sequelize } from "./../database/connectDb.js";
 
 const stripe = stripeConfig(process.env.STRIPE_SECRET_KEY);
 
@@ -13,7 +12,6 @@ const createCustomerAtStripe = async (req, res) => {
     const customer = await stripe.customers.create({
       email: `${email}`,
     });
-    // console.log(customer);
     res.send(customer);
   } catch (error) {
     return res.status(400).send({ error: { message: error.message } });

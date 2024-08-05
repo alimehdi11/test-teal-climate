@@ -15,20 +15,18 @@ const BusinessUnitActivity = sequelize.define(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: "userId",
       references: {
         model: User,
         key: "id",
         deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
     },
-    businessUnitName: {
-      type: DataTypes.STRING,
+    businessUnitId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      field: "businessUnitName",
       references: {
         model: BusinessUnit,
-        key: "businessUnitName",
+        key: "id",
         deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
     },
@@ -89,5 +87,10 @@ const BusinessUnitActivity = sequelize.define(
     tableName: "businessUnitsActivities",
   }
 );
+
+BusinessUnitActivity.belongsTo(BusinessUnit, {
+  foreignKey: "businessUnitId",
+  as: "businessUnit",
+});
 
 export { BusinessUnitActivity };
