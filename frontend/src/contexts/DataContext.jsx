@@ -1,57 +1,61 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import Loader from "../components/ui/Loader.jsx";
 import { request } from "../utils/request.js";
+import { UserContext } from "./UserContext.jsx";
 
 const DataContext = createContext();
 
 const DataProvider = ({ children }) => {
   const [data, setData] = useState(null);
+  const { user } = useContext(UserContext);
+  const [isLoding, setIsLoding] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const fetchActivitesData = async () => {
-        try {
-          const response = await request(
-            `${import.meta.env.VITE_API_BASE_URL}/activitydata`,
-            "GET"
-          );
-          if (!response.ok) {
-            throw new Error("Failed to fetch data");
+    if (Object.keys(user).length > 0) {
+      setIsLoding(true);
+      (async () => {
+        const fetchActivitesData = async () => {
+          try {
+            const response = await request(
+              `${import.meta.env.VITE_API_BASE_URL}/activitydata`,
+              "GET"
+            );
+            if (!response.ok) {
+              throw new Error("Failed to fetch data");
+            }
+            const jsonData = await response.json();
+            return jsonData;
+          } catch (error) {
+            console.error("Error fetching Fuel Category:", error);
           }
-          const jsonData = await response.json();
-          return jsonData;
-        } catch (error) {
-          console.error("Error fetching Fuel Category:", error);
-        }
-      };
-
-      const fetchScopeCategoriesData = async () => {
-        try {
-          const response = await request(
-            `${import.meta.env.VITE_API_BASE_URL}/categories`,
-            "GET"
-          );
-          if (!response.ok) {
-            throw new Error("Failed to fetch data");
+        };
+        const fetchScopeCategoriesData = async () => {
+          try {
+            const response = await request(
+              `${import.meta.env.VITE_API_BASE_URL}/categories`,
+              "GET"
+            );
+            if (!response.ok) {
+              throw new Error("Failed to fetch data");
+            }
+            const jsonData = await response.json();
+            return jsonData;
+          } catch (error) {
+            console.error("Error fetching categories data:", error);
           }
-          const jsonData = await response.json();
-          return jsonData;
-        } catch (error) {
-          console.error("Error fetching categories data:", error);
-        }
-      };
+        };
+        const activitiesData = await fetchActivitesData();
+        const scopeCategoriesData = await fetchScopeCategoriesData();
+        setData({
+          activitiesData,
+          scopeCategoriesData,
+        });
+        setIsLoding(false);
+      })();
+    }
+  }, [user]);
 
-      const activitiesData = await fetchActivitesData();
-      const scopeCategoriesData = await fetchScopeCategoriesData();
-
-      setData({
-        activitiesData,
-        scopeCategoriesData,
-      });
-    })();
-  }, []);
-
-  return !data ? (
+  return isLoding ? (
     <Loader />
   ) : (
     <DataContext.Provider value={data}>{children}</DataContext.Provider>
