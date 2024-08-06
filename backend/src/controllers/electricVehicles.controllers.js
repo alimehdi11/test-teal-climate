@@ -1,58 +1,43 @@
-import { sequelize } from "../database/connectDb.js";
+import { ElectricVehicle } from "./../models/electricVehicle.model.js";
 
 const getElectricVehicle = async (req, res) => {
   try {
     // Query params
-    const scope = req.query.scope;
-    const level1 = req.query.level1;
-    const level2 = req.query.level2;
-    const level3 = req.query.level3;
-    const level4 = req.query.level4;
-    const uom = req.query.uom;
-    const unit = req.query.unit;
-    const electricityConsumptionPerUnit =
-      req.query.electricityConsumptionPerUnit;
-
-    const queryParams = [
-      scope,
+    const {
+      // scope,
       level1,
       level2,
       level3,
       level4,
-      uom,
-      unit,
-      electricityConsumptionPerUnit,
-    ];
+      unitOfMeasurement,
+      // unit,
+      // electricityConsumptionPerUnit,
+    } = req.query;
 
-    const passedQueryParams = [];
+    const whereClause = {};
+    // if (scope) whereClause.scope = scope;
+    if (level1) whereClause.level1 = level1;
+    if (level2) whereClause.level2 = level2;
+    if (level3) whereClause.level3 = level3;
+    if (level4) whereClause.level4 = level4;
+    if (unitOfMeasurement) whereClause.unitOfMeasurement = unitOfMeasurement;
+    // if (unit) whereClause.unit = unit;
+    // if (electricityConsumptionPerUnit)
+    // whereClause.electricityConsumptionPerUnit = electricityConsumptionPerUnit;
 
-    const columnNames = [
-      "scope",
-      "level1",
-      "level2",
-      "level3",
-      "level4",
-      "uom",
-      "unit",
-      "electricityConsumptionPerUnit",
-    ];
-
-    queryParams.forEach((param, index) => {
-      if (param !== undefined && param !== "") {
-        passedQueryParams.push(`"${columnNames[index]}" = '${param}'`);
-      }
+    const electricVehicle = await ElectricVehicle.findAll({
+      where: whereClause,
     });
 
-    const query =
-      `SELECT * FROM "electricVehicles"` +
-      (passedQueryParams.length > 0
-        ? ` WHERE ${passedQueryParams.join(" AND ")}`
-        : ``);
-    const result = await pool.query(query);
-    const electricVehicle = result.rows[0];
-    return res.send(electricVehicle);
+    if (!electricVehicle) {
+      return res.status(404).send({ message: "Electric Vehicle not found" });
+    }
+
+    return res.status(200).json(electricVehicle);
   } catch (error) {
-    return res.status(400).send({ error: { message: error.message } });
+    console.log("Could not getElectricVehicle");
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

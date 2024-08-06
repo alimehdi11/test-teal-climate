@@ -21,7 +21,10 @@ const getBusinessUnitsByUserId = async (req, res) => {
 const getBusinessUnitsActivitiesByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
-    let userBusinessUnitsActivities = await BusinessUnitActivity.findAll({
+
+    const { order = "DESC", limit = 10, orderBy = "CO2e" } = req.query;
+
+    const queryOptions = {
       where: {
         userId,
       },
@@ -31,7 +34,12 @@ const getBusinessUnitsActivitiesByUserId = async (req, res) => {
           as: "businessUnit",
         },
       ],
-    });
+      order: [[orderBy, order.toUpperCase()]],
+      limit: parseInt(limit, 10),
+    };
+
+    let userBusinessUnitsActivities =
+      await BusinessUnitActivity.findAll(queryOptions);
     userBusinessUnitsActivities = userBusinessUnitsActivities.map(
       (userBusinessUnitActivity) => {
         userBusinessUnitActivity = userBusinessUnitActivity.toJSON();
@@ -48,26 +56,9 @@ const getBusinessUnitsActivitiesByUserId = async (req, res) => {
   }
 };
 
-const getTop10EmissionsByUserId = async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const top10BusinessUnitsActivities = await BusinessUnitActivity.findAll({
-      where: {
-        userId,
-      },
-      order: [["CO2e", "DESC"]],
-      limit: 10,
-    });
-    return res.status(200).json(top10BusinessUnitsActivities);
-  } catch (error) {
-    console.log("Could not getTop10EmissionsByUserId");
-    console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
 const updateUserbyId = async (req, res) => {
   try {
+    console.log("updateUserById");
     const { id } = req.params;
     const {
       companyName,
@@ -77,18 +68,19 @@ const updateUserbyId = async (req, res) => {
       sustainabilityManager,
       phoneNumber,
     } = req.body;
-    await User.update(
-      {
-        companyName,
-        country,
-        primaryIndustry,
-        secondaryIndustry,
-        sustainabilityManager,
-        phoneNumber,
-      },
-      { where: { id } }
-    );
-    return res.status(200).json({ message: "User updated successfully" });
+    const user = await User.findOne({ where: { id } });
+    if (user) {
+      user.companyName = companyName;
+      user.country = country;
+      user.primaryIndustry = primaryIndustry;
+      user.secondaryIndustry = secondaryIndustry;
+      user.sustainabilityManager = sustainabilityManager;
+      user.phoneNumber = phoneNumber;
+      await user.save();
+      return res.status(200).json({ message: "User updated successfully" });
+    } else {
+      return res.status(404).json({ message: "User not found" });
+    }
   } catch (error) {
     console.log("Could not updateUserbyId");
     console.log(error);
@@ -100,34 +92,13 @@ const getUserbyId = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findOne({ where: { id } });
-    return res.status(200).json(user);
+    if (user) {
+      return res.status(200).json(user);
+    } else {
+      return res.status(404).json({ message: "User not found" });
+    }
   } catch (error) {
     console.log("Could not getUserbyId");
-    console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-const getWorldHeatMapDataByUserId = async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const query = `SELECT cd.co2e, c.countries
-    FROM companiesdata cd
-    JOIN companies c ON cd.businessunit = c.unitname
-    WHERE cd.ids = $1
-    AND c.userId = $2;
-    `;
-    const values = [userId, userId];
-    pool.query(query, values, (error, result) => {
-      if (error) {
-        console.error("Error :", error);
-        res.status(500).json({ error: "Something went wrong" });
-      } else {
-        res.status(200).json(result.rows);
-      }
-    });
-  } catch (error) {
-    console.log("Could not getWorldHeatMapDataByUserId");
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -136,8 +107,6 @@ const getWorldHeatMapDataByUserId = async (req, res) => {
 export {
   getBusinessUnitsByUserId,
   getBusinessUnitsActivitiesByUserId,
-  getTop10EmissionsByUserId,
   updateUserbyId,
   getUserbyId,
-  getWorldHeatMapDataByUserId,
 };

@@ -5,7 +5,7 @@ import {
   updateBusinessUnitById,
   deleteBusinessUnitById,
 } from "./../controllers/businessUnits.controllers.js";
-import { isBusinessUnitOwner } from "./..//middlewares/businessUnits.middleware.js";
+import { isBusinessUnitOwner } from "./../middlewares/businessUnits.middleware.js";
 
 const businessUnitsRouter = express.Router();
 

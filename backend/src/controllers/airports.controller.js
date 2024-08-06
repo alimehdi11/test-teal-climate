@@ -1,20 +1,14 @@
-import { sequelize } from "../database/connectDb.js";
+import { Airport } from "./../models/airport.model.js";
 
-const getAirportByName = async (req, res) => {
+const getAllAirports = async (req, res) => {
   try {
-    const airportName = req.query.name;
-
-    const query = airportName
-      ? `SELECT * FROM airport WHERE "airports" = '${airportName}'`
-      : `SELECT * FROM airport`;
-    const result = await pool.query(query);
-    const airport = airportName ? result.rows[0] : result.rows;
-
-    return res.send(airport);
+    const airports = await Airport.findAll();
+    return res.status(200).json(airports);
   } catch (error) {
-    console.log("error getting airport by name\n", error.message);
-    return res.status(400).send({ error: { message: error.message } });
+    console.log("Could not getAllAirports");
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-export { getAirportByName };
+export { getAllAirports };

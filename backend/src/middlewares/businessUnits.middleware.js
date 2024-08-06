@@ -23,7 +23,7 @@ const isBusinessUnitOwner = async (req, res, next) => {
 
     return next();
   } catch (error) {
-    console.log("Could not isBusinessUnitActivityOwner");
+    console.log("Could not isBusinessUnitOwner");
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
