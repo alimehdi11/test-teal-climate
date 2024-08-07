@@ -11,28 +11,30 @@ import Layout from "../../components/layout/Layout.jsx";
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
-  const [companyData, setCompanyData] = useState([]);
+  const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
+    useState([]);
   const { id } = useParams();
   const { user } = useContext(UserContext);
 
-  const fetchCompanyData = async () => {
+  const fetchUserBusinessUnitsActivities = async () => {
     try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/companiesdata/${user.id}`,
+      const userBusinessUnitsActivitiesResponse = await request(
+        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnitsActivities`,
         "GET"
       );
-      if (!response.ok) {
+      if (!userBusinessUnitsActivitiesResponse.ok) {
         throw new Error(`Failed to fetch data:`);
       }
-      const jsonData = await response.json();
-      setCompanyData(jsonData);
+      const userBusinessUnitsActivities =
+        await userBusinessUnitsActivitiesResponse.json();
+      setUserBusinessUnitsActivities(userBusinessUnitsActivities);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    fetchCompanyData();
+    fetchUserBusinessUnitsActivities();
   }, []);
 
   useEffect(() => {
@@ -60,7 +62,9 @@ const Activities = () => {
               setSelectedScope={setSelectedScope}
               setSelectedLevel={setSelectedLevel}
               userId={user.id}
-              fetchCompanyData={fetchCompanyData}
+              fetchUserBusinessUnitsActivities={
+                fetchUserBusinessUnitsActivities
+              }
             />
           ) : (
             <div
@@ -74,8 +78,8 @@ const Activities = () => {
         }
       />
       <ActivitiesTable
-        companyData={companyData}
-        fetchCompanyData={fetchCompanyData}
+        userBusinessUnitsActivities={userBusinessUnitsActivities}
+        fetchUserBusinessUnitsActivities={fetchUserBusinessUnitsActivities}
       />
     </>
   );

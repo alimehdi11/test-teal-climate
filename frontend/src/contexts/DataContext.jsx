@@ -6,7 +6,7 @@ import { UserContext } from "./UserContext.jsx";
 const DataContext = createContext();
 
 const DataProvider = ({ children }) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
   const { user } = useContext(UserContext);
   const [isLoding, setIsLoding] = useState(false);
 
@@ -14,10 +14,10 @@ const DataProvider = ({ children }) => {
     if (Object.keys(user).length > 0) {
       setIsLoding(true);
       (async () => {
-        const fetchActivitesData = async () => {
+        const fetchActivities = async () => {
           try {
             const response = await request(
-              `${import.meta.env.VITE_API_BASE_URL}/activitydata`,
+              `${import.meta.env.VITE_API_BASE_URL}/activities`,
               "GET"
             );
             if (!response.ok) {
@@ -29,10 +29,10 @@ const DataProvider = ({ children }) => {
             console.error("Error fetching Fuel Category:", error);
           }
         };
-        const fetchScopeCategoriesData = async () => {
+        const fetchLevel1Categories = async () => {
           try {
             const response = await request(
-              `${import.meta.env.VITE_API_BASE_URL}/categories`,
+              `${import.meta.env.VITE_API_BASE_URL}/level1Categories`,
               "GET"
             );
             if (!response.ok) {
@@ -44,11 +44,11 @@ const DataProvider = ({ children }) => {
             console.error("Error fetching categories data:", error);
           }
         };
-        const activitiesData = await fetchActivitesData();
-        const scopeCategoriesData = await fetchScopeCategoriesData();
+        const activities = await fetchActivities();
+        const level1Categories = await fetchLevel1Categories();
         setData({
-          activitiesData,
-          scopeCategoriesData,
+          activities,
+          level1Categories,
         });
         setIsLoding(false);
       })();

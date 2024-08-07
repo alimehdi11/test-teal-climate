@@ -22,7 +22,7 @@ const getBusinessUnitsActivitiesByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const { order = "DESC", limit = 10, orderBy = "CO2e" } = req.query;
+    const { sortOrder = "ASC", limit, sortByColumn = "createdAt" } = req.query;
 
     const queryOptions = {
       where: {
@@ -34,9 +34,12 @@ const getBusinessUnitsActivitiesByUserId = async (req, res) => {
           as: "businessUnit",
         },
       ],
-      order: [[orderBy, order.toUpperCase()]],
-      limit: parseInt(limit, 10),
+      order: [[sortByColumn, sortOrder]],
     };
+
+    if (limit) {
+      queryOptions.limit = parseInt(limit, 10);
+    }
 
     let userBusinessUnitsActivities =
       await BusinessUnitActivity.findAll(queryOptions);

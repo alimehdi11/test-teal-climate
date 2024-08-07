@@ -13,11 +13,14 @@ import {
   TableCell,
 } from "../../components/ui/Table.jsx";
 
-const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
+const ActivitiesTable = ({
+  userBusinessUnitsActivities,
+  fetchUserBusinessUnitsActivities,
+}) => {
   const handleDelete = (id) => {
     return () => {
       request(
-        `${import.meta.env.VITE_API_BASE_URL}/companiesdata/${id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}`,
         "DELETE"
       )
         .then((response) => {
@@ -28,7 +31,7 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
         })
         .then(() => {
           // Row deleted fetched data again
-          fetchCompanyData();
+          fetchUserBusinessUnitsActivities();
         })
         .catch((error) => {
           toast.error("Error deleting data");
@@ -55,7 +58,7 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
               "uom",
               "Quantity",
               <>
-                kg CO <span style={{ fontSize: "0.6em" }}>2</span>e
+                kg CO<span style={{ fontSize: "0.6em" }}>2</span>e
               </>,
               <>
                 kg CO
@@ -79,42 +82,48 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {companyData.length > 0 &&
-            companyData.map((item, index) => (
+          {userBusinessUnitsActivities.length > 0 &&
+            userBusinessUnitsActivities.map((userBusinessUnit, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{item.scope || "-"}</TableCell>
-                <TableCell>{item.businessunit || "-"}</TableCell>
-                <TableCell>{item.fuel_category || "-"}</TableCell>
-                <TableCell>{item.level1 || "-"}</TableCell>
-                <TableCell>{item.level2 || "-"}</TableCell>
-                <TableCell>{item.level3 || "-"}</TableCell>
-                <TableCell>{item.level4 || "-"}</TableCell>
-                <TableCell>{item.level5 || "-"}</TableCell>
-                <TableCell>{item.uom || "-"}</TableCell>
-                <TableCell>{item.quantity || "-"}</TableCell>
+                <TableCell>{userBusinessUnit.scope || "-"}</TableCell>
                 <TableCell>
-                  {item.co2e === 0 ? "-" : item.co2e?.toFixed(2) || "-"}
+                  {userBusinessUnit.businessUnit.title || "-"}
+                </TableCell>
+                <TableCell>{userBusinessUnit.level1Category || "-"}</TableCell>
+                <TableCell>{userBusinessUnit.level1 || "-"}</TableCell>
+                <TableCell>{userBusinessUnit.level2 || "-"}</TableCell>
+                <TableCell>{userBusinessUnit.level3 || "-"}</TableCell>
+                <TableCell>{userBusinessUnit.level4 || "-"}</TableCell>
+                <TableCell>{userBusinessUnit.level5 || "-"}</TableCell>
+                <TableCell>
+                  {userBusinessUnit.unitOfMeasurement || "-"}
+                </TableCell>
+                <TableCell>{userBusinessUnit.quantity || "-"}</TableCell>
+                <TableCell>
+                  {userBusinessUnit.CO2e === 0
+                    ? "-"
+                    : userBusinessUnit.CO2e?.toFixed(2) || "-"}
                 </TableCell>
                 <TableCell>
-                  {item.co2eofco2 === 0
+                  {userBusinessUnit.CO2e_of_CO2 === 0
                     ? "-"
-                    : item.co2eofco2?.toFixed(2) || "-"}
+                    : userBusinessUnit.CO2e_of_CO2?.toFixed(2) || "-"}
                 </TableCell>
                 <TableCell>
-                  {item.co2eofch4 === 0
+                  {userBusinessUnit.CO2e_of_CH4 === 0
                     ? "-"
-                    : item.co2eofch4?.toFixed(2) || "-"}
+                    : userBusinessUnit.CO2e_of_CH4?.toFixed(2) || "-"}
                 </TableCell>
                 <TableCell>
-                  {item.co2eofn2o === 0
+                  {userBusinessUnit.CO2e_of_N2O === 0
                     ? "-"
-                    : item.co2eofn2o?.toFixed(2) || "-"}
+                    : userBusinessUnit.CO2e_of_N2O?.toFixed(2) || "-"}
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-center gap-x-1">
                     <Link
-                      to={`/activities/${item.id}/edit`}
+                      to={`/activities/${userBusinessUnit.id}/edit`}
                       className="flex justify-center items-center"
                     >
                       <img
@@ -125,7 +134,7 @@ const ActivitiesTable = ({ companyData, fetchCompanyData }) => {
                     <img
                       src={trashIcon}
                       className="p-1 rounded hover:bg-slate-300 size-7"
-                      onClick={handleDelete(item.id)}
+                      onClick={handleDelete(userBusinessUnit.id)}
                     />
                   </div>
                 </TableCell>

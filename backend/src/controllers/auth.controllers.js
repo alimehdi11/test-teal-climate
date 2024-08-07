@@ -115,6 +115,7 @@ const updateToken = (req, res) => {
     if (!tokenPayload.subscribed) {
       delete tokenPayload.exp;
       tokenPayload.subscribed = true;
+      // TODO : IMPORTANT : Issue token after confirming if user is surely subscribed from stripe
       const token = issueJWT(tokenPayload);
       return res.send({ token });
     } else {

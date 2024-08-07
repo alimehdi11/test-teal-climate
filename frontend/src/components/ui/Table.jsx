@@ -36,7 +36,9 @@ const TableRow = ({ className = "", children }) => (
 
 const TableHead = ({ className = "", children }) => (
   <th
-    className={("border-slate-500 text-nowrap p-2 border " + className).trim()}
+    className={(
+      "border-slate-500 text-nowrap p-2 border text-center " + className
+    ).trim()}
   >
     {children}
   </th>
@@ -44,7 +46,9 @@ const TableHead = ({ className = "", children }) => (
 
 const TableCell = ({ className = "", children }) => (
   <td
-    className={("border-slate-500 text-nowrap p-2 border " + className).trim()}
+    className={(
+      "border-slate-500 text-nowrap p-2 border text-center " + className
+    ).trim()}
   >
     {children}
   </td>

@@ -10,14 +10,14 @@ import { request } from "../../utils/request.js";
 import Layout from "../../components/layout/Layout.jsx";
 
 const Profile = () => {
-  const [profileData, setProfileData] = useState([]);
+  const [userBusinessUnits, setUserBusinessUnits] = useState([]);
   const [selectedForm, setSelectedForm] = useState("");
   const { user } = useContext(UserContext);
 
-  const fetchProfileData = async () => {
+  const fetchUserBusinessUnits = async () => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/companies/${user.id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnits`,
         "GET"
       );
       if (!response.ok) {
@@ -25,14 +25,14 @@ const Profile = () => {
         throw new Error(`Failed to fetch data: ${response.statusText}`);
       }
       const jsonData = await response.json();
-      setProfileData(jsonData);
+      setUserBusinessUnits(jsonData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    fetchProfileData();
+    fetchUserBusinessUnits();
   }, []);
 
   return (
@@ -50,8 +50,8 @@ const Profile = () => {
             (selectedForm === "Portfolio" && (
               <PortfolioForm
                 userId={user.id}
-                profileData={profileData}
-                fetchProfileData={fetchProfileData}
+                userBusinessUnits={userBusinessUnits}
+                fetchUserBusinessUnits={fetchUserBusinessUnits}
               />
             ))
           ) : (
@@ -66,8 +66,8 @@ const Profile = () => {
         }
       />
       <ProfileTable
-        profileData={profileData}
-        fetchProfileData={fetchProfileData}
+        userBusinessUnits={userBusinessUnits}
+        fetchUserBusinessUnits={fetchUserBusinessUnits}
         userId={user.id}
         setSelectedForm={setSelectedForm}
       />

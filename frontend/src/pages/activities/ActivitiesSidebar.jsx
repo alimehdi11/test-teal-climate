@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react";
-import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";
 import Input from "../../components/ui/Input.jsx";
 import { Link } from "react-router-dom";
@@ -14,16 +13,17 @@ const ActivitiesSidebar = ({
   const [level1, setLevel1] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { activitiesData } = useContext(DataContext);
+  const { activities } = useContext(DataContext);
 
   const filterLevel1 = (selectedScope) => {
-    let level1 = activitiesData.datas
+    let level1 = activities
       .filter((item) => item.scope === selectedScope)
       .map((item) => item.level1);
 
     level1 = [...new Set(level1)];
     return level1;
   };
+
   useEffect(() => {
     if (selectedScope) {
       if (searchQuery === "") {
@@ -70,11 +70,11 @@ const ActivitiesSidebar = ({
         ))}
       </div>
 
-      <hr className="w-full h-[1px] bg-slate-500 my-2" />
+      {/* <hr className="w-full h-[1px] bg-slate-500 my-2" /> */}
 
-      <Link to="/eeio" style={{ textDecoration: "none" }}>
+      {/* <Link to="/eeio" style={{ textDecoration: "none" }}>
         <Button className="py-3 w-full">Spend Base Scope 3</Button>
-      </Link>
+      </Link> */}
 
       {level1.length > 0 && (
         <>

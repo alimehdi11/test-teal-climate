@@ -32,7 +32,6 @@ const PaymentStatus = () => {
         "POST"
       );
       response = await response.json();
-      console.log("newToken", response.token);
       setToken(response.token);
     } catch (error) {
       console.log("Could not updateToken");

@@ -13,10 +13,18 @@ import {
   TableCell,
 } from "../../components/ui/Table.jsx";
 
-const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
+const ProfileTable = ({
+  userBusinessUnits,
+  fetchUserBusinessUnits,
+  setSelectedForm,
+}) => {
+  console.log("userBusinessUnits", userBusinessUnits);
   const handleDelete = (id) => {
     return () => {
-      request(`${import.meta.env.VITE_API_BASE_URL}/companies/${id}`, "DELETE")
+      request(
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnits/${id}`,
+        "DELETE"
+      )
         .then((response) => {
           if (!response.ok) {
             throw new Error();
@@ -24,7 +32,7 @@ const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
           toast.success("Data delete successfully");
         })
         .then(() => {
-          fetchProfileData();
+          fetchUserBusinessUnits();
         })
         .catch((error) => {
           toast.error("Error deleting data");
@@ -50,29 +58,29 @@ const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
               "Notes",
               "Partnership",
               "Actions",
-            ].map((item) => (
-              <TableHead>{item}</TableHead>
+            ].map((item, index) => (
+              <TableHead key={item}>{item}</TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {profileData.length > 0 &&
-            profileData.map((profile, index) => (
-              <TableRow>
+          {userBusinessUnits.length > 0 &&
+            userBusinessUnits.map((userBusinessUnit, index) => (
+              <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{profile.unitname}</TableCell>
-                <TableCell>{profile.continent}</TableCell>
-                <TableCell>{profile.countries}</TableCell>
-                <TableCell>{profile.region}</TableCell>
-                <TableCell>{profile.employees}</TableCell>
-                <TableCell>{profile.production}</TableCell>
-                <TableCell>{profile.revenue}</TableCell>
-                <TableCell>{profile.notes}</TableCell>
-                <TableCell>{profile.partnership}</TableCell>
+                <TableCell>{userBusinessUnit.title}</TableCell>
+                <TableCell>{userBusinessUnit.continent}</TableCell>
+                <TableCell>{userBusinessUnit.country}</TableCell>
+                <TableCell>{userBusinessUnit.region}</TableCell>
+                <TableCell>{userBusinessUnit.noOfEmployees || "-"}</TableCell>
+                <TableCell>{userBusinessUnit.production || "-"}</TableCell>
+                <TableCell>{userBusinessUnit.revenue || "-"}</TableCell>
+                <TableCell>{userBusinessUnit.notes || "-"}</TableCell>
+                <TableCell>{userBusinessUnit.partnership}</TableCell>
                 <TableCell>
                   <div className="flex justify-center gap-x-1">
                     <Link
-                      to={`/profile/${profile.id}/edit`}
+                      to={`/profile/${userBusinessUnit.id}/edit`}
                       className="flex justify-center items-center"
                       onClick={() => setSelectedForm("Portfolio")}
                     >
@@ -84,7 +92,7 @@ const ProfileTable = ({ profileData, fetchProfileData, setSelectedForm }) => {
                     <img
                       src={trashIcon}
                       className="p-1 rounded hover:bg-slate-300 size-7"
-                      onClick={handleDelete(profile.id)}
+                      onClick={handleDelete(userBusinessUnit.id)}
                     />
                   </div>
                 </TableCell>

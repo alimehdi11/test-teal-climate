@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react";
-import { getBearerToken } from "../../utils/auth.js";
 import { UserContext } from "../../contexts/UserContext.jsx";
 import {
   TableContainer,
@@ -10,20 +9,17 @@ import {
   TableRow,
   TableCell,
 } from "../../components/ui/Table.jsx";
+import { request } from "../../utils/request.js";
 
 const Top10EmissionsTable = () => {
-  const [top10Emissions, setTop10Emissions] = useState([]);
+  const [userTop10Emissions, setUserTop10Emissions] = useState([]);
   const { user } = useContext(UserContext);
 
-  const fetchTop10Emissions = async (userId) => {
+  const fetchUserTop10Emissions = async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/companiesdata/top10/${userId}`,
-        {
-          headers: {
-            authorization: getBearerToken(),
-          },
-        }
+      const response = await request(
+        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnitsActivities?limit=10&sortByColumn=CO2e&sortOrder=DESC`,
+        "GET"
       );
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -35,22 +31,9 @@ const Top10EmissionsTable = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (user.id) {
-  //     fetchTop10Emissions(user.id).then((top10Emissions) =>
-  //       setTop10Emissions(top10Emissions)
-  //     );
-  //   }
-  // }, [user.id]);
-
-  /**
-   * Above commented useEffect was previously used. It has [user.id] as dependency.
-   * I change it to no dependency. I do not why developer who added this as a dependency.
-   * For safety purpose I comment it so we can go back easily.
-   */
   useEffect(() => {
-    fetchTop10Emissions(user.id).then((top10Emissions) =>
-      setTop10Emissions(top10Emissions)
+    fetchUserTop10Emissions().then((userTop10Emissions) =>
+      setUserTop10Emissions(userTop10Emissions)
     );
   }, []);
 
@@ -79,8 +62,8 @@ const Top10EmissionsTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {top10Emissions.length > 0 &&
-            top10Emissions.map((item, index) => (
+          {userTop10Emissions.length > 0 &&
+            userTop10Emissions.map((item, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{item.scope || "-"}</TableCell>
@@ -90,9 +73,9 @@ const Top10EmissionsTable = () => {
                 <TableCell>{item.level2 || "-"}</TableCell>
                 <TableCell>{item.level3 || "-"}</TableCell>
                 <TableCell>{item.level4 || "-"}</TableCell>
-                <TableCell>{item.uom || "-"}</TableCell>
+                <TableCell>{item.unitOfMeasurement || "-"}</TableCell>
                 <TableCell>{item.quantity || "-"}</TableCell>
-                <TableCell>{item.co2e.toFixed(2) || "-"}</TableCell>
+                <TableCell>{item.CO2e.toFixed(2) || "-"}</TableCell>
               </TableRow>
             ))}
         </TableBody>

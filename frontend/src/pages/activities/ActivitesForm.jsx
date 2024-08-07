@@ -16,7 +16,7 @@ const ActivitesForm = ({
   setSelectedScope,
   setSelectedLevel,
   userId,
-  fetchCompanyData,
+  fetchUserBusinessUnitsActivities,
 }) => {
   const [scopeCategoryValue, setScopeCategoryValue] = useState("");
   const [fuelTypeValue, setFuelTypeValue] = useState(""); // level2
@@ -54,9 +54,10 @@ const ActivitesForm = ({
   const navigate = useNavigate();
 
   const data = useContext(DataContext);
+  console.log("ActivitiesForm Comp", data);
 
-  const activitiesData = data.activitiesData;
-  const scopeCategoriesData = data.scopeCategoriesData;
+  const activities = data.activities;
+  const level1Categories = data.level1Categories;
 
   const fetchBusinessUnit = async () => {
     try {
@@ -92,9 +93,9 @@ const ActivitesForm = ({
 
   const filterScopeCategories = () => {
     let level2 = [];
-    scopeCategoriesData?.forEach((item) => {
-      if (item.type === selectedLevel) {
-        level2.push(item.categy);
+    level1Categories?.forEach((item) => {
+      if (item.level1 === selectedLevel) {
+        level2.push(item.category);
       }
     });
     level2 = [...new Set(level2)];
@@ -103,7 +104,7 @@ const ActivitesForm = ({
 
   const filterUnitOfMeasurements = () => {
     let unitsOfMeasurement = [];
-    activitiesData?.datas.forEach((item) => {
+    activities?.forEach((item) => {
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -120,7 +121,7 @@ const ActivitesForm = ({
 
   const filterFuelTypes = () => {
     let fuelTypes = [];
-    activitiesData?.datas.forEach((item) => {
+    activities?.forEach((item) => {
       if (item.scope === selectedScope && item.level1 === selectedLevel) {
         fuelTypes.push(item.level2);
       }
@@ -131,7 +132,7 @@ const ActivitesForm = ({
 
   const filterFuelNames = () => {
     let fuelNames = [];
-    activitiesData?.datas.forEach((item) => {
+    activities?.forEach((item) => {
       if (
         item.level2 === fuelTypeValue &&
         item.level1 === selectedLevel &&
@@ -158,8 +159,8 @@ const ActivitesForm = ({
       "kg CO2e of N2O per unit",
     ];
 
-    for (let i = 0; i < activitiesData?.datas.length; i++) {
-      const item = activitiesData?.datas[i];
+    for (let i = 0; i < activities.length; i++) {
+      const item = activities[i];
 
       if (condition(item)) {
         if (item.ghg === ghgValues[0]) {
@@ -300,7 +301,7 @@ const ActivitesForm = ({
 
   const filterLevel5BasedOnScopeAndLevel1 = () => {
     let level5 = [];
-    activitiesData?.datas.forEach((item) => {
+    activities?.forEach((item) => {
       if (
         item.scope === selectedScope &&
         // here selectedLevel === Electricity
@@ -344,8 +345,8 @@ const ActivitesForm = ({
   };
 
   const filterLevel2 = (payload) => {
-    for (let index = 0; index < activitiesData?.datas.length; index++) {
-      const item = activitiesData?.datas[index];
+    for (let index = 0; index < activities.length; index++) {
+      const item = activities[index];
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -498,7 +499,7 @@ const ActivitesForm = ({
       if (selectedLevel === "WTT- district heat and steam distribution") {
         payload.level3 = ((payload) => {
           let level3 = [];
-          activitiesData?.datas.forEach((item) => {
+          activities.forEach((item) => {
             if (
               item.scope === payload.scope &&
               item.level1 === payload.level1 &&
@@ -549,8 +550,8 @@ const ActivitesForm = ({
        * Distance travelled in km/miles (quantityValue)
        *  x Electricity consumption per km/miles (fetch from electricVehicle table)
        *  x Electricity emission factor of the country/region
-       *  (fetch country/region from companies table based on businessUnitValue
-       *   after that filter emission factors from activitiesData
+       *  (fetch country/region from businessUnits table based on businessUnitValue
+       *   after that filter emission factors from activities
        *   based on Electricity and country/region)
        *
        */
@@ -644,16 +645,15 @@ const ActivitesForm = ({
         if (!response.ok) {
           throw new Error();
         }
-        // Note : This if block is for omptimization purpose below i am fetching company data again
+        // Note : This if block is for omptimization purpose below i am fetching userBusinessUnitsActivities again
         if (!marketBased) {
           toast.success("Data submitted successfully");
           resetForm();
         }
       })
       .then(() => {
-        // Note : This if block is for omptimization purpose below i am fetching company data again
         if (!marketBased) {
-          fetchCompanyData();
+          fetchUserBusinessUnitsActivities();
         }
       })
       .catch((error) => {
@@ -678,7 +678,7 @@ const ActivitesForm = ({
           resetForm();
         })
         .then(() => {
-          fetchCompanyData();
+          fetchUserBusinessUnitsActivities();
         })
         .catch((error) => {
           toast.error("Error adding data");
@@ -751,7 +751,7 @@ const ActivitesForm = ({
         navigate("/activities");
       })
       .then(() => {
-        fetchCompanyData();
+        fetchUserBusinessUnitsActivities();
       })
       .catch((error) => {
         toast.error("Error updating data");
@@ -766,7 +766,7 @@ const ActivitesForm = ({
 
   const filterLevel4Options = () => {
     let level4Options = [];
-    activitiesData?.datas.forEach((item) => {
+    activities?.forEach((item) => {
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -784,7 +784,7 @@ const ActivitesForm = ({
 
   const filterLevel5Options = () => {
     let level5 = [];
-    activitiesData?.datas.forEach((item) => {
+    activities?.forEach((item) => {
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -802,8 +802,8 @@ const ActivitesForm = ({
 
   const isFuelNamesAvaialble = () => {
     // let fuelNames = [];
-    for (let i = 0; i < activitiesData?.datas.length; i++) {
-      const item = activitiesData?.datas[i];
+    for (let i = 0; i < activities.length; i++) {
+      const item = activities[i];
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -822,8 +822,8 @@ const ActivitesForm = ({
   };
 
   const isLevel4Available = () => {
-    for (let i = 0; i < activitiesData?.datas.length; i++) {
-      const item = activitiesData?.datas[i];
+    for (let i = 0; i < activities.length; i++) {
+      const item = activities[i];
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -833,28 +833,13 @@ const ActivitesForm = ({
         return true;
       }
     }
-    // let level4 = [];
-    // activitiesData?.datas.forEach((item) => {
-    //   if (
-    //     item.scope === selectedScope &&
-    //     item.level1 === selectedLevel
-    //     // item.level2 === fuelTypeValue &&
-    //     // &&
-    //     // item.level3
-    //   ) {
-    //     if (item.level4 !== "null") {
-    //       level4.push(item.level4);
-    //     }
-    //   }
-    // });
-    // level4 = [...new Set(level4)];
-    // return level4.length > 0 ? true : false;
+
     return false;
   };
 
   const isLevel5Available = () => {
-    for (let i = 0; i < activitiesData?.datas.length; i++) {
-      const item = activitiesData?.datas[i];
+    for (let i = 0; i < activities.length; i++) {
+      const item = activities[i];
       if (
         item.scope === selectedScope &&
         item.level1 === selectedLevel &&
@@ -865,27 +850,11 @@ const ActivitesForm = ({
       }
     }
     return false;
-    // let level5 = [];
-    // activitiesData?.datas.forEach((item) => {
-    //   if (
-    //     item.scope === selectedScope &&
-    //     item.level1 === selectedLevel
-    //     // item.level2 === fuelTypeValue &&
-    //     // &&
-    //     // item.level3
-    //   ) {
-    //     if (item.level5 !== "null") {
-    //       level5.push(item.level5);
-    //     }
-    //   }
-    // });
-    // level5 = [...new Set(level5)];
-    // return level5.length > 0 ? true : false;
   };
 
   const filterUnitOfMeasurementsBasedOnScopeAndLevel1 = () => {
     let unitsOfMeasurement = [];
-    activitiesData?.datas.forEach((item) => {
+    activities?.forEach((item) => {
       if (item.scope === selectedScope && item.level1 === selectedLevel) {
         unitsOfMeasurement.push(item.uom);
       }
@@ -896,7 +865,7 @@ const ActivitesForm = ({
 
   const filterLevel3BasedOnScopeAndLevel1 = () => {
     let level3 = [];
-    activitiesData?.datas.forEach((item) => {
+    activities?.forEach((item) => {
       if (
         item.scope === selectedScope &&
         // here selectedLevel === Electricity
@@ -1009,10 +978,10 @@ const ActivitesForm = ({
       setUnitOfMeasurementValue("");
       setUnitOfMeasurements([]);
     }
-    // initialialy blocking not to filter if scopeCategoriesData or activitiesData or businessUnits is empty
+    // initialialy blocking not to filter if level1Categories or activities or businessUnits is empty
     if (
-      scopeCategoriesData !== null &&
-      activitiesData !== null &&
+      level1Categories !== null &&
+      activities !== null &&
       businessUnits.length > 0
     ) {
       const scopeCategories = filterScopeCategories();
@@ -1104,7 +1073,7 @@ const ActivitesForm = ({
         // ) {
         const level4Options = (() => {
           let level4Options = [];
-          activitiesData?.datas.forEach((item) => {
+          activities?.forEach((item) => {
             if (
               item.scope === selectedScope &&
               item.level1 === selectedLevel &&
@@ -1121,7 +1090,7 @@ const ActivitesForm = ({
         // }
       }
     }
-  }, [selectedLevel, /*scopeCategoriesData, activitiesData,*/ businessUnits]);
+  }, [selectedLevel, /*level1Categories, activities,*/ businessUnits]);
 
   /**
    * level2
@@ -1243,7 +1212,7 @@ const ActivitesForm = ({
     ) {
       // Filtering level5 options
       let level5 = [];
-      activitiesData?.datas.forEach((item) => {
+      activities?.forEach((item) => {
         if (
           item.scope === selectedScope &&
           item.level1 === selectedLevel &&
@@ -1327,7 +1296,7 @@ const ActivitesForm = ({
   }, [unitOfMeasurementValue]);
 
   useEffect(() => {
-    if (id && activitiesData) {
+    if (id && activities) {
       fetchCompanyDataOfGivenId(id)
         .then((companyDataOfGivenId) => {
           setSelectedScope(companyDataOfGivenId[0].scope);

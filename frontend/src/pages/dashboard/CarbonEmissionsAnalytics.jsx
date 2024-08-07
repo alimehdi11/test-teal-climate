@@ -1,12 +1,13 @@
 import TC_PieChartWithPaddingAngle from "../../components/TC_PieChartWithPaddingAngle.jsx";
 import { useState, useEffect, useContext } from "react";
-import { getBearerToken } from "../../utils/auth.js";
 import TC_RadialBarChart from "../../components/TC_RadialBarChart.jsx";
 import { UserContext } from "../../contexts/UserContext.jsx";
+import { request } from "../../utils/request.js";
 
 const CarbonEmissionsAnalytics = () => {
   const { user } = useContext(UserContext);
-  const [companyData, setCompanyData] = useState([]);
+  const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
+    useState([]);
   const [totalCO2e, setTotalCO2e] = useState(0);
   const [totalScope1CO2e, setTotalScope1CO2e] = useState(0);
   const [totalScope2CO2e, setTotalScope2CO2e] = useState(0);
@@ -15,41 +16,41 @@ const CarbonEmissionsAnalytics = () => {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   ]);
 
-  const fetchCompanyData = async (userId) => {
+  const fetchUserBusinessUnitsActivities = async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/companiesdata/${userId}`,
-        {
-          headers: {
-            authorization: getBearerToken(),
-          },
-        }
+      const userBusinessUnitsActivitiesResponse = await request(
+        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnitsActivities`,
+        "GET"
       );
-      if (!response.ok) {
+      if (!userBusinessUnitsActivitiesResponse.ok) {
         throw new Error(`Failed to fetch data:`);
       }
-      const jsonData = await response.json();
-      return jsonData;
+      const userBusinessUnitsActivities =
+        await userBusinessUnitsActivitiesResponse.json();
+      setUserBusinessUnitsActivities(userBusinessUnitsActivities);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   const calculateTotalC02e = () => {
-    const totalCO2e = companyData.reduce(
-      (accumulator, obj) => accumulator + obj.co2e,
+    const totalCO2e = userBusinessUnitsActivities.reduce(
+      (accumulator, obj) => accumulator + obj.CO2e,
       0
     );
     return totalCO2e / 1000; // kg CO2e
   };
 
   const calculateTotalC02eOfGivenScope = (scope) => {
-    const totalC02eOfGivenScope = companyData.reduce((accumulator, obj) => {
-      if (obj.scope === scope) {
-        return accumulator + obj.co2e;
-      }
-      return accumulator;
-    }, 0);
+    const totalC02eOfGivenScope = userBusinessUnitsActivities.reduce(
+      (accumulator, obj) => {
+        if (obj.scope === scope) {
+          return accumulator + obj.CO2e;
+        }
+        return accumulator;
+      },
+      0
+    );
     return totalC02eOfGivenScope / 1000; // kg CO2e of given scope
   };
 
@@ -62,10 +63,10 @@ const CarbonEmissionsAnalytics = () => {
   };
 
   const calculateC02ePercentageOfGivenScopeCategory = (scopeCategory) => {
-    const totalC02eOfGivenScopeCategory = companyData?.reduce(
+    const totalC02eOfGivenScopeCategory = userBusinessUnitsActivities.reduce(
       (accumulator, obj) => {
-        if (obj.fuel_category === scopeCategory) {
-          return accumulator + obj.co2e;
+        if (obj.level1Category === scopeCategory) {
+          return accumulator + obj.CO2e;
         }
         return accumulator;
       },
@@ -83,13 +84,16 @@ const CarbonEmissionsAnalytics = () => {
   };
 
   const calculateTotalC02eOfScope2 = () => {
-    const totalC02eOfScope2 = companyData.reduce((accumulator, obj) => {
-      // Here we are excluding marketBased data(Scope 2)
-      if (obj.scope === "Scope 2" && obj.level5 !== "marketBased") {
-        return accumulator + obj.co2e;
-      }
-      return accumulator;
-    }, 0);
+    const totalC02eOfScope2 = userBusinessUnitsActivities.reduce(
+      (accumulator, obj) => {
+        // Here we are excluding marketBased data(Scope 2)
+        if (obj.scope === "Scope 2" && obj.level5 !== "marketBased") {
+          return accumulator + obj.CO2e;
+        }
+        return accumulator;
+      },
+      0
+    );
     return totalC02eOfScope2 / 1000; // kg CO2e of given scope
   };
 
@@ -104,14 +108,14 @@ const CarbonEmissionsAnalytics = () => {
   const calculateC02ePercentageOfLocationBasedScopeCategory = (
     scopeCategory
   ) => {
-    const totalC02eOfGivenScopeCategory = companyData.reduce(
+    const totalC02eOfGivenScopeCategory = userBusinessUnitsActivities.reduce(
       (accumulator, obj) => {
         // Here we are excluding marketBased data(Scope 2)
         if (
-          obj.fuel_category === scopeCategory &&
+          obj.level1Category === scopeCategory &&
           obj.level5 !== "marketBased"
         ) {
-          return accumulator + obj.co2e;
+          return accumulator + obj.CO2e;
         }
         return accumulator;
       },
@@ -129,13 +133,13 @@ const CarbonEmissionsAnalytics = () => {
   };
 
   const calculateC02ePercentageOfMarketBasedScopeCategory = (scopeCategory) => {
-    const totalC02eOfGivenScopeCategory = companyData.reduce(
+    const totalC02eOfGivenScopeCategory = userBusinessUnitsActivities.reduce(
       (accumulator, obj) => {
         if (
-          obj.fuel_category === scopeCategory &&
+          obj.level1Category === scopeCategory &&
           obj.level5 === "marketBased"
         ) {
-          return accumulator + obj.co2e;
+          return accumulator + obj.CO2e;
         }
         return accumulator;
       },
@@ -189,19 +193,15 @@ const CarbonEmissionsAnalytics = () => {
   ];
 
   useEffect(() => {
-    if (user.id) {
-      fetchCompanyData(user.id).then((companyData) =>
-        setCompanyData(companyData)
-      );
-    }
-  }, [user.id]);
+    fetchUserBusinessUnitsActivities();
+  }, []);
 
   useEffect(() => {
-    if (companyData.length > 0) {
+    if (userBusinessUnitsActivities.length > 0) {
       const totalCO2e = calculateTotalC02e();
       setTotalCO2e(totalCO2e);
     }
-  }, [companyData]);
+  }, [userBusinessUnitsActivities]);
 
   useEffect(() => {
     if (totalCO2e) {
@@ -385,23 +385,24 @@ const CarbonEmissionsAnalytics = () => {
         <div className="flex flex-col gap-y-3">
           {scope3Categories.map((category, index) => {
             return (
-              <>
-                <div className="flex items-center justify-between gap-x-2">
-                  <div className="flex items-center gap-x-1">
-                    <span
-                      className={
-                        "h-3 w-3 rounded-[50%] " + scope3CategoriesColors[index]
-                      }
-                    ></span>
-                    <div className="capitalize font-medium text-[10px] text-[#111111]">
-                      {category}
-                    </div>
-                  </div>
-                  <div className="font-medium text-[10px] text-[#111111]">
-                    {scope3CategoriesCO2e[index]}%
+              <div
+                key={category}
+                className="flex items-center justify-between gap-x-2"
+              >
+                <div className="flex items-center gap-x-1">
+                  <span
+                    className={
+                      "h-3 w-3 rounded-[50%] " + scope3CategoriesColors[index]
+                    }
+                  ></span>
+                  <div className="capitalize font-medium text-[10px] text-[#111111]">
+                    {category}
                   </div>
                 </div>
-              </>
+                <div className="font-medium text-[10px] text-[#111111]">
+                  {scope3CategoriesCO2e[index]}%
+                </div>
+              </div>
             );
           })}
         </div>

@@ -9,7 +9,11 @@ import Input from "../../components/ui/Input.jsx";
 import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
 
-const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
+const PortfolioForm = ({
+  userId,
+  userBusinessUnits,
+  fetchUserBusinessUnits,
+}) => {
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [continents, setContinents] = useState([]);
@@ -21,7 +25,6 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
   const [notes, setNotes] = useState("");
   const [productionClients, setProductionClients] = useState("");
   const [ownershipPercentage, setOwnershipPercentage] = useState(100);
-  // const [businessUnits, setBusinessUnits] = useState([]);
   const [businessUnit, setBusinessUnit] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
@@ -103,7 +106,7 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
   };
 
   const isBusinessUnitUnique = () => {
-    const profile = profileData.filter((profile) => {
+    const profile = userBusinessUnits.filter((profile) => {
       return businessUnit === profile.unitname;
     });
     return profile.length > 0 ? false : true;
@@ -151,7 +154,7 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
         resetForm();
       })
       .then(() => {
-        fetchProfileData();
+        fetchUserBusinessUnits();
       })
       .catch((error) => {
         toast.error("Error adding data");
@@ -234,7 +237,7 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
         navigation("/profile");
       })
       .then(() => {
-        fetchProfileData();
+        fetchUserBusinessUnits();
       })
       .catch((error) => {
         toast.error("Error updating data");
@@ -245,7 +248,7 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
   // Fetch initial data
   useEffect(() => {
     fetchContinents();
-    // fetchBusinessUnits();
+    // fetchUserBusinessUnits();
   }, []);
 
   useEffect(() => {
@@ -375,27 +378,6 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
           />
         </FormControl>
 
-        {/* Notes */}
-        <FormControl>
-          <Label>Notes (optional)</Label>
-          <Input
-            type="text"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-        </FormControl>
-
-        {/* Production / Clients */}
-        <FormControl>
-          <Label>Production / Clients (optional)</Label>
-          <Input
-            type="number"
-            value={productionClients}
-            min="0"
-            onChange={(e) => setProductionClients(e.target.value)}
-          />
-        </FormControl>
-
         {/* Quantity Dropdown */}
         <FormControl>
           <Label>Ownership / Partnership %</Label>
@@ -411,6 +393,27 @@ const PortfolioForm = ({ userId, profileData, fetchProfileData }) => {
             onChange={(e) =>
               setOwnershipPercentage(Math.min(100, Math.max(0, e.target.value)))
             }
+          />
+        </FormControl>
+
+        {/* Production / Clients */}
+        <FormControl>
+          <Label>Production / Clients (optional)</Label>
+          <Input
+            type="number"
+            value={productionClients}
+            min="0"
+            onChange={(e) => setProductionClients(e.target.value)}
+          />
+        </FormControl>
+
+        {/* Notes */}
+        <FormControl>
+          <Label>Notes (optional)</Label>
+          <Input
+            type="text"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
           />
         </FormControl>
       </div>
