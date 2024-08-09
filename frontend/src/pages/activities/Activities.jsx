@@ -61,7 +61,6 @@ const Activities = () => {
               selectedLevel={selectedLevel}
               setSelectedScope={setSelectedScope}
               setSelectedLevel={setSelectedLevel}
-              userId={user.id}
               fetchUserBusinessUnitsActivities={
                 fetchUserBusinessUnitsActivities
               }

@@ -9,7 +9,7 @@ const ProfileSidebar = ({ selectedForm, setSelectedForm }) => {
         Select one
       </h2>
       <div className="flex flex-col gap-y-4">
-        <Button
+        {/* <Button
           className={
             "py-3" + (selectedForm === "Basic" ? " bg-tc-green text-white" : "")
           }
@@ -23,7 +23,7 @@ const ProfileSidebar = ({ selectedForm, setSelectedForm }) => {
           }}
         >
           Basic
-        </Button>
+        </Button> */}
         <Button
           className={
             "py-3" +

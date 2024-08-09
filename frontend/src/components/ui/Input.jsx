@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 const Input = ({
   className = "",
   type,
@@ -8,6 +10,22 @@ const Input = ({
   onChange,
   ...props
 }) => {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const input = inputRef.current;
+    const handleWheel = (event) => {
+      if (document.activeElement === input) {
+        event.preventDefault();
+      }
+    };
+
+    if (input) {
+      input.addEventListener("wheel", handleWheel);
+      return () => input.removeEventListener("wheel", handleWheel);
+    }
+  }, []);
+
   return (
     <input
       className={(
@@ -22,6 +40,7 @@ const Input = ({
       {...(placeholder ? (placeholder = { placeholder }) : null)}
       onChange={onChange}
       {...props}
+      ref={inputRef}
     />
   );
 };

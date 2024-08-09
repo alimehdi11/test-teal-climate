@@ -7,10 +7,12 @@ import Activities from "./pages/activities/Activities";
 import SubscriptionPlans from "./pages/SubscriptionPlans";
 import Checkout from "./pages/Checkout";
 import Completion from "./pages/Completion";
-import Account from "./pages/Account";
 import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Eeio from "./pages/eeio/Eeio";
+import SubscriptionSettings from "./pages/settings/SubscriptionSettings.jsx";
+import AccountSettings from "./pages/settings/AccountSettings.jsx";
+import AccountSettingsEdit from "./pages/settings/AccountSettingsEdit.jsx";
 
 function App() {
   return (
@@ -48,8 +50,16 @@ function App() {
           />
         </Route>
         <Route
-          path="/account"
-          element={<ProtectedRoute Component={Account} />}
+          path="/settings/account"
+          element={<ProtectedRoute Component={AccountSettings} />}
+        />
+        <Route
+          path="/settings/account/edit"
+          element={<ProtectedRoute Component={AccountSettingsEdit} />}
+        />
+        <Route
+          path="/settings/subscription"
+          element={<ProtectedRoute Component={SubscriptionSettings} />}
         />
       </Routes>
     </BrowserRouter>

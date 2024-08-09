@@ -49,7 +49,6 @@ const Profile = () => {
             (selectedForm === "Basic" && <BasicForm />) ||
             (selectedForm === "Portfolio" && (
               <PortfolioForm
-                userId={user.id}
                 userBusinessUnits={userBusinessUnits}
                 fetchUserBusinessUnits={fetchUserBusinessUnits}
               />
@@ -68,7 +67,6 @@ const Profile = () => {
       <ProfileTable
         userBusinessUnits={userBusinessUnits}
         fetchUserBusinessUnits={fetchUserBusinessUnits}
-        userId={user.id}
         setSelectedForm={setSelectedForm}
       />
     </>

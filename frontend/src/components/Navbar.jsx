@@ -12,7 +12,7 @@ import activitiesNavLinkIconWhite from "../assets/dashboard-nav-link-icon-white.
 // import eeioNavLinkIconBlack from "../assets/eeio-nav-link-icon-black.svg";
 // import eeioNavLinkIconWhite from "../assets/eeio-nav-link-icon-white.svg";
 import { IoSettingsOutline } from "react-icons/io5";
-import messagesIcon from "../assets/messages-icon.svg";
+// import messagesIcon from "../assets/messages-icon.svg";
 import notificationIcon from "../assets/notification-icon.svg";
 
 const Navbar = () => {
@@ -31,7 +31,7 @@ const Navbar = () => {
     isActivitiesPath:
       location.pathname === "/activities" ||
       !!location.pathname.match(/^\/activities(\/\d+\/edit)?$/),
-    isAccountPath: location.pathname === "/account",
+    isSettingsPath: location.pathname.startsWith("/settings"),
     isEeioPath:
       location.pathname === "/eeio" ||
       !!location.pathname.match(/^\/eeio(\/\d+\/\d+\/edit)?$/),
@@ -107,13 +107,13 @@ const Navbar = () => {
 
       {/* Profile and Notification Icons*/}
       <div className="hidden md:flex items-center gap-x-2">
-        <img src={messagesIcon} className="rounded-full" />
+        {/* <img src={messagesIcon} className="rounded-full" /> */}
         <img src={notificationIcon} className="rounded-full" />
         <Link
-          to="/account"
+          to="/settings/account"
           className={
             "no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center text-[21px] hover:bg-tc-green" +
-            (paths.isAccountPath ? " text-white bg-tc-green" : "")
+            (paths.isSettingsPath ? " text-white bg-tc-green" : "")
           }
         >
           <IoSettingsOutline />
@@ -200,13 +200,13 @@ const Navbar = () => {
 
         {/* Profile and Notification Icons*/}
         <div className="mt-3 flex justify-center items-center gap-x-2">
-          <img src={messagesIcon} className="rounded-full" />
+          {/* <img src={messagesIcon} className="rounded-full" /> */}
           <img src={notificationIcon} className="rounded-full" />
           <Link
-            to="/account"
+            to="/settings"
             className={
               "no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center text-[21px] hover:bg-tc-green" +
-              (paths.isAccountPath ? " text-white bg-tc-green" : "")
+              (paths.isSettingsPath ? " text-white bg-tc-green" : "")
             }
           >
             <IoSettingsOutline />

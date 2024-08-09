@@ -55,7 +55,7 @@ const ActivitiesTable = ({
               "Level 3",
               "Level 4",
               "Level 5",
-              "uom",
+              "UOM",
               "Quantity",
               <>
                 kg CO<span style={{ fontSize: "0.6em" }}>2</span>e

@@ -1,86 +1,35 @@
-import { sequelize } from "../database/connectDb.js";
+import { Subscription } from "../models/subscription.model.js";
 
 const getSubscription = async (req, res) => {
   try {
     const { userId } = req.params;
-    if (!userId) {
-      throw new Error("userId is required");
-    }
-
-    const query = `SELECT * FROM subscriptions WHERE "userId" = '${userId}'`;
-
-    const result = await pool.query(query);
-    const subscription = result.rows[0];
-    return res.send(subscription);
+    const subscription = await Subscription.findOne({ where: { userId } });
+    return res.status(200).json(subscription);
   } catch (error) {
-    return res.status(400).send({ error: { message: error.message } });
+    console.log("Could not getSubscription");
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 const updateSubscription = async (req, res) => {
   try {
     const { userId } = req.params;
-
-    if (!userId) {
-      throw new Error("userId is required");
-    }
-
-    // Payload
-    const customerId = req.body.customerId;
-    const subscriptionId = req.body.subscriptionId;
-    const paymentIntentId = req.body.paymentIntentId;
-    const clientSecret = req.body.clientSecret;
-
-    if (
-      customerId === undefined &&
-      subscriptionId === undefined &&
-      paymentIntentId === undefined &&
-      clientSecret === undefined
-    ) {
-      console.log("No payload data provided. Skipping update operation.");
-      return res.status(204).send(); // Send a 204 No Content response
-    }
-
-    let queryParams = [];
-    if (customerId !== undefined) {
-      if (customerId === null) {
-        queryParams.push(`"customerId" = ${customerId}`);
-      } else {
-        queryParams.push(`"customerId" = '${customerId}'`);
+    const { customerId, subscriptionId, paymentIntentId, clientSecret } =
+      req.body;
+    const subscription = await Subscription.update(
+      { customerId, subscriptionId, paymentIntentId, clientSecret },
+      {
+        where: {
+          userId,
+        },
       }
-    }
-    if (subscriptionId !== undefined) {
-      if (customerId === null) {
-        queryParams.push(`"subscriptionId" = ${subscriptionId}`);
-      } else {
-        queryParams.push(`"subscriptionId" = '${subscriptionId}'`);
-      }
-    }
-    if (paymentIntentId !== undefined) {
-      if (customerId === null) {
-        queryParams.push(`"paymentIntentId" = ${paymentIntentId}`);
-      } else {
-        queryParams.push(`"paymentIntentId" = '${paymentIntentId}'`);
-      }
-    }
-    if (clientSecret !== undefined) {
-      if (customerId === null) {
-        queryParams.push(`"clientSecret" = ${clientSecret}`);
-      } else {
-        queryParams.push(`"clientSecret" = '${clientSecret}'`);
-      }
-    }
-
-    const query = `UPDATE subscriptions SET ${queryParams.join(
-      ", "
-    )} WHERE "userId" = '${userId}' RETURNING *`;
-
-    const result = await pool.query(query);
-    const subscription = result.rows[0];
-    return res.send(subscription);
+    );
+    return res.status(200).json(subscription);
   } catch (error) {
-    console.log("error updating subscription\n", error.message);
-    return res.status(400).send({ error: { message: error.message } });
+    console.log("Could not updateSubscription");
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

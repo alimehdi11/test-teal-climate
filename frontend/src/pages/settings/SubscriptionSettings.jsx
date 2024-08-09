@@ -1,18 +1,20 @@
 import { useContext, useEffect, useState } from "react";
-import { deleteToken } from "./../utils/auth.js";
+import { UserContext } from "../../contexts/UserContext.jsx";
+import { request } from "../../utils/request.js";
+import Button from "../../components/ui/Button.jsx";
+import Layout from "../../components/layout/Layout.jsx";
+import SettingsSidebar from "./SettingsSidebar.jsx";
+import { deleteToken } from "../../utils/auth.js";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "./../contexts/UserContext.jsx";
-import { request } from "./../utils/request.js";
-import Button from "./../components/ui/Button.jsx";
-import Layout from "./../components/layout/Layout.jsx";
 
-const Account = () => {
-  const navigate = useNavigate();
+const SubscriptionSettings = () => {
   const { user } = useContext(UserContext);
   const [subscriptionId, setSubscriptionId] = useState(null);
   const [subscriptionFromStripe, setSubscriptionFromStripe] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nextInvoiceData, setNextInvoiceData] = useState("");
+
+  const navigate = useNavigate();
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -81,11 +83,6 @@ const Account = () => {
     }
   }, [subscriptionFromStripe]);
 
-  const handleLogout = () => {
-    deleteToken();
-    navigate("/");
-  };
-
   const handleUnsubscribe = async () => {
     try {
       // Unsubscribe
@@ -126,25 +123,7 @@ const Account = () => {
   return (
     <>
       <Layout
-        sidebarContent={
-          <div className="h-full flex flex-col justify-between">
-            <div className="text-black">
-              <h2 className="m-0 mb-4 font-extrabold text-2xl text-center">
-                Settings
-              </h2>
-              <ul className="list-none p-[0px] m-[0px] mt-5">
-                <li>
-                  <Button className="w-full bg-tc-green text-white hover:bg-opacity-90">
-                    Subscription
-                  </Button>
-                </li>
-              </ul>
-            </div>
-            <Button className="mb-4" onClick={handleLogout}>
-              Log out
-            </Button>
-          </div>
-        }
+        sidebarContent={<SettingsSidebar />}
         mainContent={
           <>
             <div>
@@ -162,11 +141,11 @@ const Account = () => {
             </div>
             {/* Modal */}
             <div
-              className={`bg-slate-500 opacity-80 fixed top-0 left-0 right-0 bottom-0 text-black flex justify-center items-center ${
+              className={`bg-slate-500 opacity-80 fixed z-[1000] top-0 left-0 right-0 bottom-0 text-black flex justify-center items-center ${
                 !isModalOpen && "hidden"
               }`}
             >
-              <div className="bg-white w-[40%] h-[40%] max-w-[400px] max-h-[200px] rounded-lg flex justify-center items-center font-poppins flex-col gap-3 opacity-100">
+              <div className="bg-white w-[40%] max-w-[400px] min-w-[350px] rounded-lg flex justify-center items-center font-poppins flex-col gap-3 opacity-100 py-8">
                 Are you sure you want to unsubscribe?
                 <div className="flex gap-2">
                   <Button type="button" className="w-28" onClick={closeModal}>
@@ -190,4 +169,4 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default SubscriptionSettings;

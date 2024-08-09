@@ -29,19 +29,19 @@ const WorldMap = () => {
 
   // Function to determine the style of each country based on emissions data
   const geoJsonStyle = (feature) => {
-    let totalEmissionByCountry = 0;
+    let emissionsValue = 0;
 
-    // Extracting emissions from user activities
-    userBusinessUnitsActivities.forEach((activity) => {
+    // Extracting emissions from user activities and adding all emissions if available for given country
+    userBusinessUnitsActivities.forEach((userBusinessUnitActivity) => {
       if (
-        activity.businessUnit.country === feature.properties.formal_en ||
-        activity.businessUnit.country === feature.properties.name
+        userBusinessUnitActivity.businessUnit.country ===
+          feature.properties.formal_en ||
+        userBusinessUnitActivity.businessUnit.country ===
+          feature.properties.name
       ) {
-        totalEmissionByCountry += activity.businessUnit.CO2e;
+        emissionsValue += userBusinessUnitActivity.CO2e;
       }
     });
-
-    const emissionsValue = totalEmissionByCountry;
 
     let fillColor = "#E0E0E0"; // Default color for countries with no data or not matching
 
@@ -66,25 +66,24 @@ const WorldMap = () => {
 
   // Function to handle tooltip content for each country
   const onEachFeature = (feature, layer) => {
-    let country;
-    let totalEmissionByCountry = 0;
+    const country = feature.properties.formal_en || feature.properties.name;
+    let emissionsValue = 0;
 
-    // Extracting emissions from user activities
-    userBusinessUnitsActivities.forEach((activity) => {
+    // Extracting emissions from user activities and adding all emissions if available for given country
+    userBusinessUnitsActivities.forEach((userBusinessUnitActivity) => {
       if (
-        activity.businessUnit.country === feature.properties.formal_en ||
-        activity.businessUnit.country === feature.properties.name
+        userBusinessUnitActivity.businessUnit.country ===
+          feature.properties.formal_en ||
+        userBusinessUnitActivity.businessUnit.country ===
+          feature.properties.name
       ) {
-        country = activity.businessUnit.country;
-        totalEmissionByCountry += activity.businessUnit.CO2e;
+        emissionsValue += userBusinessUnitActivity.CO2e;
       }
     });
 
-    const emissionsValue = totalEmissionByCountry;
-
-    const tooltipContent = `<strong>${country}</strong>: ${
-      emissionsValue || "Data not available"
-    }`;
+    const tooltipContent = emissionsValue
+      ? `<strong>${country}</strong> : ${emissionsValue}`
+      : `<strong>${country}</strong>`;
     layer.bindTooltip(tooltipContent);
   };
 

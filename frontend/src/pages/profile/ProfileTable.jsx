@@ -18,7 +18,6 @@ const ProfileTable = ({
   fetchUserBusinessUnits,
   setSelectedForm,
 }) => {
-  console.log("userBusinessUnits", userBusinessUnits);
   const handleDelete = (id) => {
     return () => {
       request(

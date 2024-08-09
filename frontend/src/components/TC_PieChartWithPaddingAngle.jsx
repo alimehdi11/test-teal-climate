@@ -71,7 +71,7 @@ const TC_PieChart = ({ data }) => {
           dataKey="value"
         >
           {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill="#000000" />
+            <Cell key={`cell-${index}`} fill="#EEEEEE" />
           ))}
         </Pie>
       )}

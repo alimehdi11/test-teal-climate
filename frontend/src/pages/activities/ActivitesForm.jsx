@@ -9,13 +9,13 @@ import Input from "../../components/ui/Input.jsx";
 import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
 import { DataContext } from "../../contexts/DataContext.jsx";
+import { UserContext } from "../../contexts/UserContext.jsx";
 
 const ActivitesForm = ({
   selectedScope,
   selectedLevel,
   setSelectedScope,
   setSelectedLevel,
-  userId,
   fetchUserBusinessUnitsActivities,
 }) => {
   const [scopeCategoryValue, setScopeCategoryValue] = useState("");
@@ -54,23 +54,26 @@ const ActivitesForm = ({
   const navigate = useNavigate();
 
   const data = useContext(DataContext);
-  console.log("ActivitiesForm Comp", data);
+  const { user } = useContext(UserContext);
 
   const activities = data.activities;
   const level1Categories = data.level1Categories;
 
-  const fetchBusinessUnit = async () => {
+  const fetchUserBusinessUnits = async () => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/companies/${userId}?column=unitname`,
+        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnits`,
         "GET"
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        console.log(response);
+        throw new Error(`${JSON.stringify(await response.json())}`);
       }
       return await response.json();
     } catch (error) {
-      console.error("Error fetching companies businessunits:", error);
+      const errorMessage = JSON.parse(error.message).error;
+      toast.error(errorMessage);
+      console.error("Error fetching businessUnits : ", errorMessage);
     }
   };
 
@@ -283,18 +286,21 @@ const ActivitesForm = ({
     setUnitOfEmissionFactor("");
   };
 
-  const fetchCompanyDataOfGivenId = async (id) => {
+  const fetchActivityById = async () => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/companiesdata/activites/${id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}`,
         "GET"
       );
       if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
+        throw new Error(`${JSON.stringify(await response.json())}`);
       }
       const jsonData = await response.json();
       return jsonData;
     } catch (error) {
+      const errorMessage = JSON.parse(error.message).error;
+      toast.error(errorMessage);
+      console.log(errorMessage);
       console.error("Error fetching data:", error);
     }
   };
@@ -856,7 +862,7 @@ const ActivitesForm = ({
     let unitsOfMeasurement = [];
     activities?.forEach((item) => {
       if (item.scope === selectedScope && item.level1 === selectedLevel) {
-        unitsOfMeasurement.push(item.uom);
+        unitsOfMeasurement.push(item.unitOfMeasurement);
       }
     });
     unitsOfMeasurement = [...new Set(unitsOfMeasurement)];
@@ -963,9 +969,8 @@ const ActivitesForm = ({
   };
 
   useEffect(() => {
-    fetchBusinessUnit().then((businessUnits) => {
-      businessUnits = businessUnits.map((item) => item.unitname);
-      setBusinessUnits(businessUnits);
+    fetchUserBusinessUnits().then((businessUnits) => {
+      setBusinessUnits(businessUnits.map((businessUnit) => businessUnit.title));
     });
   }, []);
 
@@ -1297,7 +1302,7 @@ const ActivitesForm = ({
 
   useEffect(() => {
     if (id && activities) {
-      fetchCompanyDataOfGivenId(id)
+      fetchActivityById()
         .then((companyDataOfGivenId) => {
           setSelectedScope(companyDataOfGivenId[0].scope);
           setSelectedLevel(companyDataOfGivenId[0].level1);

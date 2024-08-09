@@ -32,9 +32,9 @@ const Top10EmissionsTable = () => {
   };
 
   useEffect(() => {
-    fetchUserTop10Emissions().then((userTop10Emissions) =>
-      setUserTop10Emissions(userTop10Emissions)
-    );
+    fetchUserTop10Emissions().then((userTop10Emissions) => {
+      setUserTop10Emissions(userTop10Emissions);
+    });
   }, []);
 
   return (
@@ -67,8 +67,8 @@ const Top10EmissionsTable = () => {
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{item.scope || "-"}</TableCell>
-                <TableCell>{item.businessunit || "-"}</TableCell>
-                <TableCell>{item.fuel_category || "-"}</TableCell>
+                <TableCell>{item.businessUnit.title || "-"}</TableCell>
+                <TableCell>{item.level1Category || "-"}</TableCell>
                 <TableCell>{item.level1 || "-"}</TableCell>
                 <TableCell>{item.level2 || "-"}</TableCell>
                 <TableCell>{item.level3 || "-"}</TableCell>

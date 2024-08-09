@@ -26,7 +26,7 @@ const Subscription = sequelize.define(
     subscriptionId: {
       type: DataTypes.STRING,
     },
-    paymenIntenId: {
+    paymentIntentId: {
       type: DataTypes.STRING,
     },
     clientSecret: {

@@ -3,28 +3,27 @@ import { BusinessUnit } from "./../models/businessUnit.model.js";
 const createBusinessUnit = async (req, res) => {
   try {
     const {
-      // userId, // This is not needed to create businessunit because userId will be get from "req" object the user who is loggedIn
-      title, // Correct frontend property to match this property name (unit -> businessUnitName)
+      title,
       continent,
       country,
       region,
-      noOfEmployees, // Correct frontend property to match this property name (employees -> noOfEmployees)
-      production,
       revenue,
+      noOfEmployees,
       partnership,
+      production,
       notes,
     } = req.body;
     await BusinessUnit.create({
       userId: req.user.id,
       title,
-      country,
       continent,
+      country,
       region,
-      noOfEmployees,
-      production,
       revenue,
-      notes,
+      noOfEmployees,
       partnership,
+      production,
+      notes,
     });
     return res
       .status(200)
@@ -59,12 +58,11 @@ const updateBusinessUnitById = async (req, res) => {
   try {
     const { id } = req.params;
     const {
-      // userId, // This is not needed to update businessunit because userId will never change
-      businessUnitName, // Correct frontend property to match this property name (unit -> businessUnitName)
+      title,
       continent,
       country,
       region,
-      noOfEmployees, // Correct frontend property to match this property name (employees -> noOfEmployees)
+      noOfEmployees,
       production,
       revenue,
       partnership,
@@ -72,8 +70,7 @@ const updateBusinessUnitById = async (req, res) => {
     } = req.body;
     await BusinessUnit.update(
       {
-        // userId, // Do not send from frontend -> This is not needed to update businessunit because userId will never change
-        businessUnitName,
+        title,
         country,
         continent,
         region,
@@ -93,6 +90,13 @@ const updateBusinessUnitById = async (req, res) => {
       .status(200)
       .json({ message: "Businessunit updated successfully" });
   } catch (error) {
+    if (error.name === "SequelizeUniqueConstraintError") {
+      if (error.parent.constraint === "businessUnits_userId_title_key") {
+        return res.status(400).json({
+          error: "Businessunits title must be unique",
+        });
+      }
+    }
     console.log("Could not updateBusinessUnitById");
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });

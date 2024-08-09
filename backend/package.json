@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development node --watch ./src/index.js",
-    "init-db:local": "cross-env NODE_ENV=development node ./seed/initializeDatabase.js",
+    "init-db:dev": "cross-env NODE_ENV=development node ./seed/initializeDatabase.js",
     "prod": "node ./src/index.js",
     "init-db:prod": "node ./seed/initializeDatabase.js"
   },

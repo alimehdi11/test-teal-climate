@@ -26,11 +26,11 @@ const createDatabase = async () => {
     if (res.rows.length > 0) {
       // Database exists, so drop it
       console.log(`Database ${databaseName} exists. Dropping it...`);
-      await client.query(`DROP DATABASE ${databaseName};`);
+      await client.query(`DROP DATABASE "${databaseName}";`);
       console.log(`Database ${databaseName} dropped successfully`);
     }
 
-    await client.query(`CREATE DATABASE ${databaseName};`);
+    await client.query(`CREATE DATABASE "${databaseName}";`);
     console.log(`Database ${databaseName} created successfully`);
   } catch (err) {
     console.error("Error creating database", err);

@@ -9,27 +9,36 @@ import Input from "../../components/ui/Input.jsx";
 import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
 
-const PortfolioForm = ({
-  userId,
-  userBusinessUnits,
-  fetchUserBusinessUnits,
-}) => {
-  const [countries, setCountries] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [continents, setContinents] = useState([]);
-  const [selectedContinent, setSelectedContinent] = useState("");
+const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
+  const [countriesData, setCountriesData] = useState([]);
+
   const [regions, setRegions] = useState([]);
+  const [countries, setCountries] = useState([]);
+
+  const [businessUnitTitle, setBusinessUnitTitle] = useState("");
+  const [selectedContinent, setSelectedContinent] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
-  const [employees, setEmployees] = useState("");
   const [revenue, setRevenue] = useState("");
-  const [notes, setNotes] = useState("");
-  const [productionClients, setProductionClients] = useState("");
+  const [employees, setEmployees] = useState("");
   const [ownershipPercentage, setOwnershipPercentage] = useState(100);
-  const [businessUnit, setBusinessUnit] = useState("");
+  const [productionClients, setProductionClients] = useState("");
+  const [notes, setNotes] = useState("");
+
   const { id } = useParams();
+
   const navigate = useNavigate();
 
-  const fetchContinents = async () => {
+  const continents = [
+    "Europe",
+    "Oceania",
+    "Antarctica",
+    "Americas",
+    "Africa",
+    "Asia",
+  ];
+
+  const fetchCountriesData = async () => {
     try {
       const response = await request(
         `${import.meta.env.VITE_API_BASE_URL}/countries`,
@@ -38,91 +47,45 @@ const PortfolioForm = ({
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
-      const jsonData = await response.json();
-      // console.log("===>>>", jsonData);
-      const uniqueContinents = [
-        ...new Set(jsonData.countries.map((country) => country.continent)),
-      ];
-      setContinents(uniqueContinents);
-    } catch (error) {
-      console.error("Error fetching continents:", error);
-    }
-  };
-
-  const fetchCountries = async (continent) => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/countries?continent=${continent}`,
-        "GET"
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const jsonData = await response.json();
-      const countriesInContinent = jsonData.countries.filter(
-        (country) => country.continent === continent
-      );
-      const uniqueCountries = [
-        ...new Set(countriesInContinent.map((country) => country.countries)),
-      ];
-      setCountries(uniqueCountries);
+      const countries = await response.json();
+      setCountriesData(countries);
     } catch (error) {
       console.error("Error fetching countries:", error);
     }
   };
 
-  const fetchRegions = async (country) => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/countries?country=${country}`,
-        "GET"
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const jsonData = await response.json();
-      const regionsInCountry = jsonData.countries
-        .filter((item) => item.countries === country)
-        .map((item) => item.region);
-      const uniqueRegions = [...new Set(regionsInCountry)];
-      setRegions(uniqueRegions);
-    } catch (error) {
-      console.error("Error fetching regions:", error);
-    }
-  };
-
   const resetForm = () => {
-    setEmployees("");
-    setRevenue("");
-    setNotes("");
-    setBusinessUnit("");
-    setProductionClients("");
-    setOwnershipPercentage(100);
+    setBusinessUnitTitle("");
     setSelectedContinent("");
-    setSelectedRegion("");
     setSelectedCountry("");
-    setCountries([]);
-    setRegions([]);
+    setSelectedRegion("");
+    setRevenue("");
+    setEmployees("");
+    setOwnershipPercentage(100);
+    setProductionClients("");
+    setNotes("");
   };
 
   const isBusinessUnitUnique = () => {
-    const profile = userBusinessUnits.filter((profile) => {
-      return businessUnit === profile.unitname;
-    });
-    return profile.length > 0 ? false : true;
+    for (let bu = 0; bu < userBusinessUnits.length; bu++) {
+      if (businessUnitTitle === userBusinessUnits[bu].title) {
+        return false;
+      }
+    }
+    return true;
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
     if (
-      !businessUnit ||
+      !businessUnitTitle ||
       !selectedContinent ||
       !selectedCountry ||
       !selectedRegion ||
-      !ownershipPercentage
       // revenue ||
-      // productionClients ||
       // employees ||
+      !ownershipPercentage
+      // productionClients ||
       // notes
     ) {
       toast.warn("Please fill all fields");
@@ -130,25 +93,24 @@ const PortfolioForm = ({
     }
 
     if (!isBusinessUnitUnique()) {
-      toast.warn("Business unit must be unique");
+      toast.warn("Businessunits title must be unique");
       return;
     }
 
-    request(`${import.meta.env.VITE_API_BASE_URL}/companies`, "POST", {
-      userid: userId,
-      unit: businessUnit, // Updated property name
+    request(`${import.meta.env.VITE_API_BASE_URL}/businessUnits`, "POST", {
+      title: businessUnitTitle,
       continent: selectedContinent,
       country: selectedCountry,
       region: selectedRegion,
-      employees: employees,
-      production: productionClients, // Updated property name
       revenue: revenue,
-      partnership: ownershipPercentage, // Updated property name
+      noOfEmployees: employees,
+      partnership: ownershipPercentage,
+      production: productionClients,
       notes: notes,
     })
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) {
-          throw new Error();
+          throw new Error(`${JSON.stringify(await response.json())}`);
         }
         toast.success("Data submitted successfully");
         resetForm();
@@ -157,24 +119,36 @@ const PortfolioForm = ({
         fetchUserBusinessUnits();
       })
       .catch((error) => {
-        toast.error("Error adding data");
-        console.error("Error adding data:", error);
+        const errorMessage = JSON.parse(error.message).error;
+        toast.error(errorMessage);
+        console.error("Error adding data : ", errorMessage);
       });
   };
 
-  const fetchProfileOfGivenId = async (id) => {
+  const fetchBusinessUnitById = async () => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/companies/profile/${id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnits/${id}`,
         "GET"
       );
       if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
+        console.log(response);
+        throw new Error(`${JSON.stringify(await response.json())}`);
       }
-      const jsonData = await response.json();
-      return jsonData;
+      const businessUnit = await response.json();
+      setBusinessUnitTitle(businessUnit.title);
+      setSelectedContinent(businessUnit.continent);
+      setSelectedCountry(businessUnit.country);
+      setSelectedRegion(businessUnit.region);
+      setRevenue(businessUnit.revenue);
+      setEmployees(businessUnit.noOfEmployees);
+      setOwnershipPercentage(businessUnit.partnership);
+      setProductionClients(businessUnit.production);
+      setNotes(businessUnit.notes);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      const errorMessage = JSON.parse(error.message).error;
+      toast.error(errorMessage);
+      console.error("Error fetching data : ", errorMessage);
     }
   };
 
@@ -183,114 +157,98 @@ const PortfolioForm = ({
     navigate("/profile");
   };
 
-  const handleUpdateProfile = () => {
+  const handleUpdate = () => {
     if (
-      !businessUnit ||
+      !businessUnitTitle ||
       !selectedContinent ||
       !selectedCountry ||
       !selectedRegion ||
-      !ownershipPercentage
       // revenue ||
-      // productionClients ||
       // employees ||
+      !ownershipPercentage
+      // productionClients ||
       // notes
     ) {
       toast.warn("Please fill all fields");
       return;
     }
 
-    // if (!isBusinessUnitUnique()) {
-    //   toast.warn("Business unit must be unique");
-    //   return;
-    // }
-    // console.table({
-    //   userId: userId,
-    //   unit: businessUnit,
-    //   continent: selectedContinent,
-    //   countries: selectedCountry,
-    //   region: selectedRegion,
-    //   revenue: revenue,
-    //   production: productionClients,
-    //   employees: employees,
-    //   partnership: ownershipPercentage,
-    //   notes: notes,
-    // });
-    // return;
-    request(`${import.meta.env.VITE_API_BASE_URL}/companies/${id}`, "PUT", {
-      userId: userId,
-      unit: businessUnit,
+    request(`${import.meta.env.VITE_API_BASE_URL}/businessUnits/${id}`, "PUT", {
+      title: businessUnitTitle,
       continent: selectedContinent,
-      countries: selectedCountry,
+      country: selectedCountry,
       region: selectedRegion,
       revenue: revenue,
-      production: productionClients,
-      employees: employees,
+      noOfEmployees: employees,
       partnership: ownershipPercentage,
+      production: productionClients,
       notes: notes,
     })
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) {
-          throw new Error();
+          throw new Error(`${JSON.stringify(await response.json())}`);
         }
-        toast.success("Data updated successfully");
+        toast.success((await response.json()).message);
         resetForm();
-        navigation("/profile");
+        navigate("/profile");
       })
       .then(() => {
         fetchUserBusinessUnits();
       })
       .catch((error) => {
-        toast.error("Error updating data");
-        console.log(error);
+        const errorMessage = JSON.parse(error.message).error;
+        toast.error(errorMessage);
+        console.error("Error updating data : ", errorMessage);
       });
   };
 
-  // Fetch initial data
+  const filterCountriesByContinent = () => {
+    const countries = [];
+    countriesData.map((countriesDataItem) => {
+      if (countriesDataItem.continent === selectedContinent) {
+        countries.push(countriesDataItem.name);
+      }
+    });
+    const uniqueCountries = [...new Set(countries)];
+    setCountries(uniqueCountries);
+  };
+
+  const filterRegionByCountries = () => {
+    const regions = [];
+    countriesData.map((countriesDataItem) => {
+      if (countriesDataItem.name === selectedCountry) {
+        regions.push(countriesDataItem.region);
+      }
+    });
+    const uniqueRegions = [...new Set(regions)];
+    setRegions(uniqueRegions);
+  };
+
   useEffect(() => {
-    fetchContinents();
-    // fetchUserBusinessUnits();
+    fetchCountriesData();
   }, []);
 
   useEffect(() => {
-    if (!id) {
-      setSelectedRegion("");
-      setSelectedCountry("");
-      setCountries([]);
-      setRegions([]);
-    }
+    setSelectedRegion("");
+    setSelectedCountry("");
+    setCountries([]);
+    setRegions([]);
     if (selectedContinent) {
-      fetchCountries(selectedContinent);
+      filterCountriesByContinent();
     }
   }, [selectedContinent]);
 
-  // Fetch regions based on selected country
   useEffect(() => {
-    if (!id) {
-      setSelectedRegion("");
-      setRegions([]);
-    }
+    setSelectedRegion("");
+    setRegions([]);
     if (selectedCountry) {
-      fetchRegions(selectedCountry);
+      filterRegionByCountries();
     }
   }, [selectedCountry]);
 
   useEffect(() => {
     if (id) {
-      fetchProfileOfGivenId(id)
-        .then((profileOfGivenId) => {
-          setBusinessUnit(profileOfGivenId[0].unitname);
-          setSelectedContinent(profileOfGivenId[0].continent);
-          setSelectedCountry(profileOfGivenId[0].countries);
-          setSelectedRegion(profileOfGivenId[0].region);
-          setEmployees(profileOfGivenId[0].employees);
-          setProductionClients(profileOfGivenId[0].production);
-          setRevenue(profileOfGivenId[0].revenue);
-          setNotes(profileOfGivenId[0].notes);
-          setOwnershipPercentage(profileOfGivenId[0].partnership);
-        })
-        .catch((error) => {
-          console.error("Failed to get company data", error);
-        });
+      fetchBusinessUnitById();
     }
   }, [id]);
 
@@ -298,13 +256,13 @@ const PortfolioForm = ({
     <form onSubmit={handleFormSubmit}>
       <h3 className="m-0 mb-4 font-extrabold text-2xl">Create Your Profile</h3>
       <div className="grid lg:grid-cols-2 gap-4">
-        {/* Fuel Category Dropdown */}
+        {/* Business Unit Title */}
         <FormControl>
-          <Label>Business Unit</Label>
+          <Label>Business Unit Title</Label>
           <Input
             type="text"
-            value={businessUnit}
-            onChange={(e) => setBusinessUnit(e.target.value)}
+            value={businessUnitTitle}
+            onChange={(e) => setBusinessUnitTitle(e.target.value)}
           />
         </FormControl>
 
@@ -431,7 +389,7 @@ const PortfolioForm = ({
           <Button
             type="button"
             className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
-            onClick={handleUpdateProfile}
+            onClick={handleUpdate}
           >
             Edit
           </Button>
