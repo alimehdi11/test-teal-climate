@@ -47,4 +47,13 @@ const Activity = sequelize.define(
   }
 );
 
+// UPDATE public.activities
+// SET "greenHouseGas" = CASE
+//     WHEN "greenHouseGas" = 'kg CO2e of CO2 per unit' THEN 'kg CO2e of CO2'
+//     WHEN "greenHouseGas" = 'kg CO2e of CH4 per unit' THEN 'kg CO2e of CH4'
+//     WHEN "greenHouseGas" = 'kg CO2e of N2O per unit' THEN 'kg CO2e of N2O'
+//     ELSE "greenHouseGas" -- to retain other values as they are
+// END
+// WHERE "greenHouseGas" IN ('kg CO2e of CO2 per unit', 'kg CO2e of CH4 per unit', 'kg CO2e of N2O per unit');
+
 export { Activity };

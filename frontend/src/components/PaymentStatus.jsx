@@ -18,7 +18,6 @@ const PaymentStatus = () => {
         "PUT",
         payload
       );
-      console.log(response);
     } catch (error) {
       console.log("Could not update subscription");
       console.error(error.message);

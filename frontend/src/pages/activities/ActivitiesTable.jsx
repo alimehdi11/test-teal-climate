@@ -16,6 +16,8 @@ import {
 const ActivitiesTable = ({
   userBusinessUnitsActivities,
   fetchUserBusinessUnitsActivities,
+  setSelectedScope,
+  setSelectedLevel,
 }) => {
   const handleDelete = (id) => {
     return () => {
@@ -40,6 +42,26 @@ const ActivitiesTable = ({
     };
   };
 
+  const handleEdit = (id) => {
+    return async () => {
+      try {
+        const response = await request(
+          `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}`,
+          "GET"
+        );
+        if (!response.ok) {
+          throw new Error(`${JSON.stringify(await response.json())}`);
+        }
+        const businessUnitActivity = await response.json();
+        setSelectedScope(businessUnitActivity.scope);
+        setSelectedLevel(businessUnitActivity.level1);
+      } catch (error) {
+        const errorMessage = JSON.parse(error.message).error;
+        toast.error(errorMessage);
+        console.error("Error fetching businessUnits : ", errorMessage);
+      }
+    };
+  };
   return (
     <TableContainer>
       <Table>
@@ -122,15 +144,16 @@ const ActivitiesTable = ({
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-center gap-x-1">
-                    <Link
+                    {/* <Link
                       to={`/activities/${userBusinessUnit.id}/edit`}
                       className="flex justify-center items-center"
                     >
                       <img
                         src={editIcon}
                         className="p-1 rounded hover:bg-slate-300 size-7"
+                        onClick={handleEdit(userBusinessUnit.id)}
                       />
-                    </Link>
+                    </Link> */}
                     <img
                       src={trashIcon}
                       className="p-1 rounded hover:bg-slate-300 size-7"

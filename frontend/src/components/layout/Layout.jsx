@@ -2,6 +2,7 @@ import Sidebar from "./Sidebar";
 import Main from "./Main";
 import Navbar from "../Navbar";
 import { Slide, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Layout = ({ sidebarContent, mainContent, className = "" }) => {
   return (

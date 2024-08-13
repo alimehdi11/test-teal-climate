@@ -23,13 +23,17 @@ const Activities = () => {
         "GET"
       );
       if (!userBusinessUnitsActivitiesResponse.ok) {
-        throw new Error(`Failed to fetch data:`);
+        throw new Error(
+          `${JSON.stringify(await userBusinessUnitsActivitiesResponse.json())}`
+        );
       }
       const userBusinessUnitsActivities =
         await userBusinessUnitsActivitiesResponse.json();
       setUserBusinessUnitsActivities(userBusinessUnitsActivities);
     } catch (error) {
+      const errorMessage = JSON.parse(error.message).error;
       console.error("Error fetching data:", error);
+      console.error(errorMessage);
     }
   };
 
@@ -59,8 +63,6 @@ const Activities = () => {
             <ActivitesForm
               selectedScope={selectedScope}
               selectedLevel={selectedLevel}
-              setSelectedScope={setSelectedScope}
-              setSelectedLevel={setSelectedLevel}
               fetchUserBusinessUnitsActivities={
                 fetchUserBusinessUnitsActivities
               }
@@ -79,6 +81,8 @@ const Activities = () => {
       <ActivitiesTable
         userBusinessUnitsActivities={userBusinessUnitsActivities}
         fetchUserBusinessUnitsActivities={fetchUserBusinessUnitsActivities}
+        setSelectedScope={setSelectedScope}
+        setSelectedLevel={setSelectedLevel}
       />
     </>
   );

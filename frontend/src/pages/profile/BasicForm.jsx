@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { request } from "../../utils/request.js";
 import FormControl from "../../components/FormControl.jsx";
 import Label from "../../components/ui/Label.jsx";

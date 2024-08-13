@@ -22,7 +22,6 @@ const AccountSettingsEdit = () => {
   });
   const navigate = useNavigate();
 
-  console.log(formData);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });

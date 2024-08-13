@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";

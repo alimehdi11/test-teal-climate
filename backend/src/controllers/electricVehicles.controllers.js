@@ -25,7 +25,7 @@ const getElectricVehicle = async (req, res) => {
     // if (electricityConsumptionPerUnit)
     // whereClause.electricityConsumptionPerUnit = electricityConsumptionPerUnit;
 
-    const electricVehicle = await ElectricVehicle.findAll({
+    const electricVehicle = await ElectricVehicle.findOne({
       where: whereClause,
     });
 

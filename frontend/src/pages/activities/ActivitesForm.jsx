@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";
@@ -14,8 +13,6 @@ import { UserContext } from "../../contexts/UserContext.jsx";
 const ActivitesForm = ({
   selectedScope,
   selectedLevel,
-  setSelectedScope,
-  setSelectedLevel,
   fetchUserBusinessUnitsActivities,
 }) => {
   const [scopeCategoryValue, setScopeCategoryValue] = useState("");
@@ -66,7 +63,6 @@ const ActivitesForm = ({
         "GET"
       );
       if (!response.ok) {
-        console.log(response);
         throw new Error(`${JSON.stringify(await response.json())}`);
       }
       return await response.json();
@@ -106,7 +102,7 @@ const ActivitesForm = ({
   };
 
   const filterUnitOfMeasurements = () => {
-    let unitsOfMeasurement = [];
+    let unitsOfMeasurements = [];
     activities?.forEach((item) => {
       if (
         item.scope === selectedScope &&
@@ -115,11 +111,11 @@ const ActivitesForm = ({
         // &&
         // item.level3 === fuelNameValue
       ) {
-        unitsOfMeasurement.push(item.uom);
+        unitsOfMeasurements.push(item.unitOfMeasurement);
       }
     });
-    unitsOfMeasurement = [...new Set(unitsOfMeasurement)];
-    return unitsOfMeasurement;
+    unitsOfMeasurements = [...new Set(unitsOfMeasurements)];
+    return unitsOfMeasurements;
   };
 
   const filterFuelTypes = () => {
@@ -150,104 +146,107 @@ const ActivitesForm = ({
   };
 
   const filterGHGEmissions = (condition) => {
-    let co2e = null;
-    let co2eofco2 = null;
-    let co2eofch4 = null;
-    let co2eofn2o = null;
+    let CO2e = null;
+    let CO2e_of_CO2 = null;
+    let CO2e_of_CH4 = null;
+    let CO2e_of_N2O = null;
 
-    const ghgValues = [
+    const greenHouseGasValues = [
       "kg CO2e",
-      "kg CO2e of CO2 per unit",
-      "kg CO2e of CH4 per unit",
-      "kg CO2e of N2O per unit",
+      // "kg CO2e of CO2 per unit",
+      "kg CO2e of CO2",
+      // "kg CO2e of CH4 per unit",
+      "kg CO2e of CH4",
+      // "kg CO2e of N2O per unit",
+      "kg CO2e of N2O",
     ];
 
     for (let i = 0; i < activities.length; i++) {
-      const item = activities[i];
+      const activity = activities[i];
 
-      if (condition(item)) {
-        if (item.ghg === ghgValues[0]) {
-          co2e = item.ghgconversion;
-        } else if (item.ghg === ghgValues[1]) {
-          co2eofco2 = item.ghgconversion;
-        } else if (item.ghg === ghgValues[2]) {
-          co2eofch4 = item.ghgconversion;
-        } else if (item.ghg === ghgValues[3]) {
-          co2eofn2o = item.ghgconversion;
+      if (condition(activity)) {
+        if (activity.greenHouseGas === greenHouseGasValues[0]) {
+          CO2e = activity.greenHouseGasEmissionFactor;
+        } else if (activity.greenHouseGas === greenHouseGasValues[1]) {
+          CO2e_of_CO2 = activity.greenHouseGasEmissionFactor;
+        } else if (activity.greenHouseGas === greenHouseGasValues[2]) {
+          CO2e_of_CH4 = activity.greenHouseGasEmissionFactor;
+        } else if (activity.greenHouseGas === greenHouseGasValues[3]) {
+          CO2e_of_N2O = activity.greenHouseGasEmissionFactor;
         }
       }
 
-      if (co2e && co2eofco2 && co2eofch4 && co2eofn2o) {
+      if (CO2e && CO2e_of_CO2 && CO2e_of_CH4 && CO2e_of_N2O) {
         // If all 4 values are found not need to loop any more
         break;
       }
     }
 
     return {
-      co2e,
-      co2eofco2,
-      co2eofch4,
-      co2eofn2o,
+      CO2e,
+      CO2e_of_CO2,
+      CO2e_of_CH4,
+      CO2e_of_N2O,
     };
   };
 
-  const calculateConversionGHG = () => {
-    const condition = (item) => {
+  const filterConversionGHG = () => {
+    const condition = (activity) => {
       return (
-        item.scope === selectedScope &&
-        item.level1 === selectedLevel &&
-        item.level2 === fuelTypeValue &&
-        item.level3 === fuelNameValue &&
-        item.uom === unitOfMeasurementValue &&
+        activity.scope === selectedScope &&
+        activity.level1 === selectedLevel &&
+        activity.level2 === fuelTypeValue &&
+        activity.level3 === fuelNameValue &&
+        activity.unitOfMeasurement === unitOfMeasurementValue &&
         (selectedLevel === "Material use" || selectedLevel === "Waste disposal"
-          ? item.level5 === level5Value
+          ? activity.level5 === level5Value
           : true)
       );
     };
     return filterGHGEmissions(condition);
   };
 
-  const calculateConversionGHGForElectricity = (payload) => {
-    const condition = (item) => {
+  const filterConversionGHGForElectricity = (payload) => {
+    const condition = (activity) => {
       return (
-        item.scope === selectedScope &&
-        item.level1 === selectedLevel &&
-        item.level2 === payload.level2 &&
-        item.level3 === payload.level3 &&
-        (item.level4 === payload.level4 || item.level4 === "null") &&
-        item.uom === unitOfMeasurementValue
+        activity.scope === selectedScope &&
+        activity.level1 === selectedLevel &&
+        activity.level2 === payload.level2 &&
+        activity.level3 === payload.level3 &&
+        (activity.level4 === payload.level4 || activity.level4 === "null") &&
+        activity.unitOfMeasurement === unitOfMeasurementValue
       );
     };
     return filterGHGEmissions(condition);
   };
 
-  const calculateConversionGHGForDeliveryEvs = (payload) => {
-    const condition = (item) => {
+  const filterConversionGHGFor____ = (payload) => {
+    const condition = (activity) => {
       return (
-        item.scope === selectedScope &&
-        item.level1 === selectedLevel &&
-        item.level2 === payload.level2 &&
-        item.level3 === payload.level3 &&
-        item.level5 === payload.level5 &&
-        item.uom === unitOfMeasurementValue
+        activity.scope === selectedScope &&
+        activity.level1 === selectedLevel &&
+        activity.level2 === payload.level2 &&
+        activity.level3 === payload.level3 &&
+        activity.level5 === payload.level5 &&
+        activity.unitOfMeasurement === unitOfMeasurementValue
       );
     };
 
     return filterGHGEmissions(condition);
   };
 
-  const calculateConversionGHGForBusinessTravelAirOrWTTBusinessTravelAir = (
+  const filterConversionGHGForBusinessTravelAirOrWTTBusinessTravelAir = (
     payload
   ) => {
-    const condition = (item) => {
+    const condition = (activity) => {
       return (
-        item.scope === selectedScope &&
-        item.level1 === selectedLevel &&
+        activity.scope === selectedScope &&
+        activity.level1 === selectedLevel &&
         // In database level4(fuelNameValue) is at level3 (should be consistent)
-        item.level3 === payload.level4 &&
+        activity.level3 === payload.level4 &&
         // In database level5 is at level4 (should be consistent)
-        item.level4 === payload.level5 &&
-        item.uom === unitOfMeasurementValue
+        activity.level4 === payload.level5 &&
+        activity.unitOfMeasurement === unitOfMeasurementValue
       );
     };
     return filterGHGEmissions(condition);
@@ -295,13 +294,13 @@ const ActivitesForm = ({
       if (!response.ok) {
         throw new Error(`${JSON.stringify(await response.json())}`);
       }
-      const jsonData = await response.json();
-      return jsonData;
+      const activity = await response.json();
+      return activity;
     } catch (error) {
       const errorMessage = JSON.parse(error.message).error;
       toast.error(errorMessage);
-      console.log(errorMessage);
-      console.error("Error fetching data:", error);
+      console.error(errorMessage);
+      console.error("Error fetchActivityById:", error);
     }
   };
 
@@ -320,33 +319,39 @@ const ActivitesForm = ({
     return level5;
   };
 
-  const fetchElectricVehicle = async () => {
-    const url = `${import.meta.env.VITE_API_BASE_URL}/electricVehicles?scope=${selectedScope}&level1=${selectedLevel}&level2=${fuelTypeValue}&level3=${fuelNameValue}&uom=${unitOfMeasurementValue}&unit=kWh`;
-    const electricVehicle = await request(url, "GET");
-    return electricVehicle;
+  const fetchElectricVehicle = async (payload) => {
+    try {
+      const url = `${import.meta.env.VITE_API_BASE_URL}/electricVehicles?level1=${payload.level1}&level2=${payload.level2}&level3=${payload.level3}&level4=${payload.level4}&unitOfMeasurement=${payload.unitOfMeasurement}`;
+      const response = await request(url, "GET");
+      if (!response.ok) {
+        throw new Error(`${JSON.stringify(await response.json())}`);
+      }
+      const electricVehicle = await response.json();
+      return electricVehicle;
+    } catch (error) {
+      const errorMessage = JSON.parse(error.message).error;
+      toast.error(errorMessage);
+      console.error("Error fetching electricVehicle : ", errorMessage);
+      console.log(error);
+    }
   };
 
   const fetchCompanyDataAndFilterCountryAndRegion = async () => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/companies/${userId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnits/${businessUnitValue /* :id -> businessUnitId */}`,
         "GET"
       );
       if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.statusText}`);
+        throw new Error(`${JSON.stringify(await response.json())}`);
       }
-      const jsonData = await response.json();
-      let country, region;
-      for (let i = 0; i < jsonData.length; i++) {
-        if (jsonData[i].unitname === businessUnitValue) {
-          country = jsonData[i].countries;
-          region = jsonData[i].region;
-          break;
-        }
-      }
+      const businessUnit = await response.json();
+      const { country, region } = businessUnit;
       return { country, region };
     } catch (error) {
-      console.error("Error fetching data:", error);
+      const errorMessage = JSON.parse(error.message).error;
+      toast.error(errorMessage);
+      console.error("Error fetching businessUnits : ", errorMessage);
     }
   };
 
@@ -397,7 +402,7 @@ const ActivitesForm = ({
     // );
     // all value should be false
     if (
-      !userId ||
+      // !userId ||
       !selectedScope ||
       !selectedLevel ||
       !scopeCategoryValue ||
@@ -440,11 +445,10 @@ const ActivitesForm = ({
       //  fetching companies data and filtering country from that based on business unit is selected
 
       payload = {
-        ids: userId,
-        uom: unitOfMeasurementValue,
-        businessunit: businessUnitValue,
+        unitOfMeasurement: unitOfMeasurementValue,
+        businessUnitId: businessUnitValue,
         quantity: quantityValue,
-        fuel_category: scopeCategoryValue,
+        level1Category: scopeCategoryValue,
         scope: selectedScope,
         level1: selectedLevel,
         level2: fuelTypeValue || null,
@@ -472,7 +476,7 @@ const ActivitesForm = ({
         payload.level2 = selectedLevel;
         payload.level3 = selectedLevel;
       }
-      ghgconversions = calculateConversionGHGForElectricity(payload);
+      ghgconversions = filterConversionGHGForElectricity(payload);
       payload = { ...payload, ...ghgconversions };
       // console.table(payload);
       // return;
@@ -487,11 +491,10 @@ const ActivitesForm = ({
       // || selectedLevel === "WTT- business travel- air"
     ) {
       payload = {
-        ids: userId,
-        uom: unitOfMeasurementValue,
-        businessunit: businessUnitValue,
+        unitOfMeasurement: unitOfMeasurementValue,
+        businessUnitId: businessUnitValue,
         quantity: quantityValue,
-        fuel_category: scopeCategoryValue,
+        level1Category: scopeCategoryValue,
         scope: selectedScope,
         level1: selectedLevel,
         level2: null, // filter out
@@ -530,7 +533,8 @@ const ActivitesForm = ({
       ) {
         payload.level5 = filterLevel5BasedOnScopeAndLevel1()[0];
       }
-      ghgconversions = calculateConversionGHGForDeliveryEvs(payload);
+      // "filterConversionGHGFor____" this function can be named better
+      ghgconversions = filterConversionGHGFor____(payload);
       payload = { ...payload, ...ghgconversions };
       // console.table(payload);
       // return;
@@ -539,11 +543,10 @@ const ActivitesForm = ({
       selectedLevel === "Delivery Evs"
     ) {
       payload = {
-        ids: userId,
-        uom: unitOfMeasurementValue,
-        businessunit: businessUnitValue,
+        unitOfMeasurement: unitOfMeasurementValue,
+        businessUnitId: businessUnitValue,
         quantity: quantityValue,
-        fuel_category: scopeCategoryValue,
+        level1Category: scopeCategoryValue,
         level1: selectedLevel,
         level2: fuelTypeValue || "Vans", // We only have 1 option for "Delivery Evs" so hard coding here
         level3: fuelNameValue,
@@ -551,6 +554,13 @@ const ActivitesForm = ({
         level4: level4Value || null,
         level5: level5Value || "Battery Electric Vehicle", // We only have 1 option for "Delivery Evs" so hard coding here
       };
+
+      /** TODO : "activities" table column values should be corrected.
+       * "level5" data should be in level4. And level5 should be null.
+       */
+      payload.level4 = payload.level5;
+      payload.level5 = null;
+
       /**
        * Formula:
        * Distance travelled in km/miles (quantityValue)
@@ -561,47 +571,38 @@ const ActivitesForm = ({
        *   based on Electricity and country/region)
        *
        */
-      const electricVehicle = await (await fetchElectricVehicle())
-        .json()
-        .catch((error) => console.log(error));
-
+      const electricVehicle = await fetchElectricVehicle(payload);
       let electricityConsumptionPerUnit =
         electricVehicle.electricityConsumptionPerUnit;
 
       const { country, region } =
         await fetchCompanyDataAndFilterCountryAndRegion();
 
-      const { co2e, co2eofco2, co2eofch4, co2eofn2o } =
+      const { CO2e, CO2e_of_CO2, CO2e_of_CH4, CO2e_of_N2O } =
         filterElectricityEmissionsBasedOnContryAndRegion(country, region);
 
-      payload.co2e = !co2e ? null : co2e * electricityConsumptionPerUnit;
-      payload.co2eofco2 = !co2eofco2
+      payload.CO2e = !CO2e ? null : CO2e * electricityConsumptionPerUnit;
+      payload.CO2e_of_CO2 = !CO2e_of_CO2
         ? null
-        : co2eofco2 * electricityConsumptionPerUnit;
-      payload.co2eofch4 = !co2eofch4
+        : CO2e_of_CO2 * electricityConsumptionPerUnit;
+      payload.CO2e_of_CH4 = !CO2e_of_CH4
         ? null
-        : co2eofch4 * electricityConsumptionPerUnit;
-      payload.co2eofn2o = !co2eofn2o
+        : CO2e_of_CH4 * electricityConsumptionPerUnit;
+      payload.CO2e_of_N2O = !CO2e_of_N2O
         ? null
-        : co2eofn2o * electricityConsumptionPerUnit;
-
-      /** TODO : "activitydata" table column values should be corrected.
-       * "level5" data should be in level4. And level5 should be null.
-       */
-      payload.level4 = payload.level5;
+        : CO2e_of_N2O * electricityConsumptionPerUnit;
     } else {
       payload = {
-        ids: userId,
-        uom: unitOfMeasurementValue,
-        businessunit: businessUnitValue,
+        unitOfMeasurement: unitOfMeasurementValue,
+        businessUnitId: businessUnitValue,
         quantity: quantityValue,
-        fuel_category: scopeCategoryValue,
+        level1Category: scopeCategoryValue,
         level1: selectedLevel,
         level2: fuelTypeValue,
         level3: fuelNameValue,
         scope: selectedScope,
-        level4: level4Value || null,
-        level5: level5Value || null,
+        level4: level4Value || "",
+        level5: level5Value || "",
         // ...ghgconversions,
       };
 
@@ -610,15 +611,21 @@ const ActivitesForm = ({
         selectedLevel === "WTT- business travel- air"
       ) {
         ghgconversions =
-          calculateConversionGHGForBusinessTravelAirOrWTTBusinessTravelAir(
+          filterConversionGHGForBusinessTravelAirOrWTTBusinessTravelAir(
             payload
           );
       } else {
-        ghgconversions = calculateConversionGHG();
+        ghgconversions = filterConversionGHG();
       }
 
       payload = { ...payload, ...ghgconversions };
     }
+
+    // Multiplying emissionFactors by quantity/distance
+    payload.CO2e = payload.CO2e * payload.quantity;
+    payload.CO2e_of_CH4 = payload.CO2e_of_CH4 * payload.quantity;
+    payload.CO2e_of_CO2 = payload.CO2e_of_CO2 * payload.quantity;
+    payload.CO2e_of_N2O = payload.CO2e_of_N2O * payload.quantity;
 
     /**
      * For Scope 2 market based
@@ -632,18 +639,18 @@ const ActivitesForm = ({
       marketBasedPayload = { ...payload };
       marketBasedPayload.level5 = "marketBased";
       marketBasedPayload.quantity = quantityPurchased;
-      marketBasedPayload.co2e = Number(emissionFactor);
-      marketBasedPayload.uom = unitOfEmissionFactor;
-      marketBasedPayload.co2eofco2 = null;
-      marketBasedPayload.co2eofch4 = null;
-      marketBasedPayload.co2eofn2o = null;
+      marketBasedPayload.CO2e = Number(emissionFactor);
+      marketBasedPayload.unitOfMeasurement = unitOfEmissionFactor;
+      marketBasedPayload.CO2e_of_CO2 = undefined;
+      marketBasedPayload.CO2e_of_CH4 = undefined;
+      marketBasedPayload.CO2e_of_N2O = undefined;
     }
 
     // console.table(payload);
     // console.table(marketBasedPayload);
     // return;
     request(
-      `${import.meta.env.VITE_API_BASE_URL}/companiesdata`,
+      `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities`,
       "POST",
       payload
     )
@@ -672,7 +679,7 @@ const ActivitesForm = ({
      */
     if (selectedScope === "Scope 2" && marketBased) {
       request(
-        `${import.meta.env.VITE_API_BASE_URL}/companiesdata`,
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities`,
         "POST",
         marketBasedPayload
       )
@@ -693,9 +700,8 @@ const ActivitesForm = ({
     }
   };
 
-  const handleUpdateData = () => {
+  const handleUpdateData = async () => {
     if (
-      !userId ||
       !selectedScope ||
       !selectedLevel ||
       !scopeCategoryValue ||
@@ -711,19 +717,17 @@ const ActivitesForm = ({
       return;
     }
 
-    let payload = {
-      ids: userId,
-      uom: unitOfMeasurementValue,
-      businessunit: businessUnitValue,
-      quantity: quantityValue,
-      fuel_category: scopeCategoryValue,
-      scope: selectedScope,
-      level1: selectedLevel,
-      level2: fuelTypeValue,
-      level3: fuelNameValue,
-      level4: level4Value || null,
-      level5: level5Value || null,
-    };
+    /**
+     * For Scope 2 market based
+     */
+    if (marketBased) {
+      if (!emissionFactor || !quantityPurchased || !unitOfEmissionFactor) {
+        toast.warn("Please fill all fields");
+        return;
+      }
+    }
+
+    let payload, ghgconversions, marketBasedPayload;
 
     if (
       selectedLevel === "Electricity" ||
@@ -732,19 +736,220 @@ const ActivitesForm = ({
       selectedLevel === "WTT- electricity (TandD)" ||
       selectedLevel === "WTT- electricity" ||
       selectedLevel === "Water supply" ||
-      selectedLevel === "Water treatment"
+      selectedLevel === "Water treatment" ||
+      selectedLevel === "Managed assets- electricity" ||
+      selectedLevel === "WTT- electricity (T&D)" ||
+      selectedLevel === "Electricity T&D"
     ) {
-      const ghgconversions = calculateConversionGHGForElectricity(payload);
+      //  fetching companies data and filtering country from that based on business unit is selected
+
+      payload = {
+        unitOfMeasurement: unitOfMeasurementValue,
+        businessUnitId: businessUnitValue,
+        quantity: quantityValue,
+        level1Category: scopeCategoryValue,
+        scope: selectedScope,
+        level1: selectedLevel,
+        level2: fuelTypeValue || null,
+        level3: null,
+        level4: null,
+        level5: null,
+      };
+
+      // for Water supply and Water treatment we do not have to fetch country and region based on businessunit
+      if (
+        selectedLevel !== "Water supply" &&
+        selectedLevel !== "Water treatment"
+      ) {
+        // find country and region and then calculate ghgconversions and then update payload
+        const { country, region } =
+          await fetchCompanyDataAndFilterCountryAndRegion();
+        // payload.level2 = "Electricity generated";
+        payload.level3 = country;
+        payload.level4 = region;
+        if (selectedLevel !== "WTT- electricity") {
+          payload.level2 = filterLevel2(payload);
+        }
+      } else {
+        // level 4 and 5 are null for "Water supply" and "Water treatment"
+        payload.level2 = selectedLevel;
+        payload.level3 = selectedLevel;
+      }
+      ghgconversions = filterConversionGHGForElectricity(payload);
       payload = { ...payload, ...ghgconversions };
+      // console.table(payload);
+      // return;
+    } else if (
+      selectedLevel === "Heat and steam" ||
+      selectedLevel === "Electricity TandD for delivery Evs" ||
+      selectedLevel === "District heat and steam TandD" ||
+      selectedLevel === "WTT- heat and steam" ||
+      selectedLevel === "WTT- district heat and steam distribution" ||
+      selectedLevel === "Hotel stay"
+      // || selectedLevel === "Business travel- air"
+      // || selectedLevel === "WTT- business travel- air"
+    ) {
+      payload = {
+        unitOfMeasurement: unitOfMeasurementValue,
+        businessUnitId: businessUnitValue,
+        quantity: quantityValue,
+        level1Category: scopeCategoryValue,
+        scope: selectedScope,
+        level1: selectedLevel,
+        level2: null, // filter out
+        level3: fuelNameValue || null, // from form / not available
+        level4: level4Value || null, // from form / not available
+        level5: null, // filter out
+      };
+      // find level2 and level5 and then calculate ghgconversions and then update payload
+      payload.level2 = filterFuelTypes()[0];
+
+      if (selectedLevel === "WTT- district heat and steam distribution") {
+        payload.level3 = ((payload) => {
+          let level3 = [];
+          activities.forEach((item) => {
+            if (
+              item.scope === payload.scope &&
+              item.level1 === payload.level1 &&
+              item.level2 === payload.level2 &&
+              item.level3
+            ) {
+              level3.push(item.level3);
+            }
+          });
+          level3 = [...new Set(level3)];
+          return level3;
+        })(payload)[0];
+      }
+
+      if (
+        selectedLevel !== "District heat and steam TandD" ||
+        selectedLevel !== "WTT- heat and steam" ||
+        selectedLevel !== "WTT- district heat and steam distribution" ||
+        selectedLevel !== "Hotel stay" ||
+        selectedLevel !== "Business travel- air" ||
+        selectedLevel !== "WTT- business travel- air"
+      ) {
+        payload.level5 = filterLevel5BasedOnScopeAndLevel1()[0];
+      }
+      // "filterConversionGHGFor____" this function can be named better
+      ghgconversions = filterConversionGHGFor____(payload);
+      payload = { ...payload, ...ghgconversions };
+      // console.table(payload);
+      // return;
+    } else if (
+      selectedLevel === "Passenger Evs" ||
+      selectedLevel === "Delivery Evs"
+    ) {
+      payload = {
+        unitOfMeasurement: unitOfMeasurementValue,
+        businessUnitId: businessUnitValue,
+        quantity: quantityValue,
+        level1Category: scopeCategoryValue,
+        level1: selectedLevel,
+        level2: fuelTypeValue || "Vans", // We only have 1 option for "Delivery Evs" so hard coding here
+        level3: fuelNameValue,
+        scope: selectedScope,
+        level4: level4Value || null,
+        level5: level5Value || "Battery Electric Vehicle", // We only have 1 option for "Delivery Evs" so hard coding here
+      };
+
+      /** TODO : "activities" table column values should be corrected.
+       * "level5" data should be in level4. And level5 should be null.
+       */
+      payload.level4 = payload.level5;
+      payload.level5 = null;
+
+      /**
+       * Formula:
+       * Distance travelled in km/miles (quantityValue)
+       *  x Electricity consumption per km/miles (fetch from electricVehicle table)
+       *  x Electricity emission factor of the country/region
+       *  (fetch country/region from businessUnits table based on businessUnitValue
+       *   after that filter emission factors from activities
+       *   based on Electricity and country/region)
+       *
+       */
+      const electricVehicle = await fetchElectricVehicle(payload);
+      let electricityConsumptionPerUnit =
+        electricVehicle.electricityConsumptionPerUnit;
+
+      const { country, region } =
+        await fetchCompanyDataAndFilterCountryAndRegion();
+
+      const { CO2e, CO2e_of_CO2, CO2e_of_CH4, CO2e_of_N2O } =
+        filterElectricityEmissionsBasedOnContryAndRegion(country, region);
+
+      payload.CO2e = !CO2e ? null : CO2e * electricityConsumptionPerUnit;
+      payload.CO2e_of_CO2 = !CO2e_of_CO2
+        ? null
+        : CO2e_of_CO2 * electricityConsumptionPerUnit;
+      payload.CO2e_of_CH4 = !CO2e_of_CH4
+        ? null
+        : CO2e_of_CH4 * electricityConsumptionPerUnit;
+      payload.CO2e_of_N2O = !CO2e_of_N2O
+        ? null
+        : CO2e_of_N2O * electricityConsumptionPerUnit;
     } else {
-      const ghgconversions = calculateConversionGHG();
+      payload = {
+        unitOfMeasurement: unitOfMeasurementValue,
+        businessUnitId: businessUnitValue,
+        quantity: quantityValue,
+        level1Category: scopeCategoryValue,
+        level1: selectedLevel,
+        level2: fuelTypeValue,
+        level3: fuelNameValue,
+        scope: selectedScope,
+        level4: level4Value || "",
+        level5: level5Value || "",
+        // ...ghgconversions,
+      };
+
+      if (
+        selectedLevel === "Business travel- air" ||
+        selectedLevel === "WTT- business travel- air"
+      ) {
+        ghgconversions =
+          filterConversionGHGForBusinessTravelAirOrWTTBusinessTravelAir(
+            payload
+          );
+      } else {
+        ghgconversions = filterConversionGHG();
+      }
+
       payload = { ...payload, ...ghgconversions };
     }
 
+    // Multiplying emissionFactors by quantity/distance
+    payload.CO2e = payload.CO2e * payload.quantity;
+    payload.CO2e_of_CH4 = payload.CO2e_of_CH4 * payload.quantity;
+    payload.CO2e_of_CO2 = payload.CO2e_of_CO2 * payload.quantity;
+    payload.CO2e_of_N2O = payload.CO2e_of_N2O * payload.quantity;
+
+    /**
+     * For Scope 2 market based
+     */
+    if (selectedScope === "Scope 2") {
+      // explicitly setting market based here
+      payload.level5 = "locationBased";
+    }
+
+    if (selectedScope === "Scope 2" && marketBased) {
+      marketBasedPayload = { ...payload };
+      marketBasedPayload.level5 = "marketBased";
+      marketBasedPayload.quantity = quantityPurchased;
+      marketBasedPayload.CO2e = Number(emissionFactor);
+      marketBasedPayload.unitOfMeasurement = unitOfEmissionFactor;
+      marketBasedPayload.CO2e_of_CO2 = undefined;
+      marketBasedPayload.CO2e_of_CH4 = undefined;
+      marketBasedPayload.CO2e_of_N2O = undefined;
+    }
+
     // console.table(payload);
+    // console.table(marketBasedPayload);
     // return;
     request(
-      `${import.meta.env.VITE_API_BASE_URL}/companiesdata/${id}`,
+      `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}`,
       "PUT",
       payload
     )
@@ -752,17 +957,46 @@ const ActivitesForm = ({
         if (!response.ok) {
           throw new Error();
         }
-        toast.success("Data updated successfully");
-        resetForm();
-        navigate("/activities");
+        // Note : This if block is for omptimization purpose below i am fetching userBusinessUnitsActivities again
+        if (!marketBased) {
+          toast.success("Data submitted successfully");
+          resetForm();
+        }
       })
       .then(() => {
-        fetchUserBusinessUnitsActivities();
+        if (!marketBased) {
+          fetchUserBusinessUnitsActivities();
+        }
       })
       .catch((error) => {
-        toast.error("Error updating data");
-        console.log(error);
+        toast.error("Error adding data");
+        console.error("Couldn't submit data", error);
       });
+
+    /**
+     * For Scope 2 market based
+     */
+    if (selectedScope === "Scope 2" && marketBased) {
+      request(
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}`,
+        "PUT",
+        marketBasedPayload
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error();
+          }
+          toast.success("Data updated successfully");
+          navigate("/activities");
+        })
+        .then(() => {
+          fetchUserBusinessUnitsActivities();
+        })
+        .catch((error) => {
+          toast.error("Error updating data");
+          console.log(error);
+        });
+    }
   };
 
   const handleCancel = () => {
@@ -913,8 +1147,8 @@ const ActivitesForm = ({
         item.level2 === "Electricity generated" &&
         item.level3 === country &&
         item.level4 === region &&
-        item.level5 === null &&
-        item.uom === "kWh"
+        // item.level5 === null &&
+        item.unitOfMeasurement === "kWh"
       );
     };
     return filterGHGEmissions(condition);
@@ -970,19 +1204,23 @@ const ActivitesForm = ({
 
   useEffect(() => {
     fetchUserBusinessUnits().then((businessUnits) => {
-      setBusinessUnits(businessUnits.map((businessUnit) => businessUnit.title));
+      if (businessUnits.length === 0) {
+        toast.info("Please add business unit first");
+        return;
+      }
+      setBusinessUnits(businessUnits);
     });
   }, []);
 
   useEffect(() => {
-    if (!id) {
-      setScopeCategoryValue("");
-      setShowFuelNamesField(false);
-      setShowLevel4Field(false);
-      setShowLevel5Field(false);
-      setUnitOfMeasurementValue("");
-      setUnitOfMeasurements([]);
-    }
+    // if (!id) {
+    setScopeCategoryValue("");
+    setShowFuelNamesField(false);
+    setShowLevel4Field(false);
+    setShowLevel5Field(false);
+    setUnitOfMeasurementValue("");
+    setUnitOfMeasurements([]);
+    // }
     // initialialy blocking not to filter if level1Categories or activities or businessUnits is empty
     if (
       level1Categories !== null &&
@@ -1101,16 +1339,16 @@ const ActivitesForm = ({
    * level2
    */
   useEffect(() => {
-    if (
-      !id &&
-      selectedLevel !== "Business travel- air" &&
-      selectedLevel !== "WTT- business travel- air"
-    ) {
-      setFuelTypes([]);
-      setFuelTypeValue("");
-      setUnitOfMeasurementValue("");
-      setFuelNameValue("");
-    }
+    // if (
+    //   !id &&
+    //   selectedLevel !== "Business travel- air" &&
+    //   selectedLevel !== "WTT- business travel- air"
+    // ) {
+    setFuelTypes([]);
+    setFuelTypeValue("");
+    setUnitOfMeasurementValue("");
+    setFuelNameValue("");
+    // }
 
     if (
       scopeCategoryValue !== "" &&
@@ -1142,12 +1380,12 @@ const ActivitesForm = ({
    * level3
    */
   useEffect(() => {
-    if (!id) {
-      setFuelNameValue("");
-      setFuelNames([]);
-      setUnitOfMeasurementValue("");
-      // setUnitOfMeasurements([]);
-    }
+    // if (!id) {
+    setFuelNameValue("");
+    setFuelNames([]);
+    setUnitOfMeasurementValue("");
+    setUnitOfMeasurements([]);
+    // }
 
     if (
       fuelTypeValue !== "" &&
@@ -1188,17 +1426,17 @@ const ActivitesForm = ({
    * level4 & level5
    */
   useEffect(() => {
-    if (!id) {
-      if (
-        selectedLevel !== "Business travel- air" &&
-        selectedLevel !== "WTT- business travel- air"
-      ) {
-        setLevel4Options([]);
-      }
-      setLevel4Value("");
-      setLevel5Value("");
-      setLevel5Options([]);
+    // if (!id) {
+    if (
+      selectedLevel !== "Business travel- air" &&
+      selectedLevel !== "WTT- business travel- air"
+    ) {
+      setLevel4Options([]);
     }
+    setLevel4Value("");
+    setLevel5Value("");
+    setLevel5Options([]);
+    // }
 
     if (
       fuelNameValue !== "" &&
@@ -1301,21 +1539,20 @@ const ActivitesForm = ({
   }, [unitOfMeasurementValue]);
 
   useEffect(() => {
-    if (id && activities) {
+    if (id) {
       fetchActivityById()
-        .then((companyDataOfGivenId) => {
-          setSelectedScope(companyDataOfGivenId[0].scope);
-          setSelectedLevel(companyDataOfGivenId[0].level1);
-          setScopeCategoryValue(companyDataOfGivenId[0].fuel_category);
-          setBusinessUnitValue(companyDataOfGivenId[0].businessunit);
+        .then((activity) => {
+          console.group(activity);
+          setScopeCategoryValue(activity.level1Category);
+          setBusinessUnitValue(activity.businessUnit.id);
           if (selectedLevel !== "District heat and steam TandD") {
-            setFuelTypeValue(companyDataOfGivenId[0].level2);
+            setFuelTypeValue(activity.level2);
           }
-          setFuelNameValue(companyDataOfGivenId[0].level3);
-          setUnitOfMeasurementValue(companyDataOfGivenId[0].uom);
-          setQuantityValue(companyDataOfGivenId[0].quantity);
-          setLevel4Value(companyDataOfGivenId[0].level4 || "");
-          setLevel5Value(companyDataOfGivenId[0].level5 || "");
+          setFuelNameValue(activity.level3);
+          setUnitOfMeasurementValue(activity.unitOfMeasurement);
+          setQuantityValue(activity.quantity);
+          setLevel4Value(activity.level4 || "");
+          setLevel5Value(activity.level5 || "");
         })
         .catch((error) => {
           console.error("Failed to get company data", error);
@@ -1362,10 +1599,10 @@ const ActivitesForm = ({
           >
             <option value="">Select Option</option>
             {businessUnits &&
-              businessUnits.map((option, index) => {
+              businessUnits.map((businessUnit, index) => {
                 return (
-                  <option key={index} value={option}>
-                    {option}
+                  <option key={index} value={businessUnit.id}>
+                    {businessUnit.title}
                   </option>
                 );
               })}

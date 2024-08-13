@@ -5,7 +5,7 @@ const electricVehiclesRouter = express.Router();
 
 /**
  * Read electricVehicles for given
- * query params => [scope, level1, level2, level3, level4, uom, unit, electricityConsumptionPerUnit]
+ * query params => [level1, level2, level3, unitOfMeasurement]
  */
 electricVehiclesRouter.get("/", getElectricVehicle);
 

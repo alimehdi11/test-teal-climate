@@ -65,18 +65,22 @@ const BusinessUnitActivity = sequelize.define(
     CO2e: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      defaultValue: 0,
     },
     CO2e_of_CO2: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      defaultValue: 0,
     },
     CO2e_of_CH4: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      defaultValue: 0,
     },
     CO2e_of_N2O: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      defaultValue: 0,
     },
     level1Category: {
       type: DataTypes.STRING,

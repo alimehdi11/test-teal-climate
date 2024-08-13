@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";
 import FormControl from "../../components/FormControl.jsx";

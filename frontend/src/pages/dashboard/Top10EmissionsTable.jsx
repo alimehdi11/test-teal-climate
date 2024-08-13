@@ -22,6 +22,7 @@ const Top10EmissionsTable = () => {
         "GET"
       );
       if (!response.ok) {
+        console.log(response);
         throw new Error(`Failed to fetch data:`);
       }
       const jsonData = await response.json();
@@ -33,7 +34,9 @@ const Top10EmissionsTable = () => {
 
   useEffect(() => {
     fetchUserTop10Emissions().then((userTop10Emissions) => {
+      // if (userTop10Emissions) {
       setUserTop10Emissions(userTop10Emissions);
+      // }
     });
   }, []);
 

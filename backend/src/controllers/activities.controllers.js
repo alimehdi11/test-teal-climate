@@ -12,6 +12,7 @@ const getAllActivities = async (req, res) => {
         "level5",
         "unitOfMeasurement",
         "greenHouseGas",
+        "greenHouseGasEmissionFactor",
       ],
     });
     return res.status(200).json(allActivities);
