@@ -3,6 +3,12 @@ import { Sequelize } from "sequelize";
 let sequelize;
 
 const connectDb = async () => {
+  const dialectOptions = {};
+  if (process.env.NODE_ENV === "production") {
+    dialectOptions.ssl = {
+      rejectUnauthorized: false,
+    };
+  }
   sequelize = new Sequelize(
     process.env.DATABASE_NAME,
     process.env.DATABASE_USER,
@@ -12,6 +18,7 @@ const connectDb = async () => {
       port: process.env.DATABASE_PORT,
       dialect: "postgres",
       logging: false,
+      dialectOptions,
     }
   );
 
