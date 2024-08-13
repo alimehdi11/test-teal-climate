@@ -49,24 +49,18 @@ app.use("/auth", authRouter);
 
 /* ---------------------------------------------------------------------  */
 
-// app.get("/activitydata", verifyToken, getAllActivities); // TODO : this line should removed when frontend side uri updated from activitydata -> activities
 app.get("/activities", verifyToken, getAllActivities);
-// app.get("/categories", verifyToken, getAllLevel1Categories); // TODO : this line should removed when frontend side uri updated from categories -> level1Categories
 app.get("/level1Categories", verifyToken, getAllLevel1Categories);
 app.get("/countries", verifyToken, getAllCountries);
 app.use("/airports", verifyToken, airportsRouter);
-// app.get("/worldHeatMap/:userId", verifyToken, getWorldHeatMapDataByUserId);
 app.use("/electricVehicles", verifyToken, electricVehiclesRouter);
 
 /* ---------------------------------------------------------------------  */
 
-// users route is created to get users businessUnits/businessUnitsActivities by thier userid
 app.use("/users", verifyToken, usersRouter);
 app.use("/subscriptions", verifyToken, subscriptionsRouter);
 app.use("/stripe", verifyToken, stripeRouter);
-// app.use("/companies", verifyToken, businessUnitsRouter); // TODO : this line should removed when frontend side uri updated from companies -> businessUnits
 app.use("/businessUnits", verifyToken, businessUnitsRouter);
-// app.use("/companiesdata", verifyToken, businessUnitsActivitiesRouter); // TODO : this line should removed when frontend side uri updated from companiesdata -> businessUnitsActivities
 app.use("/businessUnitsActivities", verifyToken, businessUnitsActivitiesRouter);
 
 // app.use("/eeios", verifyToken, eeiosRouter); NOTE : Bilal will help for eeios
