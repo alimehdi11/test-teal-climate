@@ -37,6 +37,13 @@ if (process.env.NODE_ENV === "development") {
     methods: ["GET", "POST", "PUT", "DELETE"],
   };
   app.use(cors(corsOptions));
+} else {
+  // Mode production
+  const corsOptions = {
+    origin: ["http://app.tealclimate.com", "http://carbon.tealclimate.com"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  };
+  app.use(cors(corsOptions));
 }
 
 app.use(express.json());
