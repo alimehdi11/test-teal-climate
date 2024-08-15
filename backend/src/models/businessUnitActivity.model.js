@@ -59,7 +59,7 @@ const BusinessUnitActivity = sequelize.define(
       allowNull: false,
     },
     quantity: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT, // Airports distance can be in FLOAt
       allowNull: false,
     },
     CO2e: {

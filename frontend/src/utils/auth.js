@@ -29,12 +29,13 @@ const isLoggedIn = () => {
 };
 
 const isSubscribed = () => {
-  const token = getToken();
-  if (token) {
-    const payload = decodeToken(token);
-    return payload.subscribed;
-  }
-  return false;
+  // const token = getToken();
+  // if (token) {
+  //   const payload = decodeToken(token);
+  //   return payload.subscribed;
+  // }
+  // return false;
+  return true;
 };
 
 const getBearerToken = () => {

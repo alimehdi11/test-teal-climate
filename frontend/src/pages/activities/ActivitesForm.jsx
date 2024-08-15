@@ -120,7 +120,7 @@ const ActivitesForm = ({
 
   const filterFuelTypes = () => {
     let fuelTypes = [];
-    activities?.forEach((item) => {
+    activities.forEach((item) => {
       if (item.scope === selectedScope && item.level1 === selectedLevel) {
         fuelTypes.push(item.level2);
       }
@@ -1119,15 +1119,15 @@ const ActivitesForm = ({
   };
 
   const filterAirportsName = (airports) => {
-    const airportsName = airports.map((item) => {
-      return item.airports;
+    const airportsNames = airports.map((airport) => {
+      return airport.name;
     });
-    return airportsName;
+    return airportsNames;
   };
 
   const getLatAndLonOfGivenAirport = (givenAirportName) => {
     const filteredAirport = airports.filter(
-      (airport) => airport.airports === givenAirportName
+      (airport) => airport.name === givenAirportName
     )[0];
 
     return {
@@ -1344,10 +1344,15 @@ const ActivitesForm = ({
     //   selectedLevel !== "Business travel- air" &&
     //   selectedLevel !== "WTT- business travel- air"
     // ) {
-    setFuelTypes([]);
-    setFuelTypeValue("");
-    setUnitOfMeasurementValue("");
-    setFuelNameValue("");
+    if (
+      selectedLevel !== "Business travel- air" &&
+      selectedLevel !== "WTT- business travel- air"
+    ) {
+      setFuelTypes([]);
+      setFuelTypeValue("");
+      setUnitOfMeasurementValue("");
+      setFuelNameValue("");
+    }
     // }
 
     if (
@@ -1384,17 +1389,41 @@ const ActivitesForm = ({
     setFuelNameValue("");
     setFuelNames([]);
     setUnitOfMeasurementValue("");
-    setUnitOfMeasurements([]);
-    // }
-
     if (
-      fuelTypeValue !== "" &&
       selectedLevel !== "Business travel- air" &&
       selectedLevel !== "WTT- business travel- air"
     ) {
-      const unitsOfMeasurement = filterUnitOfMeasurements();
-      setUnitOfMeasurements(unitsOfMeasurement);
+      // Only reset unitOfMeasurements if selectedLevel is not from mention above because unitOfMeasurements are initially filter with filterUnitOfMeasurementsBasedOnScopeAndLevel1(). If we reset it we can not filter it with filterUnitOfMeasurements(). Because it's check condition has fuelTypeValue which will be filter from activities array. Activites array will not have airports in it.
+      setUnitOfMeasurements([]);
+    }
+    // }
+
+    // if (
+    //   fuelTypeValue !== ""
+    // &&
+    // selectedLevel !== "Business travel- air" &&
+    // selectedLevel !== "WTT- business travel- air"
+    // ) {
+    //   const unitsOfMeasurement = filterUnitOfMeasurements();
+    //   setUnitOfMeasurements(unitsOfMeasurement);
+    //   if (
+    //     selectedLevel !== "Electricity" &&
+    //     selectedLevel !== "Electricity TandD" &&
+    //     selectedLevel !== "WTT- electricity (generation)" &&
+    //     selectedLevel !== "WTT- electricity (TandD)" &&
+    //     selectedLevel !== "WTT- electricity" &&
+    //     selectedLevel !== "Water supply" &&
+    //     selectedLevel !== "Water treatment"
+    //   ) {
+    //     const fuelNames = filterFuelNames();
+    //     setFuelNames(fuelNames);
+    //   }
+    // }
+
+    if (fuelTypeValue !== "") {
       if (
+        selectedLevel !== "Business travel- air" &&
+        selectedLevel !== "WTT- business travel- air" &&
         selectedLevel !== "Electricity" &&
         selectedLevel !== "Electricity TandD" &&
         selectedLevel !== "WTT- electricity (generation)" &&
@@ -1405,20 +1434,20 @@ const ActivitesForm = ({
       ) {
         const fuelNames = filterFuelNames();
         setFuelNames(fuelNames);
+        const unitsOfMeasurement = filterUnitOfMeasurements();
+        setUnitOfMeasurements(unitsOfMeasurement);
+      } else if (
+        selectedLevel === "Business travel- air" ||
+        selectedLevel === "WTT- business travel- air"
+      ) {
+        const airportsName = filterAirportsName(airports);
+        const airportsNameExceptSelectedInLevel2 = airportsName.filter(
+          (airportName) => {
+            return airportName !== fuelTypeValue;
+          }
+        );
+        setFuelNames(airportsNameExceptSelectedInLevel2);
       }
-    }
-
-    if (
-      selectedLevel === "Business travel- air" ||
-      selectedLevel === "WTT- business travel- air"
-    ) {
-      const airportsName = filterAirportsName(airports);
-      const airportsNameExceptSelectedInLevel2 = airportsName.filter(
-        (airportName) => {
-          return airportName !== fuelTypeValue;
-        }
-      );
-      setFuelNames(airportsNameExceptSelectedInLevel2);
     }
   }, [fuelTypeValue]);
 
@@ -1512,13 +1541,10 @@ const ActivitesForm = ({
       selectedLevel === "Business travel- air" ||
       selectedLevel === "WTT- business travel- air"
     ) {
-      fetchAirports()
-        .then((airports) => {
-          setAirports(airports);
-          return filterAirportsName(airports);
-        })
-        .then((airportsName) => setFuelTypes(airportsName))
-        .catch((error) => console.log(error));
+      fetchAirports().then((airports) => {
+        setAirports(airports);
+        setFuelTypes(filterAirportsName(airports));
+      });
     }
   }, []);
 
