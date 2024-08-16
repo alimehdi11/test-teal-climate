@@ -335,6 +335,17 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
           />
         </FormControl>
 
+        {/* Production / Clients */}
+        <FormControl>
+          <Label>Production / Clients (optional)</Label>
+          <Input
+            type="number"
+            value={productionClients}
+            min="0"
+            onChange={(e) => setProductionClients(e.target.value)}
+          />
+        </FormControl>
+
         {/* Quantity Dropdown */}
         <FormControl>
           <Label>Ownership / Partnership %</Label>
@@ -350,17 +361,6 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
             onChange={(e) =>
               setOwnershipPercentage(Math.min(100, Math.max(0, e.target.value)))
             }
-          />
-        </FormControl>
-
-        {/* Production / Clients */}
-        <FormControl>
-          <Label>Production / Clients (optional)</Label>
-          <Input
-            type="number"
-            value={productionClients}
-            min="0"
-            onChange={(e) => setProductionClients(e.target.value)}
           />
         </FormControl>
 
