@@ -16,7 +16,7 @@ import {
 const ProfileTable = ({
   userBusinessUnits,
   fetchUserBusinessUnits,
-  setSelectedForm,
+  // setSelectedForm,
 }) => {
   const handleDelete = (id) => {
     return () => {
@@ -28,17 +28,21 @@ const ProfileTable = ({
           if (!response.ok) {
             throw new Error();
           }
-          toast.success("Data delete successfully");
+          toast.success("Data deleted successfully");
         })
         .then(() => {
           fetchUserBusinessUnits();
         })
         .catch((error) => {
           toast.error("Error deleting data");
-          console.log(error);
+          console.error(error);
         });
     };
   };
+
+  if (userBusinessUnits.length === 0) {
+    return null;
+  }
 
   return (
     <TableContainer>
@@ -63,40 +67,39 @@ const ProfileTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {userBusinessUnits.length > 0 &&
-            userBusinessUnits.map((userBusinessUnit, index) => (
-              <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{userBusinessUnit.title}</TableCell>
-                <TableCell>{userBusinessUnit.continent}</TableCell>
-                <TableCell>{userBusinessUnit.country}</TableCell>
-                <TableCell>{userBusinessUnit.region}</TableCell>
-                <TableCell>{userBusinessUnit.noOfEmployees || "-"}</TableCell>
-                <TableCell>{userBusinessUnit.production || "-"}</TableCell>
-                <TableCell>{userBusinessUnit.revenue || "-"}</TableCell>
-                <TableCell>{userBusinessUnit.notes || "-"}</TableCell>
-                <TableCell>{userBusinessUnit.partnership}</TableCell>
-                <TableCell>
-                  <div className="flex justify-center gap-x-1">
-                    <Link
-                      to={`/profile/${userBusinessUnit.id}/edit`}
-                      className="flex justify-center items-center"
-                      onClick={() => setSelectedForm("Portfolio")}
-                    >
-                      <img
-                        src={editIcon}
-                        className="p-1 rounded hover:bg-slate-300 size-7"
-                      />
-                    </Link>
+          {userBusinessUnits.map((userBusinessUnit, index) => (
+            <TableRow key={index}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{userBusinessUnit.title}</TableCell>
+              <TableCell>{userBusinessUnit.continent}</TableCell>
+              <TableCell>{userBusinessUnit.country}</TableCell>
+              <TableCell>{userBusinessUnit.region}</TableCell>
+              <TableCell>{userBusinessUnit.noOfEmployees || "-"}</TableCell>
+              <TableCell>{userBusinessUnit.production || "-"}</TableCell>
+              <TableCell>{userBusinessUnit.revenue || "-"}</TableCell>
+              <TableCell>{userBusinessUnit.notes || "-"}</TableCell>
+              <TableCell>{userBusinessUnit.partnership}</TableCell>
+              <TableCell>
+                <div className="flex justify-center gap-x-1">
+                  <Link
+                    to={`/profile/${userBusinessUnit.id}/edit`}
+                    className="flex justify-center items-center"
+                    // onClick={() => setSelectedForm("Portfolio")}
+                  >
                     <img
-                      src={trashIcon}
+                      src={editIcon}
                       className="p-1 rounded hover:bg-slate-300 size-7"
-                      onClick={handleDelete(userBusinessUnit.id)}
                     />
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+                  </Link>
+                  <img
+                    src={trashIcon}
+                    className="p-1 rounded hover:bg-slate-300 size-7"
+                    onClick={handleDelete(userBusinessUnit.id)}
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

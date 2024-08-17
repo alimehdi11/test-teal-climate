@@ -9,8 +9,8 @@ const createBusinessUnit = async (req, res) => {
       region,
       revenue,
       noOfEmployees,
-      partnership,
       production,
+      partnership,
       notes,
     } = req.body;
     await BusinessUnit.create({
@@ -19,10 +19,10 @@ const createBusinessUnit = async (req, res) => {
       continent,
       country,
       region,
-      revenue,
-      noOfEmployees,
+      revenue: Number(revenue),
+      noOfEmployees: Number(noOfEmployees),
+      production: Number(production),
       partnership,
-      production,
       notes,
     });
     return res

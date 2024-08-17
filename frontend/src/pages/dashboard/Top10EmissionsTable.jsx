@@ -34,9 +34,11 @@ const Top10EmissionsTable = () => {
 
   useEffect(() => {
     fetchUserTop10Emissions().then((userTop10Emissions) => {
-      // if (userTop10Emissions) {
-      setUserTop10Emissions(userTop10Emissions);
-      // }
+      if (userTop10Emissions.length > 0) {
+        setUserTop10Emissions(userTop10Emissions);
+      } else {
+        setUserTop10Emissions(Array(10).fill({}));
+      }
     });
   }, []);
 
@@ -65,22 +67,21 @@ const Top10EmissionsTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {userTop10Emissions.length > 0 &&
-            userTop10Emissions.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{item.scope || "-"}</TableCell>
-                <TableCell>{item.businessUnit.title || "-"}</TableCell>
-                <TableCell>{item.level1Category || "-"}</TableCell>
-                <TableCell>{item.level1 || "-"}</TableCell>
-                <TableCell>{item.level2 || "-"}</TableCell>
-                <TableCell>{item.level3 || "-"}</TableCell>
-                <TableCell>{item.level4 || "-"}</TableCell>
-                <TableCell>{item.unitOfMeasurement || "-"}</TableCell>
-                <TableCell>{item.quantity || "-"}</TableCell>
-                <TableCell>{item.CO2e.toFixed(2) || "-"}</TableCell>
-              </TableRow>
-            ))}
+          {userTop10Emissions.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{item.scope || "-"}</TableCell>
+              <TableCell>{item.businessUnit?.title || "-"}</TableCell>
+              <TableCell>{item.level1Category || "-"}</TableCell>
+              <TableCell>{item.level1 || "-"}</TableCell>
+              <TableCell>{item.level2 || "-"}</TableCell>
+              <TableCell>{item.level3 || "-"}</TableCell>
+              <TableCell>{item.level4 || "-"}</TableCell>
+              <TableCell>{item.unitOfMeasurement || "-"}</TableCell>
+              <TableCell>{item.quantity || "-"}</TableCell>
+              <TableCell>{item.CO2e?.toFixed(2) || "-"}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

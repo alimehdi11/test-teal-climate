@@ -11,7 +11,7 @@ import Layout from "../../components/layout/Layout.jsx";
 
 const Profile = () => {
   const [userBusinessUnits, setUserBusinessUnits] = useState([]);
-  const [selectedForm, setSelectedForm] = useState("");
+  // const [selectedForm, setSelectedForm] = useState("");
   const { user } = useContext(UserContext);
 
   const fetchUserBusinessUnits = async () => {
@@ -40,34 +40,34 @@ const Profile = () => {
       <Layout
         sidebarContent={
           <ProfileSidebar
-            selectedForm={selectedForm}
-            setSelectedForm={setSelectedForm}
+          // selectedForm={selectedForm}
+          // setSelectedForm={setSelectedForm}
           />
         }
         mainContent={
-          selectedForm ? (
-            (selectedForm === "Basic" && <BasicForm />) ||
-            (selectedForm === "Portfolio" && (
-              <PortfolioForm
-                userBusinessUnits={userBusinessUnits}
-                fetchUserBusinessUnits={fetchUserBusinessUnits}
-              />
-            ))
-          ) : (
-            <div
-              className="h-full bg-gray-200 flex justify-center items-center font-bold text-gray-500 rounded-lg"
-              style={{ height: "calc(100vh - 64px - 16px)" }}
-            >
-              <FaArrowLeftLong className="text-[20px] me-2" />
-              Please select option from the sidebar
-            </div>
-          )
+          // selectedForm ? (
+          // (selectedForm === "Basic" && <BasicForm />) ||
+          // selectedForm === "Portfolio" && (
+          <PortfolioForm
+            userBusinessUnits={userBusinessUnits}
+            fetchUserBusinessUnits={fetchUserBusinessUnits}
+          />
+          // ) : (
+          //   // )
+          //   <div
+          //     className="h-full bg-gray-200 flex justify-center items-center font-bold text-gray-500 rounded-lg"
+          //     style={{ height: "calc(100vh - 64px - 16px)" }}
+          //   >
+          //     <FaArrowLeftLong className="text-[20px] me-2" />
+          //     Please select option from the sidebar
+          //   </div>
+          // )
         }
       />
       <ProfileTable
         userBusinessUnits={userBusinessUnits}
         fetchUserBusinessUnits={fetchUserBusinessUnits}
-        setSelectedForm={setSelectedForm}
+        // setSelectedForm={setSelectedForm}
       />
     </>
   );

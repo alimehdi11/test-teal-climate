@@ -62,6 +62,11 @@ const ActivitiesTable = ({
       }
     };
   };
+
+  if (userBusinessUnitsActivities.length === 0) {
+    return null;
+  }
+
   return (
     <TableContainer>
       <Table>
@@ -104,47 +109,44 @@ const ActivitiesTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {userBusinessUnitsActivities.length > 0 &&
-            userBusinessUnitsActivities.map((userBusinessUnit, index) => (
-              <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{userBusinessUnit.scope || "-"}</TableCell>
-                <TableCell>
-                  {userBusinessUnit.businessUnit.title || "-"}
-                </TableCell>
-                <TableCell>{userBusinessUnit.level1Category || "-"}</TableCell>
-                <TableCell>{userBusinessUnit.level1 || "-"}</TableCell>
-                <TableCell>{userBusinessUnit.level2 || "-"}</TableCell>
-                <TableCell>{userBusinessUnit.level3 || "-"}</TableCell>
-                <TableCell>{userBusinessUnit.level4 || "-"}</TableCell>
-                <TableCell>{userBusinessUnit.level5 || "-"}</TableCell>
-                <TableCell>
-                  {userBusinessUnit.unitOfMeasurement || "-"}
-                </TableCell>
-                <TableCell>{userBusinessUnit.quantity || "-"}</TableCell>
-                <TableCell>
-                  {userBusinessUnit.CO2e === 0
-                    ? "-"
-                    : userBusinessUnit.CO2e?.toFixed(2) || "-"}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnit.CO2e_of_CO2 === 0
-                    ? "-"
-                    : userBusinessUnit.CO2e_of_CO2?.toFixed(2) || "-"}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnit.CO2e_of_CH4 === 0
-                    ? "-"
-                    : userBusinessUnit.CO2e_of_CH4?.toFixed(2) || "-"}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnit.CO2e_of_N2O === 0
-                    ? "-"
-                    : userBusinessUnit.CO2e_of_N2O?.toFixed(2) || "-"}
-                </TableCell>
-                <TableCell>
-                  <div className="flex justify-center gap-x-1">
-                    {/* <Link
+          {userBusinessUnitsActivities.map((userBusinessUnit, index) => (
+            <TableRow key={index}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{userBusinessUnit.scope || "-"}</TableCell>
+              <TableCell>
+                {userBusinessUnit.businessUnit.title || "-"}
+              </TableCell>
+              <TableCell>{userBusinessUnit.level1Category || "-"}</TableCell>
+              <TableCell>{userBusinessUnit.level1 || "-"}</TableCell>
+              <TableCell>{userBusinessUnit.level2 || "-"}</TableCell>
+              <TableCell>{userBusinessUnit.level3 || "-"}</TableCell>
+              <TableCell>{userBusinessUnit.level4 || "-"}</TableCell>
+              <TableCell>{userBusinessUnit.level5 || "-"}</TableCell>
+              <TableCell>{userBusinessUnit.unitOfMeasurement || "-"}</TableCell>
+              <TableCell>{userBusinessUnit.quantity || "-"}</TableCell>
+              <TableCell>
+                {userBusinessUnit.CO2e === 0
+                  ? "-"
+                  : userBusinessUnit.CO2e?.toFixed(2) || "-"}
+              </TableCell>
+              <TableCell>
+                {userBusinessUnit.CO2e_of_CO2 === 0
+                  ? "-"
+                  : userBusinessUnit.CO2e_of_CO2?.toFixed(2) || "-"}
+              </TableCell>
+              <TableCell>
+                {userBusinessUnit.CO2e_of_CH4 === 0
+                  ? "-"
+                  : userBusinessUnit.CO2e_of_CH4?.toFixed(2) || "-"}
+              </TableCell>
+              <TableCell>
+                {userBusinessUnit.CO2e_of_N2O === 0
+                  ? "-"
+                  : userBusinessUnit.CO2e_of_N2O?.toFixed(2) || "-"}
+              </TableCell>
+              <TableCell>
+                <div className="flex justify-center gap-x-1">
+                  {/* <Link
                       to={`/activities/${userBusinessUnit.id}/edit`}
                       className="flex justify-center items-center"
                     >
@@ -154,15 +156,15 @@ const ActivitiesTable = ({
                         onClick={handleEdit(userBusinessUnit.id)}
                       />
                     </Link> */}
-                    <img
-                      src={trashIcon}
-                      className="p-1 rounded hover:bg-slate-300 size-7"
-                      onClick={handleDelete(userBusinessUnit.id)}
-                    />
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+                  <img
+                    src={trashIcon}
+                    className="p-1 rounded hover:bg-slate-300 size-7"
+                    onClick={handleDelete(userBusinessUnit.id)}
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

@@ -92,42 +92,40 @@ const WorldMap = () => {
   }, []);
 
   return (
-    userBusinessUnitsActivities.length > 0 && (
-      <div className="mx-4 p-4 flex flex-col lg:flex-row gap-4 mt-4 rounded-lg bg-white">
-        {/* Emissions bar */}
-        <div className="lg:flex-1 max-w-[400px]">
-          <h3 className="lg:mt-0">Location wise Emissions</h3>
-          <div
-            className="h-[15px] rounded-[100px] min-w-[300px]"
-            style={{
-              background:
-                "linear-gradient(90deg, #FFECAA 0%, #FFC700 32.07%, #FFA400 64.04%, #FF6B00 100%)",
-            }}
-          ></div>
-          <div className="flex justify-between">
-            <span>0 %</span>
-            <span>100 %</span>
-          </div>
+    <div className="mx-4 p-4 flex flex-col lg:flex-row gap-4 mt-4 rounded-lg bg-white">
+      {/* Emissions bar */}
+      <div className="lg:flex-1 max-w-[400px]">
+        <h3 className="lg:mt-0">Location wise Emissions</h3>
+        <div
+          className="h-[15px] rounded-[100px] min-w-[300px]"
+          style={{
+            background:
+              "linear-gradient(90deg, #FFECAA 0%, #FFC700 32.07%, #FFA400 64.04%, #FF6B00 100%)",
+          }}
+        ></div>
+        <div className="flex justify-between">
+          <span>0 %</span>
+          <span>100 %</span>
         </div>
-        <MapContainer
-          className="w-full h-full min-h-[300px] bg-white md:min-h-[600px] rounded-lg lg:flex-2"
-          center={[50, 20]}
-          zoom={2}
-          zoomControl={false}
-          scrollWheelZoom={false}
-          doubleClickZoom={false}
-          touchZoom={false}
-          dragging={false}
-          attributionControl={false}
-        >
-          <GeoJSON
-            data={worldMapJson}
-            style={geoJsonStyle}
-            onEachFeature={onEachFeature}
-          />
-        </MapContainer>
       </div>
-    )
+      <MapContainer
+        className="w-full h-full min-h-[300px] bg-white md:min-h-[600px] rounded-lg lg:flex-2"
+        center={[50, 20]}
+        zoom={2}
+        zoomControl={false}
+        scrollWheelZoom={false}
+        doubleClickZoom={false}
+        touchZoom={false}
+        dragging={false}
+        attributionControl={false}
+      >
+        <GeoJSON
+          data={worldMapJson}
+          style={geoJsonStyle}
+          onEachFeature={onEachFeature}
+        />
+      </MapContainer>
+    </div>
   );
 };
 export default WorldMap;
