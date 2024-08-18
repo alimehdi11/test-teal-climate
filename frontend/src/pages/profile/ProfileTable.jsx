@@ -61,7 +61,7 @@ const ProfileTable = ({
               "Notes",
               "Partnership",
               "Actions",
-            ].map((item, index) => (
+            ].map((item) => (
               <TableHead key={item}>{item}</TableHead>
             ))}
           </TableRow>

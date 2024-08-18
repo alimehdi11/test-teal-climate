@@ -108,7 +108,7 @@ const Navbar = () => {
       {/* Profile and Notification Icons*/}
       <div className="hidden md:flex items-center gap-x-2">
         {/* <img src={messagesIcon} className="rounded-full" /> */}
-        <img src={notificationIcon} className="rounded-full" />
+        {/* <img src={notificationIcon} className="rounded-full" /> */}
         <Link
           to="/settings/account"
           className={
@@ -201,9 +201,9 @@ const Navbar = () => {
         {/* Profile and Notification Icons*/}
         <div className="mt-3 flex justify-center items-center gap-x-2">
           {/* <img src={messagesIcon} className="rounded-full" /> */}
-          <img src={notificationIcon} className="rounded-full" />
+          {/* <img src={notificationIcon} className="rounded-full" /> */}
           <Link
-            to="/settings"
+            to="/settings/account"
             className={
               "no-underline text-black hover:text-white bg-[#F7F8FA] rounded-full w-10 h-10 flex justify-center items-center text-[21px] hover:bg-tc-green" +
               (paths.isSettingsPath ? " text-white bg-tc-green" : "")

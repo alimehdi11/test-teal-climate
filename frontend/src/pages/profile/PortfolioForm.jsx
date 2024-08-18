@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-// import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";
 import FormControl from "../../components/FormControl.jsx";
@@ -24,9 +24,11 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   const [productionClients, setProductionClients] = useState("");
   const [notes, setNotes] = useState("");
 
-  // const { id } = useParams();
+  const [editMode, setEditMode] = useState(false);
 
-  // const navigate = useNavigate();
+  const { id } = useParams();
+
+  const navigate = useNavigate();
 
   const continents = [
     "Europe",
@@ -151,55 +153,55 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
     }
   };
 
-  // const handleCancel = () => {
-  //   resetForm();
-  //   navigate("/profile");
-  // };
+  const handleCancel = () => {
+    resetForm();
+    navigate("/profile");
+  };
 
-  // const handleUpdate = () => {
-  //   if (
-  //     !businessUnitTitle ||
-  //     !selectedContinent ||
-  //     !selectedCountry ||
-  //     !selectedRegion ||
-  //     // revenue ||
-  //     // employees ||
-  //     !ownershipPercentage
-  //     // productionClients ||
-  //     // notes
-  //   ) {
-  //     toast.warn("Please fill all fields");
-  //     return;
-  //   }
+  const handleUpdate = () => {
+    if (
+      !businessUnitTitle ||
+      !selectedContinent ||
+      !selectedCountry ||
+      !selectedRegion ||
+      // revenue ||
+      // employees ||
+      !ownershipPercentage
+      // productionClients ||
+      // notes
+    ) {
+      toast.warn("Please fill all fields");
+      return;
+    }
 
-  //   request(`${import.meta.env.VITE_API_BASE_URL}/businessUnits/${id}`, "PUT", {
-  //     title: businessUnitTitle,
-  //     continent: selectedContinent,
-  //     country: selectedCountry,
-  //     region: selectedRegion,
-  //     revenue: revenue,
-  //     noOfEmployees: employees,
-  //     partnership: ownershipPercentage,
-  //     production: productionClients,
-  //     notes: notes,
-  //   })
-  //     .then(async (response) => {
-  //       if (!response.ok) {
-  //         throw new Error(`${JSON.stringify(await response.json())}`);
-  //       }
-  //       toast.success((await response.json()).message);
-  //       resetForm();
-  //       navigate("/profile");
-  //     })
-  //     .then(() => {
-  //       fetchUserBusinessUnits();
-  //     })
-  //     .catch((error) => {
-  //       const errorMessage = JSON.parse(error.message).error;
-  //       toast.error(errorMessage);
-  //       console.error("Error updating data : ", errorMessage);
-  //     });
-  // };
+    request(`${import.meta.env.VITE_API_BASE_URL}/businessUnits/${id}`, "PUT", {
+      title: businessUnitTitle,
+      continent: selectedContinent,
+      country: selectedCountry,
+      region: selectedRegion,
+      revenue: revenue,
+      noOfEmployees: employees,
+      partnership: ownershipPercentage,
+      production: productionClients,
+      notes: notes,
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`${JSON.stringify(await response.json())}`);
+        }
+        toast.success((await response.json()).message);
+        resetForm();
+        navigate("/profile");
+      })
+      .then(() => {
+        fetchUserBusinessUnits();
+      })
+      .catch((error) => {
+        const errorMessage = JSON.parse(error.message).error;
+        toast.error(errorMessage);
+        console.error("Error updating data : ", errorMessage);
+      });
+  };
 
   const filterCountriesByContinent = () => {
     const countries = [];
@@ -228,28 +230,34 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   }, []);
 
   useEffect(() => {
-    setSelectedRegion("");
-    setSelectedCountry("");
-    setCountries([]);
-    setRegions([]);
     if (selectedContinent) {
+      if (editMode) {
+        setEditMode(false);
+      } else {
+        setSelectedCountry("");
+      }
       filterCountriesByContinent();
+    } else {
+      setSelectedCountry("");
+      setCountries([]);
     }
   }, [selectedContinent]);
 
   useEffect(() => {
-    setSelectedRegion("");
-    setRegions([]);
     if (selectedCountry) {
       filterRegionByCountries();
+    } else {
+      setSelectedRegion("");
+      setRegions([]);
     }
   }, [selectedCountry]);
 
-  // useEffect(() => {
-  //   if (id) {
-  //     fetchBusinessUnitById();
-  //   }
-  // }, [id]);
+  useEffect(() => {
+    if (id) {
+      fetchBusinessUnitById();
+      setEditMode(true);
+    }
+  }, [id]);
 
   return (
     <form onSubmit={handleFormSubmit}>
@@ -374,14 +382,14 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
           />
         </FormControl>
       </div>
-      <Button
+      {/* <Button
         className="w-full mt-4 text-white bg-tc-green hover:bg-opacity-90"
         type="submit"
       >
         Add
-      </Button>
+      </Button> */}
       {/* Buttons */}
-      {/* {id ? (
+      {id ? (
         <div className="flex flex-col mt-4 gap-4 md:flex-row">
           <Button
             type="button"
@@ -405,7 +413,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
         >
           Add
         </Button>
-      )} */}
+      )}
     </form>
   );
 };
