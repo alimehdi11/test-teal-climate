@@ -3,6 +3,7 @@ import "./../src/models/subscription.model.js";
 import "./../src/models/businessUnitEeio.model.js";
 import "./../src/models/businessUnitActivity.model.js";
 import "./../src/models/businessUnit.model.js";
+import "./../src/models/resetPasswordToken.model.js";
 import { Level1Category } from "./../src/models/level1Category.model.js";
 import { ElectricVehicle } from "./../src/models/electricVehicle.model.js";
 import { Country } from "./../src/models/country.model.js";

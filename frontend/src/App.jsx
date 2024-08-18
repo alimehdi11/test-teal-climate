@@ -13,6 +13,8 @@ import Eeio from "./pages/eeio/Eeio";
 import SubscriptionSettings from "./pages/settings/SubscriptionSettings.jsx";
 import AccountSettings from "./pages/settings/AccountSettings.jsx";
 import AccountSettingsEdit from "./pages/settings/AccountSettingsEdit.jsx";
+import ForgetPassword from "./pages/ForgetPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 
 function App() {
   return (
@@ -61,6 +63,8 @@ function App() {
           path="/settings/subscription"
           element={<ProtectedRoute Component={SubscriptionSettings} />}
         />
+        <Route path="/forget-password" element={<ForgetPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   );

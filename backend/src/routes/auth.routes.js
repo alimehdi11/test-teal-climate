@@ -3,6 +3,8 @@ import {
   registerUser,
   loginUser,
   updateToken,
+  forgetPassword,
+  resetPassword,
 } from "./../controllers/auth.controllers.js";
 import { verifyToken } from "./../middlewares/auth.middlewares.js";
 
@@ -16,5 +18,11 @@ authRouter.post("/login", loginUser);
 
 // Update JWT
 authRouter.post("/token", verifyToken, updateToken);
+
+// Forget password
+authRouter.post("/forget-password", forgetPassword);
+
+// Reset password
+authRouter.post("/reset-password", resetPassword);
 
 export { authRouter };

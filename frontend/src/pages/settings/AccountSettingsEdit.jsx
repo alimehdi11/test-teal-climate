@@ -132,15 +132,6 @@ const AccountSettingsEdit = () => {
                     onChange={(event) => handleInputChange(event)}
                   />
                 </FormControl>
-                {/* <FormControl>
-                  <Label>Email</Label>
-                  <Input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={(event) => handleInputChange(event)}
-                  />
-                </FormControl> */}
                 <FormControl>
                   <Label>Phone Number</Label>
                   <Input

@@ -195,6 +195,15 @@ const Login = () => {
             Signup
           </Link>
         </div>
+        {/* Reset Password link */}
+        <div>
+          <Link
+            to="/forget-password"
+            className="text-tc-blue hover:bg-slate-300 rounded p-1"
+          >
+            Forget password?
+          </Link>
+        </div>
       </div>
     )
   );

@@ -1,11 +1,17 @@
 import bcrypt from "bcrypt";
-import { issueJWT } from "./../services/auth.services.js";
 import {
   getSubscriptionFromStripe,
   getSubscription,
 } from "./../services/subscription.services.js";
 import { User } from "../models/user.model.js";
+import { ResetPasswordToken } from "../models/resetPasswordToken.model.js";
 import { Subscription } from "../models/subscription.model.js";
+import {
+  issueJWT,
+  generateResetPasswordToken,
+  sendMail,
+} from "./../services/auth.services.js";
+import jwt from "jsonwebtoken";
 
 const registerUser = async (req, res) => {
   try {
@@ -128,4 +134,77 @@ const updateToken = (req, res) => {
   }
 };
 
-export { registerUser, loginUser, updateToken };
+const forgetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const token = generateResetPasswordToken(user);
+    const tokenRecord = await ResetPasswordToken.findOne({
+      where: {
+        userId: user.id,
+      },
+    });
+    if (tokenRecord) {
+      // Update token in db
+      await ResetPasswordToken.update(
+        { token },
+        {
+          where: {
+            userId: user.id,
+          },
+        }
+      );
+    } else {
+      // Save token in db
+      await ResetPasswordToken.create({ userId: user.id, token });
+    }
+    // Send token in email
+    await sendMail(user.email, token);
+    return res
+      .status(200)
+      .json({ message: "Reset password link sent to your email." });
+  } catch (error) {
+    console.error("Could not forgetPassword");
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+    const { token } = req.query;
+    if (!token) {
+      return res.status(400).json({ error: "Invalid token" });
+    }
+    const isVerified = jwt.verify(token, process.env.AUTH_JWT_SECRET_KEY);
+    if (!isVerified) {
+      return res.status(400).json({ error: "Invalid token" });
+    }
+    const tokenRecord = await ResetPasswordToken.findOne({ where: { token } });
+    if (!tokenRecord) {
+      return res.status(400).json({ error: "Invalid token" });
+    }
+    const { userId } = tokenRecord;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.update(
+      { password: hashedPassword },
+      {
+        where: {
+          id: userId,
+        },
+      }
+    );
+    await ResetPasswordToken.destroy({ where: { id: tokenRecord.id } });
+    return res.status(200).json({ message: "Password resetted" });
+  } catch (error) {
+    console.error("Could not resetPassword");
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export { registerUser, loginUser, updateToken, forgetPassword, resetPassword };
