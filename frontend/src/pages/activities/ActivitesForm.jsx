@@ -14,6 +14,8 @@ const ActivitesForm = ({
   selectedScope,
   selectedLevel,
   fetchUserBusinessUnitsActivities,
+  setSelectedScope,
+  setSelectedLevel,
 }) => {
   const [scopeCategoryValue, setScopeCategoryValue] = useState("");
   const [fuelTypeValue, setFuelTypeValue] = useState(""); // level2
@@ -213,7 +215,8 @@ const ActivitesForm = ({
         activity.level1 === selectedLevel &&
         activity.level2 === payload.level2 &&
         activity.level3 === payload.level3 &&
-        (activity.level4 === payload.level4 || activity.level4 === "null") &&
+        // (activity.level4 === payload.level4 || activity.level4 === "null") &&
+        activity.level4 === payload.level4 &&
         activity.unitOfMeasurement === unitOfMeasurementValue
       );
     };
@@ -453,8 +456,8 @@ const ActivitesForm = ({
         level1: selectedLevel,
         level2: fuelTypeValue || null,
         level3: null,
-        level4: null,
-        level5: null,
+        level4: "",
+        level5: "",
       };
 
       // for Water supply and Water treatment we do not have to fetch country and region based on businessunit
@@ -498,8 +501,8 @@ const ActivitesForm = ({
         scope: selectedScope,
         level1: selectedLevel,
         level2: null, // filter out
-        level3: fuelNameValue || null, // from form / not available
-        level4: level4Value || null, // from form / not available
+        level3: fuelNameValue || "", // from form / not available
+        level4: level4Value || "", // from form / not available
         level5: null, // filter out
       };
       // find level2 and level5 and then calculate ghgconversions and then update payload
@@ -698,6 +701,14 @@ const ActivitesForm = ({
           console.error("Couldn't submit data", error);
         });
     }
+
+    // Resetting form has some issues. So I am resetting the level1 and scope. And select again.
+    const selectedLevelValue = selectedLevel;
+    const selectedScopeValue = selectedScope;
+    setSelectedLevel("");
+    setSelectedLevel(selectedLevelValue);
+    setSelectedScope("");
+    setSelectedScope(selectedScopeValue);
   };
 
   const handleUpdateData = async () => {
@@ -1704,7 +1715,7 @@ const ActivitesForm = ({
         )}
 
         {/* level4 */}
-        {showLevel4Field && (
+        {showLevel4Field && level4Options.length > 0 && (
           <FormControl>
             <Label>
               {selectedLevel

@@ -66,6 +66,8 @@ const Activities = () => {
               fetchUserBusinessUnitsActivities={
                 fetchUserBusinessUnitsActivities
               }
+              setSelectedScope={setSelectedScope}
+              setSelectedLevel={setSelectedLevel}
             />
           ) : (
             <div

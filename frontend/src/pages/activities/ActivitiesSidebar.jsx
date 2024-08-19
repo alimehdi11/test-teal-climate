@@ -29,10 +29,14 @@ const ActivitiesSidebar = ({
       if (searchQuery === "") {
         setLevel1(filterLevel1(selectedScope));
       } else {
+        const filteredLevel1 = level1.filter((level) =>
+          level.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
         setLevel1(
-          level1.filter((level) =>
-            level.toLowerCase().includes(searchQuery.toLowerCase())
-          )
+          filteredLevel1.length === 0
+            ? filterLevel1(selectedScope)
+            : filteredLevel1
         );
       }
     } else {

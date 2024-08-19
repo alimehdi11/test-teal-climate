@@ -309,16 +309,16 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
         {/* Country */}
         <FormControl className="relative">
           <Label>Country</Label>
-          <Button
+          <button
             type="button"
-            className="p-3 bg-white text-black hover:bg-white hover:text-black border border-slate-500 flex justify-between items-center"
+            className="p-2 bg-white text-black hover:bg-white hover:text-black border border-slate-500 rounded-lg flex justify-between items-center"
             onClick={(e) => {
               setShowCountriesOptions((prev) => !prev);
             }}
           >
             {selectedCountry || "Select Country"}
             <FaAngleDown className="text-[0.8rem] -me-[6px]" />
-          </Button>
+          </button>
           {showCountriesOptions &&
             (countries.length > 0 ? (
               <ul className="absolute bg-white w-full top-[105%] border border-slate-500 overflow-y-auto max-h-60">
