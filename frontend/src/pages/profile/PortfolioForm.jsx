@@ -311,7 +311,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
           <Label>Country</Label>
           <Button
             type="button"
-            className="p-3 bg-white text-[#000] hover:bg-white hover:text-[#000] border border-slate-500 flex justify-between items-center"
+            className="p-3 bg-white text-black hover:bg-white hover:text-black border border-slate-500 flex justify-between items-center"
             onClick={(e) => {
               setShowCountriesOptions((prev) => !prev);
             }}

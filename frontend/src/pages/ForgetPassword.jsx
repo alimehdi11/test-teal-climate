@@ -24,6 +24,10 @@ const ResetPassword = () => {
       const response = await request(url, "POST", payload);
       if (response.status !== 200) {
         let responseData = await response.json();
+        if (response.status === 404) {
+          toast.error(responseData.message);
+          throw new Error(responseData.message);
+        }
         throw new Error(responseData.error);
       }
       toast.success((await response.json()).message);
