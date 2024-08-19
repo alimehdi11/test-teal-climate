@@ -7,6 +7,7 @@ import FormControl from "../../components/FormControl.jsx";
 import Input from "../../components/ui/Input.jsx";
 import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
+import { FaAngleDown } from "react-icons/fa6";
 
 const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   const [countriesData, setCountriesData] = useState([]);
@@ -23,6 +24,9 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   const [ownershipPercentage, setOwnershipPercentage] = useState(100);
   const [productionClients, setProductionClients] = useState("");
   const [notes, setNotes] = useState("");
+  const [showCountriesOptions, setShowCountriesOptions] = useState(false);
+  const [filterCountryBy, setFilterCountryBy] = useState("");
+  const [filteredCountries, setFilteredCountries] = useState([]);
 
   const [editMode, setEditMode] = useState(false);
 
@@ -241,6 +245,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       setSelectedCountry("");
       setCountries([]);
     }
+    setFilterCountryBy("");
   }, [selectedContinent]);
 
   useEffect(() => {
@@ -258,6 +263,18 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       setEditMode(true);
     }
   }, [id]);
+
+  useEffect(() => {
+    if (filterCountryBy === "") {
+      setFilteredCountries(countries);
+    } else {
+      setFilteredCountries(
+        countries.filter((country) => {
+          return country.toLowerCase().includes(filterCountryBy.toLowerCase());
+        })
+      );
+    }
+  }, [filterCountryBy, countries]);
 
   return (
     <form onSubmit={handleFormSubmit}>
@@ -290,9 +307,50 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
         </FormControl>
 
         {/* Country */}
-        <FormControl>
+        <FormControl className="relative">
           <Label>Country</Label>
-          <Select
+          <Button
+            type="button"
+            className="p-3 bg-white text-[#000] hover:bg-white hover:text-[#000] border border-slate-500 flex justify-between items-center"
+            onClick={(e) => {
+              setShowCountriesOptions((prev) => !prev);
+            }}
+          >
+            {selectedCountry || "Select Country"}
+            <FaAngleDown className="text-[0.8rem] -me-[6px]" />
+          </Button>
+          {showCountriesOptions &&
+            (countries.length > 0 ? (
+              <ul className="absolute bg-white w-full top-[105%] border border-slate-500 overflow-y-auto max-h-60">
+                <Input
+                  placeholder="Search country"
+                  value={filterCountryBy}
+                  onChange={(e) => setFilterCountryBy(e.target.value)}
+                />
+                {filteredCountries.length > 0 ? (
+                  filteredCountries.map((country) => (
+                    <li
+                      key={country}
+                      onClick={() => {
+                        setSelectedCountry(country);
+                        setShowCountriesOptions(false);
+                      }}
+                      className="hover:bg-gray-500 hover:text-white px-2 cursor-pointer"
+                    >
+                      {country}
+                    </li>
+                  ))
+                ) : (
+                  <li className="px-2">No match found</li>
+                )}
+              </ul>
+            ) : (
+              <div className="absolute bg-gray-500 text-white w-full top-[105%] px-2">
+                Select Country
+              </div>
+            ))}
+
+          {/* <Select
             value={selectedCountry}
             onChange={(e) => setSelectedCountry(e.target.value)}
           >
@@ -302,7 +360,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
                 {country}
               </option>
             ))}
-          </Select>
+          </Select> */}
         </FormControl>
 
         {/* Region */}
