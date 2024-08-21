@@ -102,11 +102,23 @@ const EeioTable = ({
                 <TableCell>{eeio.exioBaseCode || "-"}</TableCell>
                 <TableCell>{eeio.unitOfMeasurement || "-"}</TableCell>
                 <TableCell>{eeio.quantity || "-"}</TableCell>
-                <TableCell>{eeio.CO2e?.toFixed(2) || "-"}</TableCell>
-                <TableCell>{eeio.CO2e_of_CO2?.toFixed(2) || "-"}</TableCell>
-                <TableCell>{eeio.CO2e_of_CH4?.toFixed(2) || "-"}</TableCell>
-                <TableCell>{eeio.CO2e_of_N2O?.toFixed(2) || "-"}</TableCell>
-                <TableCell>{eeio.CO2e_of_other?.toFixed(2) || "-"}</TableCell>
+                <TableCell>
+                  {eeio.CO2e === 0 ? "-" : eeio.CO2e?.toFixed(2)}
+                </TableCell>
+                <TableCell>
+                  {eeio.CO2e_of_CO2 === 0 ? "-" : eeio.CO2e_of_CO2?.toFixed(2)}
+                </TableCell>
+                <TableCell>
+                  {eeio.CO2e_of_CH4 === 0 ? "-" : eeio.CO2e_of_CH4?.toFixed(2)}
+                </TableCell>
+                <TableCell>
+                  {eeio.CO2e_of_N2O === 0 ? "-" : eeio.CO2e_of_N2O?.toFixed(2)}
+                </TableCell>
+                <TableCell>
+                  {eeio.CO2e_of_other === 0
+                    ? "-"
+                    : eeio.CO2e_of_other?.toFixed(2)}
+                </TableCell>
                 <TableCell>{eeio.continent || "-"}</TableCell>
                 <TableCell>{eeio.country || "-"}</TableCell>
                 <TableCell>{eeio.reference || "-"}</TableCell>

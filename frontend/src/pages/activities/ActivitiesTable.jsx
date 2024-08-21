@@ -127,22 +127,22 @@ const ActivitiesTable = ({
               <TableCell>
                 {userBusinessUnit.CO2e === 0
                   ? "-"
-                  : userBusinessUnit.CO2e?.toFixed(2) || "-"}
+                  : userBusinessUnit.CO2e?.toFixed(2)}
               </TableCell>
               <TableCell>
                 {userBusinessUnit.CO2e_of_CO2 === 0
                   ? "-"
-                  : userBusinessUnit.CO2e_of_CO2?.toFixed(2) || "-"}
+                  : userBusinessUnit.CO2e_of_CO2?.toFixed(2)}
               </TableCell>
               <TableCell>
                 {userBusinessUnit.CO2e_of_CH4 === 0
                   ? "-"
-                  : userBusinessUnit.CO2e_of_CH4?.toFixed(2) || "-"}
+                  : userBusinessUnit.CO2e_of_CH4?.toFixed(2)}
               </TableCell>
               <TableCell>
                 {userBusinessUnit.CO2e_of_N2O === 0
                   ? "-"
-                  : userBusinessUnit.CO2e_of_N2O?.toFixed(2) || "-"}
+                  : userBusinessUnit.CO2e_of_N2O?.toFixed(2)}
               </TableCell>
               <TableCell>
                 <div className="flex justify-center gap-x-1">

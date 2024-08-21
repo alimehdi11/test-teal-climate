@@ -85,7 +85,7 @@ const BusinessUnitActivity = sequelize.define(
     level1Category: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 0,
+      defaultValue: "",
     },
     CO2e_of_other: {
       type: DataTypes.FLOAT,
