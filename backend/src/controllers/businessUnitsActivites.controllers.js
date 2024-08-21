@@ -57,7 +57,7 @@ const createEeioActivity = async (req, res) => {
         country: paylaod.country,
       },
     });
-    console.log(eeioRecords);
+    // console.log(eeioRecords);
     if (!eeioRecords) {
       eeioRecords = await Eeio.findAll({
         where: {
@@ -73,9 +73,9 @@ const createEeioActivity = async (req, res) => {
         },
       });
     }
-    console.log(eeioRecords);
+    // console.log(eeioRecords);
     // console.log(eeioRecords.toJSON());
-    return res.status(200);
+    // return res.status(200);
     let CO2e = "";
     let CO2e_of_CO2 = "";
     let CO2e_of_CH4 = "";
