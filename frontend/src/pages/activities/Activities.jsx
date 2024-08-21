@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import ActivitesForm from "./ActivitesForm.jsx";
 import ActivitiesTable from "./ActivitiesTable.jsx";
 import ActivitiesSidebar from "./ActivitiesSidebar.jsx";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { UserContext } from "../../contexts/UserContext.jsx";
 import { request } from "../../utils/request.js";
@@ -13,7 +13,7 @@ const Activities = () => {
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
     useState([]);
-  const { id } = useParams();
+  // const { id } = useParams();
   const { user } = useContext(UserContext);
 
   const fetchUserBusinessUnitsActivities = async () => {
@@ -41,11 +41,11 @@ const Activities = () => {
     fetchUserBusinessUnitsActivities();
   }, []);
 
-  useEffect(() => {
-    if (!id) {
-      setSelectedLevel(null);
-    }
-  }, [selectedScope]);
+  // useEffect(() => {
+  //   if (!id) {
+  //     setSelectedLevel(null);
+  //   }
+  // }, [selectedScope]);
 
   return (
     <>

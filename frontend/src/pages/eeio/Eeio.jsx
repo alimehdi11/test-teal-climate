@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import EeioSidebar from "./EeioSidebar.jsx";
 import EeioTable from "./EeioTable.jsx";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import EeioForm from "./EeioForm.jsx";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { request } from "../../utils/request.js";
@@ -9,83 +9,68 @@ import { UserContext } from "../../contexts/UserContext.jsx";
 import Layout from "../../components/layout/Layout.jsx";
 
 const Eeio = () => {
-  const { id } = useParams();
-  const { pi } = useParams();
+  // const { id } = useParams();
+  // const { pi } = useParams();
 
-  const [selectedForm, setSelectedForm] = useState("");
-  const [level1Options, setLevel1Options] = useState([]);
-  const [selectedlevel1, setSelectedlevel1] = useState("");
+  const [productOrIndustry, setProductOrIndustry] = useState("");
+  const [selectedLevel1, setSelectedLevel1] = useState("");
+
+  const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
+    useState([]);
+
   const { user } = useContext(UserContext);
 
-  const [eeioData, setEeioData] = useState("");
-
-  const fetchEeioData = async () => {
+  const fetchUserBusinessUnitsActivities = async () => {
     try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/eeiodata/${user.id}`,
+      const userBusinessUnitsActivitiesResponse = await request(
+        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnitsActivities`,
         "GET"
       );
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data`);
+      if (!userBusinessUnitsActivitiesResponse.ok) {
+        throw new Error(
+          `${JSON.stringify(await userBusinessUnitsActivitiesResponse.json())}`
+        );
       }
-      const jsonData = await response.json();
-      setEeioData(jsonData);
+      const userBusinessUnitsActivities =
+        await userBusinessUnitsActivitiesResponse.json();
+      setUserBusinessUnitsActivities(userBusinessUnitsActivities);
     } catch (error) {
+      const errorMessage = JSON.parse(error.message).error;
       console.error("Error fetching data:", error);
-    }
-  };
-
-  const fetchLevel1Data = async () => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/${selectedForm}`,
-        "GET"
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
-      }
-      const jsonData = await response.json();
-      setLevel1Options(jsonData);
-    } catch (error) {
-      setLevel1Options([]);
+      console.error(errorMessage);
     }
   };
 
   useEffect(() => {
-    fetchEeioData();
+    fetchUserBusinessUnitsActivities();
   }, []);
 
-  useEffect(() => {
-    if (selectedForm) {
-      fetchLevel1Data();
-    }
-  }, [selectedForm]);
-
-  useEffect(() => {
-    if (id) {
-      setSelectedForm(pi);
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   if (id) {
+  //     setProductOrIndustry(pi);
+  //   }
+  // }, [id]);
 
   return (
     <>
       <Layout
         sidebarContent={
           <EeioSidebar
-            selectedForm={selectedForm}
-            setSelectedForm={setSelectedForm}
-            level1Options={level1Options}
-            selectedlevel1={selectedlevel1}
-            setSelectedlevel1={setSelectedlevel1}
+            productOrIndustry={productOrIndustry}
+            setProductOrIndustry={setProductOrIndustry}
+            selectedLevel1={selectedLevel1}
+            setSelectedLevel1={setSelectedLevel1}
           />
         }
         mainContent={
-          selectedForm && selectedlevel1 ? (
+          productOrIndustry && selectedLevel1 ? (
             <EeioForm
-              selectedForm={selectedForm}
-              selectedlevel1={selectedlevel1}
-              setSelectedlevel1={setSelectedlevel1}
-              fetchEeioData={fetchEeioData}
+              productOrIndustry={productOrIndustry}
+              selectedLevel1={selectedLevel1}
+              setSelectedLevel1={setSelectedLevel1}
+              fetchUserBusinessUnitsActivities={
+                fetchUserBusinessUnitsActivities
+              }
             />
           ) : (
             <div
@@ -99,9 +84,8 @@ const Eeio = () => {
         }
       />
       <EeioTable
-        eeioData={eeioData}
-        fetchEeioData={fetchEeioData}
-        userId={user.id}
+        userBusinessUnitsActivities={userBusinessUnitsActivities}
+        fetchUserBusinessUnitsActivities={fetchUserBusinessUnitsActivities}
       />
     </>
   );

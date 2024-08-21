@@ -1,12 +1,34 @@
+import { useEffect, useState } from "react";
 import Button from "../../components/ui/Button";
+import { request } from "../../utils/request";
 
 const EeioSidebar = ({
-  selectedForm,
-  setSelectedForm,
-  level1Options,
-  selectedlevel1,
-  setSelectedlevel1,
+  productOrIndustry,
+  setProductOrIndustry,
+  selectedLevel1,
+  setSelectedLevel1,
 }) => {
+  const [level1Options, setLevel1Options] = useState([]);
+
+  const fetchEeioLevel1 = async () => {
+    try {
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&column=level1&distinct=true`;
+      const response = await request(url, "GET");
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data:`);
+      }
+      const jsonData = await response.json();
+      setLevel1Options(jsonData);
+    } catch (error) {
+      setLevel1Options([]);
+    }
+  };
+
+  useEffect(() => {
+    if (productOrIndustry) {
+      fetchEeioLevel1();
+    }
+  }, [productOrIndustry]);
   return (
     <>
       <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">
@@ -15,10 +37,10 @@ const EeioSidebar = ({
       <div className="flex flex-col gap-y-4">
         <Button
           className={
-            selectedForm === "Industry" ? "bg-tc-green text-white" : ""
+            productOrIndustry === "Industry" ? "bg-tc-green text-white" : ""
           }
           onClick={() =>
-            setSelectedForm((previousValue) =>
+            setProductOrIndustry((previousValue) =>
               previousValue === "Industry" ? "" : "Industry"
             )
           }
@@ -26,9 +48,11 @@ const EeioSidebar = ({
           Industry
         </Button>
         <Button
-          className={selectedForm === "Product" ? "bg-tc-green text-white" : ""}
+          className={
+            productOrIndustry === "Product" ? "bg-tc-green text-white" : ""
+          }
           onClick={() =>
-            setSelectedForm((previousValue) =>
+            setProductOrIndustry((previousValue) =>
               previousValue === "Product" ? "" : "Product"
             )
           }
@@ -36,7 +60,7 @@ const EeioSidebar = ({
           Product
         </Button>
       </div>
-      {selectedForm && (
+      {productOrIndustry && (
         <>
           <h2 className="m-0 my-4 text-center font-extrabold text-2xl">
             Select Category
@@ -49,15 +73,15 @@ const EeioSidebar = ({
                 key={index}
                 className={
                   "bg-gray-200 hover:bg-tc-blue hover:text-white rounded-lg p-2" +
-                  (item.level1 === selectedlevel1
+                  (item.level1 === selectedLevel1
                     ? " bg-tc-blue text-white hover:bg-opacity-90"
                     : "")
                 }
                 onClick={() => {
-                  if (item.level1 === selectedlevel1) {
-                    setSelectedlevel1(null);
+                  if (item.level1 === selectedLevel1) {
+                    setSelectedLevel1(null);
                   } else {
-                    setSelectedlevel1(item.level1);
+                    setSelectedLevel1(item.level1);
                   }
                 }}
               >

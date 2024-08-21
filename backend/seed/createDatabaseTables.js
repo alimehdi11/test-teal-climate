@@ -1,6 +1,6 @@
 import "./../src/models/user.model.js";
 import "./../src/models/subscription.model.js";
-import "./../src/models/businessUnitEeio.model.js";
+// import "./../src/models/businessUnitEeio.model.js";
 import "./../src/models/businessUnitActivity.model.js";
 import "./../src/models/businessUnit.model.js";
 import "./../src/models/resetPasswordToken.model.js";

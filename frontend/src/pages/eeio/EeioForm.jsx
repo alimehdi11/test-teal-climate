@@ -10,26 +10,26 @@ import Select from "../../components/ui/Select.jsx";
 import { UserContext } from "../../contexts/UserContext.jsx";
 
 const EeoiForm = ({
-  selectedForm,
-  selectedlevel1,
-  setSelectedlevel1,
-  fetchEeioData,
+  productOrIndustry,
+  selectedLevel1,
+  setSelectedLevel1,
+  fetchUserBusinessUnitsActivities,
 }) => {
   const { user } = useContext(UserContext);
 
-  const [businessUnitsoption, setBusinessUnits] = useState("");
-  const [businessUnitsvalue, setBusinessUnitsvalue] = useState("");
-  const [level2options, setlevel2options] = useState("");
-  const [Level2value, setLevel2value] = useState("");
-  const [Level3option, setLevel3option] = useState("");
-  const [Level3value, setLevel3value] = useState("");
-  const [Level4option, setLevel4option] = useState("");
-  const [Level4value, setLevel4value] = useState("");
-  const [Level5option, setLevel5option] = useState("");
-  const [Level5value, setLevel5value] = useState("");
-  const [Sectoroption, setSectoroption] = useState("");
-  const [Sectorvalue, setSectorvalue] = useState("");
-  const [currencyvalue, setCurrencyValue] = useState("pereuro");
+  const [businessUnits, setBusinessUnits] = useState("");
+  const [businessUnitValue, setBusinessUnitValue] = useState("");
+  const [level2Options, setLevel2Options] = useState("");
+  const [level2Value, setLevel2Value] = useState("");
+  const [Level3Options, setLevel3Options] = useState("");
+  const [level3Value, setLevel3Value] = useState("");
+  const [Level4Options, setLevel4Options] = useState("");
+  const [level4Value, setLevel4Value] = useState("");
+  const [Level5Options, setLevel5Options] = useState("");
+  const [level5Value, setLevel5Value] = useState("");
+  const [sectorOptions, setSectorOptions] = useState("");
+  const [sectorValue, setSectorValue] = useState("");
+  const [currencyValue, setCurrencyValue] = useState("pereuro");
   const [quantity, setQuantity] = useState("");
 
   const { id } = useParams();
@@ -58,13 +58,16 @@ const EeoiForm = ({
   };
 
   const resetForm = () => {
-    setlevel2options([]);
-    setBusinessUnitsvalue("");
-    setLevel2value("");
-    setLevel3value("");
-    setLevel4value("");
-    setLevel5value("");
-    setSectorvalue("");
+    // setLevel2Options([]);
+    setLevel3Options([]);
+    setLevel4Options([]);
+    setLevel5Options([]);
+    setBusinessUnitValue("");
+    setLevel2Value("");
+    setLevel3Value("");
+    setLevel4Value("");
+    setLevel5Value("");
+    setSectorValue("");
     setQuantity("");
   };
 
@@ -72,16 +75,15 @@ const EeoiForm = ({
     event.preventDefault();
     // Validate form fields
     if (
-      !user.id ||
-      !businessUnitsvalue ||
-      !selectedForm ||
-      !selectedlevel1 ||
-      (level2options.length > 0 && !Level2value) ||
-      (Level3option.length > 0 && !Level3value) ||
-      (Level4option.length > 0 && !Level4value) ||
-      (Level5option.length > 0 && !Level5value) ||
-      (Sectoroption.length > 0 && !Sectorvalue) ||
-      !currencyvalue ||
+      !businessUnitValue ||
+      !productOrIndustry ||
+      !selectedLevel1 ||
+      !level2Value ||
+      !level3Value ||
+      !level4Value ||
+      !level5Value ||
+      !sectorValue ||
+      !currencyValue ||
       !quantity
     ) {
       toast.warn("Please fill all fields");
@@ -89,21 +91,20 @@ const EeoiForm = ({
     }
 
     const payload = {
-      userId: user.id,
-      businessUnitsvalue,
-      selectedForm,
-      selectedlevel1,
-      Level2value,
-      Level3value,
-      Level4value,
-      Level5value,
-      Sectorvalue,
-      currencyvalue,
+      productOrIndustry,
+      level1: selectedLevel1,
+      businessUnitId: businessUnitValue,
+      level2: level2Value,
+      level3: level3Value,
+      level4: level4Value,
+      level5: level5Value,
+      sector: sectorValue,
+      unitOfMeasurement: currencyValue,
       quantity,
     };
 
     await request(
-      `${import.meta.env.VITE_API_BASE_URL}/eeios/insertEeioData`,
+      `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?eeio=true`,
       "POST",
       payload
     )
@@ -115,7 +116,7 @@ const EeoiForm = ({
       })
       .then(() => {
         toast.success("Data submitted successfully");
-        fetchEeioData();
+        fetchUserBusinessUnitsActivities();
       })
       .catch((error) => {
         toast.error("Error adding data");
@@ -126,16 +127,16 @@ const EeoiForm = ({
   const handleUpdateData = async () => {
     // Validate form fields
     if (
-      !userId ||
-      !businessUnitsvalue ||
+      // !userId ||
+      !businessUnitValue ||
       !selectedForm ||
-      !selectedlevel1 ||
-      (level2options.length > 0 && !Level2value) ||
-      (Level3option.length > 0 && !Level3value) ||
-      (Level4option.length > 0 && !Level4value) ||
-      (Level5option.length > 0 && !Level5value) ||
-      (Sectoroption.length > 0 && !Sectorvalue) ||
-      !currencyvalue ||
+      !selectedLevel1 ||
+      (level2Options.length > 0 && !level2Value) ||
+      (Level3Options.length > 0 && !level3Value) ||
+      (Level4Options.length > 0 && !level4Value) ||
+      (Level5Options.length > 0 && !level5Value) ||
+      (sectorOptions.length > 0 && !sectorValue) ||
+      !currencyValue ||
       !quantity
     ) {
       toast.warn("Please fill all fields");
@@ -145,15 +146,15 @@ const EeoiForm = ({
     // Create payload
     const payload = {
       userId,
-      businessUnitsvalue,
+      businessUnitValue,
       selectedForm,
-      selectedlevel1,
-      Level2value,
-      Level3value,
-      Level4value,
-      Level5value,
-      Sectorvalue,
-      currencyvalue,
+      selectedLevel1,
+      level2Value,
+      level3Value,
+      level4Value,
+      level5Value,
+      sectorValue,
+      currencyValue,
       quantity,
     };
 
@@ -173,7 +174,7 @@ const EeoiForm = ({
         })
         .then(() => {
           console.log("done");
-          fetchEeioData();
+          fetchUserBusinessUnitsActivities();
         });
     } catch (error) {
       // Handle error
@@ -187,173 +188,164 @@ const EeoiForm = ({
     navigation("/eeio");
   };
 
-  const fetchBusinessUnit = async () => {
+  const fetchBusinessUnits = async () => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/companies/${user.id}?column=unitname`,
+        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnits`,
         "GET"
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error(JSON.stringify((await response.json()).error));
       }
-      return await response.json();
+      const businessUnits = await response.json();
+      setBusinessUnits(businessUnits);
     } catch (error) {
-      console.error("Error fetching companies businessunits:", error);
+      let errorMessage = JSON.parse(error.message).error;
+      console.log(errorMessage);
+      console.error("Error fetching businessUnits:", error);
     }
   };
 
-  const fetchLevel2Data = async () => {
+  const fetchEeioLevel2 = async () => {
     try {
-      const result = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/level2/${selectedForm}/${selectedlevel1}`,
-        "GET"
-      );
-
-      if (!result.ok) {
-        throw new Error(`Failed to fetch data:`);
-      }
-
-      const jsonData = await result.json();
-      setlevel2options(jsonData);
-    } catch (error) {
-      setlevel2options([]);
-    }
-  };
-
-  const fetchLevel3Data = async () => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/level3/${selectedForm}/${selectedlevel1}/${Level2value}/`,
-        "GET"
-      );
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${selectedLevel1}&column=level2&distinct=true`;
+      const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
       }
       const jsonData = await response.json();
-      setLevel3option(jsonData);
+      setLevel2Options(jsonData);
     } catch (error) {
-      setLevel3option([]);
+      console.log(error);
+      setLevel2Options([]);
     }
   };
 
-  const fetchLevel4Data = async () => {
+  const fetchEeioLevel3 = async () => {
     try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/level4/${selectedForm}/${selectedlevel1}/${Level2value}/${Level3value}/`,
-        "GET"
-      );
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${selectedLevel1}&level2=${level2Value}&column=level3&distinct=true`;
+      const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
       }
       const jsonData = await response.json();
-      setLevel4option(jsonData);
+      setLevel3Options(jsonData);
     } catch (error) {
-      setLevel4option([]);
+      setLevel3Options([]);
     }
   };
 
-  const fetchLevel5Data = async () => {
-    setSectorvalue("");
-
+  const fetchLevel4 = async () => {
     try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/level5/${selectedForm}/${selectedlevel1}/${Level2value}/${Level3value}/${Level4value}/`,
-        "GET"
-      );
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${selectedLevel1}&level2=${level2Value}&level3=${level3Value}&column=level4&distinct=true`;
+      const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
       }
       const jsonData = await response.json();
-      setLevel5option(jsonData);
+      setLevel4Options(jsonData);
     } catch (error) {
-      setLevel5option([]);
+      setLevel4Options([]);
     }
   };
 
-  const fetchSectorData = async () => {
+  const fetchLevel5 = async () => {
+    // setSectorValue("");
     try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/sector/${selectedForm}/${selectedlevel1}/${Level2value}/${Level3value}/${Level4value}/${Level5value}/`,
-        "GET"
-      );
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${selectedLevel1}&level2=${level2Value}&level3=${level3Value}&level4=${level4Value}&column=level5&distinct=true`;
+      const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
       }
       const jsonData = await response.json();
-      setSectoroption(jsonData);
+      setLevel5Options(jsonData);
     } catch (error) {
-      setSectoroption([]);
+      setLevel5Options([]);
+    }
+  };
+
+  const fetchSector = async () => {
+    try {
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${selectedLevel1}&level2=${level2Value}&level3=${level3Value}&level4=${level4Value}&level5=${level5Value}&column=sector&distinct=true`;
+      const response = await request(url, "GET");
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data:`);
+      }
+      const jsonData = await response.json();
+      setSectorOptions(jsonData);
+    } catch (error) {
+      setSectorOptions([]);
     }
   };
 
   useEffect(() => {
-    fetchBusinessUnit().then((businessUnits) => {
-      // businessUnits = businessUnits.map((item) => item.unitname);
-      setBusinessUnits(businessUnits);
-    });
+    fetchBusinessUnits();
+    fetchEeioLevel2();
   }, []);
 
   useEffect(() => {
-    if (selectedlevel1) {
-      fetchLevel2Data();
+    if (level2Value) {
+      fetchEeioLevel3();
     }
-  }, [selectedlevel1]);
+  }, [level2Value]);
 
   useEffect(() => {
-    fetchLevel3Data();
-  }, [Level2value /*, level2options */]);
-
-  useEffect(() => {
-    fetchLevel4Data();
-  }, [Level3value /*, Level3option */]);
-
-  useEffect(() => {
-    fetchLevel5Data();
-  }, [Level4value /*, Level4option */]);
-
-  useEffect(() => {
-    fetchSectorData();
-  }, [Level5value /*, Level5option */]);
-
-  useEffect(() => {
-    if (id && user.id) {
-      fetchEditData(id, user.id)
-        .then((editData) => {
-          console.warn(editData);
-
-          setSelectedlevel1(editData[0].level1);
-          setBusinessUnitsvalue(editData[0].unitname);
-          setLevel2value(editData[0].level2);
-          setLevel3value(editData[0].level3);
-          setLevel4value(editData[0].level4);
-          setLevel5value(editData[0].level5);
-          setSectorvalue(editData[0].sector);
-          setQuantity(editData[0].quantity);
-        })
-        .catch((error) => {
-          console.error("Error fetching edit data:", error);
-        });
+    if (level3Value) {
+      fetchLevel4();
     }
-  }, [user.id, id]);
+  }, [level3Value]);
+
+  useEffect(() => {
+    if (level4Value) {
+      fetchLevel5();
+    }
+  }, [level4Value]);
+
+  useEffect(() => {
+    if (level5Value) {
+      fetchSector();
+    }
+  }, [level5Value]);
+
+  // useEffect(() => {
+  //   if (id && user.id) {
+  //     fetchEditData(id, user.id)
+  //       .then((editData) => {
+  //         console.warn(editData);
+
+  //         setSelectedLevel1(editData[0].level1);
+  //         setBusinessUnitValue(editData[0].title);
+  //         setLevel2Value(editData[0].level2);
+  //         setLevel3Value(editData[0].level3);
+  //         setLevel4Value(editData[0].level4);
+  //         setLevel5Value(editData[0].level5);
+  //         setSectorValue(editData[0].sector);
+  //         setQuantity(editData[0].quantity);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching edit data:", error);
+  //       });
+  //   }
+  // }, [user.id, id]);
 
   return (
     <>
       <form onSubmit={handleFormSubmit} className="flex flex-col gap-y-3">
         <h3 className="m-0 font-extrabold text-2xl">Insert EEIO data here</h3>
         <div className="grid lg:grid-cols-2 gap-4">
-          {/* Business Units */}
+          {/* Business Unit */}
           <FormControl>
-            <Label>Business Units</Label>
+            <Label>Business Unit</Label>
             <Select
-              value={businessUnitsvalue}
-              onChange={(e) => setBusinessUnitsvalue(e.target.value)}
+              value={businessUnitValue}
+              onChange={(e) => setBusinessUnitValue(e.target.value)}
             >
               <option value="">Select Option</option>
-              {businessUnitsoption && businessUnitsoption.length > 0 ? (
-                businessUnitsoption.map((option, index) => {
+              {businessUnits && businessUnits.length > 0 ? (
+                businessUnits.map((options, index) => {
                   return (
-                    <option value={option.unitname} key={index}>
-                      {option.unitname}
+                    <option value={options.id} key={index}>
+                      {options.title}
                     </option>
                   );
                 })
@@ -369,15 +361,15 @@ const EeoiForm = ({
           <FormControl>
             <Label>Level 2</Label>
             <Select
-              value={Level2value}
-              onChange={(e) => setLevel2value(e.target.value)}
+              value={level2Value}
+              onChange={(e) => setLevel2Value(e.target.value)}
             >
               <option value="">Select Option</option>
-              {level2options &&
-                level2options.map((option, index) => {
+              {level2Options &&
+                level2Options.map((options, index) => {
                   return (
-                    <option value={option.level2} key={index}>
-                      {option.level2}
+                    <option value={options.level2} key={index}>
+                      {options.level2}
                     </option>
                   );
                 })}
@@ -388,15 +380,15 @@ const EeoiForm = ({
           <FormControl>
             <Label>Level 3</Label>
             <Select
-              value={Level3value}
-              onChange={(e) => setLevel3value(e.target.value)}
+              value={level3Value}
+              onChange={(e) => setLevel3Value(e.target.value)}
             >
               <option value="">Select Option</option>
-              {Level3option &&
-                Level3option.map((option, index) => {
+              {Level3Options &&
+                Level3Options.map((options, index) => {
                   return (
-                    <option value={option.level3} key={index}>
-                      {option.level3}
+                    <option value={options.level3} key={index}>
+                      {options.level3}
                     </option>
                   );
                 })}
@@ -407,15 +399,15 @@ const EeoiForm = ({
           <FormControl>
             <Label>Level 4</Label>
             <Select
-              value={Level4value}
-              onChange={(e) => setLevel4value(e.target.value)}
+              value={level4Value}
+              onChange={(e) => setLevel4Value(e.target.value)}
             >
               <option value="">Select Option</option>
-              {Level4option &&
-                Level4option.map((option, index) => {
+              {Level4Options &&
+                Level4Options.map((options, index) => {
                   return (
-                    <option value={option.level4} key={index}>
-                      {option.level4}
+                    <option value={options.level4} key={index}>
+                      {options.level4}
                     </option>
                   );
                 })}
@@ -426,15 +418,15 @@ const EeoiForm = ({
           <FormControl>
             <Label>Level 5</Label>
             <Select
-              value={Level5value}
-              onChange={(e) => setLevel5value(e.target.value)}
+              value={level5Value}
+              onChange={(e) => setLevel5Value(e.target.value)}
             >
               <option value="">Select Option</option>
-              {Level5option &&
-                Level5option.map((option, index) => {
+              {Level5Options &&
+                Level5Options.map((options, index) => {
                   return (
-                    <option value={option.level5} key={index}>
-                      {option.level5}
+                    <option value={options.level5} key={index}>
+                      {options.level5}
                     </option>
                   );
                 })}
@@ -445,15 +437,15 @@ const EeoiForm = ({
           <FormControl>
             <Label>Sector</Label>
             <Select
-              value={Sectorvalue}
-              onChange={(e) => setSectorvalue(e.target.value)}
+              value={sectorValue}
+              onChange={(e) => setSectorValue(e.target.value)}
             >
               <option value="">Select Option</option>
-              {Sectoroption &&
-                Sectoroption.map((option, index) => {
+              {sectorOptions &&
+                sectorOptions.map((options, index) => {
                   return (
-                    <option value={option.sector} key={index}>
-                      {option.sector}
+                    <option value={options.sector} key={index}>
+                      {options.sector}
                     </option>
                   );
                 })}
@@ -464,10 +456,10 @@ const EeoiForm = ({
           <FormControl>
             <Label>Currency</Label>
             <Select
-              value={currencyvalue}
+              value={currencyValue}
               onChange={(e) => setCurrencyValue(e.target.value)}
             >
-              <option value="pereuro">Per Euro</option>
+              <option value="perEuro">Per Euro</option>
             </Select>
           </FormControl>
 

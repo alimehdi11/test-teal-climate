@@ -74,11 +74,11 @@ const ActivitiesSidebar = ({
         ))}
       </div>
 
-      {/* <hr className="w-full h-[1px] bg-slate-500 my-2" /> */}
+      <hr className="w-full h-[1px] bg-slate-500 my-2" />
 
-      {/* <Link to="/eeio" style={{ textDecoration: "none" }}>
+      <Link to="/eeio" style={{ textDecoration: "none" }}>
         <Button className="py-3 w-full">Spend Base Scope 3</Button>
-      </Link> */}
+      </Link>
 
       {level1.length > 0 && (
         <>

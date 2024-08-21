@@ -69,8 +69,7 @@ app.use("/subscriptions", verifyToken, subscriptionsRouter);
 app.use("/stripe", verifyToken, stripeRouter);
 app.use("/businessUnits", verifyToken, businessUnitsRouter);
 app.use("/businessUnitsActivities", verifyToken, businessUnitsActivitiesRouter);
-
-// app.use("/eeios", verifyToken, eeiosRouter); NOTE : Bilal will help for eeios
+app.use("/eeios", verifyToken, eeiosRouter);
 
 // TODO : check webhook setup needed or not
 // app.post(

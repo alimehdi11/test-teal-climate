@@ -1,197 +1,235 @@
-import { sequelize } from "./../database/connectDb.js";
+import { Sequelize } from "sequelize";
+import { Eeio } from "../models/eeio.model.js";
 
-const getEeioByName = async (req, res) => {
-  const pi = req.params.name;
-  if (!pi) {
-    return res.status(400).json({ error: "Invalid param" });
+const getEeio = async (req, res) => {
+  try {
+    const {
+      productOrIndustry,
+      level1,
+      level2,
+      level3,
+      level4,
+      level5,
+      sector,
+      column,
+      distinct,
+    } = req.query;
+    const whereClause = {};
+    if (productOrIndustry) whereClause.productOrIndustry = productOrIndustry;
+    if (level1) whereClause.level1 = level1;
+    if (level2) whereClause.level2 = level2;
+    if (level3) whereClause.level3 = level3;
+    if (level4) whereClause.level4 = level4;
+    if (level5) whereClause.level5 = level5;
+    if (sector) whereClause.sector = sector;
+    let attributes = [];
+    if (column) {
+      if (distinct === "true") {
+        attributes.push([
+          Sequelize.fn("DISTINCT", Sequelize.col(column)),
+          column,
+        ]);
+      } else {
+        attributes.push(column);
+      }
+    }
+    const query = {};
+    query.where = whereClause;
+    query.attributes = attributes.length > 0 ? attributes : undefined;
+    const eeioLevel1 = await Eeio.findAll(query);
+    return res.status(200).json(eeioLevel1);
+  } catch (error) {
+    console.log("Could not getEeio");
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-  pool
-    .query("SELECT level1 FROM eeio WHERE pi = $1", [pi])
-    .then((eeioDataResult) => {
-      const eeiodatas = eeioDataResult.rows;
-      const level1Data = eeiodatas.map((item) => ({ level1: item.level1 }));
-      const seenNames = new Set();
-      const uniqueObjects = [];
-      for (const obj of level1Data) {
-        if (!seenNames.has(obj.level1)) {
-          seenNames.add(obj.level1);
-          uniqueObjects.push(obj);
-        }
-      }
-      res.status(200).json(uniqueObjects);
-    })
-    .catch((error) => {
-      console.error("activatedata Error:", error);
-      res.status(500).send("Error fetching data");
-    });
 };
 
-const getEeioLevel2 = async (req, res) => {
-  const selectedForm = req.params.selectedForm;
-  const selectedlevel1 = req.params.selectedlevel1;
-  pool
-    .query("SELECT level2 FROM eeio WHERE pi = $1 AND level1 = $2", [
-      selectedForm,
-      selectedlevel1,
-    ])
-    .then((eeioLevel2Result) => {
-      const eeioLevel2Data = eeioLevel2Result.rows;
-      const Level2Data = eeioLevel2Data.map((item) => ({
-        level2: item.level2,
-      }));
-      const seenNames = new Set();
-      const uniqueObjects = [];
+// const getEeioLevel2 = async (req, res) => {
+//   try {
+//     const { productOrIndustry } = req.query;
+//     if (!["Product", "Industry"].includes(productOrIndustry)) {
+//       return res.status(400).json({ error: "Invalid query" });
+//     }
+//     const eeioLevel1 = await Eeio.findAll({
+//       where: {
+//         productOrIndustry,
+//       },
+//       attributes: [
+//         [Sequelize.fn("DISTINCT", Sequelize.col("level2")), "level2"],
+//       ],
+//     });
+//     return res.status(200).json(eeioLevel1);
+//   } catch (error) {
+//     console.log("Could not getEeioLevel2");
+//     console.log(error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+//   // const selectedForm = req.params.selectedForm;
+//   // const selectedlevel1 = req.params.selectedlevel1;
+//   // pool
+//   //   .query("SELECT level2 FROM eeio WHERE pi = $1 AND level1 = $2", [
+//   //     selectedForm,
+//   //     selectedlevel1,
+//   //   ])
+//   //   .then((eeioLevel2Result) => {
+//   //     const eeioLevel2Data = eeioLevel2Result.rows;
+//   //     const Level2Data = eeioLevel2Data.map((item) => ({
+//   //       level2: item.level2,
+//   //     }));
+//   //     const seenNames = new Set();
+//   //     const uniqueObjects = [];
 
-      for (const obj of Level2Data) {
-        if (!seenNames.has(obj.level2)) {
-          seenNames.add(obj.level2);
-          uniqueObjects.push(obj);
-        }
-      }
-      res.status(200).json(uniqueObjects);
-    })
-    .catch((error) => {
-      console.error("activatedata Error:", error);
-      res.status(500).send("Error fetching data");
-    });
-};
+//   //     for (const obj of Level2Data) {
+//   //       if (!seenNames.has(obj.level2)) {
+//   //         seenNames.add(obj.level2);
+//   //         uniqueObjects.push(obj);
+//   //       }
+//   //     }
+//   //     res.status(200).json(uniqueObjects);
+//   //   })
+//   //   .catch((error) => {
+//   //     console.error("activatedata Error:", error);
+//   //     res.status(500).send("Error fetching data");
+//   //   });
+// };
 
-const getEeioLevel3 = (req, res) => {
-  const selectlevel2 = req.params.level2;
-  const selectedForm = req.params.selectedForm;
-  const selectedlevel1 = req.params.selectedlevel1;
-  pool
-    .query(
-      "SELECT level3 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3",
-      [selectedForm, selectedlevel1, selectlevel2]
-    )
-    .then((eeioLevel3Result) => {
-      const eeioLevel3Data = eeioLevel3Result.rows;
+// const getEeioLevel3 = (req, res) => {
+//   const selectlevel2 = req.params.level2;
+//   const selectedForm = req.params.selectedForm;
+//   const selectedlevel1 = req.params.selectedlevel1;
+//   pool
+//     .query(
+//       "SELECT level3 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3",
+//       [selectedForm, selectedlevel1, selectlevel2]
+//     )
+//     .then((eeioLevel3Result) => {
+//       const eeioLevel3Data = eeioLevel3Result.rows;
 
-      const Level3Data = eeioLevel3Data.map((item) => ({
-        level3: item.level3,
-      }));
+//       const Level3Data = eeioLevel3Data.map((item) => ({
+//         level3: item.level3,
+//       }));
 
-      const seenNames = new Set();
-      const uniqueObjects = [];
+//       const seenNames = new Set();
+//       const uniqueObjects = [];
 
-      for (const obj of Level3Data) {
-        if (!seenNames.has(obj.level3)) {
-          seenNames.add(obj.level3);
-          uniqueObjects.push(obj);
-        }
-      }
-      res.status(200).json(uniqueObjects);
-    })
-    .catch((error) => {
-      console.error("activatedata level2 Error:", error);
-      res.status(500).send("Error fetching data");
-    });
-};
+//       for (const obj of Level3Data) {
+//         if (!seenNames.has(obj.level3)) {
+//           seenNames.add(obj.level3);
+//           uniqueObjects.push(obj);
+//         }
+//       }
+//       res.status(200).json(uniqueObjects);
+//     })
+//     .catch((error) => {
+//       console.error("activatedata level2 Error:", error);
+//       res.status(500).send("Error fetching data");
+//     });
+// };
 
-const getEeioLevel4 = (req, res) => {
-  const selectlevel3 = req.params.level3;
-  const selectlevel2 = req.params.level2;
-  const selectedForm = req.params.selectedForm;
-  const selectedlevel1 = req.params.selectedlevel1;
-  pool
-    .query(
-      "SELECT level4 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4",
-      [selectedForm, selectedlevel1, selectlevel2, selectlevel3]
-    )
-    .then((eeioLevel4Result) => {
-      const eeioLevel4Data = eeioLevel4Result.rows;
+// const getEeioLevel4 = (req, res) => {
+//   const selectlevel3 = req.params.level3;
+//   const selectlevel2 = req.params.level2;
+//   const selectedForm = req.params.selectedForm;
+//   const selectedlevel1 = req.params.selectedlevel1;
+//   pool
+//     .query(
+//       "SELECT level4 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4",
+//       [selectedForm, selectedlevel1, selectlevel2, selectlevel3]
+//     )
+//     .then((eeioLevel4Result) => {
+//       const eeioLevel4Data = eeioLevel4Result.rows;
 
-      const Level4Data = eeioLevel4Data.map((item) => ({
-        level4: item.level4,
-      }));
-      const seenNames = new Set();
-      const uniqueObjects = [];
-      for (const obj of Level4Data) {
-        if (!seenNames.has(obj.level4)) {
-          seenNames.add(obj.level4);
-          uniqueObjects.push(obj);
-        }
-      }
-      res.status(200).json(uniqueObjects);
-    })
-    .catch((error) => {
-      console.error("activatedata level2 Error:", error);
-      res.status(500).send("Error fetching data");
-    });
-};
+//       const Level4Data = eeioLevel4Data.map((item) => ({
+//         level4: item.level4,
+//       }));
+//       const seenNames = new Set();
+//       const uniqueObjects = [];
+//       for (const obj of Level4Data) {
+//         if (!seenNames.has(obj.level4)) {
+//           seenNames.add(obj.level4);
+//           uniqueObjects.push(obj);
+//         }
+//       }
+//       res.status(200).json(uniqueObjects);
+//     })
+//     .catch((error) => {
+//       console.error("activatedata level2 Error:", error);
+//       res.status(500).send("Error fetching data");
+//     });
+// };
 
-const getEeioLevel5 = (req, res) => {
-  const selectlevel4 = req.params.level4;
-  const selectlevel3 = req.params.level3;
-  const selectlevel2 = req.params.level2;
-  const selectedForm = req.params.selectedForm;
-  const selectedlevel1 = req.params.selectedlevel1;
-  pool
-    .query(
-      "SELECT Level5 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5",
-      [selectedForm, selectedlevel1, selectlevel2, selectlevel3, selectlevel4]
-    )
-    .then((eeioLevel5Result) => {
-      const eeioLevel5Data = eeioLevel5Result.rows;
-      const level5Data = eeioLevel5Data.map((item) => ({
-        level5: item.level5,
-      }));
-      const seenNames = new Set();
-      const uniqueObjects = [];
-      for (const obj of level5Data) {
-        if (!seenNames.has(obj.level5)) {
-          seenNames.add(obj.level5);
-          uniqueObjects.push(obj);
-        }
-      }
-      res.status(200).json(uniqueObjects);
-    })
-    .catch((error) => {
-      console.error("activatedata level2 Error:", error);
-      res.status(500).send("Error fetching data");
-    });
-};
+// const getEeioLevel5 = (req, res) => {
+//   const selectlevel4 = req.params.level4;
+//   const selectlevel3 = req.params.level3;
+//   const selectlevel2 = req.params.level2;
+//   const selectedForm = req.params.selectedForm;
+//   const selectedlevel1 = req.params.selectedlevel1;
+//   pool
+//     .query(
+//       "SELECT Level5 FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5",
+//       [selectedForm, selectedlevel1, selectlevel2, selectlevel3, selectlevel4]
+//     )
+//     .then((eeioLevel5Result) => {
+//       const eeioLevel5Data = eeioLevel5Result.rows;
+//       const level5Data = eeioLevel5Data.map((item) => ({
+//         level5: item.level5,
+//       }));
+//       const seenNames = new Set();
+//       const uniqueObjects = [];
+//       for (const obj of level5Data) {
+//         if (!seenNames.has(obj.level5)) {
+//           seenNames.add(obj.level5);
+//           uniqueObjects.push(obj);
+//         }
+//       }
+//       res.status(200).json(uniqueObjects);
+//     })
+//     .catch((error) => {
+//       console.error("activatedata level2 Error:", error);
+//       res.status(500).send("Error fetching data");
+//     });
+// };
 
-const getEeiosector = (req, res) => {
-  const selectedlevel5 = req.params.level5;
-  const selectlevel4 = req.params.level4;
-  const selectlevel3 = req.params.level3;
-  const selectlevel2 = req.params.level2;
-  const selectedForm = req.params.selectedForm;
-  const selectedlevel1 = req.params.selectedlevel1;
-  pool
-    .query(
-      "SELECT sector FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5 AND level5 = $6",
-      [
-        selectedForm,
-        selectedlevel1,
-        selectlevel2,
-        selectlevel3,
-        selectlevel4,
-        selectedlevel5,
-      ]
-    )
-    .then((eeioSectorResult) => {
-      const eeioSectorData = eeioSectorResult.rows;
-      const sectorData = eeioSectorData.map((item) => ({
-        sector: item.sector,
-      }));
-      const seenNames = new Set();
-      const uniqueObjects = [];
-      for (const obj of sectorData) {
-        if (!seenNames.has(obj.sector)) {
-          seenNames.add(obj.sector);
-          uniqueObjects.push(obj);
-        }
-      }
-      res.status(200).json(uniqueObjects);
-    })
-    .catch((error) => {
-      console.error("activatedata level2 Error:", error);
-      res.status(500).send("Error fetching data");
-    });
-};
+// const getEeiosector = (req, res) => {
+//   const selectedlevel5 = req.params.level5;
+//   const selectlevel4 = req.params.level4;
+//   const selectlevel3 = req.params.level3;
+//   const selectlevel2 = req.params.level2;
+//   const selectedForm = req.params.selectedForm;
+//   const selectedlevel1 = req.params.selectedlevel1;
+//   pool
+//     .query(
+//       "SELECT sector FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5 AND level5 = $6",
+//       [
+//         selectedForm,
+//         selectedlevel1,
+//         selectlevel2,
+//         selectlevel3,
+//         selectlevel4,
+//         selectedlevel5,
+//       ]
+//     )
+//     .then((eeioSectorResult) => {
+//       const eeioSectorData = eeioSectorResult.rows;
+//       const sectorData = eeioSectorData.map((item) => ({
+//         sector: item.sector,
+//       }));
+//       const seenNames = new Set();
+//       const uniqueObjects = [];
+//       for (const obj of sectorData) {
+//         if (!seenNames.has(obj.sector)) {
+//           seenNames.add(obj.sector);
+//           uniqueObjects.push(obj);
+//         }
+//       }
+//       res.status(200).json(uniqueObjects);
+//     })
+//     .catch((error) => {
+//       console.error("activatedata level2 Error:", error);
+//       res.status(500).send("Error fetching data");
+//     });
+// };
 
 const insertEeioData = async (req, res) => {
   try {
@@ -211,7 +249,7 @@ const insertEeioData = async (req, res) => {
     const fetchQuery1 =
       "SELECT * FROM companies WHERE userid = $1 AND unitname= $2";
     const fetchValues1 = [userId, businessUnitsvalue];
-    const fetchResult1 = await pool.query(fetchQuery1, fetchValues1);
+    // const fetchResult1 = await pool.query(fetchQuery1, fetchValues1);
     if (fetchResult1.rows.length === 0) {
       console.log("hi");
       return res
@@ -235,7 +273,7 @@ const insertEeioData = async (req, res) => {
       continent,
       country,
     ];
-    const fetchResult = await pool.query(fetchQuery, fetchValues);
+    // const fetchResult = await pool.query(fetchQuery, fetchValues);
     if (fetchResult.rows.length === 0) {
       return res.status(500).json({ error: "Something went wrong" });
     }
@@ -297,7 +335,7 @@ const insertEeioData = async (req, res) => {
       businessUnitsvalue,
     ];
 
-    const insertResult = await pool.query(insertQuery, values);
+    // const insertResult = await pool.query(insertQuery, values);
     console.log("Companies data inserted successfully");
     res.status(200).json({
       message: "Companies data inserted successfully",
@@ -314,17 +352,17 @@ const getEeiodata = async (req, res) => {
   if (!userid) {
     return res.status(400).json({ error: "Invalid param" });
   }
-  pool
-    .query("SELECT * FROM eeioentry WHERE userid = $1", [userid])
-    .then((eeioDataResult) => {
-      const eeiodatas = eeioDataResult.rows;
+  // pool
+  //   .query("SELECT * FROM eeioentry WHERE userid = $1", [userid])
+  //   .then((eeioDataResult) => {
+  //     const eeiodatas = eeioDataResult.rows;
 
-      res.status(200).json(eeiodatas);
-    })
-    .catch((error) => {
-      console.error("activatedata Error:", error);
-      res.status(500).send("Error fetching data");
-    });
+  //     res.status(200).json(eeiodatas);
+  //   })
+  //   .catch((error) => {
+  //     console.error("activatedata Error:", error);
+  //     res.status(500).send("Error fetching data");
+  //   });
 };
 
 const fetchEeioEditData = async (req, res) => {
@@ -334,17 +372,17 @@ const fetchEeioEditData = async (req, res) => {
   if (!userid) {
     return res.status(400).json({ error: "Invalid param" });
   }
-  pool
-    .query("SELECT * FROM eeioentry WHERE userid = $1 AND id =$2", [userid, id])
-    .then((eeioEditDataResult) => {
-      const eeioEditData = eeioEditDataResult.rows;
+  pool;
+  // .query("SELECT * FROM eeioentry WHERE userid = $1 AND id =$2", [userid, id])
+  // .then((eeioEditDataResult) => {
+  //   const eeioEditData = eeioEditDataResult.rows;
 
-      res.status(200).json(eeioEditData);
-    })
-    .catch((error) => {
-      console.error("activatedata Error:", error);
-      res.status(500).send("Error fetching data");
-    });
+  //   res.status(200).json(eeioEditData);
+  // })
+  // .catch((error) => {
+  //   console.error("activatedata Error:", error);
+  //   res.status(500).send("Error fetching data");
+  // });
 };
 
 const editEeioData = async (req, res) => {
@@ -372,7 +410,7 @@ const editEeioData = async (req, res) => {
     const fetchQuery1 =
       "SELECT * FROM companies WHERE userid = $1 AND unitname= $2";
     const fetchValues1 = [userId, businessUnitsvalue];
-    const fetchResult1 = await pool.query(fetchQuery1, fetchValues1);
+    // const fetchResult1 = await pool.query(fetchQuery1, fetchValues1);
 
     if (fetchResult1.rows.length === 0) {
       return res
@@ -397,7 +435,7 @@ const editEeioData = async (req, res) => {
       continent,
       country,
     ];
-    const fetchResult = await pool.query(fetchQuery, fetchValues);
+    // const fetchResult = await pool.query(fetchQuery, fetchValues);
 
     if (fetchResult.rows.length === 0) {
       return res
@@ -496,7 +534,7 @@ const editEeioData = async (req, res) => {
       // assuming idToUpdate is the variable holding the id value for update
     ];
 
-    const updateResult = await pool.query(updateQuery, values);
+    // const updateResult = await pool.query(updateQuery, values);
 
     if (updateResult.rowCount > 0) {
       console.log("Data updated successfully");
@@ -519,23 +557,23 @@ const deleteEeioData = (req, res) => {
 
   const query = "DELETE FROM eeioentry WHERE id = $1 AND userid = $2";
 
-  pool.query(query, [id, userid], (error) => {
-    if (error) {
-      console.error("Error deleting data:", error);
-      res.status(500).json({ error: "Error deleting data" });
-    } else {
-      res.status(200).json({ message: "Data deleted successfully" });
-    }
-  });
+  // pool.query(query, [id, userid], (error) => {
+  //   if (error) {
+  //     console.error("Error deleting data:", error);
+  //     res.status(500).json({ error: "Error deleting data" });
+  //   } else {
+  //     res.status(200).json({ message: "Data deleted successfully" });
+  //   }
+  // });
 };
 
 export {
-  getEeioByName,
-  getEeioLevel2,
-  getEeioLevel3,
-  getEeioLevel4,
-  getEeioLevel5,
-  getEeiosector,
+  getEeio,
+  // getEeioLevel2,
+  // getEeioLevel3,
+  // getEeioLevel4,
+  // getEeioLevel5,
+  // getEeiosector,
   insertEeioData,
   getEeiodata,
   fetchEeioEditData,

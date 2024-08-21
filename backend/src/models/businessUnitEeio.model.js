@@ -21,17 +21,14 @@ const BusinessUnitEeio = sequelize.define(
         deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
     },
-    businessUnitName: {
-      type: DataTypes.STRING,
+    businessUnitId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    country: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    continent: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      references: {
+        model: BusinessUnit,
+        key: "id",
+        deferrable: Deferrable.INITIALLY_IMMEDIATE,
+      },
     },
     scope: {
       type: DataTypes.STRING,
@@ -57,32 +54,12 @@ const BusinessUnitEeio = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    sector: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     unitOfMeasurement: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    exioBaseCode: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    greenHouseGas: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    productOrIndustry: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    reference: {
-      type: DataTypes.STRING,
       allowNull: false,
     },
     CO2e: {
@@ -103,6 +80,34 @@ const BusinessUnitEeio = sequelize.define(
     },
     CO2e_of_other: {
       type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    exioBaseCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    country: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    continent: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    sector: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    greenHouseGas: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    productOrIndustry: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    reference: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },

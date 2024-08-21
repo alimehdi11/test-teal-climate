@@ -59,7 +59,7 @@ const BusinessUnitActivity = sequelize.define(
       allowNull: false,
     },
     quantity: {
-      type: DataTypes.FLOAT, // Airports distance can be in FLOAt
+      type: DataTypes.FLOAT, // Airports distance can be in FLOAT
       allowNull: false,
     },
     CO2e: {
@@ -85,6 +85,42 @@ const BusinessUnitActivity = sequelize.define(
     level1Category: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: 0,
+    },
+    CO2e_of_other: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    exioBaseCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    country: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    continent: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    sector: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    productOrIndustry: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    reference: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
     },
   },
   {
