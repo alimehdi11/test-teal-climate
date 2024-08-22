@@ -12,7 +12,6 @@ import { UserContext } from "../../contexts/UserContext.jsx";
 const EeoiForm = ({
   productOrIndustry,
   selectedLevel1,
-  setSelectedLevel1,
   fetchUserBusinessUnitsActivities,
 }) => {
   const { user } = useContext(UserContext);
@@ -29,36 +28,33 @@ const EeoiForm = ({
   const [level5Value, setLevel5Value] = useState("");
   const [sectorOptions, setSectorOptions] = useState("");
   const [sectorValue, setSectorValue] = useState("");
-  const [currencyValue, setCurrencyValue] = useState("pereuro");
+  const [currencyValue, setCurrencyValue] = useState("perEuro");
   const [quantity, setQuantity] = useState("");
 
   const { id } = useParams();
 
   const navigation = useNavigate();
 
-  const fetchEditData = async (id, userId) => {
+  const fetchActivityById = async () => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/fetchEeioEditData/${id}/${user.id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}`,
         "GET"
       );
       if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
+        throw new Error(`${JSON.stringify(await response.json())}`);
       }
-
-      const jsonData = await response.json();
-      // console.log('idies:', jsonData)
-
-      return jsonData;
-
-      // setEeioData(jsonData);
+      const activity = await response.json();
+      return activity;
     } catch (error) {
-      console.error("Error fetching data:", error);
+      const errorMessage = JSON.parse(error.message).error;
+      toast.error(errorMessage);
+      console.error(errorMessage);
+      console.error("Error fetchActivityById:", error);
     }
   };
 
   const resetForm = () => {
-    // setLevel2Options([]);
     setLevel3Options([]);
     setLevel4Options([]);
     setLevel5Options([]);
@@ -102,7 +98,6 @@ const EeoiForm = ({
       unitOfMeasurement: currencyValue,
       quantity,
     };
-
     await request(
       `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?eeio=true`,
       "POST",
@@ -127,15 +122,14 @@ const EeoiForm = ({
   const handleUpdateData = async () => {
     // Validate form fields
     if (
-      // !userId ||
       !businessUnitValue ||
-      !selectedForm ||
+      !productOrIndustry ||
       !selectedLevel1 ||
-      (level2Options.length > 0 && !level2Value) ||
-      (Level3Options.length > 0 && !level3Value) ||
-      (Level4Options.length > 0 && !level4Value) ||
-      (Level5Options.length > 0 && !level5Value) ||
-      (sectorOptions.length > 0 && !sectorValue) ||
+      !level2Value ||
+      !level3Value ||
+      !level4Value ||
+      !level5Value ||
+      !sectorValue ||
       !currencyValue ||
       !quantity
     ) {
@@ -143,43 +137,42 @@ const EeoiForm = ({
       return;
     }
 
-    // Create payload
+    // Update payload
     const payload = {
-      userId,
-      businessUnitValue,
-      selectedForm,
-      selectedLevel1,
-      level2Value,
-      level3Value,
-      level4Value,
-      level5Value,
-      sectorValue,
-      currencyValue,
+      productOrIndustry,
+      level1: selectedLevel1,
+      businessUnitId: businessUnitValue,
+      level2: level2Value,
+      level3: level3Value,
+      level4: level4Value,
+      level5: level5Value,
+      sector: sectorValue,
+      unitOfMeasurement: currencyValue,
       quantity,
     };
 
     try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/eeios/editEeioData/${id}`,
+      await request(
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}`,
         "PUT",
         payload
       )
-        .then((response) => {
+        .then(async (response) => {
           if (!response.ok) {
-            throw new Error();
+            throw new Error(`${JSON.stringify(await response.json())}`);
           }
           toast.success("Data edit successfully");
           resetForm();
           navigation("/eeio");
         })
         .then(() => {
-          console.log("done");
           fetchUserBusinessUnitsActivities();
         });
     } catch (error) {
-      // Handle error
-      toast.error("Error adding data");
-      console.error("Couldn't submit data", error);
+      const errorMessage = JSON.parse(error.message).error;
+      toast.error(errorMessage);
+      console.error(errorMessage);
+      console.error("Error fetchActivityById:", error);
     }
   };
 
@@ -307,26 +300,19 @@ const EeoiForm = ({
     }
   }, [level5Value]);
 
-  // useEffect(() => {
-  //   if (id && user.id) {
-  //     fetchEditData(id, user.id)
-  //       .then((editData) => {
-  //         console.warn(editData);
-
-  //         setSelectedLevel1(editData[0].level1);
-  //         setBusinessUnitValue(editData[0].title);
-  //         setLevel2Value(editData[0].level2);
-  //         setLevel3Value(editData[0].level3);
-  //         setLevel4Value(editData[0].level4);
-  //         setLevel5Value(editData[0].level5);
-  //         setSectorValue(editData[0].sector);
-  //         setQuantity(editData[0].quantity);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching edit data:", error);
-  //       });
-  //   }
-  // }, [user.id, id]);
+  useEffect(() => {
+    if (id) {
+      fetchActivityById().then((activity) => {
+        setBusinessUnitValue(activity.businessUnit.id);
+        setLevel2Value(activity.level2);
+        setLevel3Value(activity.level3);
+        setLevel4Value(activity.level4);
+        setLevel5Value(activity.level5);
+        setSectorValue(activity.sector);
+        setQuantity(activity.quantity);
+      });
+    }
+  }, [id]);
 
   return (
     <>

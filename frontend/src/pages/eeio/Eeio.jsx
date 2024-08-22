@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import EeioSidebar from "./EeioSidebar.jsx";
 import EeioTable from "./EeioTable.jsx";
-// import { useParams } from "react-router-dom";
 import EeioForm from "./EeioForm.jsx";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { request } from "../../utils/request.js";
@@ -9,9 +8,6 @@ import { UserContext } from "../../contexts/UserContext.jsx";
 import Layout from "../../components/layout/Layout.jsx";
 
 const Eeio = () => {
-  // const { id } = useParams();
-  // const { pi } = useParams();
-
   const [productOrIndustry, setProductOrIndustry] = useState("");
   const [selectedLevel1, setSelectedLevel1] = useState("");
 
@@ -45,11 +41,11 @@ const Eeio = () => {
     fetchUserBusinessUnitsActivities();
   }, []);
 
-  // useEffect(() => {
-  //   if (id) {
-  //     setProductOrIndustry(pi);
-  //   }
-  // }, [id]);
+  useEffect(() => {
+    if (productOrIndustry === "") {
+      setSelectedLevel1("");
+    }
+  }, [productOrIndustry]);
 
   return (
     <>
@@ -67,7 +63,6 @@ const Eeio = () => {
             <EeioForm
               productOrIndustry={productOrIndustry}
               selectedLevel1={selectedLevel1}
-              setSelectedLevel1={setSelectedLevel1}
               fetchUserBusinessUnitsActivities={
                 fetchUserBusinessUnitsActivities
               }
@@ -86,6 +81,8 @@ const Eeio = () => {
       <EeioTable
         userBusinessUnitsActivities={userBusinessUnitsActivities}
         fetchUserBusinessUnitsActivities={fetchUserBusinessUnitsActivities}
+        setProductOrIndustry={setProductOrIndustry}
+        setSelectedLevel1={setSelectedLevel1}
       />
     </>
   );

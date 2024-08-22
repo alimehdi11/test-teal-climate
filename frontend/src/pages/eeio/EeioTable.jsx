@@ -16,6 +16,8 @@ import {
 const EeioTable = ({
   userBusinessUnitsActivities,
   fetchUserBusinessUnitsActivities,
+  setProductOrIndustry,
+  setSelectedLevel1,
 }) => {
   const handleDelete = (id) => {
     return () => {
@@ -47,7 +49,7 @@ const EeioTable = ({
             {[
               "S.No",
               "Scope",
-              "pi",
+              "Product/Industry",
               "Business Unit",
               "Level 1",
               "Level 2",
@@ -78,7 +80,7 @@ const EeioTable = ({
               </>,
               "Continent",
               "Country",
-              "Refrence",
+              "Reference",
               "Actions",
             ].map((item, index) => (
               <TableHead key={index}>{item}</TableHead>
@@ -125,8 +127,12 @@ const EeioTable = ({
                 <TableCell>
                   <div className="flex justify-center gap-x-1">
                     <Link
-                      to={`/eeio/${eeio.id}/${eeio.pi}/edit`}
+                      to={`/eeio/${eeio.id}/edit`}
                       className="flex justify-center items-center"
+                      onClick={() => {
+                        setProductOrIndustry(eeio.productOrIndustry);
+                        setSelectedLevel1(eeio.level1);
+                      }}
                     >
                       <img
                         src={editIcon}

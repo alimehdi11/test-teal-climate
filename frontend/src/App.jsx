@@ -47,7 +47,7 @@ function App() {
         </Route>
         <Route path="/eeio" element={<ProtectedRoute Component={Eeio} />}>
           <Route
-            path=":id/:pi/edit"
+            path=":id/edit"
             element={<ProtectedRoute Component={Eeio} />}
           />
         </Route>
