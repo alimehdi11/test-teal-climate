@@ -4,11 +4,11 @@ import {
   getBusinessUnitActivityById,
   updateBusinessUnitActivityById,
   deleteBusinessUnitActivityById,
-} from "../controllers/businessUnitsActivites.controllers.js";
+} from "../controllers/businessUnitsActivities.controllers.js";
 import {
   isBusinessUnitActivityOwner,
   isbusinessUnitIdBelongsToUser,
-} from "../middlewares/businessUnitsActivites.middleware.js";
+} from "../middlewares/businessUnitsActivities.middleware.js";
 
 const businessUnitsActivitiesRouter = express.Router();
 

@@ -1,8 +1,15 @@
 import csv from "csv-parser";
 import path from "path";
 import fs from "fs";
-const { Level1Category, ElectricVehicle, Country, Eeio, Airport, Activity } =
-  await import("./createDatabaseTables.js");
+const {
+  Level1Category,
+  ElectricVehicle,
+  Country,
+  Eeio,
+  Airport,
+  Activity,
+  CountryMask,
+} = await import("./createDatabaseTables.js");
 import { sequelize } from "./../src/database/connectDb.js";
 
 const csvFilesNames = [
@@ -12,6 +19,7 @@ const csvFilesNames = [
   "eeios.csv",
   "electricVehicles.csv",
   "level1Categories.csv",
+  "countriesMasks.csv",
 ];
 
 const models = [
@@ -21,6 +29,7 @@ const models = [
   Eeio,
   ElectricVehicle,
   Level1Category,
+  CountryMask,
 ];
 
 const filePaths = csvFilesNames.map((csvFileName) => {

@@ -1,0 +1,323 @@
+continent,country,region,countryMask
+Asia,Afghanistan,Afghanistan,RoW Asia and Pacific
+Europe,Aland Islands,Aland Islands,RoW Europe
+Europe,Albania,Albania,RoW Europe
+Africa,Algeria,Algeria,RoW Africa
+Oceania,American Samoa,American Samoa,RoW Asia and Pacific
+Europe,Andorra,Andorra,RoW Europe
+Africa,Angola,Angola,RoW Africa
+Americas,Anguilla,Anguilla,RoW Americas
+Antarctica,Antarctica,Antarctica,RoW Asia and Pacific
+Americas,Antigua and Barbuda,Antigua and Barbuda,RoW Americas
+Americas,Argentina,Argentina,RoW Americas
+Asia,Armenia,Armenia,RoW Asia and Pacific
+Americas,Aruba,Aruba,RoW Americas
+Oceania,Australia,New South Wales and Australian Capital Territory,Australia
+Oceania,Australia,Victoria,Australia
+Oceania,Australia,Queensland,Australia
+Oceania,Australia,South Australia,Australia
+Oceania,Australia,Western Australia -,Australia
+Oceania,Australia,South West Interconnected System (SWIS) ,Australia
+Oceania,Australia,Tasmania,Australia
+Oceania,Australia,Northern territory -,Australia
+Oceania,Australia,Darwin Katherine Interconnected System (DKIS) ,Australia
+Oceania,Australia,Western Australia - North Western Interconnected System (NWIS) ,Australia
+Europe,Austria,Austria,Austria
+Asia,Azerbaijan,Azerbaijan,RoW Asia and Pacific
+Americas,Bahamas,Bahamas,RoW Americas
+Asia,Bahrain,Bahrain,RoW Middle East
+Asia,Bangladesh,Bangladesh,RoW Asia and Pacific
+Americas,Barbados,Barbados,RoW Americas
+Europe,Belarus,Belarus,RoW Europe
+Europe,Belgium,Belgium,Belgium
+Americas,Belize,Belize,RoW Americas
+Africa,Benin,Benin,RoW Africa
+Americas,Bermuda,Bermuda,RoW Americas
+Asia,Bhutan,Bhutan,RoW Asia and Pacific
+Americas,Bolivia (Plurinational State of),Bolivia (Plurinational State of),RoW Americas
+Americas,"Bonaire, Sint Eustatius and Saba","Bonaire, Sint Eustatius and Saba",RoW Americas
+Europe,Bosnia and Herzegovina,Bosnia and Herzegovina,RoW Europe
+Africa,Botswana,Botswana,RoW Africa
+Americas,Bouvet Island,Bouvet Island,RoW Americas
+Americas,Brazil,Brazil,Brazil
+Africa,British Indian Ocean Territory,British Indian Ocean Territory,RoW Africa
+Asia,Brunei Darussalam,Brunei Darussalam,RoW Asia and Pacific
+Europe,Bulgaria,Bulgaria,Bulgaria
+Africa,Burkina Faso,Burkina Faso,RoW Africa
+Africa,Burundi,Burundi,RoW Africa
+Africa,Cabo Verde,Cabo Verde,RoW Africa
+Asia,Cambodia,Cambodia,RoW Asia and Pacific
+Africa,Cameroon,Cameroon,RoW Africa
+Americas,Canada,Alberta (AB),Canada
+Americas,Canada,British Columbia (BC),Canada
+Americas,Canada,Manitoba (MT),Canada
+Americas,Canada,New Brunswick (NB),Canada
+Americas,Canada,Newfoundland and Labrador (NL),Canada
+Americas,Canada,Nova Scotia (NS),Canada
+Americas,Canada,Northwest Territories (NT),Canada
+Americas,Canada,Nunavut (NU),Canada
+Americas,Canada,Ontario (ON),Canada
+Americas,Canada,Prince Edward Island (PE),Canada
+Americas,Canada,Quebec (QC),Canada
+Americas,Canada,Saskatchewan (SK),Canada
+Americas,Canada,Yukon Territory (YT),Canada
+Americas,Cayman Islands,Cayman Islands,RoW Americas
+Africa,Central African Republic,Central African Republic,RoW Africa
+Africa,Chad,Chad,RoW Africa
+Americas,Chile,Chile,RoW Americas
+Asia,China,China,China
+Oceania,Christmas Island,Christmas Island,RoW Asia and Pacific
+Oceania,Cocos (Keeling) Islands,Cocos (Keeling) Islands,RoW Asia and Pacific
+Americas,Colombia,Colombia,RoW Americas
+Africa,Comoros,Comoros,RoW Africa
+Africa,Congo,Congo,RoW Africa
+Africa,"Congo, Democratic Republic of the","Congo, Democratic Republic of the",RoW Africa
+Oceania,Cook Islands,Cook Islands,RoW Asia and Pacific
+Americas,Costa Rica,Costa Rica,RoW Americas
+Africa,Cote d'Ivoire,Cote d'Ivoire,RoW Africa
+Europe,Croatia,Croatia,Croatia
+Americas,Cuba,Cuba,RoW Americas
+Americas,Curacao,Curacao,RoW Americas
+Asia,Cyprus,Cyprus,Cyprus
+Europe,Czechia,Czechia,RoW Europe
+Europe,Denmark,Denmark,Denmark
+Africa,Djibouti,Djibouti,RoW Africa
+Americas,Dominica,Dominica,RoW Americas
+Americas,Dominican Republic,Dominican Republic,RoW Americas
+Americas,Ecuador,Ecuador,RoW Americas
+Africa,Egypt,Egypt,RoW Middle East
+Americas,El Salvador,El Salvador,RoW Americas
+Africa,Equatorial Guinea,Equatorial Guinea,RoW Africa
+Africa,Eritrea,Eritrea,RoW Africa
+Europe,Estonia,Estonia,Estonia
+Africa,Eswatini,Eswatini,RoW Africa
+Africa,Ethiopia,Ethiopia,RoW Africa
+Americas,Falkland Islands (Malvinas),Falkland Islands (Malvinas),RoW Americas
+Europe,Faroe Islands,Faroe Islands,RoW Europe
+Oceania,Fiji,Fiji,RoW Asia and Pacific
+Europe,Finland,Finland,Finland
+Europe,France,France,France
+Americas,French Guiana,French Guiana,RoW Americas
+Oceania,French Polynesia,French Polynesia,RoW Asia and Pacific
+Africa,French Southern Territories,French Southern Territories,RoW Africa
+Africa,Gabon,Gabon,RoW Africa
+Africa,Gambia,Gambia,RoW Africa
+Asia,Georgia,Georgia,RoW Asia and Pacific
+Europe,Germany,Germany,Germany
+Africa,Ghana,Ghana,RoW Africa
+Europe,Gibraltar,Gibraltar,RoW Europe
+Europe,Greece,Greece,Greece
+Americas,Greenland,Greenland,RoW Americas
+Americas,Grenada,Grenada,RoW Americas
+Americas,Guadeloupe,Guadeloupe,RoW Americas
+Oceania,Guam,Guam,RoW Asia and Pacific
+Americas,Guatemala,Guatemala,RoW Americas
+Europe,Guernsey,Guernsey,RoW Europe
+Africa,Guinea,Guinea,RoW Africa
+Africa,Guinea-Bissau,Guinea-Bissau,RoW Africa
+Americas,Guyana,Guyana,RoW Americas
+Americas,Haiti,Haiti,RoW Americas
+Oceania,Heard Island and McDonald Islands,Heard Island and McDonald Islands,RoW Asia and Pacific
+Europe,Holy See,Holy See,RoW Europe
+Americas,Honduras,Honduras,RoW Americas
+Asia,Hong Kong,Hong Kong,RoW Asia and Pacific
+Europe,Hungary,Hungary,Hungary
+Europe,Iceland,Iceland,RoW Europe
+Asia,India,India,India
+Asia,Indonesia,Indonesia,Indonesia
+Asia,Iran (Islamic Republic of),Iran (Islamic Republic of),RoW Middle East
+Asia,Iraq,Iraq,RoW Middle East
+Europe,Ireland,Ireland,Ireland
+Europe,Isle of Man,Isle of Man,RoW Europe
+Asia,Israel,Israel,RoW Middle East
+Europe,Italy,Italy,Italy
+Americas,Jamaica,Jamaica,RoW Americas
+Asia,Japan,Japan,Japan
+Europe,Jersey,Jersey,RoW Europe
+Asia,Jordan,Jordan,RoW Middle East
+Asia,Kazakhstan,Kazakhstan,RoW Asia and Pacific
+Africa,Kenya,Kenya,RoW Africa
+Oceania,Kiribati,Kiribati,RoW Asia and Pacific
+Asia,Korea (Democratic People's Republic of),Korea (Democratic People's Republic of),RoW Asia and Pacific
+Asia,"Korea, Republic of","Korea, Republic of",RoW Asia and Pacific
+Asia,Kuwait,Kuwait,RoW Middle East
+Asia,Kyrgyzstan,Kyrgyzstan,RoW Asia and Pacific
+Asia,Lao People's Democratic Republic,Lao People's Democratic Republic,RoW Asia and Pacific
+Europe,Latvia,Latvia,Latvia
+Asia,Lebanon,Lebanon,RoW Middle East
+Africa,Lesotho,Lesotho,RoW Africa
+Africa,Liberia,Liberia,RoW Africa
+Africa,Libya,Libya,RoW Africa
+Europe,Liechtenstein,Liechtenstein,RoW Europe
+Europe,Lithuania,Lithuania,Lithuania
+Europe,Luxembourg,Luxembourg,Luxembourg
+Asia,Macao,Macao,RoW Asia and Pacific
+Africa,Madagascar,Madagascar,RoW Africa
+Africa,Malawi,Malawi,RoW Africa
+Asia,Malaysia,Malaysia,RoW Asia and Pacific
+Asia,Maldives,Maldives,RoW Asia and Pacific
+Africa,Mali,Mali,RoW Africa
+Europe,Malta,Malta,Malta
+Oceania,Marshall Islands,Marshall Islands,RoW Asia and Pacific
+Americas,Martinique,Martinique,RoW Americas
+Africa,Mauritania,Mauritania,RoW Africa
+Africa,Mauritius,Mauritius,RoW Africa
+Africa,Mayotte,Mayotte,RoW Africa
+Americas,Mexico,Mexico,Mexico
+Oceania,Micronesia (Federated States of),Micronesia (Federated States of),RoW Asia and Pacific
+Europe,"Moldova, Republic of","Moldova, Republic of",RoW Europe
+Europe,Monaco,Monaco,RoW Europe
+Asia,Mongolia,Mongolia,RoW Asia and Pacific
+Europe,Montenegro,Montenegro,RoW Europe
+Americas,Montserrat,Montserrat,RoW Americas
+Africa,Morocco,Morocco,RoW Africa
+Africa,Mozambique,Mozambique,RoW Africa
+Asia,Myanmar,Myanmar,RoW Asia and Pacific
+Africa,Namibia,Namibia,RoW Africa
+Oceania,Nauru,Nauru,RoW Asia and Pacific
+Asia,Nepal,Nepal,RoW Asia and Pacific
+Europe,Netherlands,Netherlands,Netherlands
+Oceania,New Caledonia,New Caledonia,RoW Asia and Pacific
+Oceania,New Zealand,New Zealand,RoW Asia and Pacific
+Americas,Nicaragua,Nicaragua,RoW Americas
+Africa,Niger,Niger,RoW Africa
+Africa,Nigeria,Nigeria,RoW Africa
+Oceania,Niue,Niue,RoW Asia and Pacific
+Oceania,Norfolk Island,Norfolk Island,RoW Asia and Pacific
+Europe,North Macedonia,North Macedonia,RoW Europe
+Oceania,Northern Mariana Islands,Northern Mariana Islands,RoW Asia and Pacific
+Europe,Norway,Norway,Norway
+Asia,Oman,Oman,RoW Middle East
+Asia,Pakistan,Pakistan,RoW Asia and Pacific
+Oceania,Palau,Palau,RoW Asia and Pacific
+Asia,"Palestine, State of","Palestine, State of",RoW Middle East
+Americas,Panama,Panama,RoW Americas
+Oceania,Papua New Guinea,Papua New Guinea,RoW Asia and Pacific
+Americas,Paraguay,Paraguay,RoW Americas
+Americas,Peru,Peru,RoW Americas
+Asia,Philippines,Philippines,RoW Asia and Pacific
+Oceania,Pitcairn,Pitcairn,RoW Asia and Pacific
+Europe,Poland,Poland,Poland
+Europe,Portugal,Portugal,Portugal
+Americas,Puerto Rico,Puerto Rico,RoW Americas
+Asia,Qatar,Qatar,RoW Middle East
+Africa,Reunion,Reunion,RoW Africa
+Europe,Romania,Romania,Romania
+Europe,Russian Federation,Russian Federation,RoW Europe
+Africa,Rwanda,Rwanda,RoW Africa
+Americas,Saint Barthelemy,Saint Barthelemy,RoW Americas
+Africa,"Saint Helena, Ascension and Tristan da Cunha","Saint Helena, Ascension and Tristan da Cunha",RoW Africa
+Americas,Saint Kitts and Nevis,Saint Kitts and Nevis,RoW Americas
+Americas,Saint Lucia,Saint Lucia,RoW Americas
+Americas,Saint Martin (French part),Saint Martin (French part),RoW Americas
+Americas,Saint Pierre and Miquelon,Saint Pierre and Miquelon,RoW Americas
+Americas,Saint Vincent and the Grenadines,Saint Vincent and the Grenadines,RoW Americas
+Oceania,Samoa,Samoa,RoW Asia and Pacific
+Europe,San Marino,San Marino,RoW Europe
+Africa,Sao Tome and Principe,Sao Tome and Principe,RoW Africa
+Asia,Saudi Arabia,Saudi Arabia,RoW Middle East
+Africa,Senegal,Senegal,RoW Africa
+Europe,Serbia,Serbia,RoW Europe
+Africa,Seychelles,Seychelles,RoW Africa
+Africa,Sierra Leone,Sierra Leone,RoW Africa
+Asia,Singapore,Singapore,RoW Asia and Pacific
+Americas,Sint Maarten (Dutch part),Sint Maarten (Dutch part),RoW Americas
+Europe,Slovakia,Slovakia,Slovakia
+Europe,Slovenia,Slovenia,Slovenia
+Oceania,Solomon Islands,Solomon Islands,RoW Asia and Pacific
+Africa,Somalia,Somalia,RoW Africa
+Africa,South Africa,South Africa,South Africa
+Americas,South Georgia and the South Sandwich Islands,South Georgia and the South Sandwich Islands,RoW Americas
+Africa,South Sudan,South Sudan,RoW Africa
+Europe,Spain,Spain,Spain
+Asia,Sri Lanka,Sri Lanka,RoW Asia and Pacific
+Africa,Sudan,Sudan,RoW Africa
+Americas,Suriname,Suriname,RoW Americas
+Europe,Svalbard and Jan Mayen,Svalbard and Jan Mayen,RoW Europe
+Europe,Sweden,Sweden,Sweden
+Europe,Switzerland,Switzerland,Switzerland
+Asia,Syrian Arab Republic,Syrian Arab Republic,RoW Middle East
+Asia,"Taiwan, Province of China","Taiwan, Province of China",RoW Asia and Pacific
+Asia,Tajikistan,Tajikistan,RoW Asia and Pacific
+Africa,"Tanzania, United Republic of","Tanzania, United Republic of",RoW Africa
+Asia,Thailand,Thailand,RoW Asia and Pacific
+Asia,Timor-Leste,Timor-Leste,RoW Asia and Pacific
+Africa,Togo,Togo,RoW Africa
+Oceania,Tokelau,Tokelau,RoW Asia and Pacific
+Oceania,Tonga,Tonga,RoW Asia and Pacific
+Americas,Trinidad and Tobago,Trinidad and Tobago,RoW Americas
+Africa,Tunisia,Tunisia,RoW Africa
+Asia,Turkey,Turkey,RoW Middle East
+Asia,Turkmenistan,Turkmenistan,RoW Asia and Pacific
+Americas,Turks and Caicos Islands,Turks and Caicos Islands,RoW Americas
+Oceania,Tuvalu,Tuvalu,RoW Asia and Pacific
+Africa,Uganda,Uganda,RoW Africa
+Europe,Ukraine,Ukraine,RoW Europe
+Asia,United Arab Emirates,United Arab Emirates,RoW Middle East
+Europe,United Kingdom of Great Britain and Northern Ireland,United Kingdom of Great Britain and Northern Ireland,RoW Europe
+Americas,United States of America,Alaska,United States of America
+Americas,United States of America,Alabama,United States of America
+Americas,United States of America,Arkansas,United States of America
+Americas,United States of America,Arizona,United States of America
+Americas,United States of America,California,United States of America
+Americas,United States of America,Colorado,United States of America
+Americas,United States of America,Connecticut,United States of America
+Americas,United States of America,District of Columbia,United States of America
+Americas,United States of America,Delaware,United States of America
+Americas,United States of America,Florida,United States of America
+Americas,United States of America,Georgia,United States of America
+Americas,United States of America,Hawaii,United States of America
+Americas,United States of America,Iowa,United States of America
+Americas,United States of America,Idaho,United States of America
+Americas,United States of America,Illinois,United States of America
+Americas,United States of America,Indiana,United States of America
+Americas,United States of America,Kansas,United States of America
+Americas,United States of America,Kentucky,United States of America
+Americas,United States of America,Louisiana,United States of America
+Americas,United States of America,Massachusetts,United States of America
+Americas,United States of America,Maryland,United States of America
+Americas,United States of America,Maine,United States of America
+Americas,United States of America,Michigan,United States of America
+Americas,United States of America,Minnesota,United States of America
+Americas,United States of America,Missouri,United States of America
+Americas,United States of America,Mississippi,United States of America
+Americas,United States of America,Montana,United States of America
+Americas,United States of America,North Carolina,United States of America
+Americas,United States of America,North Dakota,United States of America
+Americas,United States of America,Nebraska,United States of America
+Americas,United States of America,New Hampshire,United States of America
+Americas,United States of America,New Jersey,United States of America
+Americas,United States of America,New Mexico,United States of America
+Americas,United States of America,Nevada,United States of America
+Americas,United States of America,New York,United States of America
+Americas,United States of America,Ohio,United States of America
+Americas,United States of America,Oklahoma,United States of America
+Americas,United States of America,Oregon,United States of America
+Americas,United States of America,Pennsylvania,United States of America
+Americas,United States of America,Puerto Rico,United States of America
+Americas,United States of America,Rhode Island,United States of America
+Americas,United States of America,South Carolina,United States of America
+Americas,United States of America,South Dakota,United States of America
+Americas,United States of America,Tennessee,United States of America
+Americas,United States of America,Texas,United States of America
+Americas,United States of America,Utah,United States of America
+Americas,United States of America,Virginia,United States of America
+Americas,United States of America,Vermont,United States of America
+Americas,United States of America,Washington,United States of America
+Americas,United States of America,Wisconsin,United States of America
+Americas,United States of America,West Virginia,United States of America
+Americas,United States of America,Wyoming,United States of America
+Americas,United States of America,United States of America,United States of America
+Oceania,United States Minor Outlying Islands,United States Minor Outlying Islands,RoW Asia and Pacific
+Americas,Uruguay,Uruguay,RoW Americas
+Asia,Uzbekistan,Uzbekistan,RoW Asia and Pacific
+Oceania,Vanuatu,Vanuatu,RoW Asia and Pacific
+Americas,Venezuela (Bolivarian Republic of),Venezuela (Bolivarian Republic of),RoW Americas
+Asia,Viet Nam,Viet Nam,RoW Asia and Pacific
+Americas,Virgin Islands (British),Virgin Islands (British),RoW Americas
+Americas,Virgin Islands (U.S.),Virgin Islands (U.S.),RoW Americas
+Oceania,Wallis and Futuna,Wallis and Futuna,RoW Asia and Pacific
+Africa,Western Sahara,Western Sahara,RoW Africa
+Asia,Yemen,Yemen,RoW Middle East
+Africa,Zambia,Zambia,RoW Africa
+Africa,Zimbabwe,Zimbabwe,RoW Africa

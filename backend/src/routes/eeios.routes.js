@@ -6,11 +6,11 @@ import {
   // getEeioLevel4,
   // getEeioLevel5,
   // getEeiosector,
-  insertEeioData,
-  getEeiodata,
-  fetchEeioEditData,
-  editEeioData,
-  deleteEeioData,
+  // insertEeioData,
+  // getEeiodata,
+  // fetchEeioEditData,
+  // editEeioData,
+  // deleteEeioData,
 } from "../controllers/eeio.controllers.js";
 
 const eeiosRouter = express.Router();
@@ -30,10 +30,10 @@ eeiosRouter.get("/", getEeio);
 //   "/sector/:selectedForm/:selectedlevel1/:level2/:level3/:level4/:level5",
 //   getEeiosector
 // );
-eeiosRouter.post("/", insertEeioData);
-eeiosRouter.get("/eeiodata/:userid", getEeiodata);
-eeiosRouter.get("/fetchEeioEditData/:id/:userid", fetchEeioEditData);
-eeiosRouter.put("/editEeioData/:id", editEeioData);
-eeiosRouter.delete("/deleteEeioData/:id/:userid", deleteEeioData);
+// eeiosRouter.post("/", insertEeioData);
+// eeiosRouter.get("/eeiodata/:userid", getEeiodata);
+// eeiosRouter.get("/fetchEeioEditData/:id/:userid", fetchEeioEditData);
+// eeiosRouter.put("/editEeioData/:id", editEeioData);
+// eeiosRouter.delete("/deleteEeioData/:id/:userid", deleteEeioData);
 
 export { eeiosRouter };
