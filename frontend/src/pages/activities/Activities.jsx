@@ -80,12 +80,12 @@ const Activities = () => {
           )
         }
       />
-      <ActivitiesTable
+      {/* <ActivitiesTable
         userBusinessUnitsActivities={userBusinessUnitsActivities}
         fetchUserBusinessUnitsActivities={fetchUserBusinessUnitsActivities}
         setSelectedScope={setSelectedScope}
         setSelectedLevel={setSelectedLevel}
-      />
+      /> */}
     </>
   );
 };
