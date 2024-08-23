@@ -9,9 +9,9 @@ import {
 
 const createBusinessUnitActivity = async (req, res) => {
   if (req.query.eeio === "true") {
-    await createEeioActivity(req, res, "create");
+    await createEeioActivity(req, res);
   } else {
-    await createActivity();
+    await createActivity(req, res);
   }
 };
 
