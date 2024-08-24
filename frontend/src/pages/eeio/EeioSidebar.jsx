@@ -3,8 +3,8 @@ import Button from "../../components/ui/Button";
 const EeioSidebar = ({
   productOrIndustry,
   setProductOrIndustry,
-  selectedLevel1,
-  setSelectedLevel1,
+  selectedLevel,
+  setSelectedLevel,
 }) => {
   const level1Options = [
     "Activities of households",
@@ -28,13 +28,15 @@ const EeioSidebar = ({
 
   return (
     <>
-      <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">
+      {/* <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">
         Select one
-      </h2>
-      <div className="flex flex-col gap-y-4">
+      </h2> */}
+      <div className="flex flex-col gap-y-2 mt-2">
         <Button
           className={
-            productOrIndustry === "Industry" ? "bg-tc-green text-white" : ""
+            productOrIndustry === "Industry"
+              ? "bg-tc-indigo-light text-tc-blue"
+              : ""
           }
           onClick={() =>
             setProductOrIndustry((previousValue) =>
@@ -46,7 +48,9 @@ const EeioSidebar = ({
         </Button>
         <Button
           className={
-            productOrIndustry === "Product" ? "bg-tc-green text-white" : ""
+            productOrIndustry === "Product"
+              ? "bg-tc-indigo-light text-tc-blue"
+              : ""
           }
           onClick={() =>
             setProductOrIndustry((previousValue) =>
@@ -57,37 +61,49 @@ const EeioSidebar = ({
           Product
         </Button>
       </div>
-      {productOrIndustry && (
+      {/* {productOrIndustry && (
         <>
           <h2 className="m-0 my-4 text-center font-extrabold text-2xl">
             Select Category
           </h2>
-
-          {/* List */}
-          <ul className="list-none m-0 my-4 md:mb-0 p-0 flex flex-col gap-y-4">
+          List
+          <div className="flex flex-col gap-y-2 mt-2">
             {level1Options.map((item, index) => (
-              <li
+              <Button
                 key={index}
                 className={
-                  "bg-gray-200 hover:bg-tc-blue hover:text-white rounded-lg p-2" +
-                  (item === selectedLevel1
-                    ? " bg-tc-blue text-white hover:bg-opacity-90"
-                    : "")
+                  item === selectedLevel
+                    ? " bg-tc-indigo-light text-tc-blue"
+                    : ""
                 }
                 onClick={() => {
-                  if (item === selectedLevel1) {
-                    setSelectedLevel1(null);
+                  if (item === selectedLevel) {
+                    setSelectedLevel(null);
                   } else {
-                    setSelectedLevel1(item);
+                    setSelectedLevel(item);
                   }
                 }}
               >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-5 min-w-5 min-h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m16.49 12 3.75 3.75m0 0-3.75 3.75m3.75-3.75H3.74V4.499"
+                  />
+                </svg>
                 {item}
-              </li>
+              </Button>
             ))}
-          </ul>
+          </div>
         </>
-      )}
+      )} */}
     </>
   );
 };

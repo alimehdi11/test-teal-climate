@@ -2,7 +2,8 @@ const Select = ({ children, className = "", id = "", onChange, value }) => {
   return (
     <select
       className={(
-        "text-[16px] h-10 rounded-lg border border-slate-500 p-2 " + className
+        "w-full text-[16px] h-11 rounded-md bg-tc-input-background p-2 " +
+        className
       ).trim()}
       {...(id ? (id = { id }) : null)}
       onChange={onChange}

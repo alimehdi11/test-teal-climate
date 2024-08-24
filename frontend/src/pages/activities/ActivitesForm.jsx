@@ -1598,13 +1598,16 @@ const ActivitesForm = ({
   }, [id]);
 
   return (
-    <form onSubmit={handleFormSubmit} className="flex flex-col gap-y-3">
+    <form
+      onSubmit={handleFormSubmit}
+      className="flex flex-col gap-y-3 bg-white rounded-md p-6"
+    >
       <h3 className="m-0 font-extrabold text-2xl">Insert activity data here</h3>
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div className="grid gap-4">
         {/* TODO: Location Based bar should be in all Scope 2 levels or only in Scope 2(Electricity) */}
         {/* {selectedLevel === "Electricity" && (  */}
         {selectedScope === "Scope 2" && (
-          <h4 className="bg-gray-200 col-span-full p-2 rounded">
+          <h4 className="bg-gray-200 col-span-full p-2 rounded-md">
             Location based
           </h4>
         )}
@@ -1903,7 +1906,7 @@ const ActivitesForm = ({
       {/* Market based form */}
       {marketBased && (
         <div className="grid lg:grid-cols-2 gap-4">
-          <h4 className="bg-gray-200 col-span-full p-2 rounded">
+          <h4 className="bg-gray-200 col-span-full p-2 rounded-md">
             Market based
           </h4>
           <FormControl>
@@ -1964,7 +1967,7 @@ const ActivitesForm = ({
       ) : (
         <Button
           type="submit"
-          className="text-white bg-tc-green hover:bg-opacity-90"
+          className="text-white bg-tc-green hover:bg-opacity-90 max-w-[200px] justify-center self-end"
         >
           Add
         </Button>

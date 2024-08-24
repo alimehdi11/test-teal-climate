@@ -1,7 +1,7 @@
 import { useState } from "react";
 import rightAngleIcon from "../../assets/right-angle-icon.svg";
 import Logo from "../ui/Logo";
-import Navbar from "../Navbar";
+import Menu from "../Menu";
 
 const Sidebar = ({ children }) => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -12,15 +12,11 @@ const Sidebar = ({ children }) => {
       //   "w-[25vw] min-w-[250px] fixed top-[64px] left-0 bottom-0 -translate-x-full transition-transform duration-400 ease-out md:translate-x-0 md:static md:transition-none z-[900] pt-4 shadow-lg shadow-tc-blue md:shadow-none md:pt-0 " +
       //   (sidebarVisible ? "translate-x-0" : "")
       // ).trim()}
-      className="bg-white flex-1 py-4 px-6 max-w-[300px]"
+      className="bg-white flex-1 py-4 px-6 max-w-[300px] min-w-[300px] overflow-auto fixed top-0 left-0 bottom-0"
     >
       <Logo />
-      {/* Menu */}
-      <div className="mt-4">
-        <div className="text-tc-sidebar-heading px-4">Menu</div>
-        <Navbar />
-        {children}
-      </div>
+      <Menu />
+      {children}
       {/* <div
         className="h-full overflow-y-auto hide-scroll px-4 md:px-0"
         style={{

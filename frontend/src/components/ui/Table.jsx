@@ -1,7 +1,7 @@
 const TableContainer = ({ className = "", children }) => (
   <div
     className={(
-      "m-4 overflow-auto rounded-lg border border-slate-500 thin-scroll-bar shadow-2xl " +
+      "mt-5 overflow-auto rounded-md border border-slate-500 thin-scroll-bar shadow-2xl " +
       className
     ).trim()}
   >

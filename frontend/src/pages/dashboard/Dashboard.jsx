@@ -1,5 +1,5 @@
 import CarbonEmissionsAnalytics from "./CarbonEmissionsAnalytics.jsx";
-import Navbar from "../../components/Navbar.jsx";
+import Menu from "../../components/Menu.jsx";
 import Top10EmissionsTable from "./Top10EmissionsTable.jsx";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -39,7 +39,7 @@ const Dashboard = () => {
 
   return (
     <div ref={pdfRef}>
-      <Navbar />
+      <Menu />
       <div className="flex flex-col-reverse xs:flex-row gap-y-4 justify-between px-4 mt-4">
         <Button
           className="bg-tc-green text-white text-base"

@@ -1,17 +1,10 @@
 import Sidebar from "./Sidebar";
 import Main from "./Main";
-import Navbar from "../Navbar";
 
-const Layout = ({ sidebarContent, mainContent, className = "" }) => {
+const Layout = ({ sidebarContent, mainContent }) => {
   return (
     <>
-      {/* <Navbar /> */}
-      <div
-        className={("flex relative bg-green-400 " + className).trim()}
-        style={{
-          minHeight: "100vh",
-        }}
-      >
+      <div>
         <Sidebar>{sidebarContent}</Sidebar>
         <Main>{mainContent}</Main>
       </div>

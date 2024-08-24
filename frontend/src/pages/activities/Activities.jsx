@@ -7,12 +7,16 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { UserContext } from "../../contexts/UserContext.jsx";
 import { request } from "../../utils/request.js";
 import Layout from "../../components/layout/Layout.jsx";
+import EeioForm from "../../pages/eeio/EeioForm.jsx";
 
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
     useState([]);
+  const [isSpendBaseScope3Selected, setIsSpendBaseScope3Selected] =
+    useState(false);
+  const [productOrIndustry, setProductOrIndustry] = useState("");
   // const { id } = useParams();
   const { user } = useContext(UserContext);
 
@@ -56,36 +60,58 @@ const Activities = () => {
             selectedLevel={selectedLevel}
             setSelectedScope={setSelectedScope}
             setSelectedLevel={setSelectedLevel}
+            isSpendBaseScope3Selected={isSpendBaseScope3Selected}
+            setIsSpendBaseScope3Selected={setIsSpendBaseScope3Selected}
+            productOrIndustry={productOrIndustry}
+            setProductOrIndustry={setProductOrIndustry}
           />
         }
         mainContent={
-          selectedScope && selectedLevel ? (
-            <ActivitesForm
-              selectedScope={selectedScope}
-              selectedLevel={selectedLevel}
+          <>
+            {selectedScope && selectedLevel ? (
+              <>
+                <div className="my-5 font-extrabold text-2xl">
+                  {selectedLevel}
+                </div>
+                <ActivitesForm
+                  selectedScope={selectedScope}
+                  selectedLevel={selectedLevel}
+                  fetchUserBusinessUnitsActivities={
+                    fetchUserBusinessUnitsActivities
+                  }
+                  setSelectedScope={setSelectedScope}
+                  setSelectedLevel={setSelectedLevel}
+                />
+              </>
+            ) : (
+              isSpendBaseScope3Selected &&
+              productOrIndustry && (
+                <>
+                  <div className="my-5 font-extrabold text-2xl">
+                    {productOrIndustry}
+                  </div>
+                  <EeioForm
+                    productOrIndustry={productOrIndustry}
+                    selectedLevel={selectedLevel}
+                    setSelectedLevel={setSelectedLevel}
+                    fetchUserBusinessUnitsActivities={
+                      fetchUserBusinessUnitsActivities
+                    }
+                  />
+                </>
+              )
+            )}
+            <ActivitiesTable
+              userBusinessUnitsActivities={userBusinessUnitsActivities}
               fetchUserBusinessUnitsActivities={
                 fetchUserBusinessUnitsActivities
               }
               setSelectedScope={setSelectedScope}
               setSelectedLevel={setSelectedLevel}
             />
-          ) : (
-            <div
-              className="bg-gray-200 flex justify-center items-center font-bold text-gray-500 rounded-lg"
-              style={{ height: "calc(100vh - 64px - 16px)" }}
-            >
-              <FaArrowLeftLong className="text-[20px] me-2" /> Please select
-              scope and activity from the sidebar
-            </div>
-          )
+          </>
         }
       />
-      {/* <ActivitiesTable
-        userBusinessUnitsActivities={userBusinessUnitsActivities}
-        fetchUserBusinessUnitsActivities={fetchUserBusinessUnitsActivities}
-        setSelectedScope={setSelectedScope}
-        setSelectedLevel={setSelectedLevel}
-      /> */}
     </>
   );
 };
