@@ -146,16 +146,16 @@ const ActivitiesTable = ({
               </TableCell>
               <TableCell>
                 <div className="flex justify-center gap-x-1">
-                  {/* <Link
-                      to={`/activities/${userBusinessUnit.id}/edit`}
-                      className="flex justify-center items-center"
-                    >
-                      <img
-                        src={editIcon}
-                        className="p-1 rounded hover:bg-slate-300 size-7"
-                        onClick={handleEdit(userBusinessUnit.id)}
-                      />
-                    </Link> */}
+                  <Link
+                    to={`/activities/${userBusinessUnit.id}/edit`}
+                    className="flex justify-center items-center"
+                  >
+                    <img
+                      src={editIcon}
+                      className="p-1 rounded hover:bg-slate-300 size-7"
+                      onClick={handleEdit(userBusinessUnit.id)}
+                    />
+                  </Link>
                   <img
                     src={trashIcon}
                     className="p-1 rounded hover:bg-slate-300 size-7"

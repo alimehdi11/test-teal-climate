@@ -203,8 +203,8 @@ const ActivitiesSidebar = ({
       {/* </Link> */}
 
       {level1.length > 0 && (
-        <>
-          <div className="mt-6">
+        <div className="ml-8 border-l my-2">
+          <div>
             {/* <h2 className="text-tc-sidebar-heading px-4">Select Activity</h2> */}
             {/* Search query input */}
             <div className="mt-2">
@@ -257,7 +257,7 @@ const ActivitiesSidebar = ({
               </Button>
             ))}
           </div>
-        </>
+        </div>
       )}
 
       {isSpendBaseScope3Selected && (

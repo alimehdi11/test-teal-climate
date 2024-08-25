@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../contexts/UserContext.jsx";
-import { request } from "../../utils/request.js";
-import Button from "../../components/ui/Button.jsx";
-import Layout from "../../components/layout/Layout.jsx";
-import SettingsSidebar from "./SettingsSidebar.jsx";
-import { deleteToken } from "../../utils/auth.js";
+import { UserContext } from "../contexts/UserContext.jsx";
+import { request } from "../utils/request.js";
+import Button from "../components/ui/Button.jsx";
+import Layout from "../components/layout/Layout.jsx";
+// import SettingsSidebar from "./SettingsSidebar.jsx";
+import { deleteToken } from "../utils/auth.js";
 import { useNavigate } from "react-router-dom";
 
 const SubscriptionSettings = () => {
@@ -123,10 +123,11 @@ const SubscriptionSettings = () => {
   return (
     <>
       <Layout
-        sidebarContent={<SettingsSidebar />}
+        // sidebarContent={<SettingsSidebar />}
         mainContent={
           <>
-            <div>
+            <div className="my-5 font-extrabold text-2xl">Setting</div>
+            <div className="bg-white p-6 rounded-md">
               <h2 className="m-0 mb-4 font-extrabold text-2xl">
                 Subscription Details
               </h2>
@@ -134,7 +135,11 @@ const SubscriptionSettings = () => {
                 <p>
                   {"Your next invoive will be on "} <b>{nextInvoiceData}</b>
                 </p>
-                <Button type="button" className="mt-4" onClick={openModal}>
+                <Button
+                  type="button"
+                  className="mt-4 w-max bg-tc-green text-white hover:opacity-90 hover:bg-[#00cc9c] hover:text-white"
+                  onClick={openModal}
+                >
                   Unsubscribe
                 </Button>
               </div>

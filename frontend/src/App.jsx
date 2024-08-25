@@ -10,9 +10,9 @@ import Completion from "./pages/Completion";
 import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Eeio from "./pages/eeio/Eeio";
-import SubscriptionSettings from "./pages/settings/SubscriptionSettings.jsx";
-import AccountSettings from "./pages/settings/AccountSettings.jsx";
-import AccountSettingsEdit from "./pages/settings/AccountSettingsEdit.jsx";
+import Setting from "./pages/Setting.jsx";
+import Account from "./pages/Account.jsx";
+import AccountEdit from "./pages/AccountEdit.jsx";
 import ForgetPassword from "./pages/ForgetPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 
@@ -52,16 +52,16 @@ function App() {
           />
         </Route>
         <Route
-          path="/settings/account"
-          element={<ProtectedRoute Component={AccountSettings} />}
+          path="/account"
+          element={<ProtectedRoute Component={Account} />}
         />
         <Route
-          path="/settings/account/edit"
-          element={<ProtectedRoute Component={AccountSettingsEdit} />}
+          path="/account/edit"
+          element={<ProtectedRoute Component={AccountEdit} />}
         />
         <Route
-          path="/settings/subscription"
-          element={<ProtectedRoute Component={SubscriptionSettings} />}
+          path="/setting"
+          element={<ProtectedRoute Component={Setting} />}
         />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />

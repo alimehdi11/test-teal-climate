@@ -61,10 +61,18 @@ const Profile = () => {
           // selectedForm ? (
           // (selectedForm === "Basic" && <BasicForm />) ||
           // selectedForm === "Portfolio" && (
-          <PortfolioForm
-            userBusinessUnits={userBusinessUnits}
-            fetchUserBusinessUnits={fetchUserBusinessUnits}
-          />
+          <>
+            <div className="my-5 font-extrabold text-2xl">Profile</div>
+            <PortfolioForm
+              userBusinessUnits={userBusinessUnits}
+              fetchUserBusinessUnits={fetchUserBusinessUnits}
+            />
+            <ProfileTable
+              userBusinessUnits={userBusinessUnits}
+              fetchUserBusinessUnits={fetchUserBusinessUnits}
+              // setSelectedForm={setSelectedForm}
+            />
+          </>
           // ) : (
           //   // )
           //   <div
@@ -76,11 +84,6 @@ const Profile = () => {
           //   </div>
           // )
         }
-      />
-      <ProfileTable
-        userBusinessUnits={userBusinessUnits}
-        fetchUserBusinessUnits={fetchUserBusinessUnits}
-        // setSelectedForm={setSelectedForm}
       />
     </>
   );

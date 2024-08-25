@@ -502,17 +502,17 @@ const EeoiForm = ({
 
         {/* Add, Edit, Cancel Buttons */}
         {id ? (
-          <div className="flex flex-col gap-4 md:flex-row">
+          <div className="flex flex-col gap-4 md:flex-row self-end">
             <Button
               type="button"
-              className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+              className="flex-1 text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] min-w-[200px] justify-center"
               onClick={handleCancel}
             >
               Cancel
             </Button>
             <Button
               type="button"
-              className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+              className="flex-1 text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] min-w-[200px] justify-center"
               onClick={handleUpdateData}
             >
               Edit
@@ -521,7 +521,7 @@ const EeoiForm = ({
         ) : (
           <Button
             type="submit"
-            className="text-white bg-tc-green max-w-[200px] justify-center self-end"
+            className="text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] justify-center self-end"
             style={{
               backgroundColor: "rgba(0,204,156,1)",
             }}

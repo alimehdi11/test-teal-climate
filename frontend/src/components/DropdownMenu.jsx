@@ -31,7 +31,11 @@ const DropdownMenu = ({ children, selectedScope }) => {
           />
         </svg>
       </Button>
-      {isOpen && <div className="mt-2 flex flex-col gap-y-2">{children}</div>}
+      {isOpen && (
+        <div className="mt-2 flex flex-col gap-y-2 ml-4 border-l">
+          {children}
+        </div>
+      )}
     </div>
   );
 };

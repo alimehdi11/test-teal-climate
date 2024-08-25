@@ -277,9 +277,12 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   }, [filterCountryBy, countries]);
 
   return (
-    <form onSubmit={handleFormSubmit}>
+    <form
+      onSubmit={handleFormSubmit}
+      className="flex flex-col gap-y-3 bg-white rounded-md p-6"
+    >
       <h3 className="m-0 mb-4 font-extrabold text-2xl">Create Your Profile</h3>
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div className="grid gap-4  ">
         {/* Business Unit Title */}
         <FormControl>
           <Label>Business Unit Title</Label>
@@ -311,7 +314,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
           <Label>Country</Label>
           <button
             type="button"
-            className="p-2 bg-white text-black hover:bg-white hover:text-black border border-slate-500 rounded-lg flex justify-between items-center"
+            className="h-11 p-2 bg-tc-input-background  hover:text-black rounded-md flex justify-between items-center"
             onClick={(e) => {
               setShowCountriesOptions((prev) => !prev);
             }}
@@ -448,17 +451,17 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       </Button> */}
       {/* Buttons */}
       {id ? (
-        <div className="flex flex-col mt-4 gap-4 md:flex-row">
+        <div className="flex flex-col mt-4 gap-4 md:flex-row self-end">
           <Button
             type="button"
-            className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+            className="flex-1 text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] min-w-[200px] justify-center self-end"
             onClick={handleCancel}
           >
             Cancel
           </Button>
           <Button
             type="button"
-            className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
+            className="flex-1 text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] min-w-[200px] justify-center self-end"
             onClick={handleUpdate}
           >
             Edit
@@ -466,7 +469,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
         </div>
       ) : (
         <Button
-          className="w-full mt-4 text-white bg-tc-green hover:bg-opacity-90"
+          className="w-full mt-4 text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] justify-center self-end"
           type="submit"
         >
           Add

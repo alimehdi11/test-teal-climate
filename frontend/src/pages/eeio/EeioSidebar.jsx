@@ -31,7 +31,7 @@ const EeioSidebar = ({
       {/* <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">
         Select one
       </h2> */}
-      <div className="flex flex-col gap-y-2 mt-2">
+      <div className="flex flex-col gap-y-2 mt-2 ml-8 border-l">
         <Button
           className={
             productOrIndustry === "Industry"
