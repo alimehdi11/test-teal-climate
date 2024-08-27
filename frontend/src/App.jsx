@@ -9,7 +9,7 @@ import Checkout from "./pages/Checkout";
 import Completion from "./pages/Completion";
 import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/dashboard/Dashboard";
-import Eeio from "./pages/eeio/Eeio";
+// import Eeio from "./pages/eeio/Eeio";
 import Setting from "./pages/Setting.jsx";
 import Account from "./pages/Account.jsx";
 import AccountEdit from "./pages/AccountEdit.jsx";
@@ -45,12 +45,12 @@ function App() {
             element={<ProtectedRoute Component={Profile} />}
           />
         </Route>
-        <Route path="/eeio" element={<ProtectedRoute Component={Eeio} />}>
+        {/* <Route path="/eeio" element={<ProtectedRoute Component={Eeio} />}>
           <Route
             path=":id/edit"
             element={<ProtectedRoute Component={Eeio} />}
           />
-        </Route>
+        </Route> */}
         <Route
           path="/account"
           element={<ProtectedRoute Component={Account} />}

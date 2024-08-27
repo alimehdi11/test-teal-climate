@@ -11,14 +11,15 @@ import { UserContext } from "../../contexts/UserContext.jsx";
 
 const EeoiForm = ({
   productOrIndustry,
-  selectedLevel,
-  setSelectedLevel,
   fetchUserBusinessUnitsActivities,
+  setProductOrIndustry,
+  setIsSpendBaseScope3Selected,
 }) => {
   const { user } = useContext(UserContext);
 
   const [businessUnits, setBusinessUnits] = useState("");
   const [businessUnitValue, setBusinessUnitValue] = useState("");
+  const [level1Value, setLevel1Value] = useState("");
   const [level2Options, setLevel2Options] = useState("");
   const [level2Value, setLevel2Value] = useState("");
   const [Level3Options, setLevel3Options] = useState("");
@@ -77,12 +78,15 @@ const EeoiForm = ({
     setLevel4Options([]);
     setLevel5Options([]);
     setBusinessUnitValue("");
+    setLevel1Value("");
     setLevel2Value("");
     setLevel3Value("");
     setLevel4Value("");
     setLevel5Value("");
     setSectorValue("");
     setQuantity("");
+    setProductOrIndustry("");
+    setIsSpendBaseScope3Selected(false);
   };
 
   const handleFormSubmit = async (event) => {
@@ -91,7 +95,7 @@ const EeoiForm = ({
     if (
       !businessUnitValue ||
       !productOrIndustry ||
-      !selectedLevel ||
+      !level1Value ||
       !level2Value ||
       !level3Value ||
       !level4Value ||
@@ -106,7 +110,7 @@ const EeoiForm = ({
 
     const payload = {
       productOrIndustry,
-      level1: selectedLevel,
+      level1: level1Value,
       businessUnitId: businessUnitValue,
       level2: level2Value,
       level3: level3Value,
@@ -142,7 +146,7 @@ const EeoiForm = ({
     if (
       !businessUnitValue ||
       !productOrIndustry ||
-      !selectedLevel ||
+      !level1Value ||
       !level2Value ||
       !level3Value ||
       !level4Value ||
@@ -158,7 +162,7 @@ const EeoiForm = ({
     // Update payload
     const payload = {
       productOrIndustry,
-      level1: selectedLevel,
+      level1: level1Value,
       businessUnitId: businessUnitValue,
       level2: level2Value,
       level3: level3Value,
@@ -171,7 +175,7 @@ const EeoiForm = ({
 
     try {
       await request(
-        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}?eeio=true`,
         "PUT",
         payload
       )
@@ -181,7 +185,7 @@ const EeoiForm = ({
           }
           toast.success("Data edit successfully");
           resetForm();
-          navigation("/eeio");
+          navigation("/activities");
         })
         .then(() => {
           fetchUserBusinessUnitsActivities();
@@ -196,7 +200,7 @@ const EeoiForm = ({
 
   const handleCancel = () => {
     resetForm();
-    navigation("/eeio");
+    navigation("/activities");
   };
 
   const fetchBusinessUnits = async () => {
@@ -219,7 +223,7 @@ const EeoiForm = ({
 
   const fetchEeioLevel2 = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${selectedLevel}&column=level2&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1Value}&column=level2&distinct=true`;
       const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -234,7 +238,7 @@ const EeoiForm = ({
 
   const fetchEeioLevel3 = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${selectedLevel}&level2=${level2Value}&column=level3&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1Value}&level2=${level2Value}&column=level3&distinct=true`;
       const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -248,7 +252,7 @@ const EeoiForm = ({
 
   const fetchLevel4 = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${selectedLevel}&level2=${level2Value}&level3=${level3Value}&column=level4&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1Value}&level2=${level2Value}&level3=${level3Value}&column=level4&distinct=true`;
       const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -263,7 +267,7 @@ const EeoiForm = ({
   const fetchLevel5 = async () => {
     // setSectorValue("");
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${selectedLevel}&level2=${level2Value}&level3=${level3Value}&level4=${level4Value}&column=level5&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1Value}&level2=${level2Value}&level3=${level3Value}&level4=${level4Value}&column=level5&distinct=true`;
       const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -277,7 +281,7 @@ const EeoiForm = ({
 
   const fetchSector = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${selectedLevel}&level2=${level2Value}&level3=${level3Value}&level4=${level4Value}&level5=${level5Value}&column=sector&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1Value}&level2=${level2Value}&level3=${level3Value}&level4=${level4Value}&level5=${level5Value}&column=sector&distinct=true`;
       const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -291,8 +295,13 @@ const EeoiForm = ({
 
   useEffect(() => {
     fetchBusinessUnits();
-    fetchEeioLevel2();
   }, []);
+
+  useEffect(() => {
+    if (level1Value) {
+      fetchEeioLevel2();
+    }
+  }, [level1Value]);
 
   useEffect(() => {
     if (level2Value) {
@@ -322,6 +331,7 @@ const EeoiForm = ({
     if (id) {
       fetchActivityById().then((activity) => {
         setBusinessUnitValue(activity.businessUnit.id);
+        setLevel1Value(activity.level1);
         setLevel2Value(activity.level2);
         setLevel3Value(activity.level3);
         setLevel4Value(activity.level4);
@@ -369,23 +379,12 @@ const EeoiForm = ({
           <FormControl>
             <Label>Level 1</Label>
             <Select
-              value={businessUnitValue}
-              onChange={(e) => setBusinessUnitValue(e.target.value)}
+              value={level1Value}
+              onChange={(e) => setLevel1Value(e.target.value)}
             >
               <option value="">Select Option</option>
               {level1Options.map((item, index) => (
-                <option
-                  key={index}
-                  onClick={() => {
-                    if (item === selectedLevel) {
-                      setSelectedLevel(null);
-                    } else {
-                      setSelectedLevel(item);
-                    }
-                  }}
-                >
-                  {item}
-                </option>
+                <option key={index}>{item}</option>
               ))}
             </Select>
           </FormControl>

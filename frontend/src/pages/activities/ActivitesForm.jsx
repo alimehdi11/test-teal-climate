@@ -276,8 +276,8 @@ const ActivitesForm = ({
     // setShowLevel4Field(false);
     // setShowLevel5Field(false);
 
-    // setSelectedScope(selectedScope || null);
-    // setSelectedLevel(selectedLevel || null);
+    setSelectedScope(null);
+    setSelectedLevel(null);
 
     /**
      * For electricity(level1) market based
@@ -1579,7 +1579,6 @@ const ActivitesForm = ({
     if (id) {
       fetchActivityById()
         .then((activity) => {
-          console.group(activity);
           setScopeCategoryValue(activity.level1Category);
           setBusinessUnitValue(activity.businessUnit.id);
           if (selectedLevel !== "District heat and steam TandD") {

@@ -3,7 +3,7 @@ import ActivitesForm from "./ActivitesForm.jsx";
 import ActivitiesTable from "./ActivitiesTable.jsx";
 import ActivitiesSidebar from "./ActivitiesSidebar.jsx";
 // import { useParams } from "react-router-dom";
-import { FaArrowLeftLong } from "react-icons/fa6";
+// import { FaArrowLeftLong } from "react-icons/fa6";
 import { UserContext } from "../../contexts/UserContext.jsx";
 import { request } from "../../utils/request.js";
 import Layout from "../../components/layout/Layout.jsx";
@@ -92,8 +92,10 @@ const Activities = () => {
                   </div>
                   <EeioForm
                     productOrIndustry={productOrIndustry}
-                    selectedLevel={selectedLevel}
-                    setSelectedLevel={setSelectedLevel}
+                    setProductOrIndustry={setProductOrIndustry}
+                    setIsSpendBaseScope3Selected={setIsSpendBaseScope3Selected}
+                    // selectedLevel={selectedLevel}
+                    // setSelectedLevel={setSelectedLevel}
                     fetchUserBusinessUnitsActivities={
                       fetchUserBusinessUnitsActivities
                     }
@@ -108,6 +110,8 @@ const Activities = () => {
               }
               setSelectedScope={setSelectedScope}
               setSelectedLevel={setSelectedLevel}
+              setIsSpendBaseScope3Selected={setIsSpendBaseScope3Selected}
+              setProductOrIndustry={setProductOrIndustry}
             />
           </>
         }
