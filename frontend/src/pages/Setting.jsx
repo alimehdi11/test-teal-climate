@@ -2,10 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext.jsx";
 import { request } from "../utils/request.js";
 import Button from "../components/ui/Button.jsx";
-import Layout from "../components/layout/Layout.jsx";
-// import SettingsSidebar from "./SettingsSidebar.jsx";
 import { deleteToken } from "../utils/auth.js";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/layout/Sidebar.jsx";
+import Main from "../components/layout/Main.jsx";
 
 const SubscriptionSettings = () => {
   const { user } = useContext(UserContext);
@@ -122,54 +122,48 @@ const SubscriptionSettings = () => {
 
   return (
     <>
-      <Layout
-        // sidebarContent={<SettingsSidebar />}
-        mainContent={
-          <>
-            <div className="my-5 font-extrabold text-2xl">Setting</div>
-            <div className="bg-white p-6 rounded-md">
-              <h2 className="m-0 mb-4 font-extrabold text-2xl">
-                Subscription Details
-              </h2>
-              <div className="mt-4">
-                <p>
-                  {"Your next invoive will be on "} <b>{nextInvoiceData}</b>
-                </p>
+      <Sidebar></Sidebar>
+      <Main>
+        <>
+          <div className="my-5 font-extrabold text-2xl">Setting</div>
+          <div className="bg-white p-6 rounded-md">
+            <h2 className="m-0 mb-4 font-extrabold text-2xl">
+              Subscription Details
+            </h2>
+            <div className="mt-4">
+              <p>
+                {"Your next invoive will be on "} <b>{nextInvoiceData}</b>
+              </p>
+              <Button type="button" className="mt-4" onClick={openModal}>
+                Unsubscribe
+              </Button>
+            </div>
+          </div>
+          {/* Modal */}
+          <div
+            className={`bg-slate-500 opacity-80 fixed z-[1000] top-0 left-0 right-0 bottom-0 text-black flex justify-center items-center ${
+              !isModalOpen && "hidden"
+            }`}
+          >
+            <div className="bg-white w-[40%] max-w-[400px] min-w-[350px] rounded-lg flex justify-center items-center font-poppins flex-col gap-3 opacity-100 py-8">
+              Are you sure you want to unsubscribe?
+              <div className="flex gap-2">
+                <Button type="button" className="w-28" onClick={closeModal}>
+                  No
+                </Button>
                 <Button
+                  disabled={subscriptionId ? false : true}
                   type="button"
-                  className="mt-4 w-max bg-tc-green text-white hover:opacity-90 hover:bg-[#00cc9c] hover:text-white"
-                  onClick={openModal}
+                  className="w-28"
+                  onClick={handleUnsubscribe}
                 >
-                  Unsubscribe
+                  Yes
                 </Button>
               </div>
             </div>
-            {/* Modal */}
-            <div
-              className={`bg-slate-500 opacity-80 fixed z-[1000] top-0 left-0 right-0 bottom-0 text-black flex justify-center items-center ${
-                !isModalOpen && "hidden"
-              }`}
-            >
-              <div className="bg-white w-[40%] max-w-[400px] min-w-[350px] rounded-lg flex justify-center items-center font-poppins flex-col gap-3 opacity-100 py-8">
-                Are you sure you want to unsubscribe?
-                <div className="flex gap-2">
-                  <Button type="button" className="w-28" onClick={closeModal}>
-                    No
-                  </Button>
-                  <Button
-                    disabled={subscriptionId ? false : true}
-                    type="button"
-                    className="w-28"
-                    onClick={handleUnsubscribe}
-                  >
-                    Yes
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </>
-        }
-      />
+          </div>
+        </>
+      </Main>
     </>
   );
 };

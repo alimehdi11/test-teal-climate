@@ -452,26 +452,15 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       {/* Buttons */}
       {id ? (
         <div className="flex flex-col mt-4 gap-4 md:flex-row self-end">
-          <Button
-            type="button"
-            className="flex-1 text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] min-w-[200px] justify-center self-end"
-            onClick={handleCancel}
-          >
+          <Button type="button" className="flex-1" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button
-            type="button"
-            className="flex-1 text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] min-w-[200px] justify-center self-end"
-            onClick={handleUpdate}
-          >
+          <Button type="button" className="flex-1" onClick={handleUpdate}>
             Edit
           </Button>
         </div>
       ) : (
-        <Button
-          className="w-full mt-4 text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] justify-center self-end"
-          type="submit"
-        >
+        <Button className="self-end" type="submit">
           Add
         </Button>
       )}

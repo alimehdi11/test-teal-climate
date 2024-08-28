@@ -6,7 +6,8 @@ import { useRef } from "react";
 import WorldMap from "./WorldMap.jsx";
 import Button from "../../components/ui/Button.jsx";
 import calendarIcon from "../../assets/calendar-icon.svg";
-import Layout from "../../components/layout/Layout.jsx";
+import Sidebar from "../../components/layout/Sidebar.jsx";
+import Main from "../../components/layout/Main.jsx";
 
 const Dashboard = () => {
   const pdfRef = useRef();
@@ -38,16 +39,12 @@ const Dashboard = () => {
   };
 
   return (
-    <Layout
-      mainContent={
+    <>
+      <Sidebar></Sidebar>
+      <Main>
         <div ref={pdfRef}>
           <div className="flex flex-col-reverse xs:flex-row gap-y-4 justify-between">
-            <Button
-              className="bg-tc-green text-white w-max hover:bg-[#00cc9c] hover:opacity-90 hover:text-white"
-              onClick={downloadPDF}
-            >
-              Download PDF
-            </Button>
+            <Button onClick={downloadPDF}>Download PDF</Button>
             <div className="flex justify-center items-center gap-x-1 bg-white px-2 rounded-lg">
               <img className="h-6 w-6" src={calendarIcon} />
               <span className="font-medium text-gray-800">
@@ -59,8 +56,8 @@ const Dashboard = () => {
           <WorldMap />
           <Top10EmissionsTable />
         </div>
-      }
-    />
+      </Main>
+    </>
   );
 };
 

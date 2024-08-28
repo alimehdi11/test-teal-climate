@@ -9,7 +9,6 @@ import Checkout from "./pages/Checkout";
 import Completion from "./pages/Completion";
 import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/dashboard/Dashboard";
-// import Eeio from "./pages/eeio/Eeio";
 import Setting from "./pages/Setting.jsx";
 import Account from "./pages/Account.jsx";
 import AccountEdit from "./pages/AccountEdit.jsx";

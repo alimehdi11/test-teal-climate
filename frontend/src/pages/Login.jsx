@@ -6,11 +6,11 @@ import { setToken, isLoggedIn, decodeToken } from "../utils/auth.js";
 import Input from "../components/ui/Input.jsx";
 import Button from "../components/ui/Button.jsx";
 import { request } from "../utils/request.js";
-import { MdOutlineClose } from "react-icons/md";
 import Logo from "../components/ui/Logo.jsx";
 import FormControl from "../components/FormControl.jsx";
 import Label from "../components/ui/Label.jsx";
 import ErrorMessage from "../components/ErrorMessage.jsx";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,7 +21,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [submitError, setSubmitError] = useState("");
 
   const loginFormSchema = {
     email: Yup.string()
@@ -77,10 +76,6 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const closePopup = () => {
-    setSubmitError("");
-  };
-
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -123,7 +118,7 @@ const Login = () => {
     } catch (error) {
       console.error("Error loging-in user");
       console.error(error.message);
-      setSubmitError(error.message);
+      toast.error(error.message);
       console.error(error);
     }
   };
@@ -141,21 +136,11 @@ const Login = () => {
       <div className="flex flex-col justify-center items-center h-screen gap-y-3">
         {/* Logo */}
         <Logo />
-        {/* Submit Error */}
-        {submitError && (
-          <div className="bg-red-500 min-w-[350px] max-w-[350px] break-words rounded p-3 text-white flex justify-between items-center">
-            {submitError}
-            <MdOutlineClose
-              className="text-[20px] hover:text-red-500 hover:bg-white rounded"
-              onClick={closePopup}
-            />
-          </div>
-        )}
         {/* Form */}
         <form
           method="POST"
           onSubmit={handleSubmit}
-          className="w-[350px] flex flex-col gap-y-3"
+          className="w-[350px] flex flex-col gap-y-3 bg-white p-6 rounded-md"
         >
           {/* Email */}
           <FormControl>
@@ -181,7 +166,10 @@ const Login = () => {
             />
             {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
           </FormControl>
-          <Button type="submit" className="bg-tc-blue text-white text-base">
+          <Button
+            type="submit"
+            className="bg-tc-blue text-white justify-center"
+          >
             Login
           </Button>
         </form>

@@ -47,8 +47,6 @@ const ActivitesForm = ({
   const [quantityPurchased, setQuantityPurchased] = useState("");
   const [unitOfEmissionFactor, setUnitOfEmissionFactor] = useState("");
 
-  const [airports, setAirports] = useState([]);
-
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -57,6 +55,7 @@ const ActivitesForm = ({
 
   const activities = data.activities;
   const level1Categories = data.level1Categories;
+  const airports = data.airports;
 
   const fetchUserBusinessUnits = async () => {
     try {
@@ -72,23 +71,6 @@ const ActivitesForm = ({
       const errorMessage = JSON.parse(error.message).error;
       toast.error(errorMessage);
       console.error("Error fetching businessUnits : ", errorMessage);
-    }
-  };
-
-  const fetchAirports = async () => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/airports`,
-        "GET"
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch airports");
-      }
-      const jsonData = await response.json();
-      return jsonData;
-    } catch (error) {
-      console.error("Error fetching airports data:", error);
     }
   };
 
@@ -1552,10 +1534,10 @@ const ActivitesForm = ({
       selectedLevel === "Business travel- air" ||
       selectedLevel === "WTT- business travel- air"
     ) {
-      fetchAirports().then((airports) => {
-        setAirports(airports);
-        setFuelTypes(filterAirportsName(airports));
-      });
+      // fetchAirports().then((airports) => {
+      // setAirports(airports);
+      setFuelTypes(filterAirportsName(airports));
+      // });
     }
   }, []);
 
@@ -1948,26 +1930,15 @@ const ActivitesForm = ({
       {/* Add, Edit, Cancel Buttons */}
       {id ? (
         <div className="flex flex-col gap-4 md:flex-row self-end">
-          <Button
-            type="button"
-            className="flex-1 text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] min-w-[200px] justify-center"
-            onClick={handleCancel}
-          >
+          <Button type="button" className="flex-1" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button
-            type="button"
-            className="flex-1 text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] min-w-[200px] justify-center"
-            onClick={handleUpdateData}
-          >
+          <Button type="button" className="flex-1" onClick={handleUpdateData}>
             Edit
           </Button>
         </div>
       ) : (
-        <Button
-          type="submit"
-          className="text-white bg-tc-green hover:bg-[#00cc9c] hover:text-white hover:bg-opacity-90 max-w-[200px] justify-center self-end"
-        >
+        <Button type="submit" className="self-end">
           Add
         </Button>
       )}

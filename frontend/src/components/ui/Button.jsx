@@ -9,7 +9,7 @@ const Button = ({
   return (
     <button
       className={(
-        "w-full text-tc-black font-medium flex items-center text-left gap-x-3 py-3 px-4 rounded-md hover:bg-tc-indigo-light hover:text-tc-blue " +
+        "bg-tc-green text-white min-w-40 hover:opacity-95 font-medium py-3 px-4 rounded-md " +
         className
       ).trim()}
       {...(type ? (type = { type }) : null)}

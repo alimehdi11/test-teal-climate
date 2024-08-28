@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Button from "./ui/Button";
 
 const DropdownMenu = ({ children, selectedScope }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,10 +8,10 @@ const DropdownMenu = ({ children, selectedScope }) => {
   };
 
   return (
-    <div>
-      <Button
+    <div className="mt-2">
+      <div
         onClick={toggleDropdown}
-        className="flex justify-between items-center bg-tc-indigo-light text-tc-blue"
+        className="flex justify-between items-center bg-tc-indigo-light text-tc-blue py-3 px-4 rounded-md hover:bg-tc-indigo-light hover:text-tc-blue"
       >
         {selectedScope || "Scopes"}
         <svg
@@ -30,7 +29,7 @@ const DropdownMenu = ({ children, selectedScope }) => {
             strokeLinejoin="round"
           />
         </svg>
-      </Button>
+      </div>
       {isOpen && (
         <div className="mt-2 flex flex-col gap-y-2 ml-4 border-l">
           {children}
