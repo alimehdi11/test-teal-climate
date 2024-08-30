@@ -168,10 +168,7 @@ const Signup = () => {
             />
             {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
           </FormControl>
-          <Button
-            type="submit"
-            className="bg-tc-blue text-white justify-center"
-          >
+          <Button type="submit" className="!bg-tc-blue">
             Signup
           </Button>
         </form>
