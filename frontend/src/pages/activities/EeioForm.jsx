@@ -32,6 +32,8 @@ const EeoiForm = ({
   const [sectorValue, setSectorValue] = useState("");
   const [currencyValue, setCurrencyValue] = useState("perEuro");
   const [quantity, setQuantity] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
   const { id } = useParams();
   const navigation = useNavigate();
   const level1Options = [
@@ -53,6 +55,8 @@ const EeoiForm = ({
     "Extra-territorial organizations and bodies",
     "Education",
   ];
+  const currentYear = new Date().getFullYear();
+  const years = [currentYear, currentYear - 1];
 
   const fetchActivityById = async () => {
     try {
@@ -91,7 +95,7 @@ const EeoiForm = ({
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    // Validate form fields
+    // Checking for missing values
     if (
       !businessUnitValue ||
       !productOrIndustry ||
@@ -102,7 +106,9 @@ const EeoiForm = ({
       !level5Value ||
       !sectorValue ||
       !currencyValue ||
-      !quantity
+      !quantity ||
+      !month ||
+      !year
     ) {
       toast.warn("Please fill all fields");
       return;
@@ -119,6 +125,8 @@ const EeoiForm = ({
       sector: sectorValue,
       unitOfMeasurement: currencyValue,
       quantity,
+      month,
+      year,
     };
     await request(
       `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?eeio=true`,
@@ -142,7 +150,7 @@ const EeoiForm = ({
   };
 
   const handleUpdateData = async () => {
-    // Validate form fields
+    // Checking for missing values
     if (
       !businessUnitValue ||
       !productOrIndustry ||
@@ -153,7 +161,9 @@ const EeoiForm = ({
       !level5Value ||
       !sectorValue ||
       !currencyValue ||
-      !quantity
+      !quantity ||
+      !month ||
+      !year
     ) {
       toast.warn("Please fill all fields");
       return;
@@ -171,6 +181,8 @@ const EeoiForm = ({
       sector: sectorValue,
       unitOfMeasurement: currencyValue,
       quantity,
+      month,
+      year,
     };
 
     try {
@@ -338,6 +350,8 @@ const EeoiForm = ({
         setLevel5Value(activity.level5);
         setSectorValue(activity.sector);
         setQuantity(activity.quantity);
+        setMonth(activity.month);
+        setYear(activity.year);
       });
     }
   }, [id]);
@@ -352,6 +366,48 @@ const EeoiForm = ({
           Insert EEIO data here
         </h3>
         <div className="grid gap-4">
+          {/* month & year */}
+          <div className="flex gap-4">
+            <FormControl className="flex-1">
+              <Label>Month</Label>
+              <Select value={month} onChange={(e) => setMonth(e.target.value)}>
+                <option value="">Select Option</option>
+                {[
+                  "january",
+                  "february",
+                  "march",
+                  "april",
+                  "may",
+                  "june",
+                  "july",
+                  "august",
+                  "september",
+                  "october",
+                  "november",
+                  "december",
+                ].map((option) => {
+                  return (
+                    <option key={option} value={option}>
+                      {option.toUpperCase()}
+                    </option>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <FormControl className="flex-1">
+              <Label>Year</Label>
+              <Select value={year} onChange={(e) => setYear(e.target.value)}>
+                <option value="">Select Option</option>
+                {years.map((option, index) => {
+                  return (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </div>
           {/* Business Unit */}
           <FormControl>
             <Label>Business Unit</Label>

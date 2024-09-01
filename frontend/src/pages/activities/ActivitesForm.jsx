@@ -47,6 +47,9 @@ const ActivitesForm = ({
   const [quantityPurchased, setQuantityPurchased] = useState("");
   const [unitOfEmissionFactor, setUnitOfEmissionFactor] = useState("");
 
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -56,6 +59,9 @@ const ActivitesForm = ({
   const activities = data.activities;
   const level1Categories = data.level1Categories;
   const airports = data.airports;
+
+  const currentYear = new Date().getFullYear();
+  const years = [currentYear, currentYear - 1];
 
   const fetchUserBusinessUnits = async () => {
     try {
@@ -355,39 +361,8 @@ const ActivitesForm = ({
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    // console.table([
-    //   userId,
-    //   selectedScope,
-    //   selectedLevel,
-    //   scopeCategoryValue,
-    //   businessUnitValue,
-    //   fuelTypes,
-    //   fuelTypeValue,
-    //   fuelNames,
-    //   fuelNameValue,
-    //   level4Options,
-    //   level4Value,
-    //   level5Options,
-    //   level5Value,
-    //   unitOfMeasurementValue,
-    //   quantityValue,
-    // ]);
-    // console.log(
-    //   !userId ||
-    //     !selectedScope ||
-    //     !selectedLevel ||
-    //     !scopeCategoryValue ||
-    //     !businessUnitValue ||
-    //     (fuelTypes.length > 0 && !fuelTypeValue) ||
-    //     (fuelNames.length > 0 && !fuelNameValue) ||
-    //     (level4Options.length > 0 && !level4Value) ||
-    //     (level5Options.length > 0 && !level5Value) ||
-    //     !unitOfMeasurementValue ||
-    //     !quantityValue
-    // );
-    // all value should be false
+    // all values should be false
     if (
-      // !userId ||
       !selectedScope ||
       !selectedLevel ||
       !scopeCategoryValue ||
@@ -397,7 +372,9 @@ const ActivitesForm = ({
       (level4Options.length > 0 && !level4Value) ||
       (level5Options.length > 0 && !level5Value) ||
       !unitOfMeasurementValue ||
-      !quantityValue
+      !quantityValue ||
+      !month ||
+      !year
     ) {
       toast.warn("Please fill all fields");
       return;
@@ -630,6 +607,9 @@ const ActivitesForm = ({
       marketBasedPayload.CO2e_of_CH4 = undefined;
       marketBasedPayload.CO2e_of_N2O = undefined;
     }
+
+    payload.month = month;
+    payload.year = year;
 
     // console.table(payload);
     // console.table(marketBasedPayload);
@@ -1592,7 +1572,48 @@ const ActivitesForm = ({
             Location based
           </h4>
         )}
-
+        {/* month & year */}
+        <div className="flex gap-4">
+          <FormControl className="flex-1">
+            <Label>Month</Label>
+            <Select value={month} onChange={(e) => setMonth(e.target.value)}>
+              <option value="">Select Option</option>
+              {[
+                "january",
+                "february",
+                "march",
+                "april",
+                "may",
+                "june",
+                "july",
+                "august",
+                "september",
+                "october",
+                "november",
+                "december",
+              ].map((option) => {
+                return (
+                  <option key={option} value={option}>
+                    {option.toUpperCase()}
+                  </option>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <FormControl className="flex-1">
+            <Label>Year</Label>
+            <Select value={year} onChange={(e) => setYear(e.target.value)}>
+              <option value="">Select Option</option>
+              {years.map((option, index) => {
+                return (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </div>
         {/* Scope Category */}
         <FormControl>
           <Label>Scope Category</Label>
