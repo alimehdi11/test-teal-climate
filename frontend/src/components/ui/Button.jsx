@@ -1,20 +1,10 @@
-const Button = ({
-  children,
-  className = "",
-  type = "",
-  id = "",
-  onClick,
-  ...props
-}) => {
+const Button = ({ children, className = "", ...props }) => {
   return (
     <button
       className={(
-        "flex justify-center items-center text-base h-10 cursor-pointer rounded-lg bg-gray-200 text-gray-700 p-2 hover:bg-tc-green hover:text-white " +
+        "bg-tc-green text-white min-w-40 hover:opacity-95 font-medium py-3 px-4 rounded-md " +
         className
       ).trim()}
-      {...(type ? (type = { type }) : null)}
-      {...(id ? (id = { id }) : null)}
-      onClick={onClick}
       {...props}
     >
       {children}

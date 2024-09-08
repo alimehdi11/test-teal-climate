@@ -18,6 +18,8 @@ const ActivitiesTable = ({
   fetchUserBusinessUnitsActivities,
   setSelectedScope,
   setSelectedLevel,
+  setIsSpendBaseScope3Selected,
+  setProductOrIndustry,
 }) => {
   const handleDelete = (id) => {
     return () => {
@@ -39,27 +41,6 @@ const ActivitiesTable = ({
           toast.error("Error deleting data");
           console.log(error);
         });
-    };
-  };
-
-  const handleEdit = (id) => {
-    return async () => {
-      try {
-        const response = await request(
-          `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}`,
-          "GET"
-        );
-        if (!response.ok) {
-          throw new Error(`${JSON.stringify(await response.json())}`);
-        }
-        const businessUnitActivity = await response.json();
-        setSelectedScope(businessUnitActivity.scope);
-        setSelectedLevel(businessUnitActivity.level1);
-      } catch (error) {
-        const errorMessage = JSON.parse(error.message).error;
-        toast.error(errorMessage);
-        console.error("Error fetching businessUnits : ", errorMessage);
-      }
     };
   };
 
@@ -109,62 +90,84 @@ const ActivitiesTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {userBusinessUnitsActivities.map((userBusinessUnit, index) => (
-            <TableRow key={index}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>{userBusinessUnit.scope || "-"}</TableCell>
-              <TableCell>
-                {userBusinessUnit.businessUnit.title || "-"}
-              </TableCell>
-              <TableCell>{userBusinessUnit.level1Category || "-"}</TableCell>
-              <TableCell>{userBusinessUnit.level1 || "-"}</TableCell>
-              <TableCell>{userBusinessUnit.level2 || "-"}</TableCell>
-              <TableCell>{userBusinessUnit.level3 || "-"}</TableCell>
-              <TableCell>{userBusinessUnit.level4 || "-"}</TableCell>
-              <TableCell>{userBusinessUnit.level5 || "-"}</TableCell>
-              <TableCell>{userBusinessUnit.unitOfMeasurement || "-"}</TableCell>
-              <TableCell>{userBusinessUnit.quantity || "-"}</TableCell>
-              <TableCell>
-                {userBusinessUnit.CO2e === 0
-                  ? "-"
-                  : userBusinessUnit.CO2e?.toFixed(2)}
-              </TableCell>
-              <TableCell>
-                {userBusinessUnit.CO2e_of_CO2 === 0
-                  ? "-"
-                  : userBusinessUnit.CO2e_of_CO2?.toFixed(2)}
-              </TableCell>
-              <TableCell>
-                {userBusinessUnit.CO2e_of_CH4 === 0
-                  ? "-"
-                  : userBusinessUnit.CO2e_of_CH4?.toFixed(2)}
-              </TableCell>
-              <TableCell>
-                {userBusinessUnit.CO2e_of_N2O === 0
-                  ? "-"
-                  : userBusinessUnit.CO2e_of_N2O?.toFixed(2)}
-              </TableCell>
-              <TableCell>
-                <div className="flex justify-center gap-x-1">
-                  {/* <Link
-                      to={`/activities/${userBusinessUnit.id}/edit`}
+          {userBusinessUnitsActivities.map(
+            (userBusinessUnitActivity, index) => (
+              <TableRow key={index}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{userBusinessUnitActivity.scope || "-"}</TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.businessUnit.title || "-"}
+                </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.level1Category || "-"}
+                </TableCell>
+                <TableCell>{userBusinessUnitActivity.level1 || "-"}</TableCell>
+                <TableCell>{userBusinessUnitActivity.level2 || "-"}</TableCell>
+                <TableCell>{userBusinessUnitActivity.level3 || "-"}</TableCell>
+                <TableCell>{userBusinessUnitActivity.level4 || "-"}</TableCell>
+                <TableCell>{userBusinessUnitActivity.level5 || "-"}</TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.unitOfMeasurement || "-"}
+                </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.quantity || "-"}
+                </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.CO2e === 0
+                    ? "-"
+                    : userBusinessUnitActivity.CO2e?.toFixed(2)}
+                </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.CO2e_of_CO2 === 0
+                    ? "-"
+                    : userBusinessUnitActivity.CO2e_of_CO2?.toFixed(2)}
+                </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.CO2e_of_CH4 === 0
+                    ? "-"
+                    : userBusinessUnitActivity.CO2e_of_CH4?.toFixed(2)}
+                </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.CO2e_of_N2O === 0
+                    ? "-"
+                    : userBusinessUnitActivity.CO2e_of_N2O?.toFixed(2)}
+                </TableCell>
+                <TableCell>
+                  <div className="flex justify-center gap-x-1">
+                    <Link
+                      to={`/activities/${userBusinessUnitActivity.id}/edit`}
                       className="flex justify-center items-center"
+                      onClick={() => {
+                        if (userBusinessUnitActivity.eeio) {
+                          setIsSpendBaseScope3Selected(true);
+                          setProductOrIndustry(
+                            userBusinessUnitActivity.productOrIndustry
+                          );
+                          setSelectedScope(null);
+                          setSelectedLevel(null);
+                        } else {
+                          setIsSpendBaseScope3Selected(false);
+                          setProductOrIndustry("");
+                          setSelectedScope(userBusinessUnitActivity.scope);
+                          setSelectedLevel(userBusinessUnitActivity.level1);
+                        }
+                      }}
                     >
                       <img
                         src={editIcon}
                         className="p-1 rounded hover:bg-slate-300 size-7"
-                        onClick={handleEdit(userBusinessUnit.id)}
                       />
-                    </Link> */}
-                  <img
-                    src={trashIcon}
-                    className="p-1 rounded hover:bg-slate-300 size-7"
-                    onClick={handleDelete(userBusinessUnit.id)}
-                  />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+                    </Link>
+                    <img
+                      src={trashIcon}
+                      className="p-1 rounded hover:bg-slate-300 size-7"
+                      onClick={handleDelete(userBusinessUnitActivity.id)}
+                    />
+                  </div>
+                </TableCell>
+              </TableRow>
+            )
+          )}
         </TableBody>
       </Table>
     </TableContainer>

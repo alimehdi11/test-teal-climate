@@ -44,11 +44,33 @@ const DataProvider = ({ children }) => {
             console.error("Error fetching categories data:", error);
           }
         };
-        const activities = await fetchActivities();
-        const level1Categories = await fetchLevel1Categories();
+        const fetchAirports = async () => {
+          try {
+            const response = await request(
+              `${import.meta.env.VITE_API_BASE_URL}/airports`,
+              "GET"
+            );
+
+            if (!response.ok) {
+              throw new Error("Failed to fetch airports");
+            }
+            const jsonData = await response.json();
+            return jsonData;
+          } catch (error) {
+            console.error("Error fetching airports data:", error);
+          }
+        };
+
+        const [activities, level1Categories, airports] = await Promise.all([
+          fetchActivities(),
+          fetchLevel1Categories(),
+          fetchAirports(),
+        ]);
+
         setData({
           activities,
           level1Categories,
+          airports,
         });
         setIsLoding(false);
       })();

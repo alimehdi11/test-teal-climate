@@ -1,15 +1,19 @@
-import { useNavigate } from "react-router-dom";
-import Button from "../../components/ui/Button";
+// import { useNavigate } from "react-router-dom";
+// import Button from "../../components/ui/Button";
+import SidebarItem from "../../components/SidebarItem";
 
 const ProfileSidebar = ({ selectedForm, setSelectedForm }) => {
   // const navigate = useNavigate();
   return (
     <>
-      <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">
+      <SidebarItem className="bg-tc-indigo-light text-tc-blue mt-2">
+        Portfolio
+      </SidebarItem>
+      {/* <h2 className="m-0 mb-4 text-center font-extrabold text-2xl">
         Select one
-      </h2>
-      <div className="flex flex-col gap-y-4">
-        {/* <Button
+      </h2> */}
+      {/* <div className="mt-2 flex flex-col gap-y-4"> */}
+      {/* <Button
           className={
             "py-3" + (selectedForm === "Basic" ? " bg-tc-green text-white" : "")
           }
@@ -24,12 +28,12 @@ const ProfileSidebar = ({ selectedForm, setSelectedForm }) => {
         >
           Basic
         </Button> */}
-        <Button
+      {/* <Button
           // className={
           //   "py-3" +
           //   (selectedForm === "Portfolio" ? " bg-tc-green text-white" : "")
           // }
-          className="py-3 bg-tc-green text-white"
+          className="bg-tc-indigo-light text-tc-blue"
           // onClick={() => {
           //   setSelectedForm((previousValue) =>
           //     previousValue === "Portfolio" ? "" : "Portfolio"
@@ -40,8 +44,8 @@ const ProfileSidebar = ({ selectedForm, setSelectedForm }) => {
           // }}
         >
           Portfolio
-        </Button>
-      </div>
+        </Button> */}
+      {/* </div> */}
     </>
   );
 };

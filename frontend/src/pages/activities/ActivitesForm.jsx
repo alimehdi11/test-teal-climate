@@ -47,7 +47,8 @@ const ActivitesForm = ({
   const [quantityPurchased, setQuantityPurchased] = useState("");
   const [unitOfEmissionFactor, setUnitOfEmissionFactor] = useState("");
 
-  const [airports, setAirports] = useState([]);
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -57,6 +58,10 @@ const ActivitesForm = ({
 
   const activities = data.activities;
   const level1Categories = data.level1Categories;
+  const airports = data.airports;
+
+  const currentYear = new Date().getFullYear();
+  const years = [currentYear, currentYear - 1];
 
   const fetchUserBusinessUnits = async () => {
     try {
@@ -72,23 +77,6 @@ const ActivitesForm = ({
       const errorMessage = JSON.parse(error.message).error;
       toast.error(errorMessage);
       console.error("Error fetching businessUnits : ", errorMessage);
-    }
-  };
-
-  const fetchAirports = async () => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/airports`,
-        "GET"
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch airports");
-      }
-      const jsonData = await response.json();
-      return jsonData;
-    } catch (error) {
-      console.error("Error fetching airports data:", error);
     }
   };
 
@@ -276,8 +264,8 @@ const ActivitesForm = ({
     // setShowLevel4Field(false);
     // setShowLevel5Field(false);
 
-    // setSelectedScope(selectedScope || null);
-    // setSelectedLevel(selectedLevel || null);
+    setSelectedScope(null);
+    setSelectedLevel(null);
 
     /**
      * For electricity(level1) market based
@@ -373,39 +361,8 @@ const ActivitesForm = ({
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    // console.table([
-    //   userId,
-    //   selectedScope,
-    //   selectedLevel,
-    //   scopeCategoryValue,
-    //   businessUnitValue,
-    //   fuelTypes,
-    //   fuelTypeValue,
-    //   fuelNames,
-    //   fuelNameValue,
-    //   level4Options,
-    //   level4Value,
-    //   level5Options,
-    //   level5Value,
-    //   unitOfMeasurementValue,
-    //   quantityValue,
-    // ]);
-    // console.log(
-    //   !userId ||
-    //     !selectedScope ||
-    //     !selectedLevel ||
-    //     !scopeCategoryValue ||
-    //     !businessUnitValue ||
-    //     (fuelTypes.length > 0 && !fuelTypeValue) ||
-    //     (fuelNames.length > 0 && !fuelNameValue) ||
-    //     (level4Options.length > 0 && !level4Value) ||
-    //     (level5Options.length > 0 && !level5Value) ||
-    //     !unitOfMeasurementValue ||
-    //     !quantityValue
-    // );
-    // all value should be false
+    // all values should be false
     if (
-      // !userId ||
       !selectedScope ||
       !selectedLevel ||
       !scopeCategoryValue ||
@@ -415,7 +372,9 @@ const ActivitesForm = ({
       (level4Options.length > 0 && !level4Value) ||
       (level5Options.length > 0 && !level5Value) ||
       !unitOfMeasurementValue ||
-      !quantityValue
+      !quantityValue ||
+      !month ||
+      !year
     ) {
       toast.warn("Please fill all fields");
       return;
@@ -648,6 +607,9 @@ const ActivitesForm = ({
       marketBasedPayload.CO2e_of_CH4 = undefined;
       marketBasedPayload.CO2e_of_N2O = undefined;
     }
+
+    payload.month = month;
+    payload.year = year;
 
     // console.table(payload);
     // console.table(marketBasedPayload);
@@ -1552,10 +1514,10 @@ const ActivitesForm = ({
       selectedLevel === "Business travel- air" ||
       selectedLevel === "WTT- business travel- air"
     ) {
-      fetchAirports().then((airports) => {
-        setAirports(airports);
-        setFuelTypes(filterAirportsName(airports));
-      });
+      // fetchAirports().then((airports) => {
+      // setAirports(airports);
+      setFuelTypes(filterAirportsName(airports));
+      // });
     }
   }, []);
 
@@ -1579,7 +1541,6 @@ const ActivitesForm = ({
     if (id) {
       fetchActivityById()
         .then((activity) => {
-          console.group(activity);
           setScopeCategoryValue(activity.level1Category);
           setBusinessUnitValue(activity.businessUnit.id);
           if (selectedLevel !== "District heat and steam TandD") {
@@ -1598,17 +1559,61 @@ const ActivitesForm = ({
   }, [id]);
 
   return (
-    <form onSubmit={handleFormSubmit} className="flex flex-col gap-y-3">
+    <form
+      onSubmit={handleFormSubmit}
+      className="flex flex-col gap-y-3 bg-white rounded-md p-6"
+    >
       <h3 className="m-0 font-extrabold text-2xl">Insert activity data here</h3>
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div className="grid gap-4">
         {/* TODO: Location Based bar should be in all Scope 2 levels or only in Scope 2(Electricity) */}
         {/* {selectedLevel === "Electricity" && (  */}
         {selectedScope === "Scope 2" && (
-          <h4 className="bg-gray-200 col-span-full p-2 rounded">
+          <h4 className="bg-gray-200 col-span-full p-2 rounded-md">
             Location based
           </h4>
         )}
-
+        {/* month & year */}
+        <div className="flex gap-4">
+          <FormControl className="flex-1">
+            <Label>Month</Label>
+            <Select value={month} onChange={(e) => setMonth(e.target.value)}>
+              <option value="">Select Option</option>
+              {[
+                "january",
+                "february",
+                "march",
+                "april",
+                "may",
+                "june",
+                "july",
+                "august",
+                "september",
+                "october",
+                "november",
+                "december",
+              ].map((option) => {
+                return (
+                  <option key={option} value={option}>
+                    {option.toUpperCase()}
+                  </option>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <FormControl className="flex-1">
+            <Label>Year</Label>
+            <Select value={year} onChange={(e) => setYear(e.target.value)}>
+              <option value="">Select Option</option>
+              {years.map((option, index) => {
+                return (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </div>
         {/* Scope Category */}
         <FormControl>
           <Label>Scope Category</Label>
@@ -1903,7 +1908,7 @@ const ActivitesForm = ({
       {/* Market based form */}
       {marketBased && (
         <div className="grid lg:grid-cols-2 gap-4">
-          <h4 className="bg-gray-200 col-span-full p-2 rounded">
+          <h4 className="bg-gray-200 col-span-full p-2 rounded-md">
             Market based
           </h4>
           <FormControl>
@@ -1945,27 +1950,16 @@ const ActivitesForm = ({
 
       {/* Add, Edit, Cancel Buttons */}
       {id ? (
-        <div className="flex flex-col gap-4 md:flex-row">
-          <Button
-            type="button"
-            className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
-            onClick={handleCancel}
-          >
+        <div className="flex flex-col gap-4 md:flex-row self-end">
+          <Button type="button" className="flex-1" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button
-            type="button"
-            className="flex-1 text-white bg-tc-green hover:bg-opacity-90"
-            onClick={handleUpdateData}
-          >
+          <Button type="button" className="flex-1" onClick={handleUpdateData}>
             Edit
           </Button>
         </div>
       ) : (
-        <Button
-          type="submit"
-          className="text-white bg-tc-green hover:bg-opacity-90"
-        >
+        <Button type="submit" className="self-end">
           Add
         </Button>
       )}

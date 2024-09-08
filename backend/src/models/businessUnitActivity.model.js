@@ -122,6 +122,19 @@ const BusinessUnitActivity = sequelize.define(
       allowNull: false,
       defaultValue: "",
     },
+    eeio: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    month: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    year: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
   {
     tableName: "businessUnitsActivities",

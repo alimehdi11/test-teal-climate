@@ -61,7 +61,6 @@ const getBusinessUnitsActivitiesByUserId = async (req, res) => {
 
 const updateUserbyId = async (req, res) => {
   try {
-    console.log("updateUserById");
     const { id } = req.params;
     const {
       companyName,

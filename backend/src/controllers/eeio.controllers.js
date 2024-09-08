@@ -552,20 +552,20 @@ const editEeioData = async (req, res) => {
   }
 };
 
-const deleteEeioData = (req, res) => {
-  const { id, userid } = req.params;
+// const deleteEeioData = (req, res) => {
+//   const { id, userid } = req.params;
 
-  const query = "DELETE FROM eeioentry WHERE id = $1 AND userid = $2";
+//   const query = "DELETE FROM eeioentry WHERE id = $1 AND userid = $2";
 
-  // pool.query(query, [id, userid], (error) => {
-  //   if (error) {
-  //     console.error("Error deleting data:", error);
-  //     res.status(500).json({ error: "Error deleting data" });
-  //   } else {
-  //     res.status(200).json({ message: "Data deleted successfully" });
-  //   }
-  // });
-};
+//   // pool.query(query, [id, userid], (error) => {
+//   //   if (error) {
+//   //     console.error("Error deleting data:", error);
+//   //     res.status(500).json({ error: "Error deleting data" });
+//   //   } else {
+//   //     res.status(200).json({ message: "Data deleted successfully" });
+//   //   }
+//   // });
+// };
 
 export {
   getEeio,
@@ -578,5 +578,5 @@ export {
   getEeiodata,
   fetchEeioEditData,
   editEeioData,
-  deleteEeioData,
+  // deleteEeioData,
 };

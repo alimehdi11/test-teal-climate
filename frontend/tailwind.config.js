@@ -5,9 +5,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        "tc-green": "#00cc9c",
-        "tc-blue": "#197ec6",
         "tc-input-border": "#475569",
+        "tc-background": "rgba(247, 248, 250, 1)",
+        "tc-sidebar-heading": "rgba(8,36,49,0.5)",
+        "tc-black": "rgba(39, 50, 64, 1)",
+        "tc-input-background": "rgba(247, 248, 250, 1)",
+        "tc-indigo-light": "rgba(112, 127, 221, 0.1)",
         "forest-green": "#32b950",
         "golden-rod": "#e6ba1f",
         "medium-slate-blue": "#5d5fef",
@@ -23,6 +26,8 @@ export default {
         gold: "#ffca2a",
         "dark-cyan": "#1f8a7d",
         orange: "#ffa400",
+        "tc-green": "#00cc9c",
+        "tc-blue": "#197ec6",
       },
       screens: {
         xs: "480px",

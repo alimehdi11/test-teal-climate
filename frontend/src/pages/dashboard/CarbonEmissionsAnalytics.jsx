@@ -221,9 +221,9 @@ const CarbonEmissionsAnalytics = () => {
   }, [totalCO2e]);
 
   return (
-    <div className="grid grid-cols-1 mqMin850:grid-cols-2 xl:grid-cols-3 px-4 gap-4 mt-4">
+    <div className="grid grid-cols-1 mqMin850:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
       {/* Card total emissions */}
-      <div className="bg-white rounded-lg shadow-card p-6">
+      <div className="bg-white rounded-md shadow-card p-6">
         <div className="font-medium text-[1rem] text-[#111111]">
           Total GHG Emissions
         </div>
@@ -286,7 +286,7 @@ const CarbonEmissionsAnalytics = () => {
       </div>
 
       {/* Card scope 1*/}
-      <div className="bg-white rounded-lg shadow-card p-6">
+      <div className="bg-white rounded-md shadow-card p-6">
         <div className="font-medium text-[1rem] text-[#111111]">
           Scope 1 Emissions
         </div>
@@ -364,7 +364,7 @@ const CarbonEmissionsAnalytics = () => {
       </div>
 
       {/* Card scope 3 */}
-      <div className="xl:row-span-2 bg-white rounded-lg shadow-card p-6">
+      <div className="xl:row-span-2 bg-white rounded-md shadow-card p-6">
         <div className="flex justify-between">
           <div className="self-start">
             <div className="font-medium text-[1rem] text-[#111111]">
@@ -409,7 +409,7 @@ const CarbonEmissionsAnalytics = () => {
       </div>
 
       {/* Card scope 2 */}
-      <div className="row-start-3 mqMin850:row-start-2 mqMin850:self-start xl:self-stretch xl:col-span-2 bg-white rounded-lg shadow-card p-6">
+      <div className="row-start-3 mqMin850:row-start-2 mqMin850:self-start xl:self-stretch xl:col-span-2 bg-white rounded-md shadow-card p-6">
         <div className="font-medium text-[1rem] text-[#111111]">
           Scope 2 Emissions
         </div>

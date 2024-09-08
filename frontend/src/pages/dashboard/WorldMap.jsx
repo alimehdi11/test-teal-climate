@@ -92,7 +92,7 @@ const WorldMap = () => {
   }, []);
 
   return (
-    <div className="mx-4 p-4 flex flex-col lg:flex-row gap-4 mt-4 rounded-lg bg-white">
+    <div className="p-4 flex flex-col lg:flex-row gap-4 mt-4 rounded-md bg-white">
       {/* Emissions bar */}
       <div className="lg:flex-1 max-w-[400px]">
         <h3 className="lg:mt-0">Location wise Emissions</h3>
