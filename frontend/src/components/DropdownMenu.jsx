@@ -30,11 +30,16 @@ const DropdownMenu = ({ children, selectedScope }) => {
           />
         </svg>
       </div>
-      {isOpen && (
-        <div className="mt-2 flex flex-col gap-y-2 ml-4 border-l">
+      <div
+        className={
+          "grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out" +
+          (isOpen ? " grid-rows-[1fr] pt-2" : "")
+        }
+      >
+        <div className="overflow-hidden flex flex-col gap-y-2 ml-4 border-l">
           {children}
         </div>
-      )}
+      </div>
     </div>
   );
 };

@@ -13,7 +13,7 @@ import { CountryMask } from "./../src/models/countryMask.model.js";
 
 import { sequelize } from "./../src/database/connectDb.js";
 
-await sequelize.sync({ alter: true });
+await sequelize.sync({ force: true });
 
 export {
   Level1Category,
