@@ -29,13 +29,11 @@ const CarbonEmissionsAnalytics = () => {
       }
       let userBusinessUnitsActivities =
         await userBusinessUnitsActivitiesResponse.json();
-      console.log("before", userBusinessUnitsActivities);
       userBusinessUnitsActivities = userBusinessUnitsActivities.filter(
         (activity) => {
           return activity.businessUnit.period === selectedPeriod;
         }
       );
-      console.log("after", userBusinessUnitsActivities);
       setUserBusinessUnitsActivities(userBusinessUnitsActivities);
     } catch (error) {
       console.error("Error fetching data:", error);

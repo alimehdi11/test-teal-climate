@@ -19,8 +19,13 @@ const WorldMap = () => {
       if (!userBusinessUnitsActivitiesResponse.ok) {
         throw new Error(`Failed to fetch data:`);
       }
-      const userBusinessUnitsActivities =
+      let userBusinessUnitsActivities =
         await userBusinessUnitsActivitiesResponse.json();
+      userBusinessUnitsActivities = userBusinessUnitsActivities.filter(
+        (activity) => {
+          return activity.businessUnit.period === selectedPeriod;
+        }
+      );
       setUserBusinessUnitsActivities(userBusinessUnitsActivities);
     } catch (error) {
       console.error("Error fetching data:", error);
