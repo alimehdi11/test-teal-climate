@@ -7,16 +7,19 @@ import { request } from "../../utils/request.js";
 import Sidebar from "../../components/layout/Sidebar.jsx";
 import Main from "../../components/layout/Main.jsx";
 import EeioForm from "./EeioForm.jsx";
+import PeriodSelector from "../../components/PeriodSelector.jsx";
+import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
 const Activities = () => {
-  const [selectedScope, setSelectedScope] = useState(null);
-  const [selectedLevel, setSelectedLevel] = useState(null);
+  const [selectedScope, setSelectedScope] = useState("Scope 1");
+  const [selectedLevel, setSelectedLevel] = useState("Fuels");
   const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
     useState([]);
   const [isSpendBaseScope3Selected, setIsSpendBaseScope3Selected] =
     useState(false);
   const [productOrIndustry, setProductOrIndustry] = useState("");
   const { user } = useContext(UserContext);
+  const { selectedPeriod } = usePeriod();
 
   const fetchUserBusinessUnitsActivities = async () => {
     try {
@@ -29,8 +32,15 @@ const Activities = () => {
           `${JSON.stringify(await userBusinessUnitsActivitiesResponse.json())}`
         );
       }
-      const userBusinessUnitsActivities =
+      let userBusinessUnitsActivities =
         await userBusinessUnitsActivitiesResponse.json();
+      userBusinessUnitsActivities = userBusinessUnitsActivities.filter(
+        (userBusinessUnitsActivity) => {
+          return (
+            userBusinessUnitsActivity.businessUnit.period === selectedPeriod
+          );
+        }
+      );
       setUserBusinessUnitsActivities(userBusinessUnitsActivities);
     } catch (error) {
       const errorMessage = JSON.parse(error.message).error;
@@ -41,7 +51,7 @@ const Activities = () => {
 
   useEffect(() => {
     fetchUserBusinessUnitsActivities();
-  }, []);
+  }, [selectedPeriod]);
 
   return (
     <>
@@ -61,8 +71,11 @@ const Activities = () => {
         <>
           {selectedScope && selectedLevel ? (
             <>
-              <div className="my-5 font-extrabold text-2xl">
-                {selectedLevel}
+              <div className="my-5 flex justify-between">
+                <span className=" font-extrabold text-2xl">
+                  {selectedLevel}
+                </span>
+                <PeriodSelector />
               </div>
               <ActivitesForm
                 selectedScope={selectedScope}
@@ -78,8 +91,11 @@ const Activities = () => {
             isSpendBaseScope3Selected &&
             productOrIndustry && (
               <>
-                <div className="my-5 font-extrabold text-2xl">
-                  {productOrIndustry}
+                <div className="my-5 flex justify-between">
+                  <span className=" font-extrabold text-2xl">
+                    {productOrIndustry}
+                  </span>
+                  <PeriodSelector />
                 </div>
                 <EeioForm
                   productOrIndustry={productOrIndustry}

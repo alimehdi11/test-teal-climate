@@ -17,7 +17,7 @@ const createEeioActivity = async (req, res) => {
       unitOfMeasurement,
       quantity,
       month,
-      year,
+      // year,
     } = req.body;
     const businessUnit = await BusinessUnit.findByPk(businessUnitId);
     const paylaod = {
@@ -34,7 +34,7 @@ const createEeioActivity = async (req, res) => {
       unitOfMeasurement,
       quantity,
       month,
-      year,
+      // year,
     };
     paylaod.continent = businessUnit.continent;
     paylaod.country = businessUnit.country;
@@ -134,7 +134,7 @@ const createActivity = async (req, res) => {
       CO2e_of_N2O,
       level1Category,
       month,
-      year,
+      // year,
     } = req.body;
 
     await BusinessUnitActivity.create({
@@ -154,7 +154,7 @@ const createActivity = async (req, res) => {
       CO2e_of_N2O,
       level1Category,
       month,
-      year,
+      // year,
     });
     res.status(200).json({ message: "Activity created sucessfully" });
   } catch (error) {
@@ -179,7 +179,7 @@ const updateEeioActivityById = async (req, res) => {
       unitOfMeasurement,
       quantity,
       month,
-      year,
+      // year,
     } = req.body;
     const businessUnit = await BusinessUnit.findByPk(businessUnitId);
     const paylaod = {
@@ -196,7 +196,7 @@ const updateEeioActivityById = async (req, res) => {
       unitOfMeasurement,
       quantity,
       month,
-      year,
+      // year,
     };
     paylaod.continent = businessUnit.continent;
     paylaod.country = businessUnit.country;
@@ -300,7 +300,7 @@ const updateActivityById = async (req, res) => {
       CO2e_of_CH4,
       CO2e_of_N2O,
       month,
-      year,
+      // year,
     } = req.body;
     await BusinessUnitActivity.update(
       {
@@ -319,7 +319,7 @@ const updateActivityById = async (req, res) => {
         CO2e_of_CH4,
         CO2e_of_N2O,
         month,
-        year,
+        // year,
       },
       {
         where: {

@@ -36,9 +36,7 @@ const DropdownMenu = ({ children, selectedScope }) => {
           (isOpen ? " grid-rows-[1fr] pt-2" : "")
         }
       >
-        <div className="overflow-hidden flex flex-col gap-y-2 ml-4 border-l">
-          {children}
-        </div>
+        <div className="overflow-hidden flex flex-col gap-y-2">{children}</div>
       </div>
     </div>
   );

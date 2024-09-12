@@ -3,11 +3,13 @@ import { useState, useEffect, useContext } from "react";
 import TC_RadialBarChart from "../../components/TC_RadialBarChart.jsx";
 import { UserContext } from "../../contexts/UserContext.jsx";
 import { request } from "../../utils/request.js";
+import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
 const CarbonEmissionsAnalytics = () => {
   const { user } = useContext(UserContext);
   const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
     useState([]);
+  const { selectedPeriod } = usePeriod();
   const [totalCO2e, setTotalCO2e] = useState(0);
   const [totalScope1CO2e, setTotalScope1CO2e] = useState(0);
   const [totalScope2CO2e, setTotalScope2CO2e] = useState(0);
@@ -25,8 +27,15 @@ const CarbonEmissionsAnalytics = () => {
       if (!userBusinessUnitsActivitiesResponse.ok) {
         throw new Error(`Failed to fetch data:`);
       }
-      const userBusinessUnitsActivities =
+      let userBusinessUnitsActivities =
         await userBusinessUnitsActivitiesResponse.json();
+      console.log("before", userBusinessUnitsActivities);
+      userBusinessUnitsActivities = userBusinessUnitsActivities.filter(
+        (activity) => {
+          return activity.businessUnit.period === selectedPeriod;
+        }
+      );
+      console.log("after", userBusinessUnitsActivities);
       setUserBusinessUnitsActivities(userBusinessUnitsActivities);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -193,8 +202,10 @@ const CarbonEmissionsAnalytics = () => {
   ];
 
   useEffect(() => {
-    fetchUserBusinessUnitsActivities();
-  }, []);
+    if (selectedPeriod) {
+      fetchUserBusinessUnitsActivities();
+    }
+  }, [selectedPeriod]);
 
   useEffect(() => {
     if (userBusinessUnitsActivities.length > 0) {

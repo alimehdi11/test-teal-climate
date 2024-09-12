@@ -18,11 +18,11 @@ const ActivitiesSidebar = ({
   const [level1, setLevel1] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { activities } = useContext(DataContext);
+  const { activities } = useContext(DataContext).data;
 
   const filterLevel1 = (selectedScope) => {
     let level1 = activities
-      .filter((item) => item.scope === selectedScope)
+      ?.filter((item) => item.scope === selectedScope)
       .map((item) => item.level1);
 
     level1 = [...new Set(level1)];
@@ -72,7 +72,7 @@ const ActivitiesSidebar = ({
                 }}
               >
                 <>
-                  {scope === selectedScope ? (
+                  {/* {scope === selectedScope ? (
                     <svg
                       width="22"
                       height="22"
@@ -99,7 +99,7 @@ const ActivitiesSidebar = ({
                         fill="#C7C7D2"
                       />
                     </svg>
-                  )}
+                  )} */}
                   {scope}
                 </>
               </SidebarItem>
@@ -115,7 +115,7 @@ const ActivitiesSidebar = ({
                 setIsSpendBaseScope3Selected((prev) => !prev);
               }}
             >
-              {isSpendBaseScope3Selected ? (
+              {/* {isSpendBaseScope3Selected ? (
                 <svg
                   width="22"
                   height="22"
@@ -144,7 +144,7 @@ const ActivitiesSidebar = ({
                     fill="#C7C7D2"
                   />
                 </svg>
-              )}
+              )} */}
               Spend Base Scope 3
             </SidebarItem>
           </>
@@ -152,7 +152,7 @@ const ActivitiesSidebar = ({
         selectedScope={selectedScope}
       />
       {level1.length > 0 && (
-        <div className="ml-8 border-l my-2">
+        <div className="my-2">
           {/* Search query input */}
           <div className="mt-2">
             <Input
@@ -182,7 +182,7 @@ const ActivitiesSidebar = ({
                   }
                 }}
               >
-                <svg
+                {/* <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -196,7 +196,7 @@ const ActivitiesSidebar = ({
                     strokeLinejoin="round"
                     d="m16.49 12 3.75 3.75m0 0-3.75 3.75m3.75-3.75H3.74V4.499"
                   />
-                </svg>
+                </svg> */}
                 {level}
               </SidebarItem>
             ))}

@@ -7,12 +7,13 @@ import { UserContext } from "../../contexts/UserContext.jsx";
 import { request } from "../../utils/request.js";
 import Sidebar from "../../components/layout/Sidebar.jsx";
 import Main from "../../components/layout/Main.jsx";
+import PeriodSelector from "../../components/PeriodSelector.jsx";
+import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
 const Profile = () => {
   const [userBusinessUnits, setUserBusinessUnits] = useState([]);
-  // const [selectedForm, setSelectedForm] = useState("");
   const { user } = useContext(UserContext);
-  // const { id } = useParams();
+  const { selectedPeriod } = usePeriod();
 
   const fetchUserBusinessUnits = async () => {
     try {
@@ -24,16 +25,21 @@ const Profile = () => {
         console.log(response);
         throw new Error(`Failed to fetch data: ${response.statusText}`);
       }
-      const jsonData = await response.json();
-      setUserBusinessUnits(jsonData);
+      let businessUnits = await response.json();
+      businessUnits = businessUnits.filter((businessUnit) => {
+        return businessUnit.period === selectedPeriod;
+      });
+      setUserBusinessUnits(businessUnits);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    fetchUserBusinessUnits();
-  }, []);
+    if (selectedPeriod) {
+      fetchUserBusinessUnits();
+    }
+  }, [selectedPeriod]);
 
   return (
     <>
@@ -42,7 +48,10 @@ const Profile = () => {
       </Sidebar>
       <Main>
         <>
-          <div className="my-5 font-extrabold text-2xl">Profile</div>
+          <div className="my-5 flex justify-between">
+            <span className=" font-extrabold text-2xl">Profile</span>
+            <PeriodSelector />
+          </div>
           <PortfolioForm
             userBusinessUnits={userBusinessUnits}
             fetchUserBusinessUnits={fetchUserBusinessUnits}

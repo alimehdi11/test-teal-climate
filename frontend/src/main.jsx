@@ -3,17 +3,19 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import { UserProvider } from "./contexts/UserContext.jsx";
 import { DataProvider } from "./contexts/DataContext.jsx";
+import { PeriodProvider } from "./contexts/PeriodProvider.jsx";
 import "./global.css";
 import { Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {/* <div className="bg-[#FBFBFB]"> */}
     <div className="bg-tc-background">
       <UserProvider>
         <DataProvider>
-          <App />
+          <PeriodProvider>
+            <App />
+          </PeriodProvider>
         </DataProvider>
       </UserProvider>
       <ToastContainer

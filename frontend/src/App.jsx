@@ -44,12 +44,6 @@ function App() {
             element={<ProtectedRoute Component={Profile} />}
           />
         </Route>
-        {/* <Route path="/eeio" element={<ProtectedRoute Component={Eeio} />}>
-          <Route
-            path=":id/edit"
-            element={<ProtectedRoute Component={Eeio} />}
-          />
-        </Route> */}
         <Route
           path="/account"
           element={<ProtectedRoute Component={Account} />}

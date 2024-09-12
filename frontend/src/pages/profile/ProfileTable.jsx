@@ -12,12 +12,10 @@ import {
   TableRow,
   TableCell,
 } from "../../components/ui/Table.jsx";
+import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
-const ProfileTable = ({
-  userBusinessUnits,
-  fetchUserBusinessUnits,
-  // setSelectedForm,
-}) => {
+const ProfileTable = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
+  const { fetchBusinessUnitsPeriod, setPeriods } = usePeriod();
   const handleDelete = (id) => {
     return () => {
       request(
@@ -30,8 +28,14 @@ const ProfileTable = ({
           }
           toast.success("Data deleted successfully");
         })
-        .then(() => {
+        .then(async () => {
           fetchUserBusinessUnits();
+          const updatedPeriods = await fetchBusinessUnitsPeriod();
+          if (updatedPeriods) {
+            setPeriods(updatedPeriods);
+          } else {
+            toast.error("Error fetching periods");
+          }
         })
         .catch((error) => {
           toast.error("Error deleting data");
@@ -60,6 +64,7 @@ const ProfileTable = ({
               "Revenue",
               "Notes",
               "Partnership",
+              "Period",
               "Actions",
             ].map((item) => (
               <TableHead key={item}>{item}</TableHead>
@@ -79,12 +84,12 @@ const ProfileTable = ({
               <TableCell>{userBusinessUnit.revenue || "-"}</TableCell>
               <TableCell>{userBusinessUnit.notes || "-"}</TableCell>
               <TableCell>{userBusinessUnit.partnership}</TableCell>
+              <TableCell>{userBusinessUnit.period}</TableCell>
               <TableCell>
                 <div className="flex justify-center gap-x-1">
                   <Link
                     to={`/profile/${userBusinessUnit.id}/edit`}
                     className="flex justify-center items-center"
-                    // onClick={() => setSelectedForm("Portfolio")}
                   >
                     <img
                       src={editIcon}

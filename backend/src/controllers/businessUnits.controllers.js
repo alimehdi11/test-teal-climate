@@ -12,6 +12,7 @@ const createBusinessUnit = async (req, res) => {
       production,
       partnership,
       notes,
+      period,
     } = req.body;
     await BusinessUnit.create({
       userId: req.user.id,
@@ -24,15 +25,16 @@ const createBusinessUnit = async (req, res) => {
       production: Number(production),
       partnership,
       notes,
+      period,
     });
     return res
       .status(200)
       .json({ message: "Businessunit created successfully" });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
-      if (error.parent.constraint === "businessUnits_userId_title_key") {
+      if (error.parent.constraint === "businessUnits_userId_title_period_key") {
         return res.status(400).json({
-          error: "Businessunits title must be unique",
+          error: "Businessunits title must be unique for within period",
         });
       }
     }
@@ -67,6 +69,7 @@ const updateBusinessUnitById = async (req, res) => {
       revenue,
       partnership,
       notes,
+      period,
     } = req.body;
     await BusinessUnit.update(
       {
@@ -79,6 +82,7 @@ const updateBusinessUnitById = async (req, res) => {
         revenue,
         notes,
         partnership,
+        period,
       },
       {
         where: {
@@ -91,9 +95,9 @@ const updateBusinessUnitById = async (req, res) => {
       .json({ message: "Businessunit updated successfully" });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
-      if (error.parent.constraint === "businessUnits_userId_title_key") {
+      if (error.parent.constraint === "businessUnits_userId_title_period_key") {
         return res.status(400).json({
-          error: "Businessunits title must be unique",
+          error: "Businessunits title must be unique for each period.",
         });
       }
     }

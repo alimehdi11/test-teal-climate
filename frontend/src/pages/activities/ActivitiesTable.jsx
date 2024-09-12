@@ -65,6 +65,7 @@ const ActivitiesTable = ({
               "Level 5",
               "UOM",
               "Quantity",
+              "Month",
               <>
                 kg CO<span style={{ fontSize: "0.6em" }}>2</span>e
               </>,
@@ -111,6 +112,10 @@ const ActivitiesTable = ({
                 </TableCell>
                 <TableCell>
                   {userBusinessUnitActivity.quantity || "-"}
+                </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.month.charAt(0).toUpperCase() +
+                    userBusinessUnitActivity.month.slice(1)}
                 </TableCell>
                 <TableCell>
                   {userBusinessUnitActivity.CO2e === 0

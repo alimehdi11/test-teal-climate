@@ -131,10 +131,10 @@ const BusinessUnitActivity = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    year: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    // year: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
   },
   {
     tableName: "businessUnitsActivities",

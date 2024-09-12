@@ -231,326 +231,326 @@ const getEeio = async (req, res) => {
 //     });
 // };
 
-const insertEeioData = async (req, res) => {
-  try {
-    const {
-      userId,
-      businessUnitsvalue,
-      selectedForm,
-      selectedlevel1,
-      Level2value,
-      Level3value,
-      Level4value,
-      Level5value,
-      Sectorvalue,
-      currencyvalue,
-      quantity,
-    } = req.body;
-    const fetchQuery1 =
-      "SELECT * FROM companies WHERE userid = $1 AND unitname= $2";
-    const fetchValues1 = [userId, businessUnitsvalue];
-    // const fetchResult1 = await pool.query(fetchQuery1, fetchValues1);
-    if (fetchResult1.rows.length === 0) {
-      console.log("hi");
-      return res
-        .status(404)
-        .json({ error: "No data found for the given user id" });
-    }
-    const userData = fetchResult1.rows;
-    const continent = userData[0].continent;
-    const country = userData[0].countries;
-    // const region = userData[0].region;
-    const fetchQuery =
-      "SELECT * FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5 AND level5 = $6 AND sector = $7 AND continent = $8 AND country = $9";
-    const fetchValues = [
-      selectedForm,
-      selectedlevel1,
-      Level2value,
-      Level3value,
-      Level4value,
-      Level5value,
-      Sectorvalue,
-      continent,
-      country,
-    ];
-    // const fetchResult = await pool.query(fetchQuery, fetchValues);
-    if (fetchResult.rows.length === 0) {
-      return res.status(500).json({ error: "Something went wrong" });
-    }
-    const datas = fetchResult.rows;
-    let co2e = null;
-    let co2eofco2 = null;
-    let co2eofch4 = null;
-    let co2eofn2o = null;
-    let co2eofother = null;
-    const ghgValues = [
-      "kg CO2e",
-      "kg CO2e of CO2",
-      "kg CO2e of CH4",
-      "kg CO2e of N2O",
-      "kg CO2e of Other",
-    ];
-    datas.forEach((data) => {
-      if (data.ghg == ghgValues[0]) {
-        co2e = data.pereuro * quantity;
-      }
-      if (data.ghg == ghgValues[1]) {
-        co2eofco2 = data.pereuro * quantity;
-      }
-      if (data.ghg == ghgValues[2]) {
-        co2eofch4 = data.pereuro * quantity;
-      }
-      if (data.ghg == ghgValues[3]) {
-        co2eofn2o = data.pereuro * quantity;
-      }
-      if (data.ghg == ghgValues[4]) {
-        co2eofother = data.pereuro * quantity;
-      }
-    });
-    const exiobasecode = datas[0]?.exiobasecode;
-    const scope = "scope 3";
-    const insertQuery =
-      "INSERT INTO eeioentry (scope, continent, country, usercountry, pi, level1, level2, level3, level4, level5, sector, exiobasecode, uom, quantity, userid, co2e, co2eofco2, co2eofch4, co2eofn2o, co2eofother, unitname) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING *";
-    const values = [
-      scope,
-      continent,
-      country,
-      country,
-      selectedForm,
-      selectedlevel1,
-      Level2value,
-      Level3value,
-      Level4value,
-      Level5value,
-      Sectorvalue,
-      exiobasecode,
-      currencyvalue,
-      quantity,
-      userId,
-      co2e,
-      co2eofco2,
-      co2eofch4,
-      co2eofn2o,
-      co2eofother,
-      businessUnitsvalue,
-    ];
+// const insertEeioData = async (req, res) => {
+//   try {
+//     const {
+//       userId,
+//       businessUnitsvalue,
+//       selectedForm,
+//       selectedlevel1,
+//       Level2value,
+//       Level3value,
+//       Level4value,
+//       Level5value,
+//       Sectorvalue,
+//       currencyvalue,
+//       quantity,
+//     } = req.body;
+//     const fetchQuery1 =
+//       "SELECT * FROM companies WHERE userid = $1 AND unitname= $2";
+//     const fetchValues1 = [userId, businessUnitsvalue];
+//     // const fetchResult1 = await pool.query(fetchQuery1, fetchValues1);
+//     if (fetchResult1.rows.length === 0) {
+//       console.log("hi");
+//       return res
+//         .status(404)
+//         .json({ error: "No data found for the given user id" });
+//     }
+//     const userData = fetchResult1.rows;
+//     const continent = userData[0].continent;
+//     const country = userData[0].countries;
+//     // const region = userData[0].region;
+//     const fetchQuery =
+//       "SELECT * FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5 AND level5 = $6 AND sector = $7 AND continent = $8 AND country = $9";
+//     const fetchValues = [
+//       selectedForm,
+//       selectedlevel1,
+//       Level2value,
+//       Level3value,
+//       Level4value,
+//       Level5value,
+//       Sectorvalue,
+//       continent,
+//       country,
+//     ];
+//     // const fetchResult = await pool.query(fetchQuery, fetchValues);
+//     if (fetchResult.rows.length === 0) {
+//       return res.status(500).json({ error: "Something went wrong" });
+//     }
+//     const datas = fetchResult.rows;
+//     let co2e = null;
+//     let co2eofco2 = null;
+//     let co2eofch4 = null;
+//     let co2eofn2o = null;
+//     let co2eofother = null;
+//     const ghgValues = [
+//       "kg CO2e",
+//       "kg CO2e of CO2",
+//       "kg CO2e of CH4",
+//       "kg CO2e of N2O",
+//       "kg CO2e of Other",
+//     ];
+//     datas.forEach((data) => {
+//       if (data.ghg == ghgValues[0]) {
+//         co2e = data.pereuro * quantity;
+//       }
+//       if (data.ghg == ghgValues[1]) {
+//         co2eofco2 = data.pereuro * quantity;
+//       }
+//       if (data.ghg == ghgValues[2]) {
+//         co2eofch4 = data.pereuro * quantity;
+//       }
+//       if (data.ghg == ghgValues[3]) {
+//         co2eofn2o = data.pereuro * quantity;
+//       }
+//       if (data.ghg == ghgValues[4]) {
+//         co2eofother = data.pereuro * quantity;
+//       }
+//     });
+//     const exiobasecode = datas[0]?.exiobasecode;
+//     const scope = "scope 3";
+//     const insertQuery =
+//       "INSERT INTO eeioentry (scope, continent, country, usercountry, pi, level1, level2, level3, level4, level5, sector, exiobasecode, uom, quantity, userid, co2e, co2eofco2, co2eofch4, co2eofn2o, co2eofother, unitname) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING *";
+//     const values = [
+//       scope,
+//       continent,
+//       country,
+//       country,
+//       selectedForm,
+//       selectedlevel1,
+//       Level2value,
+//       Level3value,
+//       Level4value,
+//       Level5value,
+//       Sectorvalue,
+//       exiobasecode,
+//       currencyvalue,
+//       quantity,
+//       userId,
+//       co2e,
+//       co2eofco2,
+//       co2eofch4,
+//       co2eofn2o,
+//       co2eofother,
+//       businessUnitsvalue,
+//     ];
 
-    // const insertResult = await pool.query(insertQuery, values);
-    console.log("Companies data inserted successfully");
-    res.status(200).json({
-      message: "Companies data inserted successfully",
-      data: insertResult.rows[0],
-    });
-  } catch (err) {
-    console.error("Error inserting data:", err);
-    res.status(500).json({ error: "Error inserting data" });
-  }
-};
+//     // const insertResult = await pool.query(insertQuery, values);
+//     console.log("Companies data inserted successfully");
+//     res.status(200).json({
+//       message: "Companies data inserted successfully",
+//       data: insertResult.rows[0],
+//     });
+//   } catch (err) {
+//     console.error("Error inserting data:", err);
+//     res.status(500).json({ error: "Error inserting data" });
+//   }
+// };
 
-const getEeiodata = async (req, res) => {
-  const userid = req.params.userid;
-  if (!userid) {
-    return res.status(400).json({ error: "Invalid param" });
-  }
-  // pool
-  //   .query("SELECT * FROM eeioentry WHERE userid = $1", [userid])
-  //   .then((eeioDataResult) => {
-  //     const eeiodatas = eeioDataResult.rows;
+// const getEeiodata = async (req, res) => {
+//   const userid = req.params.userid;
+//   if (!userid) {
+//     return res.status(400).json({ error: "Invalid param" });
+//   }
+//   // pool
+//   //   .query("SELECT * FROM eeioentry WHERE userid = $1", [userid])
+//   //   .then((eeioDataResult) => {
+//   //     const eeiodatas = eeioDataResult.rows;
 
-  //     res.status(200).json(eeiodatas);
-  //   })
-  //   .catch((error) => {
-  //     console.error("activatedata Error:", error);
-  //     res.status(500).send("Error fetching data");
-  //   });
-};
+//   //     res.status(200).json(eeiodatas);
+//   //   })
+//   //   .catch((error) => {
+//   //     console.error("activatedata Error:", error);
+//   //     res.status(500).send("Error fetching data");
+//   //   });
+// };
 
-const fetchEeioEditData = async (req, res) => {
-  const userid = req.params.userid;
-  const id = req.params.id;
+// const fetchEeioEditData = async (req, res) => {
+//   const userid = req.params.userid;
+//   const id = req.params.id;
 
-  if (!userid) {
-    return res.status(400).json({ error: "Invalid param" });
-  }
-  pool;
-  // .query("SELECT * FROM eeioentry WHERE userid = $1 AND id =$2", [userid, id])
-  // .then((eeioEditDataResult) => {
-  //   const eeioEditData = eeioEditDataResult.rows;
+//   if (!userid) {
+//     return res.status(400).json({ error: "Invalid param" });
+//   }
+//   pool;
+//   // .query("SELECT * FROM eeioentry WHERE userid = $1 AND id =$2", [userid, id])
+//   // .then((eeioEditDataResult) => {
+//   //   const eeioEditData = eeioEditDataResult.rows;
 
-  //   res.status(200).json(eeioEditData);
-  // })
-  // .catch((error) => {
-  //   console.error("activatedata Error:", error);
-  //   res.status(500).send("Error fetching data");
-  // });
-};
+//   //   res.status(200).json(eeioEditData);
+//   // })
+//   // .catch((error) => {
+//   //   console.error("activatedata Error:", error);
+//   //   res.status(500).send("Error fetching data");
+//   // });
+// };
 
-const editEeioData = async (req, res) => {
-  const id = req.params.id;
+// const editEeioData = async (req, res) => {
+//   const id = req.params.id;
 
-  const {
-    userId,
-    businessUnitsvalue,
-    selectedForm,
-    selectedlevel1,
-    Level2value,
-    Level3value,
-    Level4value,
-    Level5value,
-    Sectorvalue,
-    currencyvalue,
-    quantity,
-  } = req.body;
+//   const {
+//     userId,
+//     businessUnitsvalue,
+//     selectedForm,
+//     selectedlevel1,
+//     Level2value,
+//     Level3value,
+//     Level4value,
+//     Level5value,
+//     Sectorvalue,
+//     currencyvalue,
+//     quantity,
+//   } = req.body;
 
-  if (!userId) {
-    return res.status(401).json({ error: "User id is required" });
-  }
+//   if (!userId) {
+//     return res.status(401).json({ error: "User id is required" });
+//   }
 
-  try {
-    const fetchQuery1 =
-      "SELECT * FROM companies WHERE userid = $1 AND unitname= $2";
-    const fetchValues1 = [userId, businessUnitsvalue];
-    // const fetchResult1 = await pool.query(fetchQuery1, fetchValues1);
+//   try {
+//     const fetchQuery1 =
+//       "SELECT * FROM companies WHERE userid = $1 AND unitname= $2";
+//     const fetchValues1 = [userId, businessUnitsvalue];
+//     // const fetchResult1 = await pool.query(fetchQuery1, fetchValues1);
 
-    if (fetchResult1.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "No data found for the given user id" });
-    }
-    const userData = fetchResult1.rows;
+//     if (fetchResult1.rows.length === 0) {
+//       return res
+//         .status(404)
+//         .json({ error: "No data found for the given user id" });
+//     }
+//     const userData = fetchResult1.rows;
 
-    const continent = userData[0].continent;
-    const country = userData[0].countries;
-    // Assuming you need to fetch some data before inserting
-    const fetchQuery =
-      "SELECT * FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5 AND level5 = $6 AND sector = $7 AND continent = $8 AND country = $9";
-    const fetchValues = [
-      selectedForm,
-      selectedlevel1,
-      Level2value,
-      Level3value,
-      Level4value,
-      Level5value,
-      Sectorvalue,
-      continent,
-      country,
-    ];
-    // const fetchResult = await pool.query(fetchQuery, fetchValues);
+//     const continent = userData[0].continent;
+//     const country = userData[0].countries;
+//     // Assuming you need to fetch some data before inserting
+//     const fetchQuery =
+//       "SELECT * FROM eeio WHERE pi = $1 AND level1 = $2 AND level2 = $3 AND level3 = $4 AND level4 = $5 AND level5 = $6 AND sector = $7 AND continent = $8 AND country = $9";
+//     const fetchValues = [
+//       selectedForm,
+//       selectedlevel1,
+//       Level2value,
+//       Level3value,
+//       Level4value,
+//       Level5value,
+//       Sectorvalue,
+//       continent,
+//       country,
+//     ];
+//     // const fetchResult = await pool.query(fetchQuery, fetchValues);
 
-    if (fetchResult.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "No data found for the given user id" });
-    }
-    const datas = fetchResult.rows;
+//     if (fetchResult.rows.length === 0) {
+//       return res
+//         .status(404)
+//         .json({ error: "No data found for the given user id" });
+//     }
+//     const datas = fetchResult.rows;
 
-    let co2e = null;
-    let co2eofco2 = null;
-    let co2eofch4 = null;
-    let co2eofn2o = null;
-    let co2eofother = null;
+//     let co2e = null;
+//     let co2eofco2 = null;
+//     let co2eofch4 = null;
+//     let co2eofn2o = null;
+//     let co2eofother = null;
 
-    const ghgValues = [
-      "kg CO2e",
-      "kg CO2e of CO2",
-      "kg CO2e of CH4",
-      "kg CO2e of N2O",
-      "kg CO2e of Other",
-    ];
+//     const ghgValues = [
+//       "kg CO2e",
+//       "kg CO2e of CO2",
+//       "kg CO2e of CH4",
+//       "kg CO2e of N2O",
+//       "kg CO2e of Other",
+//     ];
 
-    datas.forEach((data) => {
-      if (data.ghg == ghgValues[0]) {
-        co2e = data.pereuro * quantity;
-      }
+//     datas.forEach((data) => {
+//       if (data.ghg == ghgValues[0]) {
+//         co2e = data.pereuro * quantity;
+//       }
 
-      if (data.ghg == ghgValues[1]) {
-        co2eofco2 = data.pereuro * quantity;
-      }
+//       if (data.ghg == ghgValues[1]) {
+//         co2eofco2 = data.pereuro * quantity;
+//       }
 
-      if (data.ghg == ghgValues[2]) {
-        co2eofch4 = data.pereuro * quantity;
-      }
+//       if (data.ghg == ghgValues[2]) {
+//         co2eofch4 = data.pereuro * quantity;
+//       }
 
-      if (data.ghg == ghgValues[3]) {
-        co2eofn2o = data.pereuro * quantity;
-      }
+//       if (data.ghg == ghgValues[3]) {
+//         co2eofn2o = data.pereuro * quantity;
+//       }
 
-      if (data.ghg == ghgValues[4]) {
-        co2eofother = data.pereuro * quantity;
-      }
-    });
+//       if (data.ghg == ghgValues[4]) {
+//         co2eofother = data.pereuro * quantity;
+//       }
+//     });
 
-    const exiobasecode = datas[0].exiobasecode;
-    const scope = "scope 3";
-    const updateQuery = `
-            UPDATE eeioentry 
-            SET scope = $1,
-                continent = $2,
-                country = $3,
-                usercountry = $4,
-                pi = $5,
-                level1 = $6,
-                level2 = $7,
-                level3 = $8,
-                level4 = $9,
-                level5 = $10,
-                sector = $11,
-                exiobasecode = $12,
-                uom = $13,
-                quantity = $14,
-                co2e = $15,
-                co2eofco2 = $16,
-                co2eofch4 = $17,
-                co2eofn2o = $18,
-                co2eofother = $19,
-                unitname = $20
-            WHERE id = $21 AND userid= $22
-            RETURNING *
-        `;
+//     const exiobasecode = datas[0].exiobasecode;
+//     const scope = "scope 3";
+//     const updateQuery = `
+//             UPDATE eeioentry
+//             SET scope = $1,
+//                 continent = $2,
+//                 country = $3,
+//                 usercountry = $4,
+//                 pi = $5,
+//                 level1 = $6,
+//                 level2 = $7,
+//                 level3 = $8,
+//                 level4 = $9,
+//                 level5 = $10,
+//                 sector = $11,
+//                 exiobasecode = $12,
+//                 uom = $13,
+//                 quantity = $14,
+//                 co2e = $15,
+//                 co2eofco2 = $16,
+//                 co2eofch4 = $17,
+//                 co2eofn2o = $18,
+//                 co2eofother = $19,
+//                 unitname = $20
+//             WHERE id = $21 AND userid= $22
+//             RETURNING *
+//         `;
 
-    const values = [
-      scope,
-      continent,
-      country,
-      country, // Assuming usercountry is the same as country for update
-      selectedForm,
-      selectedlevel1,
-      Level2value,
-      Level3value,
-      Level4value,
-      Level5value,
-      Sectorvalue,
-      exiobasecode,
-      currencyvalue,
-      quantity,
-      co2e,
-      co2eofco2,
-      co2eofch4,
-      co2eofn2o,
-      co2eofother,
-      businessUnitsvalue,
-      id,
-      userId,
-      // assuming idToUpdate is the variable holding the id value for update
-    ];
+//     const values = [
+//       scope,
+//       continent,
+//       country,
+//       country, // Assuming usercountry is the same as country for update
+//       selectedForm,
+//       selectedlevel1,
+//       Level2value,
+//       Level3value,
+//       Level4value,
+//       Level5value,
+//       Sectorvalue,
+//       exiobasecode,
+//       currencyvalue,
+//       quantity,
+//       co2e,
+//       co2eofco2,
+//       co2eofch4,
+//       co2eofn2o,
+//       co2eofother,
+//       businessUnitsvalue,
+//       id,
+//       userId,
+//       // assuming idToUpdate is the variable holding the id value for update
+//     ];
 
-    // const updateResult = await pool.query(updateQuery, values);
+//     // const updateResult = await pool.query(updateQuery, values);
 
-    if (updateResult.rowCount > 0) {
-      console.log("Data updated successfully");
-      res.status(200).json({
-        message: "Company data updated successfully",
-        data: updateResult.rows[0],
-      });
-    } else {
-      console.log("No record found to update", userId, id);
-      res.status(404).json({ message: "No record found to update" });
-    }
-  } catch (err) {
-    console.error("Error inserting data:", err);
-    res.status(500).json({ error: "Error inserting data" });
-  }
-};
+//     if (updateResult.rowCount > 0) {
+//       console.log("Data updated successfully");
+//       res.status(200).json({
+//         message: "Company data updated successfully",
+//         data: updateResult.rows[0],
+//       });
+//     } else {
+//       console.log("No record found to update", userId, id);
+//       res.status(404).json({ message: "No record found to update" });
+//     }
+//   } catch (err) {
+//     console.error("Error inserting data:", err);
+//     res.status(500).json({ error: "Error inserting data" });
+//   }
+// };
 
 // const deleteEeioData = (req, res) => {
 //   const { id, userid } = req.params;
@@ -574,9 +574,9 @@ export {
   // getEeioLevel4,
   // getEeioLevel5,
   // getEeiosector,
-  insertEeioData,
-  getEeiodata,
-  fetchEeioEditData,
-  editEeioData,
-  // deleteEeioData,
+  // insertEeioData,
+  // getEeiodata,
+  // fetchEeioEditData,
+  // editEeioData,
+  // // deleteEeioData,
 };

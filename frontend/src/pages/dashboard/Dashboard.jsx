@@ -8,6 +8,7 @@ import Button from "../../components/ui/Button.jsx";
 import calendarIcon from "../../assets/calendar-icon.svg";
 import Sidebar from "../../components/layout/Sidebar.jsx";
 import Main from "../../components/layout/Main.jsx";
+import PeriodSelector from "../../components/PeriodSelector.jsx";
 
 const Dashboard = () => {
   const pdfRef = useRef();
@@ -45,12 +46,13 @@ const Dashboard = () => {
         <div ref={pdfRef}>
           <div className="flex flex-col-reverse xs:flex-row gap-y-4 justify-between">
             <Button onClick={downloadPDF}>Download PDF</Button>
-            <div className="flex justify-center items-center gap-x-1 bg-white px-2 rounded-lg">
+            {/* <div className="flex justify-center items-center gap-x-1 bg-white px-2 rounded-lg">
               <img className="h-6 w-6" src={calendarIcon} />
               <span className="font-medium text-gray-800">
                 Jan 01, 2024 - Dec 11, 2024
               </span>
-            </div>
+            </div> */}
+            <PeriodSelector />
           </div>
           <CarbonEmissionsAnalytics />
           <WorldMap />

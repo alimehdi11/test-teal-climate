@@ -8,6 +8,7 @@ import Input from "../../components/ui/Input.jsx";
 import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
 import { UserContext } from "../../contexts/UserContext.jsx";
+import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
 const EeoiForm = ({
   productOrIndustry,
@@ -33,9 +34,10 @@ const EeoiForm = ({
   const [currencyValue, setCurrencyValue] = useState("perEuro");
   const [quantity, setQuantity] = useState("");
   const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
+  // const [year, setYear] = useState("");
   const { id } = useParams();
   const navigation = useNavigate();
+  const { selectedPeriod } = usePeriod();
   const level1Options = [
     "Activities of households",
     "Public administration and defence; compulsory social security",
@@ -89,8 +91,9 @@ const EeoiForm = ({
     setLevel5Value("");
     setSectorValue("");
     setQuantity("");
-    setProductOrIndustry("");
-    setIsSpendBaseScope3Selected(false);
+    setMonth("");
+    // setProductOrIndustry("");
+    // setIsSpendBaseScope3Selected(false);
   };
 
   const handleFormSubmit = async (event) => {
@@ -107,8 +110,9 @@ const EeoiForm = ({
       !sectorValue ||
       !currencyValue ||
       !quantity ||
-      !month ||
-      !year
+      !month
+      // ||
+      // !year
     ) {
       toast.warn("Please fill all fields");
       return;
@@ -126,7 +130,7 @@ const EeoiForm = ({
       unitOfMeasurement: currencyValue,
       quantity,
       month,
-      year,
+      // year,
     };
     await request(
       `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?eeio=true`,
@@ -162,8 +166,9 @@ const EeoiForm = ({
       !sectorValue ||
       !currencyValue ||
       !quantity ||
-      !month ||
-      !year
+      !month
+      // ||
+      // !year
     ) {
       toast.warn("Please fill all fields");
       return;
@@ -182,7 +187,7 @@ const EeoiForm = ({
       unitOfMeasurement: currencyValue,
       quantity,
       month,
-      year,
+      // year,
     };
 
     try {
@@ -224,8 +229,7 @@ const EeoiForm = ({
       if (!response.ok) {
         throw new Error(JSON.stringify((await response.json()).error));
       }
-      const businessUnits = await response.json();
-      setBusinessUnits(businessUnits);
+      return await response.json();
     } catch (error) {
       let errorMessage = JSON.parse(error.message).error;
       console.log(errorMessage);
@@ -277,7 +281,6 @@ const EeoiForm = ({
   };
 
   const fetchLevel5 = async () => {
-    // setSectorValue("");
     try {
       const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1Value}&level2=${level2Value}&level3=${level3Value}&level4=${level4Value}&column=level5&distinct=true`;
       const response = await request(url, "GET");
@@ -306,8 +309,19 @@ const EeoiForm = ({
   };
 
   useEffect(() => {
-    fetchBusinessUnits();
-  }, []);
+    if (selectedPeriod) {
+      fetchBusinessUnits().then(async (businessUnits) => {
+        if (businessUnits.length === 0) {
+          toast.info("Please add business unit first");
+          return;
+        }
+        businessUnits = businessUnits.filter((businessUnit) => {
+          return businessUnit.period === selectedPeriod;
+        });
+        setBusinessUnits(businessUnits);
+      });
+    }
+  }, [selectedPeriod]);
 
   useEffect(() => {
     if (level1Value) {
@@ -351,7 +365,7 @@ const EeoiForm = ({
         setSectorValue(activity.sector);
         setQuantity(activity.quantity);
         setMonth(activity.month);
-        setYear(activity.year);
+        // setYear(activity.year);
       });
     }
   }, [id]);
@@ -394,7 +408,7 @@ const EeoiForm = ({
                 })}
               </Select>
             </FormControl>
-            <FormControl className="flex-1">
+            {/* <FormControl className="flex-1">
               <Label>Year</Label>
               <Select value={year} onChange={(e) => setYear(e.target.value)}>
                 <option value="">Select Option</option>
@@ -406,7 +420,7 @@ const EeoiForm = ({
                   );
                 })}
               </Select>
-            </FormControl>
+            </FormControl> */}
           </div>
           {/* Business Unit */}
           <FormControl>

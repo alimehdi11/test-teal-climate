@@ -1,16 +1,54 @@
 import { BusinessUnit } from "../models/businessUnit.model.js";
 import { BusinessUnitActivity } from "../models/businessUnitActivity.model.js";
 import { User } from "../models/user.model.js";
+// import { Sequelize } from "sequelize";
 
 const getBusinessUnitsByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
-    const userBusinessUnits = await BusinessUnit.findAll({
+    const { limit, sortOrder = "ASC", column, distinct } = req.query;
+    const query = {
       where: {
         userId,
       },
-    });
-    return res.status(200).json(userBusinessUnits);
+      order: [["createdAt", sortOrder]],
+    };
+    if (limit) {
+      query.limit = parseInt(limit, 10);
+    }
+    if (column) {
+      // if (distinct === "true") {
+      //   query.attributes = [
+      //     [Sequelize.fn("DISTINCT", Sequelize.col(column)), column],
+      //     "createdAt",
+      //   ];
+      // } else {
+      query.attributes = [column];
+      // }
+    }
+    let businessUnits = await BusinessUnit.findAll(query);
+    const uniquePeriods = [];
+    if (distinct) {
+      // If distinct is passed we are manually making each record unique by "period" column.
+      // The above commented code is not working as intended.
+      // Thats why we are doing this manually.
+      businessUnits.forEach((businessUnit) => {
+        let isPeriodExists = false;
+        for (let up = 0; up < uniquePeriods.length; up++) {
+          const { period } = uniquePeriods[up];
+          if (period === businessUnit.period) {
+            isPeriodExists = true;
+            break;
+          }
+        }
+        if (!isPeriodExists) {
+          uniquePeriods.push(businessUnit);
+        }
+      });
+      businessUnits = uniquePeriods;
+    }
+
+    return res.status(200).json(businessUnits);
   } catch (error) {
     console.log("Could not getBusinessUnitsByUserId");
     console.log(error);
@@ -24,7 +62,7 @@ const getBusinessUnitsActivitiesByUserId = async (req, res) => {
 
     const { sortOrder = "ASC", limit, sortByColumn = "createdAt" } = req.query;
 
-    const queryOptions = {
+    const query = {
       where: {
         userId,
       },
@@ -38,11 +76,10 @@ const getBusinessUnitsActivitiesByUserId = async (req, res) => {
     };
 
     if (limit) {
-      queryOptions.limit = parseInt(limit, 10);
+      query.limit = parseInt(limit, 10);
     }
 
-    let userBusinessUnitsActivities =
-      await BusinessUnitActivity.findAll(queryOptions);
+    let userBusinessUnitsActivities = await BusinessUnitActivity.findAll(query);
     userBusinessUnitsActivities = userBusinessUnitsActivities.map(
       (userBusinessUnitActivity) => {
         userBusinessUnitActivity = userBusinessUnitActivity.toJSON();

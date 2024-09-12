@@ -60,17 +60,35 @@ const DataProvider = ({ children }) => {
             console.error("Error fetching airports data:", error);
           }
         };
-
-        const [activities, level1Categories, airports] = await Promise.all([
-          fetchActivities(),
-          fetchLevel1Categories(),
-          fetchAirports(),
-        ]);
+        const fetchBusinessUnitsPeriod = async () => {
+          try {
+            const response = await request(
+              `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnits?sortOrder=DESC&column=period&distinct=true`,
+              "GET"
+            );
+            if (!response.ok) {
+              throw new Error("Failed to fetch airports");
+            }
+            const result = await response.json();
+            return result.map((item) => item.period);
+          } catch (error) {
+            console.error("Error fetching airports data:", error);
+          }
+        };
+        const [activities, level1Categories, airports, businessUnitsPeriod] =
+          await Promise.all([
+            fetchActivities(),
+            fetchLevel1Categories(),
+            fetchAirports(),
+            fetchBusinessUnitsPeriod(),
+          ]);
 
         setData({
           activities,
           level1Categories,
           airports,
+          businessUnitsPeriod,
+          fetchBusinessUnitsPeriod,
         });
         setIsLoding(false);
       })();
@@ -80,7 +98,9 @@ const DataProvider = ({ children }) => {
   return isLoding ? (
     <Loader />
   ) : (
-    <DataContext.Provider value={data}>{children}</DataContext.Provider>
+    <DataContext.Provider value={{ data, setData }}>
+      {children}
+    </DataContext.Provider>
   );
 };
 

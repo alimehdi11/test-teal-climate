@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { request } from "../../utils/request.js";
@@ -8,6 +8,8 @@ import Input from "../../components/ui/Input.jsx";
 import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
 import { FaAngleDown } from "react-icons/fa6";
+import { usePeriod } from "../../contexts/PeriodProvider.jsx";
+import { formatDate } from "../../utils/date.js";
 
 const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   const [countriesData, setCountriesData] = useState([]);
@@ -27,12 +29,17 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   const [showCountriesOptions, setShowCountriesOptions] = useState(false);
   const [filterCountryBy, setFilterCountryBy] = useState("");
   const [filteredCountries, setFilteredCountries] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndtDate] = useState("");
 
   const [editMode, setEditMode] = useState(false);
 
   const { id } = useParams();
 
   const navigate = useNavigate();
+
+  const { setPeriods, fetchBusinessUnitsPeriod, setSelectedPeriod } =
+    usePeriod();
 
   const continents = [
     "Europe",
@@ -69,6 +76,8 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
     setOwnershipPercentage(100);
     setProductionClients("");
     setNotes("");
+    setStartDate("");
+    setEndtDate("");
   };
 
   const isBusinessUnitUnique = () => {
@@ -89,20 +98,22 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       !selectedRegion ||
       // revenue ||
       // employees ||
-      !ownershipPercentage
+      !ownershipPercentage ||
       // productionClients ||
       // notes
+      !startDate ||
+      !endDate
     ) {
       toast.warn("Please fill all fields");
       return;
     }
 
     if (!isBusinessUnitUnique()) {
-      toast.warn("Businessunits title must be unique");
+      toast.warn("Businessunits title must be unique for within period");
       return;
     }
 
-    request(`${import.meta.env.VITE_API_BASE_URL}/businessUnits`, "POST", {
+    const payload = {
       title: businessUnitTitle,
       continent: selectedContinent,
       country: selectedCountry,
@@ -112,7 +123,14 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       partnership: ownershipPercentage,
       production: productionClients,
       notes: notes,
-    })
+      period: formatDate(startDate) + " - " + formatDate(endDate),
+    };
+
+    request(
+      `${import.meta.env.VITE_API_BASE_URL}/businessUnits`,
+      "POST",
+      payload
+    )
       .then(async (response) => {
         if (!response.ok) {
           throw new Error(`${JSON.stringify(await response.json())}`);
@@ -120,8 +138,14 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
         toast.success("Data submitted successfully");
         resetForm();
       })
-      .then(() => {
+      .then(async () => {
         fetchUserBusinessUnits();
+        const updatedPeriods = await fetchBusinessUnitsPeriod();
+        if (updatedPeriods) {
+          setPeriods(updatedPeriods);
+        } else {
+          toast.error("Error fetching periods");
+        }
       })
       .catch((error) => {
         const errorMessage = JSON.parse(error.message).error;
@@ -150,6 +174,17 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       setOwnershipPercentage(businessUnit.partnership);
       setProductionClients(businessUnit.production);
       setNotes(businessUnit.notes);
+      let period = businessUnit.period;
+      period = period.split("-");
+      const formattedDates = period.map((date) => {
+        const d = new Date(date.trim());
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, "0"); // getMonth is zero-based, so add 1
+        const day = String(d.getDate()).padStart(2, "0"); // getDate returns the day of the month
+        return `${year}-${month}-${day}`;
+      });
+      setStartDate(formattedDates[0]);
+      setEndtDate(formattedDates[1]);
     } catch (error) {
       const errorMessage = JSON.parse(error.message).error;
       toast.error(errorMessage);
@@ -170,15 +205,17 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       !selectedRegion ||
       // revenue ||
       // employees ||
-      !ownershipPercentage
+      !ownershipPercentage ||
       // productionClients ||
       // notes
+      !startDate ||
+      !endDate
     ) {
       toast.warn("Please fill all fields");
       return;
     }
 
-    request(`${import.meta.env.VITE_API_BASE_URL}/businessUnits/${id}`, "PUT", {
+    const payload = {
       title: businessUnitTitle,
       continent: selectedContinent,
       country: selectedCountry,
@@ -188,7 +225,14 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       partnership: ownershipPercentage,
       production: productionClients,
       notes: notes,
-    })
+      period: formatDate(startDate) + " - " + formatDate(endDate),
+    };
+
+    request(
+      `${import.meta.env.VITE_API_BASE_URL}/businessUnits/${id}`,
+      "PUT",
+      payload
+    )
       .then(async (response) => {
         if (!response.ok) {
           throw new Error(`${JSON.stringify(await response.json())}`);
@@ -197,8 +241,15 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
         resetForm();
         navigate("/profile");
       })
-      .then(() => {
+      .then(async () => {
         fetchUserBusinessUnits();
+        const updatedPeriods = await fetchBusinessUnitsPeriod();
+        if (updatedPeriods) {
+          setPeriods(updatedPeriods);
+          setSelectedPeriod(payload.period);
+        } else {
+          toast.error("Error fetching periods");
+        }
       })
       .catch((error) => {
         const errorMessage = JSON.parse(error.message).error;
@@ -283,9 +334,27 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
     >
       <h3 className="m-0 mb-4 font-extrabold text-2xl">Create Your Profile</h3>
       <div className="grid gap-4  ">
+        <div className="flex gap-4">
+          <FormControl className="flex-1">
+            <Label>Start date</Label>
+            <Input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </FormControl>
+          <FormControl className="flex-1">
+            <Label>End date</Label>
+            <Input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndtDate(e.target.value)}
+            />
+          </FormControl>
+        </div>
         {/* Business Unit Title */}
         <FormControl>
-          <Label>Business Unit Title</Label>
+          <Label>Business unit title</Label>
           <Input
             type="text"
             value={businessUnitTitle}
@@ -300,7 +369,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
             value={selectedContinent}
             onChange={(e) => setSelectedContinent(e.target.value)}
           >
-            <option value="">Select Continent</option>
+            <option value="">Select continent</option>
             {continents.map((continent, index) => (
               <option key={index} value={continent}>
                 {continent}
@@ -314,22 +383,24 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
           <Label>Country</Label>
           <button
             type="button"
-            className="h-11 p-2 bg-tc-input-background  hover:text-black rounded-md flex justify-between items-center"
+            className="h-11 p-2 bg-tc-input-background hover:text-black rounded-md flex justify-between items-center"
             onClick={(e) => {
               setShowCountriesOptions((prev) => !prev);
             }}
           >
-            {selectedCountry || "Select Country"}
+            {selectedCountry || "Select country"}
             <FaAngleDown className="text-[0.8rem] -me-[6px]" />
           </button>
           {showCountriesOptions &&
             (countries.length > 0 ? (
               <ul className="absolute bg-white w-full top-[105%] border border-slate-500 overflow-y-auto max-h-60">
-                <Input
-                  placeholder="Search country"
-                  value={filterCountryBy}
-                  onChange={(e) => setFilterCountryBy(e.target.value)}
-                />
+                <li>
+                  <Input
+                    placeholder="Search country"
+                    value={filterCountryBy}
+                    onChange={(e) => setFilterCountryBy(e.target.value)}
+                  />
+                </li>
                 {filteredCountries.length > 0 ? (
                   filteredCountries.map((country) => (
                     <li
@@ -349,21 +420,9 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
               </ul>
             ) : (
               <div className="absolute bg-gray-500 text-white w-full top-[105%] px-2">
-                Select Country
+                Select country
               </div>
             ))}
-
-          {/* <Select
-            value={selectedCountry}
-            onChange={(e) => setSelectedCountry(e.target.value)}
-          >
-            <option value="">Select Country</option>
-            {countries.map((country, index) => (
-              <option key={index} value={country}>
-                {country}
-              </option>
-            ))}
-          </Select> */}
         </FormControl>
 
         {/* Region */}
@@ -373,7 +432,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
             value={selectedRegion}
             onChange={(e) => setSelectedRegion(e.target.value)}
           >
-            <option value="">Select Region</option>
+            <option value="">Select region</option>
             {regions.map((region, index) => (
               <option key={index} value={region}>
                 {region}
@@ -443,12 +502,6 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
           />
         </FormControl>
       </div>
-      {/* <Button
-        className="w-full mt-4 text-white bg-tc-green hover:bg-opacity-90"
-        type="submit"
-      >
-        Add
-      </Button> */}
       {/* Buttons */}
       {id ? (
         <div className="flex flex-col mt-4 gap-4 md:flex-row self-end">

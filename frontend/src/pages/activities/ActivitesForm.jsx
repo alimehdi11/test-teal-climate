@@ -9,6 +9,7 @@ import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
 import { DataContext } from "../../contexts/DataContext.jsx";
 import { UserContext } from "../../contexts/UserContext.jsx";
+import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
 const ActivitesForm = ({
   selectedScope,
@@ -48,12 +49,12 @@ const ActivitesForm = ({
   const [unitOfEmissionFactor, setUnitOfEmissionFactor] = useState("");
 
   const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
+  // const [year, setYear] = useState("");
 
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const data = useContext(DataContext);
+  const data = useContext(DataContext).data;
   const { user } = useContext(UserContext);
 
   const activities = data.activities;
@@ -62,6 +63,8 @@ const ActivitesForm = ({
 
   const currentYear = new Date().getFullYear();
   const years = [currentYear, currentYear - 1];
+
+  const { selectedPeriod } = usePeriod();
 
   const fetchUserBusinessUnits = async () => {
     try {
@@ -264,8 +267,11 @@ const ActivitesForm = ({
     // setShowLevel4Field(false);
     // setShowLevel5Field(false);
 
-    setSelectedScope(null);
-    setSelectedLevel(null);
+    // setSelectedScope(null);
+    // setSelectedLevel(null);
+
+    setMonth("");
+    // setYear("");
 
     /**
      * For electricity(level1) market based
@@ -373,8 +379,9 @@ const ActivitesForm = ({
       (level5Options.length > 0 && !level5Value) ||
       !unitOfMeasurementValue ||
       !quantityValue ||
-      !month ||
-      !year
+      !month
+      // ||
+      // !year
     ) {
       toast.warn("Please fill all fields");
       return;
@@ -609,7 +616,7 @@ const ActivitesForm = ({
     }
 
     payload.month = month;
-    payload.year = year;
+    // payload.year = year;
 
     // console.table(payload);
     // console.table(marketBasedPayload);
@@ -684,7 +691,8 @@ const ActivitesForm = ({
       (level4Options.length > 0 && !level4Value) ||
       (level5Options.length > 0 && !level5Value) ||
       !unitOfMeasurementValue ||
-      !quantityValue
+      !quantityValue ||
+      !month
     ) {
       toast.warn("Please fill all fields");
       return;
@@ -918,6 +926,8 @@ const ActivitesForm = ({
       marketBasedPayload.CO2e_of_N2O = undefined;
     }
 
+    payload.month = month;
+
     // console.table(payload);
     // console.table(marketBasedPayload);
     // return;
@@ -970,6 +980,8 @@ const ActivitesForm = ({
           console.log(error);
         });
     }
+
+    navigate("/activities");
   };
 
   const handleCancel = () => {
@@ -1176,14 +1188,19 @@ const ActivitesForm = ({
   };
 
   useEffect(() => {
-    fetchUserBusinessUnits().then((businessUnits) => {
-      if (businessUnits.length === 0) {
-        toast.info("Please add business unit first");
-        return;
-      }
-      setBusinessUnits(businessUnits);
-    });
-  }, []);
+    if (selectedPeriod) {
+      fetchUserBusinessUnits().then(async (businessUnits) => {
+        if (businessUnits.length === 0) {
+          toast.info("Please add business unit first");
+          return;
+        }
+        businessUnits = businessUnits.filter((businessUnit) => {
+          return businessUnit.period === selectedPeriod;
+        });
+        setBusinessUnits(businessUnits);
+      });
+    }
+  }, [selectedPeriod]);
 
   useEffect(() => {
     // if (!id) {
@@ -1551,6 +1568,8 @@ const ActivitesForm = ({
           setQuantityValue(activity.quantity);
           setLevel4Value(activity.level4 || "");
           setLevel5Value(activity.level5 || "");
+          setMonth(activity.month);
+          // setYear(activity.year);
         })
         .catch((error) => {
           console.error("Failed to get company data", error);
@@ -1600,7 +1619,7 @@ const ActivitesForm = ({
               })}
             </Select>
           </FormControl>
-          <FormControl className="flex-1">
+          {/* <FormControl className="flex-1">
             <Label>Year</Label>
             <Select value={year} onChange={(e) => setYear(e.target.value)}>
               <option value="">Select Option</option>
@@ -1612,7 +1631,7 @@ const ActivitesForm = ({
                 );
               })}
             </Select>
-          </FormControl>
+          </FormControl> */}
         </div>
         {/* Scope Category */}
         <FormControl>
