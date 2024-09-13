@@ -1,5 +1,4 @@
 import { useEffect, useContext } from "react";
-import ProfileSidebar from "./ProfileSidebar.jsx";
 import PortfolioForm from "./PortfolioForm.jsx";
 import ProfileTable from "./ProfileTable.jsx";
 import { useState } from "react";
@@ -43,9 +42,7 @@ const Profile = () => {
 
   return (
     <>
-      <Sidebar>
-        <ProfileSidebar />
-      </Sidebar>
+      <Sidebar />
       <Main>
         <>
           <div className="my-5 flex justify-between">

@@ -4,11 +4,13 @@ import "leaflet/dist/leaflet.css";
 import worldMapJson from "../../data/worldMap.json";
 import { UserContext } from "../../contexts/UserContext.jsx";
 import { request } from "../../utils/request.js";
+import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
 const WorldMap = () => {
   const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
     useState([]);
   const { user } = useContext(UserContext);
+  const { selectedPeriod } = usePeriod();
 
   const fetchUserBusinessUnitsActivities = async () => {
     try {
@@ -26,6 +28,7 @@ const WorldMap = () => {
           return activity.businessUnit.period === selectedPeriod;
         }
       );
+      console.log(userBusinessUnitsActivities);
       setUserBusinessUnitsActivities(userBusinessUnitsActivities);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -48,7 +51,7 @@ const WorldMap = () => {
       }
     });
 
-    let fillColor = "#E0E0E0"; // Default color for countries with no data or not matching
+    let fillColor = "#E0E0E0"; // Default color for countries with no data
 
     if (emissionsValue) {
       if (emissionsValue > 1000) {
@@ -93,8 +96,10 @@ const WorldMap = () => {
   };
 
   useEffect(() => {
-    fetchUserBusinessUnitsActivities();
-  }, []);
+    if (selectedPeriod) {
+      fetchUserBusinessUnitsActivities();
+    }
+  }, [selectedPeriod]);
 
   return (
     <div className="p-4 flex flex-col lg:flex-row gap-4 mt-4 rounded-md bg-white">

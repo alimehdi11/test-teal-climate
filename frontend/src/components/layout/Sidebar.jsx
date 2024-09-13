@@ -40,8 +40,10 @@ const Sidebar = ({ children }) => {
   };
 
   return (
-    <div className="bg-white flex-1 p-5 max-w-[300px] min-w-[300px] overflow-auto fixed top-0 left-0 bottom-0">
-      <Logo />
+    <div className="bg-white flex-1 p-5 pt-0 max-w-[300px] min-w-[300px] overflow-auto fixed top-0 left-0 bottom-0">
+      <div className="bg-white pt-5 pb-1 sticky top-0">
+        <Logo />
+      </div>
       <div
         className="mt-4 flex flex-col justify-between"
         style={{

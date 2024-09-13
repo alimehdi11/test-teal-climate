@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { isLoggedIn, isSubscribed } from "./../utils/auth.js";
+import { deleteToken, isLoggedIn, isSubscribed } from "./../utils/auth.js";
 
 const ProtectedRoute = ({ Component }) => {
   const [isLoggedInAndSubscribed, setIsLoggedInAndSubscribed] = useState(false);
@@ -14,6 +14,7 @@ const ProtectedRoute = ({ Component }) => {
         navigate("/plans");
       }
     } else {
+      deleteToken();
       navigate("/login");
     }
   });
