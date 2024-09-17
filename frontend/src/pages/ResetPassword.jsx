@@ -43,8 +43,9 @@ const ResetPassword = () => {
         {/* Logo */}
         <Logo />
         <form
-          className="w-[350px] flex flex-col gap-y-3"
+          method="POST"
           onSubmit={handleSubmit}
+          className="w-[350px] flex flex-col gap-y-3 bg-white p-6 rounded-md"
         >
           <FormControl>
             <Label>Enter your new password</Label>
@@ -56,7 +57,7 @@ const ResetPassword = () => {
               }}
             />
           </FormControl>
-          <Button type="submit" className="bg-tc-blue text-white text-base">
+          <Button type="submit" className="!bg-tc-blue">
             Submit
           </Button>
         </form>
@@ -70,18 +71,6 @@ const ResetPassword = () => {
           </Link>
         </div>
       </div>
-      <ToastContainer
-        theme={"colored"}
-        hideProgressBar={true}
-        transition={Slide}
-        autoClose={1500}
-        pauseOnFocusLoss={false}
-        style={{
-          "--toastify-font-family": "Poppins",
-          "--toastify-color-success": "#00CC9CFF",
-          "--toastify-color-warning": "#e74c3c",
-        }}
-      />
     </>
   );
 };
