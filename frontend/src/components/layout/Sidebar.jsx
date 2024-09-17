@@ -13,6 +13,8 @@ import settingIcon from "../../assets/icons/setting.svg";
 import settingSelectedOrHoverIcon from "../../assets/icons/settingSelectedOrHover.svg";
 import accountIcon from "../../assets/icons/account.svg";
 import accountSelectedOrHoverIcon from "../../assets/icons/accountSelectedOrHover.svg";
+import profileIcon from "../../assets/icons/profile.svg";
+import profileSelectedOrHoverIcon from "../../assets/icons/profileSelectedOrHover.svg";
 
 const Sidebar = ({ children }) => {
   const [isSettingBtnHovered, setIsSettingBtnHovered] = useState(false);
@@ -85,9 +87,9 @@ const Sidebar = ({ children }) => {
               }}
             >
               {paths.isProfilePath || isProfileBtnHovered ? (
-                <img src={dashboardSelectedOrHoverIcon} />
+                <img src={profileSelectedOrHoverIcon} />
               ) : (
-                <img src={dashboardIcon} />
+                <img src={profileIcon} />
               )}
               Profile
             </SidebarItem>
