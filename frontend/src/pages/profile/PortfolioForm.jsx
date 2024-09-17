@@ -80,14 +80,14 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
     setEndtDate("");
   };
 
-  const isBusinessUnitUnique = () => {
-    for (let bu = 0; bu < userBusinessUnits.length; bu++) {
-      if (businessUnitTitle === userBusinessUnits[bu].title) {
-        return false;
-      }
-    }
-    return true;
-  };
+  // const isBusinessUnitUnique = () => {
+  //   for (let bu = 0; bu < userBusinessUnits.length; bu++) {
+  //     if (businessUnitTitle === userBusinessUnits[bu].title) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -108,10 +108,10 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       return;
     }
 
-    if (!isBusinessUnitUnique()) {
-      toast.warn("Businessunits title must be unique for within period");
-      return;
-    }
+    // if (!isBusinessUnitUnique()) {
+    //   toast.warn("Businessunits title must be unique for within period");
+    //   return;
+    // }
 
     const payload = {
       title: businessUnitTitle,

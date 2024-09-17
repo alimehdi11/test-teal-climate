@@ -10,6 +10,7 @@ import Select from "../../components/ui/Select.jsx";
 import { DataContext } from "../../contexts/DataContext.jsx";
 import { UserContext } from "../../contexts/UserContext.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
+import { getPeriodMonths } from "../../utils/date.js";
 
 const ActivitesForm = ({
   selectedScope,
@@ -1190,10 +1191,10 @@ const ActivitesForm = ({
   useEffect(() => {
     if (selectedPeriod) {
       fetchUserBusinessUnits().then(async (businessUnits) => {
-        if (businessUnits.length === 0) {
-          toast.info("Please add business unit first");
-          return;
-        }
+        // if (businessUnits.length === 0) {
+        //   toast.info("Please add business unit first");
+        //   return;
+        // }
         businessUnits = businessUnits.filter((businessUnit) => {
           return businessUnit.period === selectedPeriod;
         });
@@ -1536,7 +1537,7 @@ const ActivitesForm = ({
       setFuelTypes(filterAirportsName(airports));
       // });
     }
-  }, []);
+  }, [businessUnitValue]);
 
   /**
    * "Business travel- air" & "WTT- business travel- air"
@@ -1597,20 +1598,7 @@ const ActivitesForm = ({
             <Label>Month</Label>
             <Select value={month} onChange={(e) => setMonth(e.target.value)}>
               <option value="">Select Option</option>
-              {[
-                "january",
-                "february",
-                "march",
-                "april",
-                "may",
-                "june",
-                "july",
-                "august",
-                "september",
-                "october",
-                "november",
-                "december",
-              ].map((option) => {
+              {getPeriodMonths(selectedPeriod).map((option) => {
                 return (
                   <option key={option} value={option}>
                     {option.toUpperCase()}
