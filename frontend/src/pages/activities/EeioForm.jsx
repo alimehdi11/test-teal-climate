@@ -9,6 +9,8 @@ import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
 import { UserContext } from "../../contexts/UserContext.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
+import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
+import { getPeriodMonths } from "../../utils/date.js";
 
 const EeoiForm = ({
   productOrIndustry,
@@ -21,15 +23,15 @@ const EeoiForm = ({
   const [businessUnits, setBusinessUnits] = useState("");
   const [businessUnitValue, setBusinessUnitValue] = useState("");
   const [level1Value, setLevel1Value] = useState("");
-  const [level2Options, setLevel2Options] = useState("");
+  const [level2Options, setLevel2Options] = useState([]);
   const [level2Value, setLevel2Value] = useState("");
-  const [Level3Options, setLevel3Options] = useState("");
+  const [level3Options, setLevel3Options] = useState([]);
   const [level3Value, setLevel3Value] = useState("");
-  const [Level4Options, setLevel4Options] = useState("");
+  const [level4Options, setLevel4Options] = useState([]);
   const [level4Value, setLevel4Value] = useState("");
-  const [Level5Options, setLevel5Options] = useState("");
+  const [level5Options, setLevel5Options] = useState([]);
   const [level5Value, setLevel5Value] = useState("");
-  const [sectorOptions, setSectorOptions] = useState("");
+  const [sectorOptions, setSectorOptions] = useState([]);
   const [sectorValue, setSectorValue] = useState("");
   const [currencyValue, setCurrencyValue] = useState("perEuro");
   const [quantity, setQuantity] = useState("");
@@ -382,9 +384,16 @@ const EeoiForm = ({
         <div className="grid gap-4">
           {/* month & year */}
           <div className="flex gap-4">
-            <FormControl className="flex-1">
+            <FormControl className="flex-1 relative">
               <Label>Month</Label>
-              <Select value={month} onChange={(e) => setMonth(e.target.value)}>
+              <SearchableSelect
+                data={getPeriodMonths(selectedPeriod)}
+                item={month}
+                setItem={setMonth}
+                text={"Select month"}
+                placeholder={"Search month"}
+              />
+              {/* <Select value={month} onChange={(e) => setMonth(e.target.value)}>
                 <option value="">Select Option</option>
                 {[
                   "january",
@@ -406,7 +415,7 @@ const EeoiForm = ({
                     </option>
                   );
                 })}
-              </Select>
+              </Select> */}
             </FormControl>
             {/* <FormControl className="flex-1">
               <Label>Year</Label>
@@ -446,9 +455,16 @@ const EeoiForm = ({
             </Select>
           </FormControl>
           {/* Level 1 */}
-          <FormControl>
+          <FormControl className="relative">
             <Label>Level 1</Label>
-            <Select
+            <SearchableSelect
+              data={level1Options}
+              item={level1Value}
+              setItem={setLevel1Value}
+              text={"Select level 1"}
+              placeholder={"Search level 1"}
+            />
+            {/* <Select
               value={level1Value}
               onChange={(e) => setLevel1Value(e.target.value)}
             >
@@ -456,12 +472,19 @@ const EeoiForm = ({
               {level1Options.map((item, index) => (
                 <option key={index}>{item}</option>
               ))}
-            </Select>
+            </Select> */}
           </FormControl>
           {/* Level 2 */}
-          <FormControl>
+          <FormControl className="relative">
             <Label>Level 2</Label>
-            <Select
+            <SearchableSelect
+              data={level2Options}
+              item={level2Value}
+              setItem={setLevel2Value}
+              text={"Select level 2"}
+              placeholder={"Search level 2"}
+            />
+            {/* <Select
               value={level2Value}
               onChange={(e) => setLevel2Value(e.target.value)}
             >
@@ -474,66 +497,94 @@ const EeoiForm = ({
                     </option>
                   );
                 })}
-            </Select>
+            </Select> */}
           </FormControl>
           {/* Level 3 */}
           <FormControl>
             <Label>Level 3</Label>
-            <Select
+            <SearchableSelect
+              data={level3Options}
+              item={level3Value}
+              setItem={setLevel3Value}
+              text={"Select level 3"}
+              placeholder={"Search level 3"}
+            />
+            {/* <Select
               value={level3Value}
               onChange={(e) => setLevel3Value(e.target.value)}
             >
               <option value="">Select Option</option>
-              {Level3Options &&
-                Level3Options.map((options, index) => {
+              {level3Options &&
+                level3Options.map((options, index) => {
                   return (
                     <option value={options.level3} key={index}>
                       {options.level3}
                     </option>
                   );
                 })}
-            </Select>
+            </Select> */}
           </FormControl>
           {/* Level 4 */}
-          <FormControl>
+          <FormControl className="relative">
             <Label>Level 4</Label>
-            <Select
+            <SearchableSelect
+              data={level4Options}
+              item={level4Value}
+              setItem={setLevel4Value}
+              text={"Select level 4"}
+              placeholder={"Search level 4"}
+            />
+            {/* <Select
               value={level4Value}
               onChange={(e) => setLevel4Value(e.target.value)}
             >
               <option value="">Select Option</option>
-              {Level4Options &&
-                Level4Options.map((options, index) => {
+              {level4Options &&
+                level4Options.map((options, index) => {
                   return (
                     <option value={options.level4} key={index}>
                       {options.level4}
                     </option>
                   );
                 })}
-            </Select>
+            </Select> */}
           </FormControl>
           {/* Level 5 */}
-          <FormControl>
+          <FormControl className="relative">
             <Label>Level 5</Label>
-            <Select
+            <SearchableSelect
+              data={level5Options}
+              item={level5Value}
+              setItem={setLevel5Value}
+              text={"Select level 5"}
+              placeholder={"Search level 5"}
+            />
+            {/* <Select
               value={level5Value}
               onChange={(e) => setLevel5Value(e.target.value)}
             >
               <option value="">Select Option</option>
-              {Level5Options &&
-                Level5Options.map((options, index) => {
+              {level5Options &&
+                level5Options.map((options, index) => {
                   return (
                     <option value={options.level5} key={index}>
                       {options.level5}
                     </option>
                   );
                 })}
-            </Select>
+            </Select> */}
           </FormControl>
           {/* Sector */}
           <FormControl>
             <Label>Sector</Label>
-            <Select
+            <SearchableSelect
+              data={sectorOptions}
+              item={sectorValue}
+              setItem={setSectorValue}
+              text={"Select sector"}
+              placeholder={"Search sector"}
+            />
+            {/* <Select
               value={sectorValue}
               onChange={(e) => setSectorValue(e.target.value)}
             >
@@ -546,7 +597,7 @@ const EeoiForm = ({
                     </option>
                   );
                 })}
-            </Select>
+            </Select> */}
           </FormControl>
           {/* Currency */}
           <FormControl>

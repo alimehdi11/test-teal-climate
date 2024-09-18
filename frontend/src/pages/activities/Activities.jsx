@@ -17,7 +17,7 @@ const Activities = () => {
     useState([]);
   const [isSpendBaseScope3Selected, setIsSpendBaseScope3Selected] =
     useState(false);
-  const [productOrIndustry, setProductOrIndustry] = useState("");
+  const [productOrIndustry, setProductOrIndustry] = useState("Industry");
   const { user } = useContext(UserContext);
   const { selectedPeriod } = usePeriod();
 

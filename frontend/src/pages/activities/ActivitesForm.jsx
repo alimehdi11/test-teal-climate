@@ -11,6 +11,7 @@ import { DataContext } from "../../contexts/DataContext.jsx";
 import { UserContext } from "../../contexts/UserContext.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import { getPeriodMonths } from "../../utils/date.js";
+import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
 
 const ActivitesForm = ({
   selectedScope,
@@ -1594,9 +1595,16 @@ const ActivitesForm = ({
         )}
         {/* month & year */}
         <div className="flex gap-4">
-          <FormControl className="flex-1">
+          <FormControl className="flex-1 relative">
             <Label>Month</Label>
-            <Select value={month} onChange={(e) => setMonth(e.target.value)}>
+            <SearchableSelect
+              data={getPeriodMonths(selectedPeriod)}
+              item={month}
+              setItem={setMonth}
+              text={"Select month"}
+              placeholder={"Search month"}
+            />
+            {/* <Select value={month} onChange={(e) => setMonth(e.target.value)}>
               <option value="">Select Option</option>
               {getPeriodMonths(selectedPeriod).map((option) => {
                 return (
@@ -1605,7 +1613,7 @@ const ActivitesForm = ({
                   </option>
                 );
               })}
-            </Select>
+            </Select> */}
           </FormControl>
           {/* <FormControl className="flex-1">
             <Label>Year</Label>
@@ -1622,9 +1630,16 @@ const ActivitesForm = ({
           </FormControl> */}
         </div>
         {/* Scope Category */}
-        <FormControl>
+        <FormControl className="relative">
           <Label>Scope Category</Label>
-          <Select
+          <SearchableSelect
+            data={scopeCategories}
+            item={scopeCategoryValue}
+            setItem={setScopeCategoryValue}
+            text={"Select scope category"}
+            placeholder={"Search scope category"}
+          />
+          {/* <Select
             value={scopeCategoryValue}
             onChange={(e) => setScopeCategoryValue(e.target.value)}
           >
@@ -1636,21 +1651,30 @@ const ActivitesForm = ({
                 </option>
               );
             })}
-          </Select>
+          </Select> */}
         </FormControl>
 
         {/* Business Unit */}
-        <FormControl>
+        <FormControl className="relative">
           <Label>Business Unit</Label>
+          {/* <SearchableSelect
+            data={businessUnits.map(
+              (businessUnit, index) => businessUnit.title
+            )}
+            item={businessUnitValue}
+            setItem={setBusinessUnitValue}
+            text={"Select business unit"}
+            placeholder={"Search business unit"}
+          /> */}
           <Select
             value={businessUnitValue}
             onChange={(e) => setBusinessUnitValue(e.target.value)}
           >
             <option value="">Select Option</option>
             {businessUnits &&
-              businessUnits.map((businessUnit, index) => {
+              businessUnits.map((businessUnit) => {
                 return (
-                  <option key={index} value={businessUnit.id}>
+                  <option key={businessUnit.id} value={businessUnit.id}>
                     {businessUnit.title}
                   </option>
                 );
@@ -1681,12 +1705,27 @@ const ActivitesForm = ({
             "WTT- electricity (T&D)",
             "Electricity T&D",
           ].includes(selectedLevel) && (
-            <FormControl>
+            <FormControl className="relative">
               <Label>
                 {(selectedLevel && possibleFuelTypeLabels[selectedLevel]) ||
                   `${selectedLevel} Type`}
               </Label>
-              <Select
+              <SearchableSelect
+                data={fuelTypes}
+                item={fuelTypeValue}
+                setItem={setFuelTypeValue}
+                text={
+                  "Select " +
+                  ((selectedLevel && possibleFuelTypeLabels[selectedLevel]) ||
+                    `${selectedLevel} Type`)
+                }
+                placeholder={
+                  "Search " +
+                  ((selectedLevel && possibleFuelTypeLabels[selectedLevel]) ||
+                    `${selectedLevel} Type`)
+                }
+              />
+              {/* <Select
                 value={fuelTypeValue}
                 onChange={(e) => setFuelTypeValue(e.target.value)}
               >
@@ -1698,19 +1737,34 @@ const ActivitesForm = ({
                     </option>
                   );
                 })}
-              </Select>
+              </Select> */}
             </FormControl>
           )
         }
 
         {/* Fuel Name (level3) */}
         {showFuelNamesField && (
-          <FormControl>
+          <FormControl className="relative">
             <Label>
               {(selectedLevel && possibleFuelNameLabels[selectedLevel]) ||
                 `${selectedLevel} Name`}
             </Label>
-            <Select
+            <SearchableSelect
+              data={fuelNames}
+              item={fuelNameValue}
+              setItem={setFuelNameValue}
+              text={
+                "Select " +
+                ((selectedLevel && possibleFuelNameLabels[selectedLevel]) ||
+                  `${selectedLevel} Name`)
+              }
+              placeholder={
+                "Search " +
+                ((selectedLevel && possibleFuelNameLabels[selectedLevel]) ||
+                  `${selectedLevel} Name`)
+              }
+            />
+            {/* <Select
               value={fuelNameValue}
               onChange={(e) => setFuelNameValue(e.target.value)}
             >
@@ -1722,13 +1776,13 @@ const ActivitesForm = ({
                   </option>
                 );
               })}
-            </Select>
+            </Select> */}
           </FormControl>
         )}
 
         {/* level4 */}
         {showLevel4Field && level4Options.length > 0 && (
-          <FormControl>
+          <FormControl className="relative">
             <Label>
               {selectedLevel
                 ? selectedLevel === "Freighting goods"
@@ -1742,7 +1796,32 @@ const ActivitesForm = ({
                       "Level 4"
                 : "Level 4"}
             </Label>
-            <Select
+            <SearchableSelect
+              data={level4Options}
+              item={level4Value}
+              setItem={setLevel4Value}
+              text={
+                "Select " +
+                (selectedLevel
+                  ? selectedLevel === "Freighting goods"
+                    ? "Capacity"
+                    : selectedLevel === "WTT- delivery vehs and freight"
+                      ? "Capacity"
+                      : "Level 4"
+                  : "Level 4")
+              }
+              placeholder={
+                "Search " +
+                (selectedLevel
+                  ? selectedLevel === "Freighting goods"
+                    ? "Capacity"
+                    : selectedLevel === "WTT- delivery vehs and freight"
+                      ? "Capacity"
+                      : "Level 4"
+                  : "Level 4")
+              }
+            />
+            {/* <Select
               onChange={(e) => setLevel4Value(e.target.value)}
               value={level4Value}
             >
@@ -1754,13 +1833,13 @@ const ActivitesForm = ({
                   </option>
                 );
               })}
-            </Select>
+            </Select> */}
           </FormControl>
         )}
 
         {/* level5 */}
         {showLevel5Field && (
-          <FormControl>
+          <FormControl className="relative">
             <Label>
               {selectedLevel && selectedLevel === "Passenger vehicles"
                 ? "Fuel Type"
@@ -1796,7 +1875,88 @@ const ActivitesForm = ({
                                           ? "Class"
                                           : "Level 5"}
             </Label>
-            <Select
+            <SearchableSelect
+              data={level5Options}
+              item={level5Value}
+              setItem={setLevel5Value}
+              text={
+                "Select " +
+                (selectedLevel && selectedLevel === "Passenger vehicles"
+                  ? "Fuel Type"
+                  : selectedLevel === "Delivery vehicles"
+                    ? "Fuel Type / Laden Percent"
+                    : selectedLevel === "Passenger Evs"
+                      ? "EV Type"
+                      : selectedLevel === "Delivery Evs"
+                        ? "Fuel Type"
+                        : selectedLevel ===
+                            "Electricity TandD for passenger EVs"
+                          ? "EV Type"
+                          : selectedLevel === "Business travel- land"
+                            ? "Fuel Type"
+                            : selectedLevel === "Material use"
+                              ? "Source of material"
+                              : selectedLevel === "Waste disposal"
+                                ? "Waste Treatment Type"
+                                : selectedLevel ===
+                                    "WTT- pass vehs and travel- land"
+                                  ? "Fuel Type"
+                                  : selectedLevel === "Freighting goods"
+                                    ? "Fuel / Laden"
+                                    : selectedLevel ===
+                                        "WTT- delivery vehs and freight"
+                                      ? "Fuel / Laden"
+                                      : selectedLevel ===
+                                          "Managed assets- vehicles"
+                                        ? "Fuel Type / Laden"
+                                        : selectedLevel ===
+                                            "Business travel- air"
+                                          ? "Class"
+                                          : selectedLevel ===
+                                              "WTT- business travel- air"
+                                            ? "Class"
+                                            : "Level 5")
+              }
+              placeholder={
+                "Search " +
+                (selectedLevel && selectedLevel === "Passenger vehicles"
+                  ? "Fuel Type"
+                  : selectedLevel === "Delivery vehicles"
+                    ? "Fuel Type / Laden Percent"
+                    : selectedLevel === "Passenger Evs"
+                      ? "EV Type"
+                      : selectedLevel === "Delivery Evs"
+                        ? "Fuel Type"
+                        : selectedLevel ===
+                            "Electricity TandD for passenger EVs"
+                          ? "EV Type"
+                          : selectedLevel === "Business travel- land"
+                            ? "Fuel Type"
+                            : selectedLevel === "Material use"
+                              ? "Source of material"
+                              : selectedLevel === "Waste disposal"
+                                ? "Waste Treatment Type"
+                                : selectedLevel ===
+                                    "WTT- pass vehs and travel- land"
+                                  ? "Fuel Type"
+                                  : selectedLevel === "Freighting goods"
+                                    ? "Fuel / Laden"
+                                    : selectedLevel ===
+                                        "WTT- delivery vehs and freight"
+                                      ? "Fuel / Laden"
+                                      : selectedLevel ===
+                                          "Managed assets- vehicles"
+                                        ? "Fuel Type / Laden"
+                                        : selectedLevel ===
+                                            "Business travel- air"
+                                          ? "Class"
+                                          : selectedLevel ===
+                                              "WTT- business travel- air"
+                                            ? "Class"
+                                            : "Level 5")
+              }
+            />
+            {/* <Select
               value={level5Value}
               onChange={(e) => setLevel5Value(e.target.value)}
             >
@@ -1808,14 +1968,21 @@ const ActivitesForm = ({
                   </option>
                 );
               })}
-            </Select>
+            </Select> */}
           </FormControl>
         )}
 
         {/*  Unit of Measurement  */}
-        <FormControl>
+        <FormControl className="relative">
           <Label>Unit of measurement</Label>
-          <Select
+          <SearchableSelect
+            data={unitOfMeasurements}
+            item={unitOfMeasurementValue}
+            setItem={setUnitOfMeasurementValue}
+            text={"Select unit of measurement"}
+            placeholder={"Search unit of measurement"}
+          />
+          {/* <Select
             value={unitOfMeasurementValue}
             onChange={(e) => setUnitOfMeasurementValue(e.target.value)}
           >
@@ -1827,7 +1994,7 @@ const ActivitesForm = ({
                 </option>
               );
             })}
-          </Select>
+          </Select> */}
         </FormControl>
 
         {/* Quantity */}
