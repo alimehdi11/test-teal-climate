@@ -392,7 +392,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
         </FormControl>
 
         {/* Region */}
-        <FormControl>
+        <FormControl class="relative">
           <Label>Region</Label>
           <SearchableSelect
             data={regions}

@@ -246,8 +246,8 @@ const EeoiForm = ({
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
       }
-      const jsonData = await response.json();
-      setLevel2Options(jsonData);
+      const result = await response.json();
+      setLevel2Options(result.map((item) => item.level2));
     } catch (error) {
       console.log(error);
       setLevel2Options([]);
@@ -261,8 +261,9 @@ const EeoiForm = ({
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
       }
-      const jsonData = await response.json();
-      setLevel3Options(jsonData);
+      const result = await response.json();
+      console.log("=======>>>", result);
+      setLevel3Options(result.map((item) => item.level3));
     } catch (error) {
       setLevel3Options([]);
     }
@@ -275,8 +276,8 @@ const EeoiForm = ({
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
       }
-      const jsonData = await response.json();
-      setLevel4Options(jsonData);
+      const result = await response.json();
+      setLevel4Options(result.map((item) => item.level4));
     } catch (error) {
       setLevel4Options([]);
     }
@@ -289,8 +290,8 @@ const EeoiForm = ({
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
       }
-      const jsonData = await response.json();
-      setLevel5Options(jsonData);
+      const result = await response.json();
+      setLevel5Options(result.map((item) => item.level5));
     } catch (error) {
       setLevel5Options([]);
     }
@@ -303,8 +304,8 @@ const EeoiForm = ({
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
       }
-      const jsonData = await response.json();
-      setSectorOptions(jsonData);
+      const result = await response.json();
+      setSectorOptions(result.map((item) => item.sector));
     } catch (error) {
       setSectorOptions([]);
     }
@@ -500,7 +501,7 @@ const EeoiForm = ({
             </Select> */}
           </FormControl>
           {/* Level 3 */}
-          <FormControl>
+          <FormControl className="relative">
             <Label>Level 3</Label>
             <SearchableSelect
               data={level3Options}
@@ -575,7 +576,7 @@ const EeoiForm = ({
             </Select> */}
           </FormControl>
           {/* Sector */}
-          <FormControl>
+          <FormControl className="relative">
             <Label>Sector</Label>
             <SearchableSelect
               data={sectorOptions}

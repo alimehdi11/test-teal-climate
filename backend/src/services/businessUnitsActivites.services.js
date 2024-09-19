@@ -110,7 +110,7 @@ const createEeioActivity = async (req, res) => {
     await BusinessUnitActivity.create(paylaod);
     return res.status(200).json({ message: "Activity created sucessfully" });
   } catch (error) {
-    console.log("Could not createOrUpdateEeioActivity");
+    console.log("Could not createBusinessUnitActivity -> createEeioActivity");
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -158,7 +158,7 @@ const createActivity = async (req, res) => {
     });
     res.status(200).json({ message: "Activity created sucessfully" });
   } catch (error) {
-    console.log("Could not createBusinessUnitActivity");
+    console.log("Could not createBusinessUnitActivity -> createActivity");
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -275,7 +275,9 @@ const updateEeioActivityById = async (req, res) => {
     });
     return res.status(200).json({ message: "Activity created sucessfully" });
   } catch (error) {
-    console.log("Could not updateEeioActivityById");
+    console.log(
+      "Could not updateBusinessUnitActivity -> updateEeioActivityById"
+    );
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -329,7 +331,7 @@ const updateActivityById = async (req, res) => {
     );
     return res.status(200).json({ message: "Activity created sucessfully" });
   } catch (error) {
-    console.log("Could not updateActivityById");
+    console.log("Could not updateBusinessUnitActivity -> updateActivityById");
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }

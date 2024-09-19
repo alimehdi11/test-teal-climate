@@ -33,7 +33,7 @@ const SearchableSelect = ({ data = [], item, setItem, text, placeholder }) => {
     <>
       <button
         type="button"
-        className="relative z-0 h-11 p-3 bg-tc-input-background hover:text-black rounded-md flex justify-between items-center"
+        className="relative w-full z-0 h-11 p-3 bg-tc-input-background hover:text-black rounded-md flex justify-between items-center"
         onClick={(e) => {
           setShowOptions((prev) => !prev);
         }}
