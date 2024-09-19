@@ -13,9 +13,10 @@ const formatDate = (dateStr) => {
     "Nov",
     "Dec",
   ];
-  const options = { year: "numeric", month: "short", day: "2-digit" };
-  const [year, month, day] = dateStr.split("-").map(Number);
-  const formattedDate = `${abbreviatedMonths[month - 1]} ${day}, ${year}`;
+  let [year, month, day] = dateStr.split("-");
+  month = abbreviatedMonths[Number(month) - 1];
+  day = day.padStart(2, "0");
+  const formattedDate = `${month} ${day}, ${year}`;
   return formattedDate;
 };
 
@@ -50,7 +51,6 @@ const getPeriodMonths = (period) => {
         ...months.slice(0, periodEndMonthIndex + 1),
       ];
     }
-
     return monthsFromPeriod;
   }
   return [];
