@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const verifyToken = (req, res, next) => {
+const isLoggedIn = (req, res, next) => {
   try {
     if (!req?.headers.authorization) {
       throw Error("No authorization header provided");
@@ -27,4 +27,15 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-export { verifyToken };
+const isSubscribed = (req, res, next) => {
+  // if (!req.user.subscribed) {
+  //   console.log("User not subscribed");
+  //   console.error(JSON.stringify(req.user, null, 2));
+  //   res.status(401).json({
+  //     message: "You are not authorized",
+  //   });
+  // }
+  next();
+};
+
+export { isLoggedIn, isSubscribed };

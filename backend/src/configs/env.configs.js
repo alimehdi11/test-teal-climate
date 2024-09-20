@@ -2,14 +2,16 @@ import dotenv from "dotenv";
 
 if (process.env.NODE_ENV === "development") {
   dotenv.config({ path: "./.env.development" });
-} else {
+} else if (process.env.NODE_ENV === "production") {
   dotenv.config({ path: "./.env.production" });
+} else if (process.env.NODE_ENV === "test") {
+  dotenv.config({ path: "./.env.test" });
 }
 
 /**
  * ---------- Log environment variables ----------
  */
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
   console.table([
     ["PORT", process.env.PORT],
     ["NODE_ENV", process.env.NODE_ENV],

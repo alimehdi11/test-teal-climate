@@ -16,5 +16,4 @@ await import("./createDatabaseTables.js");
 /**
  * ---------- Seeding tables ----------
  */
-
 await import("./seedTables.js");

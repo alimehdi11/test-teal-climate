@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development node --watch ./src/index.js",
     "init-db:dev": "cross-env NODE_ENV=development node ./seed/initializeDatabase.js",
-    "prod": "node ./src/index.js",
-    "init-db:prod": "node ./seed/initializeDatabase.js"
+    "prod": "cross-env NODE_ENV=production node ./src/index.js",
+    "init-db:prod": "cross-env NODE_ENV=production node ./seed/initializeDatabase.js",
+    "test": "cross-env NODE_ENV=test node ./test/index.js",
+    "init-db:test": "cross-env NODE_ENV=test node ./seed/initializeDatabase.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

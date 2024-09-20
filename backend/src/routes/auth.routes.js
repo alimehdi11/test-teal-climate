@@ -6,7 +6,7 @@ import {
   forgetPassword,
   resetPassword,
 } from "./../controllers/auth.controllers.js";
-import { verifyToken } from "./../middlewares/auth.middlewares.js";
+import { isLoggedIn } from "./../middlewares/auth.middlewares.js";
 
 const authRouter = express.Router();
 
@@ -17,7 +17,7 @@ authRouter.post("/register", registerUser);
 authRouter.post("/login", loginUser);
 
 // Update JWT
-authRouter.post("/token", verifyToken, updateToken);
+authRouter.post("/token", isLoggedIn, updateToken);
 
 // Forget password
 authRouter.post("/forget-password", forgetPassword);
