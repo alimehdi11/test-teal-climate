@@ -21,9 +21,6 @@ app.listen(process.env.PORT, () => {
   console.log("\x1b[33m%s\x1b[0m", `http://localhost:${process.env.PORT}`);
 });
 
-// Api base url
-process.env.API_BASE_URL = `http://localhost:${process.env.PORT}`;
-
 // Step-1 : Create test user
 await import("./createTestUser.js");
 
@@ -31,10 +28,10 @@ await import("./createTestUser.js");
 await import("./createBusinessUnits.js");
 
 // Step-3 : Drop the database
-try {
-  await sequelize.drop();
-  console.log("All tables dropped!");
-} catch (err) {
-  console.error("Error dropping tables:", err);
-}
+// try {
+//   await sequelize.drop();
+//   console.log("All tables dropped!");
+// } catch (err) {
+//   console.error("Error dropping tables:", err);
+// }
 process.exit();
