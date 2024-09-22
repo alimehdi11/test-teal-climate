@@ -37,22 +37,28 @@ const BusinessUnitActivity = sequelize.define(
     level1: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "",
     },
     level2: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "",
     },
     level3: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "",
     },
     level4: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "",
+      defaultValue: "",
     },
     level5: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "",
     },
     unitOfMeasurement: {
       type: DataTypes.STRING,
@@ -130,11 +136,38 @@ const BusinessUnitActivity = sequelize.define(
     month: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "",
     },
-    // year: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
+    reit: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    continent: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    country: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    region: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    assetType: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    year: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
   },
   {
     tableName: "businessUnitsActivities",

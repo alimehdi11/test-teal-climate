@@ -12,7 +12,7 @@ import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
 import { getPeriodMonths } from "../../utils/date.js";
 
-const EeoiForm = ({
+const EeioForm = ({
   productOrIndustry,
   fetchUserBusinessUnitsActivities,
   setProductOrIndustry,
@@ -646,4 +646,4 @@ const EeoiForm = ({
   );
 };
 
-export default EeoiForm;
+export default EeioForm;

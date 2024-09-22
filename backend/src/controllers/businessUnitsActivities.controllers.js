@@ -5,11 +5,14 @@ import {
   createEeioActivity,
   updateEeioActivityById,
   updateActivityById,
+  createReitActivity,
 } from "../services/businessUnitsActivites.services.js";
 
 const createBusinessUnitActivity = async (req, res) => {
   if (req.query.eeio === "true") {
     await createEeioActivity(req, res);
+  } else if (req.query.reit === "true") {
+    await createReitActivity(req, res);
   } else {
     await createActivity(req, res);
   }

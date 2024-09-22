@@ -52,6 +52,7 @@ const SearchableSelect = ({ data = [], item, setItem, text, placeholder }) => {
                 placeholder={placeholder}
                 value={filterBy}
                 onChange={(e) => setFilterBy(e.target.value)}
+                className="block my-[4px] mx-auto w-[calc(100%-10px)] border border-black"
               />
             </li>
             {filteredItems.length > 0 ? (
@@ -62,13 +63,13 @@ const SearchableSelect = ({ data = [], item, setItem, text, placeholder }) => {
                     setItem(item);
                     setShowOptions(false);
                   }}
-                  className="hover:bg-gray-500 hover:text-white px-3 cursor-pointer"
+                  className="hover:bg-gray-500 hover:text-white px-3 p-1 cursor-pointer"
                 >
                   {item}
                 </li>
               ))
             ) : (
-              <li className="p-1">No match found</li>
+              <li className="px-3 p-1">No match found</li>
             )}
           </ul>
         ) : (

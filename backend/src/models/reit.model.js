@@ -22,10 +22,6 @@ const Reit = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    state: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     assetType: {
       type: DataTypes.STRING,
       allowNull: false,

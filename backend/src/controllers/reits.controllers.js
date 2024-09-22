@@ -7,13 +7,9 @@ const getReits = async (req, res) => {
       continent,
       country,
       region,
-      state,
       assetType,
       year,
       unitOfMeasurement,
-      greenHouseGas,
-      greenHouseGasEmissionFactor,
-      averageTemprature,
       column,
       distinct,
     } = req.query;
@@ -21,14 +17,9 @@ const getReits = async (req, res) => {
     if (continent) whereClause.continent = continent;
     if (country) whereClause.country = country;
     if (region) whereClause.region = region;
-    if (state) whereClause.state = state;
     if (assetType) whereClause.assetType = assetType;
     if (year) whereClause.year = year;
     if (unitOfMeasurement) whereClause.unitOfMeasurement = unitOfMeasurement;
-    if (greenHouseGas) whereClause.greenHouseGas = greenHouseGas;
-    if (greenHouseGasEmissionFactor)
-      whereClause.greenHouseGasEmissionFactor = greenHouseGasEmissionFactor;
-    if (averageTemprature) whereClause.averageTemprature = averageTemprature;
     let attributes = [];
     if (column) {
       if (distinct === "true") {

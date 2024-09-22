@@ -113,12 +113,9 @@ const Activities = () => {
               <>
                 <div className="my-5 flex justify-between">
                   <span className=" font-extrabold text-2xl">{"REIT"}</span>
-                  {/* <PeriodSelector /> */}
+                  <PeriodSelector />
                 </div>
                 <ReitForm
-                  productOrIndustry={productOrIndustry}
-                  setProductOrIndustry={setProductOrIndustry}
-                  setIsSpendBaseScope3Selected={setIsSpendBaseScope3Selected}
                   fetchUserBusinessUnitsActivities={
                     fetchUserBusinessUnitsActivities
                   }
@@ -133,6 +130,7 @@ const Activities = () => {
             setSelectedLevel={setSelectedLevel}
             setIsSpendBaseScope3Selected={setIsSpendBaseScope3Selected}
             setProductOrIndustry={setProductOrIndustry}
+            setIsReitSelected={setIsReitSelected}
           />
         </>
       </Main>

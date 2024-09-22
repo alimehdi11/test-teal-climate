@@ -15,7 +15,7 @@ import { airportsRouter } from "./routes/airports.routes.js";
 import { electricVehiclesRouter } from "./routes/electricVehicles.routes.js";
 import { eeiosRouter } from "./routes/eeios.routes.js";
 import { usersRouter } from "./routes/users.routes.js";
-import { reitsRouter } from "./routes/reitsRouter.routes.js";
+import { reitsRouter } from "./routes/reits.routes.js";
 
 const app = express();
 

@@ -20,6 +20,7 @@ const ActivitiesTable = ({
   setSelectedLevel,
   setIsSpendBaseScope3Selected,
   setProductOrIndustry,
+  setIsReitSelected,
 }) => {
   const handleDelete = (id) => {
     return () => {
@@ -63,9 +64,21 @@ const ActivitiesTable = ({
               "Level 3",
               "Level 4",
               "Level 5",
-              "UOM",
+              "Unit Of Measurement",
               "Quantity",
               "Month",
+              "Level1 Category",
+              "Exio Base Code",
+              "Country",
+              "Continent",
+              "Sector",
+              "Product Or Industry",
+              "Reference",
+              "Eeio",
+              "Reit",
+              "Region",
+              "Asset Type",
+              "Year",
               <>
                 kg CO<span style={{ fontSize: "0.6em" }}>2</span>e
               </>,
@@ -83,6 +96,10 @@ const ActivitiesTable = ({
                 kg CO
                 <span style={{ fontSize: "0.6em" }}>2</span>e of N
                 <span style={{ fontSize: "0.6em" }}>2</span>O
+              </>,
+              <>
+                kg CO
+                <span style={{ fontSize: "0.6em" }}>2</span>e of other
               </>,
               "Actions",
             ].map((item, index) => (
@@ -115,8 +132,40 @@ const ActivitiesTable = ({
                 </TableCell>
                 <TableCell>
                   {userBusinessUnitActivity.month.charAt(0).toUpperCase() +
-                    userBusinessUnitActivity.month.slice(1)}
+                    userBusinessUnitActivity.month.slice(1) || "-"}
                 </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.level1Category || "-"}
+                </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.exioBaseCode || "-"}
+                </TableCell>
+                <TableCell>{userBusinessUnitActivity.country || "-"}</TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.continent || "-"}
+                </TableCell>
+                <TableCell>{userBusinessUnitActivity.sector || "-"}</TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.productOrIndustry || "-"}
+                </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.reference || "-"}
+                </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.eeio
+                    ? String(userBusinessUnitActivity.eeio)
+                    : "-"}
+                </TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.reit
+                    ? String(userBusinessUnitActivity.reit)
+                    : "-"}
+                </TableCell>
+                <TableCell>{userBusinessUnitActivity.region || "-"}</TableCell>
+                <TableCell>
+                  {userBusinessUnitActivity.assetType || "-"}
+                </TableCell>
+                <TableCell>{userBusinessUnitActivity.year || "-"}</TableCell>
                 <TableCell>
                   {userBusinessUnitActivity.CO2e === 0
                     ? "-"
@@ -138,6 +187,11 @@ const ActivitiesTable = ({
                     : userBusinessUnitActivity.CO2e_of_N2O?.toFixed(2)}
                 </TableCell>
                 <TableCell>
+                  {userBusinessUnitActivity.CO2e_of_other === 0
+                    ? "-"
+                    : userBusinessUnitActivity.CO2e_of_other?.toFixed(2)}
+                </TableCell>
+                <TableCell>
                   <div className="flex justify-center gap-x-1">
                     <Link
                       to={`/activities/${userBusinessUnitActivity.id}/edit`}
@@ -150,9 +204,16 @@ const ActivitiesTable = ({
                           );
                           setSelectedScope(null);
                           setSelectedLevel(null);
+                        } else if (userBusinessUnitActivity.reit) {
+                          setIsSpendBaseScope3Selected(false);
+                          setProductOrIndustry("");
+                          setSelectedScope(null);
+                          setSelectedLevel(null);
+                          setIsReitSelected(true);
                         } else {
                           setIsSpendBaseScope3Selected(false);
                           setProductOrIndustry("");
+                          setIsReitSelected(false);
                           setSelectedScope(userBusinessUnitActivity.scope);
                           setSelectedLevel(userBusinessUnitActivity.level1);
                         }

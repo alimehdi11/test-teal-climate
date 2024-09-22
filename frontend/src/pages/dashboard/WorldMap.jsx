@@ -28,7 +28,6 @@ const WorldMap = () => {
           return activity.businessUnit.period === selectedPeriod;
         }
       );
-      console.log(userBusinessUnitsActivities);
       setUserBusinessUnitsActivities(userBusinessUnitsActivities);
     } catch (error) {
       console.error("Error fetching data:", error);

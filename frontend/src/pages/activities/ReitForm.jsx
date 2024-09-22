@@ -6,31 +6,33 @@ import Button from "../../components/ui/Button.jsx";
 import FormControl from "../../components/FormControl.jsx";
 import Input from "../../components/ui/Input.jsx";
 import Label from "../../components/ui/Label.jsx";
-import Select from "../../components/ui/Select.jsx";
-import { UserContext } from "../../contexts/UserContext.jsx";
-import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
-import { getPeriodMonths } from "../../utils/date.js";
+import Select from "../../components/ui/Select.jsx";
+import { usePeriod } from "../../contexts/PeriodProvider.jsx";
+import { UserContext } from "../../contexts/UserContext.jsx";
 
-const EeoiForm = ({ productOrIndustry, fetchUserBusinessUnitsActivities }) => {
-  const [businessUnitValue, setBusinessUnitValue] = useState("");
-  const [level1Value, setLevel1Value] = useState("");
-  const [level2Options, setLevel2Options] = useState([]);
-  const [level2Value, setLevel2Value] = useState("");
-  const [level3Options, setLevel3Options] = useState([]);
-  const [level3Value, setLevel3Value] = useState("");
-  const [level4Options, setLevel4Options] = useState([]);
-  const [level4Value, setLevel4Value] = useState("");
-  const [level5Options, setLevel5Options] = useState([]);
-  const [level5Value, setLevel5Value] = useState("");
-  const [sectorOptions, setSectorOptions] = useState([]);
-  const [sectorValue, setSectorValue] = useState("");
-  const [currencyValue, setCurrencyValue] = useState("perEuro");
+const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
+  const [businessUnitId, setBusinessUnitId] = useState("");
+  const [continent, setContinent] = useState("");
+  const [country, setCountry] = useState("");
+  const [region, setRegion] = useState("");
+  const [assetType, setAssetType] = useState("");
+  const [year, setYear] = useState("");
+  const [unitOfMeasurement, setUnitOfMeasurement] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [month, setMonth] = useState("");
+
+  const [businessUnitOptions, setBusinessUnitOptions] = useState([]);
+  const [continentOptions, setContinentOptions] = useState([]);
+  const [countryOptions, setCountryOptions] = useState([]);
+  const [regionOptions, setRegionOptions] = useState([]);
+  const [assetTypeOptions, setAssetTypeOptions] = useState([]);
+  const [yearOptions, setYearOptions] = useState([]);
+  const [unitOfMeasurementOptions, setUnitOfMeasurementOptions] = useState([]);
+
   const { id } = useParams();
   const navigation = useNavigate();
-  const currentYear = new Date().getFullYear();
+  const { selectedPeriod } = usePeriod();
+  const { user } = useContext(UserContext);
 
   const fetchActivityById = async () => {
     try {
@@ -52,58 +54,50 @@ const EeoiForm = ({ productOrIndustry, fetchUserBusinessUnitsActivities }) => {
   };
 
   const resetForm = () => {
-    setLevel3Options([]);
-    setLevel4Options([]);
-    setLevel5Options([]);
-    setBusinessUnitValue("");
-    setLevel1Value("");
-    setLevel2Value("");
-    setLevel3Value("");
-    setLevel4Value("");
-    setLevel5Value("");
-    setSectorValue("");
+    setBusinessUnitId("");
+    setContinent("");
+    setCountry("");
+    setRegion("");
+    setAssetType("");
+    setYear("");
+    setUnitOfMeasurement("");
     setQuantity("");
-    setMonth("");
+    setContinentOptions([]);
+    setCountryOptions([]);
+    setRegionOptions([]);
+    setAssetTypeOptions([]);
+    setYearOptions([]);
+    setUnitOfMeasurementOptions([]);
   };
 
-  const handleFormSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     // Checking for missing values
     if (
-      !businessUnitValue ||
-      !productOrIndustry ||
-      !level1Value ||
-      !level2Value ||
-      !level3Value ||
-      !level4Value ||
-      !level5Value ||
-      !sectorValue ||
-      !currencyValue ||
-      !quantity ||
-      !month
-      // ||
-      // !year
+      !businessUnitId ||
+      !continent ||
+      !country ||
+      !region ||
+      !assetType ||
+      !year ||
+      !unitOfMeasurement ||
+      !quantity
     ) {
       toast.warn("Please fill all fields");
       return;
     }
-
     const payload = {
-      productOrIndustry,
-      level1: level1Value,
-      businessUnitId: businessUnitValue,
-      level2: level2Value,
-      level3: level3Value,
-      level4: level4Value,
-      level5: level5Value,
-      sector: sectorValue,
-      unitOfMeasurement: currencyValue,
+      businessUnitId,
+      continent,
+      country,
+      region,
+      assetType,
+      year,
+      unitOfMeasurement,
       quantity,
-      month,
-      // year,
     };
     await request(
-      `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?eeio=true`,
+      `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?reit=true`,
       "POST",
       payload
     )
@@ -123,46 +117,34 @@ const EeoiForm = ({ productOrIndustry, fetchUserBusinessUnitsActivities }) => {
       });
   };
 
-  const handleUpdateData = async () => {
+  const handleEdit = async () => {
     // Checking for missing values
     if (
-      !businessUnitValue ||
-      !productOrIndustry ||
-      !level1Value ||
-      !level2Value ||
-      !level3Value ||
-      !level4Value ||
-      !level5Value ||
-      !sectorValue ||
-      !currencyValue ||
-      !quantity ||
-      !month
-      // ||
-      // !year
+      !businessUnitId ||
+      !continent ||
+      !country ||
+      !region ||
+      !assetType ||
+      !year ||
+      !unitOfMeasurement ||
+      !quantity
     ) {
       toast.warn("Please fill all fields");
       return;
     }
-
-    // Update payload
     const payload = {
-      productOrIndustry,
-      level1: level1Value,
-      businessUnitId: businessUnitValue,
-      level2: level2Value,
-      level3: level3Value,
-      level4: level4Value,
-      level5: level5Value,
-      sector: sectorValue,
-      unitOfMeasurement: currencyValue,
+      businessUnitId,
+      continent,
+      country,
+      region,
+      assetType,
+      year,
+      unitOfMeasurement,
       quantity,
-      month,
-      // year,
     };
-
     try {
       await request(
-        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}?eeio=true`,
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities/${id}?reit=true`,
         "PUT",
         payload
       )
@@ -190,119 +172,196 @@ const EeoiForm = ({ productOrIndustry, fetchUserBusinessUnitsActivities }) => {
     navigation("/activities");
   };
 
-  const fetchEeioLevel2 = async () => {
+  const fetchContinents = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1Value}&column=level2&distinct=true`;
+      const queryParams = `column=continent&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
       const response = await request(url, "GET");
       if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
+        throw new Error(`Failed to fetch continents`);
       }
       const result = await response.json();
-      setLevel2Options(result.map((item) => item.level2));
+      setContinentOptions(result.map((item) => item.continent));
     } catch (error) {
       console.log(error);
-      setLevel2Options([]);
     }
   };
 
-  const fetchEeioLevel3 = async () => {
+  const fetchCountries = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1Value}&level2=${level2Value}&column=level3&distinct=true`;
+      const queryParams = `continent=${continent}&column=country&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
       const response = await request(url, "GET");
       if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
+        throw new Error(`Failed to fetch countries`);
       }
       const result = await response.json();
-      setLevel3Options(result.map((item) => item.level3));
+      setCountryOptions(result.map((item) => item.country));
     } catch (error) {
-      setLevel3Options([]);
+      console.log(error);
     }
   };
 
-  const fetchLevel4 = async () => {
+  const fetchRegions = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1Value}&level2=${level2Value}&level3=${level3Value}&column=level4&distinct=true`;
+      const queryParams = `continent=${continent}&country=${country}&column=region&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
       const response = await request(url, "GET");
       if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
+        throw new Error(`Failed to fetch regions`);
       }
       const result = await response.json();
-      setLevel4Options(result.map((item) => item.level4));
+      setRegionOptions(result.map((item) => item.region));
     } catch (error) {
-      setLevel4Options([]);
+      console.log(error);
     }
   };
 
-  const fetchLevel5 = async () => {
+  const fetchAssetTypes = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1Value}&level2=${level2Value}&level3=${level3Value}&level4=${level4Value}&column=level5&distinct=true`;
+      const queryParams = `continent=${continent}&country=${country}&region=${region}&column=assetType&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
       const response = await request(url, "GET");
       if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
+        throw new Error(`Failed to fetch asset types`);
       }
       const result = await response.json();
-      setLevel5Options(result.map((item) => item.level5));
+      setAssetTypeOptions(result.map((item) => item.assetType));
     } catch (error) {
-      setLevel5Options([]);
+      console.log(error);
     }
   };
 
-  const fetchSector = async () => {
+  const fetchYears = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1Value}&level2=${level2Value}&level3=${level3Value}&level4=${level4Value}&level5=${level5Value}&column=sector&distinct=true`;
+      const queryParams = `continent=${continent}&country=${country}&region=${region}&assetType=${assetType}&column=year&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
       const response = await request(url, "GET");
       if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
+        throw new Error(`Failed to fetch years`);
       }
       const result = await response.json();
-      setSectorOptions(result.map((item) => item.sector));
+      setYearOptions(result.map((item) => item.year));
     } catch (error) {
-      setSectorOptions([]);
+      console.log(error);
+    }
+  };
+
+  const fetchUnitsOfMeasurement = async () => {
+    try {
+      const queryParams = `continent=${continent}&country=${country}&region=${region}&assetType=${assetType}&year=${year}&column=unitOfMeasurement&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
+      const response = await request(url, "GET");
+      if (!response.ok) {
+        throw new Error(`Failed to fetch units of measurement`);
+      }
+      const result = await response.json();
+      setUnitOfMeasurementOptions(result.map((item) => item.unitOfMeasurement));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchBusinessUnits = async () => {
+    try {
+      const response = await request(
+        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnits`,
+        "GET"
+      );
+      if (!response.ok) {
+        throw new Error(JSON.stringify((await response.json()).error));
+      }
+      return await response.json();
+    } catch (error) {
+      let errorMessage = JSON.parse(error.message).error;
+      console.log(errorMessage);
+      console.error("Error fetching businessUnits:", error);
     }
   };
 
   useEffect(() => {
-    if (level1Value) {
-      fetchEeioLevel2();
+    if (selectedPeriod) {
+      fetchBusinessUnits().then(async (businessUnits) => {
+        if (businessUnits.length === 0) {
+          toast.info("Please add business unit first");
+          return;
+        }
+        businessUnits = businessUnits.filter((businessUnit) => {
+          return businessUnit.period === selectedPeriod;
+        });
+        setBusinessUnitOptions(businessUnits);
+      });
     }
-  }, [level1Value]);
+  }, [selectedPeriod]);
 
   useEffect(() => {
-    if (level2Value) {
-      fetchEeioLevel3();
+    if (businessUnitId) {
+      fetchContinents();
+      setContinent("");
+      setCountry("");
+      setRegion("");
+      setAssetType("");
+      setYear("");
+      setUnitOfMeasurement("");
     }
-  }, [level2Value]);
+  }, [businessUnitId]);
 
   useEffect(() => {
-    if (level3Value) {
-      fetchLevel4();
+    if (continent) {
+      fetchCountries();
+      setCountry("");
+      setRegion("");
+      setAssetType("");
+      setYear("");
+      setUnitOfMeasurement("");
     }
-  }, [level3Value]);
+  }, [continent]);
 
   useEffect(() => {
-    if (level4Value) {
-      fetchLevel5();
+    if (country) {
+      fetchRegions();
+      setRegion("");
+      setAssetType("");
+      setYear("");
+      setUnitOfMeasurement("");
     }
-  }, [level4Value]);
+  }, [country]);
 
   useEffect(() => {
-    if (level5Value) {
-      fetchSector();
+    if (region) {
+      fetchAssetTypes();
+      setAssetType("");
+      setYear("");
+      setUnitOfMeasurement("");
     }
-  }, [level5Value]);
+  }, [region]);
+
+  useEffect(() => {
+    if (assetType) {
+      fetchYears();
+      setYear("");
+      setUnitOfMeasurement("");
+    }
+  }, [assetType]);
+
+  useEffect(() => {
+    if (year) {
+      fetchUnitsOfMeasurement();
+      setUnitOfMeasurement("");
+    }
+  }, [year]);
 
   useEffect(() => {
     if (id) {
       fetchActivityById().then((activity) => {
-        setBusinessUnitValue(activity.businessUnit.id);
-        setLevel1Value(activity.level1);
-        setLevel2Value(activity.level2);
-        setLevel3Value(activity.level3);
-        setLevel4Value(activity.level4);
-        setLevel5Value(activity.level5);
-        setSectorValue(activity.sector);
+        setBusinessUnitId(activity.businessUnit.id);
+        setContinent(activity.continent);
+        setCountry(activity.country);
+        setRegion(activity.region);
+        setAssetType(activity.assetType);
+        setYear(activity.year);
+        setUnitOfMeasurement(activity.unitOfMeasurement);
         setQuantity(activity.quantity);
-        setMonth(activity.month);
       });
     }
   }, [id]);
@@ -310,96 +369,110 @@ const EeoiForm = ({ productOrIndustry, fetchUserBusinessUnitsActivities }) => {
   return (
     <>
       <form
-        onSubmit={handleFormSubmit}
+        onSubmit={handleSubmit}
         className="flex flex-col gap-y-3 bg-white rounded-md p-6"
       >
         <h3 className="m-0 mb-3 font-extrabold text-2xl">
           Insert REIT data here
         </h3>
         <div className="grid gap-4">
-          {/* Level 1 */}
-          <FormControl className="relative">
-            <Label>Level 1</Label>
-            <SearchableSelect
-              // data={level1Options}
-              item={level1Value}
-              setItem={setLevel1Value}
-              text={"Select level 1"}
-              placeholder={"Search level 1"}
-            />
-          </FormControl>
-          {/* Level 2 */}
-          <FormControl className="relative">
-            <Label>Level 2</Label>
-            <SearchableSelect
-              data={level2Options}
-              item={level2Value}
-              setItem={setLevel2Value}
-              text={"Select level 2"}
-              placeholder={"Search level 2"}
-            />
-          </FormControl>
-          {/* Level 3 */}
-          <FormControl className="relative">
-            <Label>Level 3</Label>
-            <SearchableSelect
-              data={level3Options}
-              item={level3Value}
-              setItem={setLevel3Value}
-              text={"Select level 3"}
-              placeholder={"Search level 3"}
-            />
-          </FormControl>
-          {/* Level 4 */}
-          <FormControl className="relative">
-            <Label>Level 4</Label>
-            <SearchableSelect
-              data={level4Options}
-              item={level4Value}
-              setItem={setLevel4Value}
-              text={"Select level 4"}
-              placeholder={"Search level 4"}
-            />
-          </FormControl>
-          {/* Level 5 */}
-          <FormControl className="relative">
-            <Label>Level 5</Label>
-            <SearchableSelect
-              data={level5Options}
-              item={level5Value}
-              setItem={setLevel5Value}
-              text={"Select level 5"}
-              placeholder={"Search level 5"}
-            />
-          </FormControl>
-          {/* Sector */}
-          <FormControl className="relative">
-            <Label>Sector</Label>
-            <SearchableSelect
-              data={sectorOptions}
-              item={sectorValue}
-              setItem={setSectorValue}
-              text={"Select sector"}
-              placeholder={"Search sector"}
-            />
-          </FormControl>
-          {/* Currency */}
+          {/* Business Unit */}
           <FormControl>
-            <Label>Currency</Label>
+            <Label>Business Unit</Label>
             <Select
-              value={currencyValue}
-              onChange={(e) => setCurrencyValue(e.target.value)}
+              value={businessUnitId}
+              onChange={(e) => setBusinessUnitId(e.target.value)}
             >
-              <option value="perEuro">Per Euro</option>
+              <option value="">Select Option</option>
+              {businessUnitOptions.length > 0 ? (
+                businessUnitOptions.map((options, index) => {
+                  return (
+                    <option value={options.id} key={index}>
+                      {options.title}
+                    </option>
+                  );
+                })
+              ) : (
+                <option disabled>
+                  'Profile not found create profile first'
+                </option>
+              )}
             </Select>
+          </FormControl>
+          {/* Continent */}
+          <FormControl className="relative">
+            <Label>Continent</Label>
+            <SearchableSelect
+              data={continentOptions}
+              item={continent}
+              setItem={setContinent}
+              text={"Select continent"}
+              placeholder={"Search continent"}
+            />
+          </FormControl>
+          {/* Country */}
+          <FormControl className="relative">
+            <Label>Country</Label>
+            <SearchableSelect
+              data={countryOptions}
+              item={country}
+              setItem={setCountry}
+              text={"Select country"}
+              placeholder={"Search country"}
+            />
+          </FormControl>
+          {/* Region */}
+          <FormControl className="relative">
+            <Label>Region</Label>
+            <SearchableSelect
+              data={regionOptions}
+              item={region}
+              setItem={setRegion}
+              text={"Select region"}
+              placeholder={"Search region"}
+            />
+          </FormControl>
+          {/* Asset type */}
+          <FormControl className="relative">
+            <Label>Asset type</Label>
+            <SearchableSelect
+              data={assetTypeOptions}
+              item={assetType}
+              setItem={setAssetType}
+              text={"Select asset type"}
+              placeholder={"Search asset type"}
+            />
+          </FormControl>
+          {/* Year */}
+          <FormControl className="relative">
+            <Label>Year</Label>
+            <SearchableSelect
+              data={yearOptions}
+              item={year}
+              setItem={setYear}
+              text={"Select year"}
+              placeholder={"Search year"}
+            />
+          </FormControl>
+          {/* Unit of measurement */}
+          <FormControl className="relative">
+            <Label>Unit of measurement</Label>
+            <SearchableSelect
+              data={unitOfMeasurementOptions}
+              item={unitOfMeasurement}
+              setItem={setUnitOfMeasurement}
+              text={"Select unit of measurement"}
+              placeholder={"Search unit of measurement"}
+            />
           </FormControl>
           {/* Quantity */}
           <FormControl>
             <Label>Quantity</Label>
             <Input
-              type="number"
               value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
+              onChange={(e) => {
+                setQuantity(e.target.value);
+              }}
             />
           </FormControl>
         </div>
@@ -409,7 +482,7 @@ const EeoiForm = ({ productOrIndustry, fetchUserBusinessUnitsActivities }) => {
             <Button type="button" className="flex-1" onClick={handleCancel}>
               Cancel
             </Button>
-            <Button type="button" className="flex-1" onClick={handleUpdateData}>
+            <Button type="button" className="flex-1" onClick={handleEdit}>
               Edit
             </Button>
           </div>
@@ -429,4 +502,4 @@ const EeoiForm = ({ productOrIndustry, fetchUserBusinessUnitsActivities }) => {
   );
 };
 
-export default EeoiForm;
+export default ReitForm;

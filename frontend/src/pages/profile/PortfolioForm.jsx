@@ -297,7 +297,6 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       setSelectedCountry("");
       setCountries([]);
     }
-    // setFilterCountryBy("");
   }, [selectedContinent]);
 
   useEffect(() => {

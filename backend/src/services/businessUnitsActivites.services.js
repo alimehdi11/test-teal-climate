@@ -2,6 +2,109 @@ import { Eeio } from "../models/eeio.model.js";
 import { CountryMask } from "../models/countryMask.model.js";
 import { BusinessUnitActivity } from "../models/businessUnitActivity.model.js";
 import { BusinessUnit } from "../models/businessUnit.model.js";
+import { Reit } from "../models/reit.model.js";
+
+const createActivity = async (req, res) => {
+  try {
+    const {
+      businessUnitId,
+      scope,
+      level1,
+      level2,
+      level3,
+      level4,
+      level5,
+      unitOfMeasurement,
+      quantity,
+      CO2e,
+      CO2e_of_CO2,
+      CO2e_of_CH4,
+      CO2e_of_N2O,
+      level1Category,
+      month,
+      // year,
+    } = req.body;
+
+    await BusinessUnitActivity.create({
+      userId: req.user.id,
+      businessUnitId,
+      scope,
+      level1,
+      level2,
+      level3,
+      level4,
+      level5,
+      unitOfMeasurement,
+      quantity,
+      CO2e,
+      CO2e_of_CO2,
+      CO2e_of_CH4,
+      CO2e_of_N2O,
+      level1Category,
+      month,
+      // year,
+    });
+    res.status(200).json({ message: "Activity created sucessfully" });
+  } catch (error) {
+    console.log("Could not createBusinessUnitActivity -> createActivity");
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const updateActivityById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      unitOfMeasurement,
+      businessUnitId,
+      quantity,
+      scope,
+      level1Category,
+      level1,
+      level2,
+      level3,
+      level4,
+      level5,
+      CO2e,
+      CO2e_of_CO2,
+      CO2e_of_CH4,
+      CO2e_of_N2O,
+      month,
+      // year,
+    } = req.body;
+    await BusinessUnitActivity.update(
+      {
+        unitOfMeasurement,
+        businessUnitId,
+        quantity,
+        scope,
+        level1Category,
+        level1,
+        level2,
+        level3,
+        level4,
+        level5,
+        CO2e,
+        CO2e_of_CO2,
+        CO2e_of_CH4,
+        CO2e_of_N2O,
+        month,
+        // year,
+      },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    return res.status(200).json({ message: "Activity created sucessfully" });
+  } catch (error) {
+    console.log("Could not updateBusinessUnitActivity -> updateActivityById");
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 const createEeioActivity = async (req, res) => {
   try {
@@ -111,54 +214,6 @@ const createEeioActivity = async (req, res) => {
     return res.status(200).json({ message: "Activity created sucessfully" });
   } catch (error) {
     console.log("Could not createBusinessUnitActivity -> createEeioActivity");
-    console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-const createActivity = async (req, res) => {
-  try {
-    const {
-      businessUnitId,
-      scope,
-      level1,
-      level2,
-      level3,
-      level4,
-      level5,
-      unitOfMeasurement,
-      quantity,
-      CO2e,
-      CO2e_of_CO2,
-      CO2e_of_CH4,
-      CO2e_of_N2O,
-      level1Category,
-      month,
-      // year,
-    } = req.body;
-
-    await BusinessUnitActivity.create({
-      userId: req.user.id,
-      businessUnitId,
-      scope,
-      level1,
-      level2,
-      level3,
-      level4,
-      level5,
-      unitOfMeasurement,
-      quantity,
-      CO2e,
-      CO2e_of_CO2,
-      CO2e_of_CH4,
-      CO2e_of_N2O,
-      level1Category,
-      month,
-      // year,
-    });
-    res.status(200).json({ message: "Activity created sucessfully" });
-  } catch (error) {
-    console.log("Could not createBusinessUnitActivity -> createActivity");
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -283,55 +338,54 @@ const updateEeioActivityById = async (req, res) => {
   }
 };
 
-const updateActivityById = async (req, res) => {
+const createReitActivity = async (req, res) => {
   try {
-    const { id } = req.params;
     const {
-      unitOfMeasurement,
       businessUnitId,
+      continent,
+      country,
+      region,
+      assetType,
+      year,
+      unitOfMeasurement,
       quantity,
-      scope,
-      level1Category,
-      level1,
-      level2,
-      level3,
-      level4,
-      level5,
-      CO2e,
-      CO2e_of_CO2,
-      CO2e_of_CH4,
-      CO2e_of_N2O,
-      month,
-      // year,
     } = req.body;
-    await BusinessUnitActivity.update(
-      {
+    const reitRecord = await Reit.findOne({
+      where: {
+        continent,
+        country,
+        region,
+        assetType,
+        year,
         unitOfMeasurement,
-        businessUnitId,
-        quantity,
-        scope,
-        level1Category,
-        level1,
-        level2,
-        level3,
-        level4,
-        level5,
-        CO2e,
-        CO2e_of_CO2,
-        CO2e_of_CH4,
-        CO2e_of_N2O,
-        month,
-        // year,
       },
-      {
-        where: {
-          id,
-        },
-      }
-    );
-    return res.status(200).json({ message: "Activity created sucessfully" });
+    });
+    if (reitRecord === null) {
+      return res
+        .status(404)
+        .json({ error: "Reit record not found for given data" });
+    }
+    const paylaod = {
+      userId: req.user.id,
+      businessUnitId,
+      scope: "Scope 3",
+      unitOfMeasurement,
+      quantity,
+      continent,
+      country,
+      region,
+      assetType,
+      year,
+      unitOfMeasurement,
+      CO2e: reitRecord.greenHouseGasEmissionFactor * quantity,
+      reit: true,
+    };
+    await BusinessUnitActivity.create(paylaod);
+    return res
+      .status(200)
+      .json({ message: "Reit activity created sucessfully" });
   } catch (error) {
-    console.log("Could not updateBusinessUnitActivity -> updateActivityById");
+    console.log("Could not createReit");
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -342,4 +396,5 @@ export {
   createEeioActivity,
   updateEeioActivityById,
   updateActivityById,
+  createReitActivity,
 };
