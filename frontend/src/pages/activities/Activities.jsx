@@ -7,6 +7,7 @@ import { request } from "../../utils/request.js";
 import Sidebar from "../../components/layout/Sidebar.jsx";
 import Main from "../../components/layout/Main.jsx";
 import EeioForm from "./EeioForm.jsx";
+import ReitForm from "./ReitForm.jsx";
 import PeriodSelector from "../../components/PeriodSelector.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
@@ -20,6 +21,7 @@ const Activities = () => {
   const [productOrIndustry, setProductOrIndustry] = useState("Industry");
   const { user } = useContext(UserContext);
   const { selectedPeriod } = usePeriod();
+  const [isReitSelected, setIsReitSelected] = useState(false);
 
   const fetchUserBusinessUnitsActivities = async () => {
     try {
@@ -65,6 +67,8 @@ const Activities = () => {
           setIsSpendBaseScope3Selected={setIsSpendBaseScope3Selected}
           productOrIndustry={productOrIndustry}
           setProductOrIndustry={setProductOrIndustry}
+          setIsReitSelected={setIsReitSelected}
+          isReitSelected={isReitSelected}
         />
       </Sidebar>
       <Main>
@@ -87,17 +91,31 @@ const Activities = () => {
                 setSelectedLevel={setSelectedLevel}
               />
             </>
+          ) : isSpendBaseScope3Selected && productOrIndustry ? (
+            <>
+              <div className="my-5 flex justify-between">
+                <span className=" font-extrabold text-2xl">
+                  {productOrIndustry}
+                </span>
+                <PeriodSelector />
+              </div>
+              <EeioForm
+                productOrIndustry={productOrIndustry}
+                setProductOrIndustry={setProductOrIndustry}
+                setIsSpendBaseScope3Selected={setIsSpendBaseScope3Selected}
+                fetchUserBusinessUnitsActivities={
+                  fetchUserBusinessUnitsActivities
+                }
+              />
+            </>
           ) : (
-            isSpendBaseScope3Selected &&
-            productOrIndustry && (
+            isReitSelected && (
               <>
                 <div className="my-5 flex justify-between">
-                  <span className=" font-extrabold text-2xl">
-                    {productOrIndustry}
-                  </span>
-                  <PeriodSelector />
+                  <span className=" font-extrabold text-2xl">{"REIT"}</span>
+                  {/* <PeriodSelector /> */}
                 </div>
-                <EeioForm
+                <ReitForm
                   productOrIndustry={productOrIndustry}
                   setProductOrIndustry={setProductOrIndustry}
                   setIsSpendBaseScope3Selected={setIsSpendBaseScope3Selected}

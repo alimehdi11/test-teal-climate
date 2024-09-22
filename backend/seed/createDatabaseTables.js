@@ -10,6 +10,7 @@ import { Eeio } from "./../src/models/eeio.model.js";
 import { Airport } from "./../src/models/airport.model.js";
 import { Activity } from "./../src/models/activity.model.js";
 import { CountryMask } from "./../src/models/countryMask.model.js";
+import { Reit } from "./../src/models/reit.model.js";
 
 import { sequelize } from "./../src/database/connectDb.js";
 
@@ -23,4 +24,5 @@ export {
   Airport,
   Activity,
   CountryMask,
+  Reit,
 };

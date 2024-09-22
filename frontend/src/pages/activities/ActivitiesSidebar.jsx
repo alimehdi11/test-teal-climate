@@ -14,6 +14,8 @@ const ActivitiesSidebar = ({
   setIsSpendBaseScope3Selected,
   productOrIndustry,
   setProductOrIndustry,
+  setIsReitSelected,
+  isReitSelected,
 }) => {
   const [level1, setLevel1] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,6 +69,7 @@ const ActivitiesSidebar = ({
                     setSelectedScope(null);
                   } else {
                     setIsSpendBaseScope3Selected(false);
+                    setIsReitSelected(false);
                     setSelectedScope(e.target.innerText);
                   }
                 }}
@@ -112,6 +115,7 @@ const ActivitiesSidebar = ({
               }
               onClick={() => {
                 setSelectedScope(null);
+                setIsReitSelected(false);
                 setIsSpendBaseScope3Selected((prev) => !prev);
               }}
             >
@@ -147,9 +151,28 @@ const ActivitiesSidebar = ({
               )} */}
               Spend Base Scope 3
             </SidebarItem>
+            {isSpendBaseScope3Selected && (
+              <EeioSidebar
+                productOrIndustry={productOrIndustry}
+                setProductOrIndustry={setProductOrIndustry}
+                selectedLevel={selectedLevel}
+                setSelectedLevel={setSelectedLevel}
+              />
+            )}
+            <SidebarItem
+              className={
+                isReitSelected ? "bg-tc-indigo-light text-tc-blue" : ""
+              }
+              onClick={() => {
+                setSelectedScope(null);
+                setIsSpendBaseScope3Selected(false);
+                setIsReitSelected((prev) => !prev);
+              }}
+            >
+              Reit
+            </SidebarItem>
           </>
         }
-        selectedScope={selectedScope}
       />
       {level1.length > 0 && (
         <div className="my-2">
@@ -202,14 +225,6 @@ const ActivitiesSidebar = ({
             ))}
           </div>
         </div>
-      )}
-      {isSpendBaseScope3Selected && (
-        <EeioSidebar
-          productOrIndustry={productOrIndustry}
-          setProductOrIndustry={setProductOrIndustry}
-          selectedLevel={selectedLevel}
-          setSelectedLevel={setSelectedLevel}
-        />
       )}
     </>
   );

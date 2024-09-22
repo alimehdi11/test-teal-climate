@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const DropdownMenu = ({ children, selectedScope }) => {
+const DropdownMenu = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {

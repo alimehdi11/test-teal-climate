@@ -4,7 +4,6 @@ import path from "path";
 import { authRouter } from "./routes/auth.routes.js";
 import { businessUnitsRouter } from "./routes/businessUnits.routes.js";
 import { businessUnitsActivitiesRouter } from "./routes/businessUnitsActivities.routes.js";
-// import { getWorldHeatMapDataByUserId } from "./controllers/worldHeatMap.controllers.js";
 import { getAllActivities } from "./controllers/activities.controllers.js";
 import { getAllLevel1Categories } from "./controllers/level1Categories.controllers.js";
 import { getAllCountries } from "./controllers/countries.controllers.js";
@@ -16,6 +15,7 @@ import { airportsRouter } from "./routes/airports.routes.js";
 import { electricVehiclesRouter } from "./routes/electricVehicles.routes.js";
 import { eeiosRouter } from "./routes/eeios.routes.js";
 import { usersRouter } from "./routes/users.routes.js";
+import { reitsRouter } from "./routes/reitsRouter.routes.js";
 
 const app = express();
 
@@ -49,6 +49,8 @@ app.get("/level1Categories", isLoggedIn, isSubscribed, getAllLevel1Categories);
 app.get("/countries", isLoggedIn, isSubscribed, getAllCountries);
 app.use("/airports", isLoggedIn, isSubscribed, airportsRouter);
 app.use("/electricVehicles", isLoggedIn, isSubscribed, electricVehiclesRouter);
+app.use("/eeios", isLoggedIn, isSubscribed, eeiosRouter);
+app.use("/reits", isLoggedIn, isSubscribed, reitsRouter);
 
 /* ---------------------------------------------------------------------  */
 
@@ -62,7 +64,6 @@ app.use(
   isSubscribed,
   businessUnitsActivitiesRouter
 );
-app.use("/eeios", isLoggedIn, isSubscribed, eeiosRouter);
 
 // TODO : check webhook setup needed or not
 // app.post(
