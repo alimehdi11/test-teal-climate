@@ -3,6 +3,7 @@ import { CountryMask } from "../models/countryMask.model.js";
 import { BusinessUnitActivity } from "../models/businessUnitActivity.model.js";
 import { BusinessUnit } from "../models/businessUnit.model.js";
 import { Reit } from "../models/reit.model.js";
+import { where } from "sequelize";
 
 const createActivity = async (req, res) => {
   try {
@@ -391,10 +392,65 @@ const createReitActivity = async (req, res) => {
   }
 };
 
+const updateReitActivityById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      businessUnitId,
+      continent,
+      country,
+      region,
+      assetType,
+      year,
+      unitOfMeasurement,
+      quantity,
+    } = req.body;
+    const reitRecord = await Reit.findOne({
+      where: {
+        continent,
+        country,
+        region,
+        assetType,
+        year,
+        unitOfMeasurement,
+      },
+    });
+    if (reitRecord === null) {
+      return res
+        .status(404)
+        .json({ error: "Reit record not found for given data" });
+    }
+    const paylaod = {
+      userId: req.user.id,
+      businessUnitId,
+      scope: "Scope 3",
+      unitOfMeasurement,
+      quantity,
+      continent,
+      country,
+      region,
+      assetType,
+      year,
+      unitOfMeasurement,
+      CO2e: reitRecord.greenHouseGasEmissionFactor * quantity,
+      reit: true,
+    };
+    await BusinessUnitActivity.update(paylaod, { where: { id } });
+    return res
+      .status(200)
+      .json({ message: "Reit activity updated sucessfully" });
+  } catch (error) {
+    console.log("Could not updateReitActivityById");
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export {
   createActivity,
   createEeioActivity,
   updateEeioActivityById,
   updateActivityById,
   createReitActivity,
+  updateReitActivityById,
 };

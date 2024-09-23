@@ -34,6 +34,8 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
   const { selectedPeriod } = usePeriod();
   const { user } = useContext(UserContext);
 
+  const [editMode, setEditMode] = useState(false);
+
   const fetchActivityById = async () => {
     try {
       const response = await request(
@@ -297,62 +299,75 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
   useEffect(() => {
     if (businessUnitId) {
       fetchContinents();
-      setContinent("");
-      setCountry("");
-      setRegion("");
-      setAssetType("");
-      setYear("");
-      setUnitOfMeasurement("");
+      if (!editMode) {
+        setContinent("");
+        setCountry("");
+        setRegion("");
+        setAssetType("");
+        setYear("");
+        setUnitOfMeasurement("");
+      }
     }
   }, [businessUnitId]);
 
   useEffect(() => {
     if (continent) {
       fetchCountries();
-      setCountry("");
-      setRegion("");
-      setAssetType("");
-      setYear("");
-      setUnitOfMeasurement("");
+      if (!editMode) {
+        setCountry("");
+        setRegion("");
+        setAssetType("");
+        setYear("");
+        setUnitOfMeasurement("");
+      }
     }
   }, [continent]);
 
   useEffect(() => {
     if (country) {
       fetchRegions();
-      setRegion("");
-      setAssetType("");
-      setYear("");
-      setUnitOfMeasurement("");
+      if (!editMode) {
+        setRegion("");
+        setAssetType("");
+        setYear("");
+        setUnitOfMeasurement("");
+      }
     }
   }, [country]);
 
   useEffect(() => {
     if (region) {
       fetchAssetTypes();
-      setAssetType("");
-      setYear("");
-      setUnitOfMeasurement("");
+      if (!editMode) {
+        setAssetType("");
+        setYear("");
+        setUnitOfMeasurement("");
+      }
     }
   }, [region]);
 
   useEffect(() => {
     if (assetType) {
       fetchYears();
-      setYear("");
-      setUnitOfMeasurement("");
+      if (!editMode) {
+        setYear("");
+        setUnitOfMeasurement("");
+      }
     }
   }, [assetType]);
 
   useEffect(() => {
     if (year) {
       fetchUnitsOfMeasurement();
-      setUnitOfMeasurement("");
+      if (!editMode) {
+        setUnitOfMeasurement("");
+      }
     }
   }, [year]);
 
   useEffect(() => {
     if (id) {
+      setEditMode(true);
       fetchActivityById().then((activity) => {
         setBusinessUnitId(activity.businessUnit.id);
         setContinent(activity.continent);
@@ -362,6 +377,9 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
         setYear(activity.year);
         setUnitOfMeasurement(activity.unitOfMeasurement);
         setQuantity(activity.quantity);
+        setTimeout(() => {
+          setEditMode(false);
+        });
       });
     }
   }, [id]);

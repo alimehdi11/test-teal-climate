@@ -6,6 +6,7 @@ import {
   updateEeioActivityById,
   updateActivityById,
   createReitActivity,
+  updateReitActivityById,
 } from "../services/businessUnitsActivites.services.js";
 
 const createBusinessUnitActivity = async (req, res) => {
@@ -46,6 +47,8 @@ const getBusinessUnitActivityById = async (req, res) => {
 const updateBusinessUnitActivityById = async (req, res) => {
   if (req.query.eeio === "true") {
     await updateEeioActivityById(req, res);
+  } else if (req.query.reit === "true") {
+    await updateReitActivityById(req, res);
   } else {
     await updateActivityById(req, res);
   }
