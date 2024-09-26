@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useLayoutEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { request } from "../../utils/request.js";
@@ -34,7 +34,7 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
   const { selectedPeriod } = usePeriod();
   const { user } = useContext(UserContext);
 
-  const [editMode, setEditMode] = useState(false);
+  const [isFormInitializing, setIsFormInitializing] = useState(false);
 
   const fetchActivityById = async () => {
     try {
@@ -299,7 +299,7 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
   useEffect(() => {
     if (businessUnitId) {
       fetchContinents();
-      if (!editMode) {
+      if (!isFormInitializing) {
         setContinent("");
         setCountry("");
         setRegion("");
@@ -313,7 +313,7 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
   useEffect(() => {
     if (continent) {
       fetchCountries();
-      if (!editMode) {
+      if (!isFormInitializing) {
         setCountry("");
         setRegion("");
         setAssetType("");
@@ -326,7 +326,7 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
   useEffect(() => {
     if (country) {
       fetchRegions();
-      if (!editMode) {
+      if (!isFormInitializing) {
         setRegion("");
         setAssetType("");
         setYear("");
@@ -338,7 +338,7 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
   useEffect(() => {
     if (region) {
       fetchAssetTypes();
-      if (!editMode) {
+      if (!isFormInitializing) {
         setAssetType("");
         setYear("");
         setUnitOfMeasurement("");
@@ -349,7 +349,7 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
   useEffect(() => {
     if (assetType) {
       fetchYears();
-      if (!editMode) {
+      if (!isFormInitializing) {
         setYear("");
         setUnitOfMeasurement("");
       }
@@ -359,7 +359,7 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
   useEffect(() => {
     if (year) {
       fetchUnitsOfMeasurement();
-      if (!editMode) {
+      if (!isFormInitializing) {
         setUnitOfMeasurement("");
       }
     }
@@ -367,7 +367,7 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
 
   useEffect(() => {
     if (id) {
-      setEditMode(true);
+      setIsFormInitializing(true);
       fetchActivityById().then((activity) => {
         setBusinessUnitId(activity.businessUnit.id);
         setContinent(activity.continent);
@@ -377,12 +377,33 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
         setYear(activity.year);
         setUnitOfMeasurement(activity.unitOfMeasurement);
         setQuantity(activity.quantity);
-        setTimeout(() => {
-          setEditMode(false);
-        });
       });
     }
   }, [id]);
+
+  useEffect(() => {
+    if (
+      businessUnitId &&
+      continent &&
+      country &&
+      region &&
+      assetType &&
+      year &&
+      unitOfMeasurement &&
+      quantity
+    ) {
+      setIsFormInitializing(false);
+    }
+  }, [
+    businessUnitId,
+    continent,
+    country,
+    region,
+    assetType,
+    year,
+    unitOfMeasurement,
+    quantity,
+  ]);
 
   return (
     <>

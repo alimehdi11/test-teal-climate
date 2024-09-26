@@ -33,7 +33,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndtDate] = useState("");
 
-  const [editMode, setEditMode] = useState(false);
+  const [isFormInitializing, setIsFormInitializing] = useState(false);
 
   const { id } = useParams();
 
@@ -287,9 +287,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
 
   useEffect(() => {
     if (selectedContinent) {
-      if (editMode) {
-        setEditMode(false);
-      } else {
+      if (!isFormInitializing) {
         setSelectedCountry("");
       }
       filterCountriesByContinent();
@@ -311,7 +309,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   useEffect(() => {
     if (id) {
       fetchBusinessUnitById();
-      setEditMode(true);
+      setIsFormInitializing(true);
     }
   }, [id]);
 
@@ -326,6 +324,31 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   //     );
   //   }
   // }, [filterCountryBy, countries]);
+  useEffect(() => {
+    if (
+      businessUnitTitle &&
+      selectedContinent &&
+      selectedCountry &&
+      selectedRegion &&
+      revenue &&
+      employees &&
+      ownershipPercentage &&
+      productionClients &&
+      notes
+    ) {
+      setIsFormInitializing(false);
+    }
+  }, [
+    businessUnitTitle,
+    selectedContinent,
+    selectedCountry,
+    selectedRegion,
+    revenue,
+    employees,
+    ownershipPercentage,
+    productionClients,
+    notes,
+  ]);
 
   return (
     <form
