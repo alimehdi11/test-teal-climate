@@ -1,16 +1,22 @@
 import dotenv from "dotenv";
 
-if (process.env.NODE_ENV === "development") {
-  dotenv.config({ path: "./.env.development" });
-} else if (process.env.NODE_ENV === "production") {
-  dotenv.config({ path: "./.env.production" });
-} else if (process.env.NODE_ENV === "test") {
-  dotenv.config({ path: "./.env.test" });
+// Load environment variables based on NODE_ENV
+switch (process.env.NODE_ENV) {
+  case "development":
+    dotenv.config({ path: "./.env.development" });
+    break;
+  case "production":
+    dotenv.config({ path: "./.env.production" });
+    break;
+  case "test":
+    dotenv.config({ path: "./.env.test" });
+    break;
 }
 
-/**
- * ---------- Log environment variables ----------
- */
+// Always load .env.local to override any specific environment variables
+dotenv.config({ path: "./.env.local", override: true });
+
+// Log environment variables in development or test mode
 if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
   console.table([
     ["PORT", process.env.PORT],

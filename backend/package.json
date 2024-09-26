@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development node --watch ./src/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon ./src/index.js",
     "init-db:dev": "cross-env NODE_ENV=development node ./seed/initializeDatabase.js",
     "prod": "cross-env NODE_ENV=production node ./src/index.js",
     "init-db:prod": "cross-env NODE_ENV=production node ./seed/initializeDatabase.js",
@@ -17,13 +17,14 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.14",
+    "nodemon": "^3.1.7",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.3",
-    "stripe": "^15.3.0"
+    "stripe": "^15.3.0",
+    "cross-env": "^7.0.3"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3",
     "csv-parser": "^3.0.0"
   }
 }
