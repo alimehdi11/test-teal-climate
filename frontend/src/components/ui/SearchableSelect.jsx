@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LiaAngleDownSolid } from "react-icons/lia";
 import Input from "./Input";
 
@@ -6,6 +6,7 @@ const SearchableSelect = ({ data = [], item, setItem, text, placeholder }) => {
   const [showOptions, setShowOptions] = useState(false);
   const [filteredItems, setFilteredItems] = useState([]);
   const [filterBy, setFilterBy] = useState("");
+  const selectRef = useRef(null);
 
   useEffect(() => {
     if (filterBy === "") {
@@ -29,8 +30,20 @@ const SearchableSelect = ({ data = [], item, setItem, text, placeholder }) => {
     );
   }, [data]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setShowOptions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <>
+    <div ref={selectRef}>
       <button
         type="button"
         className="relative w-full z-0 h-11 p-3 bg-tc-input-background hover:text-black rounded-md flex justify-between items-center"
@@ -77,7 +90,7 @@ const SearchableSelect = ({ data = [], item, setItem, text, placeholder }) => {
             {text}
           </div>
         ))}
-    </>
+    </div>
   );
 };
 
