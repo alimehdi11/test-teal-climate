@@ -46,12 +46,7 @@ const Sidebar = ({ children }) => {
       <div className="bg-white pt-5 sticky top-0">
         <Logo />
       </div>
-      <div
-        className="mt-5 flex flex-col justify-between"
-        style={{
-          height: "calc(100% - 20px - 40px - 20px)",
-        }}
-      >
+      <div className="mt-5 flex flex-col justify-between min-h-[calc(100%-20px-40px-20px)]">
         <div>
           <Link to="/dashboard">
             <SidebarItem
@@ -116,7 +111,7 @@ const Sidebar = ({ children }) => {
           </Link>
           {children}
         </div>
-        <div>
+        <div className="pt-2">
           <Link to="/setting">
             <SidebarItem
               className={
@@ -172,7 +167,6 @@ const Sidebar = ({ children }) => {
             onMouseLeave={() => {
               setIsLogoutBtnHovered(false);
             }}
-            className="mb-2"
           >
             {isLogoutBtnHovered ? (
               <img src={logoutHoverIcon} />

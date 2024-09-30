@@ -61,6 +61,7 @@ const EeioForm = ({
   ];
   const currentYear = new Date().getFullYear();
   const years = [currentYear, currentYear - 1];
+  const [isFormInitializing, setIsFormInitializing] = useState(false);
 
   const fetchActivityById = async () => {
     try {
@@ -262,7 +263,6 @@ const EeioForm = ({
         throw new Error(`Failed to fetch data:`);
       }
       const result = await response.json();
-      console.log("=======>>>", result);
       setLevel3Options(result.map((item) => item.level3));
     } catch (error) {
       setLevel3Options([]);
@@ -329,35 +329,71 @@ const EeioForm = ({
   useEffect(() => {
     if (level1Value) {
       fetchEeioLevel2();
+      if (!isFormInitializing) {
+        setLevel2Value("");
+        setLevel3Value("");
+        setLevel4Value("");
+        setLevel5Value("");
+        setSectorValue("");
+        setLevel3Options([]);
+        setLevel4Options([]);
+        setLevel5Options([]);
+        setSectorOptions([]);
+      }
     }
   }, [level1Value]);
 
   useEffect(() => {
     if (level2Value) {
       fetchEeioLevel3();
+      if (!isFormInitializing) {
+        setLevel3Value("");
+        setLevel4Value("");
+        setLevel5Value("");
+        setSectorValue("");
+        setLevel4Options([]);
+        setLevel5Options([]);
+        setSectorOptions([]);
+      }
     }
   }, [level2Value]);
 
   useEffect(() => {
     if (level3Value) {
       fetchLevel4();
+      if (!isFormInitializing) {
+        setLevel4Value("");
+        setLevel5Value("");
+        setSectorValue("");
+        setLevel5Options([]);
+        setSectorOptions([]);
+      }
     }
   }, [level3Value]);
 
   useEffect(() => {
     if (level4Value) {
       fetchLevel5();
+      if (!isFormInitializing) {
+        setLevel5Value("");
+        setSectorValue("");
+        setSectorOptions([]);
+      }
     }
   }, [level4Value]);
 
   useEffect(() => {
     if (level5Value) {
       fetchSector();
+      if (!isFormInitializing) {
+        setSectorValue("");
+      }
     }
   }, [level5Value]);
 
   useEffect(() => {
     if (id) {
+      setIsFormInitializing(true);
       fetchActivityById().then((activity) => {
         setBusinessUnitValue(activity.businessUnit.id);
         setLevel1Value(activity.level1);
@@ -372,6 +408,34 @@ const EeioForm = ({
       });
     }
   }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      if (
+        businessUnitValue &&
+        level1Value &&
+        level2Value &&
+        level3Value &&
+        level4Value &&
+        level5Value &&
+        sectorValue &&
+        quantity &&
+        month
+      ) {
+        setIsFormInitializing(false);
+      }
+    }
+  }, [
+    businessUnitValue,
+    level1Value,
+    level2Value,
+    level3Value,
+    level4Value,
+    level5Value,
+    sectorValue,
+    quantity,
+    month,
+  ]);
 
   return (
     <>

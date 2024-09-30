@@ -204,6 +204,7 @@ const ActivitiesTable = ({
                           );
                           setSelectedScope(null);
                           setSelectedLevel(null);
+                          setIsReitSelected(false);
                         } else if (userBusinessUnitActivity.reit) {
                           setIsSpendBaseScope3Selected(false);
                           setProductOrIndustry("");

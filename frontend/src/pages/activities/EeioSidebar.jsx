@@ -2,18 +2,14 @@ import SidebarItem from "../../components/SidebarItem";
 
 const EeioSidebar = ({ productOrIndustry, setProductOrIndustry }) => {
   return (
-    <div className="flex flex-col gap-y-2 mt-2 ml-8 border-l">
+    <div className="flex flex-col gap-y-2 mt-2">
       <SidebarItem
         className={
           productOrIndustry === "Industry"
             ? "bg-tc-indigo-light text-tc-blue"
             : ""
         }
-        onClick={() =>
-          setProductOrIndustry((previousValue) =>
-            previousValue === "Industry" ? "" : "Industry"
-          )
-        }
+        onClick={() => setProductOrIndustry("Industry")}
       >
         Industry
       </SidebarItem>
@@ -23,11 +19,7 @@ const EeioSidebar = ({ productOrIndustry, setProductOrIndustry }) => {
             ? "bg-tc-indigo-light text-tc-blue"
             : ""
         }
-        onClick={() =>
-          setProductOrIndustry((previousValue) =>
-            previousValue === "Product" ? "" : "Product"
-          )
-        }
+        onClick={() => setProductOrIndustry("Product")}
       >
         Product
       </SidebarItem>

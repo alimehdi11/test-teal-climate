@@ -306,6 +306,11 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
         setAssetType("");
         setYear("");
         setUnitOfMeasurement("");
+        setCountryOptions([]);
+        setRegionOptions([]);
+        setAssetTypeOptions([]);
+        setYearOptions([]);
+        setUnitOfMeasurementOptions([]);
       }
     }
   }, [businessUnitId]);
@@ -319,6 +324,10 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
         setAssetType("");
         setYear("");
         setUnitOfMeasurement("");
+        setRegionOptions([]);
+        setAssetTypeOptions([]);
+        setYearOptions([]);
+        setUnitOfMeasurementOptions([]);
       }
     }
   }, [continent]);
@@ -331,6 +340,9 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
         setAssetType("");
         setYear("");
         setUnitOfMeasurement("");
+        setAssetTypeOptions([]);
+        setYearOptions([]);
+        setUnitOfMeasurementOptions([]);
       }
     }
   }, [country]);
@@ -342,6 +354,8 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
         setAssetType("");
         setYear("");
         setUnitOfMeasurement("");
+        setYearOptions([]);
+        setUnitOfMeasurementOptions([]);
       }
     }
   }, [region]);
@@ -352,6 +366,7 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
       if (!isFormInitializing) {
         setYear("");
         setUnitOfMeasurement("");
+        setUnitOfMeasurementOptions([]);
       }
     }
   }, [assetType]);
@@ -382,17 +397,19 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
   }, [id]);
 
   useEffect(() => {
-    if (
-      businessUnitId &&
-      continent &&
-      country &&
-      region &&
-      assetType &&
-      year &&
-      unitOfMeasurement &&
-      quantity
-    ) {
-      setIsFormInitializing(false);
+    if (id) {
+      if (
+        businessUnitId &&
+        continent &&
+        country &&
+        region &&
+        assetType &&
+        year &&
+        unitOfMeasurement &&
+        quantity
+      ) {
+        setIsFormInitializing(false);
+      }
     }
   }, [
     businessUnitId,
