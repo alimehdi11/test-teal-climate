@@ -76,7 +76,7 @@ const ProfileTable = ({ businessUnits, fetchBusinessUnits }) => {
               <TableCell>{userBusinessUnit.revenue || "-"}</TableCell>
               <TableCell>{userBusinessUnit.notes || "-"}</TableCell>
               <TableCell>{userBusinessUnit.partnership}</TableCell>
-              <TableCell>{userBusinessUnit.period}</TableCell>
+              <TableCell>{userBusinessUnit.period.period}</TableCell>
               <TableCell>
                 <div className="flex justify-center gap-x-1">
                   <Link

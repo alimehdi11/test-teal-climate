@@ -1,3 +1,4 @@
+import { Period } from "../models/period.model.js";
 import { BusinessUnit } from "./../models/businessUnit.model.js";
 
 const createBusinessUnit = async (req, res) => {
@@ -134,8 +135,14 @@ const getAllBusinessUnits = async (req, res) => {
     const query = {
       where: {
         userId,
-        periodId,
       },
+      include: [
+        {
+          model: Period,
+          as: "period", // Include the Period model
+        },
+      ],
+      attributes: { exclude: ["periodId"] },
     };
     if (periodId) {
       query.where.periodId = periodId;

@@ -36,10 +36,12 @@ const Activities = () => {
       }
       let userBusinessUnitsActivities =
         await userBusinessUnitsActivitiesResponse.json();
+      console.log(userBusinessUnitsActivities);
       userBusinessUnitsActivities = userBusinessUnitsActivities.filter(
         (userBusinessUnitsActivity) => {
           return (
-            userBusinessUnitsActivity.businessUnit.period === selectedPeriod
+            userBusinessUnitsActivity.businessUnit.period.id ===
+            Number(selectedPeriod)
           );
         }
       );

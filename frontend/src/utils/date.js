@@ -36,7 +36,7 @@ const getPeriodMonths = (period) => {
       "november",
       "december",
     ];
-    const [periodStartData, periodEndData] = period.split("-");
+    const [periodStartData, periodEndData] = period.period.split("-");
     const periodStartMonthIndex = new Date(periodStartData.trim()).getMonth();
     const periodEndMonthIndex = new Date(periodEndData.trim()).getMonth();
     let monthsFromPeriod = [];

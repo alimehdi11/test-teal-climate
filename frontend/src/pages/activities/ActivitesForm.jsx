@@ -8,10 +8,10 @@ import Input from "../../components/ui/Input.jsx";
 import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
 import { DataContext } from "../../contexts/DataContext.jsx";
-import { UserContext } from "../../contexts/UserContext.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import { getPeriodMonths } from "../../utils/date.js";
 import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
+import { api } from "../../../api/index.js";
 
 const ActivitesForm = ({
   selectedScope,
@@ -57,7 +57,6 @@ const ActivitesForm = ({
   const navigate = useNavigate();
 
   const data = useContext(DataContext).data;
-  const { user } = useContext(UserContext);
 
   const activities = data.activities;
   const level1Categories = data.level1Categories;
@@ -66,22 +65,15 @@ const ActivitesForm = ({
   const currentYear = new Date().getFullYear();
   const years = [currentYear, currentYear - 1];
 
-  const { selectedPeriod } = usePeriod();
+  const { selectedPeriod, periods } = usePeriod();
 
-  const fetchUserBusinessUnits = async () => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnits`,
-        "GET"
-      );
-      if (!response.ok) {
-        throw new Error(`${JSON.stringify(await response.json())}`);
-      }
-      return await response.json();
-    } catch (error) {
-      const errorMessage = JSON.parse(error.message).error;
-      toast.error(errorMessage);
-      console.error("Error fetching businessUnits : ", errorMessage);
+  const fetchBusinessUnits = async () => {
+    const { data, success, message } =
+      await api.businessUnits.getAllBusinessUnits(selectedPeriod);
+    if (success) {
+      setBusinessUnits(data);
+    } else {
+      toast.error(message);
     }
   };
 
@@ -1191,16 +1183,7 @@ const ActivitesForm = ({
 
   useEffect(() => {
     if (selectedPeriod) {
-      fetchUserBusinessUnits().then(async (businessUnits) => {
-        // if (businessUnits.length === 0) {
-        //   toast.info("Please add business unit first");
-        //   return;
-        // }
-        businessUnits = businessUnits.filter((businessUnit) => {
-          return businessUnit.period === selectedPeriod;
-        });
-        setBusinessUnits(businessUnits);
-      });
+      fetchBusinessUnits();
     }
   }, [selectedPeriod]);
 
@@ -1598,7 +1581,11 @@ const ActivitesForm = ({
           <FormControl className="flex-1 relative">
             <Label>Month</Label>
             <SearchableSelect
-              data={getPeriodMonths(selectedPeriod)}
+              data={getPeriodMonths(
+                periods.filter((period) => {
+                  return Number(selectedPeriod) === period.id;
+                })[0]
+              )}
               item={month}
               setItem={setMonth}
               text={"Select month"}
