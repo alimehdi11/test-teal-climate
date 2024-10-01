@@ -48,6 +48,7 @@ const Reit = sequelize.define(
     },
   },
   {
+    timestamps: false,
     tableName: "reits",
   }
 );

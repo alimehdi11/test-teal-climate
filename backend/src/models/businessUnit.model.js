@@ -1,6 +1,7 @@
 import { DataTypes, Deferrable } from "sequelize";
 import { sequelize } from "../database/connectDb.js";
 import { User } from "./user.model.js";
+import { Period } from "./period.model.js";
 
 const BusinessUnit = sequelize.define(
   "BusinessUnit",
@@ -19,7 +20,7 @@ const BusinessUnit = sequelize.define(
      * but their combination must be.
      *
      * The composite unique key is created by using the 'unique' attribute with the same string value
-     * ("userId_title_period") across the 'userId', 'title', and 'period' fields. This instructs Sequelize
+     * ("userId_title_periodId") across the 'userId', 'title', and 'period' fields. This instructs Sequelize
      * to generate a composite unique index that spans these three columns.
      *
      * Example:
@@ -32,7 +33,7 @@ const BusinessUnit = sequelize.define(
      * duplicate business units for a user within the same time period. This allows for flexibility in
      * data entry while maintaining the necessary constraints to avoid redundancy.
      *
-     * Sequelize uses the composite unique key ("userId_title_period") on the 'userId', 'title', and 'period'
+     * Sequelize uses the composite unique key ("userId_title_periodId") on the 'userId', 'title', and 'period'
      * fields to enforce this behavior.
      */
     userId: {
@@ -43,12 +44,12 @@ const BusinessUnit = sequelize.define(
         key: "id",
         deferrable: Deferrable.INITIALLY_IMMEDIATE,
       },
-      unique: "userId_title_period", // Composite unique key
+      unique: "userId_title_periodId", // Composite unique key
     },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: "userId_title_period", // Composite unique key
+      unique: "userId_title_periodId", // Composite unique key
     },
     country: {
       type: DataTypes.STRING,
@@ -78,15 +79,25 @@ const BusinessUnit = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    period: {
-      type: DataTypes.STRING,
+    periodId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      unique: "userId_title_period", // Composite unique key
+      unique: "userId_title_periodId", // Composite unique key
+      references: {
+        model: Period,
+        key: "id",
+        deferrable: Deferrable.INITIALLY_IMMEDIATE,
+      },
     },
   },
   {
     tableName: "businessUnits",
   }
 );
+
+BusinessUnit.belongsTo(Period, {
+  foreignKey: "periodId",
+  as: "period",
+});
 
 export { BusinessUnit };

@@ -10,7 +10,11 @@ const isLoggedIn = (req, res, next) => {
       tokenParts[0] !== "Bearer" ||
       tokenParts[1].match(/\S+\.\S+\.\S+/) === null
     ) {
-      throw Error();
+      res.status(401).json({
+        message:
+          "Invalid token format. Expected a JWT token. Expected 'Bearer <token>'",
+      });
+      return;
     }
     const decodedToken = jwt.verify(
       tokenParts[1],
@@ -22,7 +26,7 @@ const isLoggedIn = (req, res, next) => {
   } catch (error) {
     console.log("Error Verifying Token: ", error);
     res.status(401).json({
-      message: "You are not authorized",
+      message: "Invalid token",
     });
   }
 };

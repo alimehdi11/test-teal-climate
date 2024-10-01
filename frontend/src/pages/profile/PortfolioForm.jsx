@@ -12,12 +12,10 @@ import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import { formatDate } from "../../utils/date.js";
 import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
 
-const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
+const PortfolioForm = ({ fetchBusinessUnits }) => {
   const [countriesData, setCountriesData] = useState([]);
-
   const [regions, setRegions] = useState([]);
   const [countries, setCountries] = useState([]);
-
   const [businessUnitTitle, setBusinessUnitTitle] = useState("");
   const [selectedContinent, setSelectedContinent] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -27,20 +25,10 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   const [ownershipPercentage, setOwnershipPercentage] = useState(100);
   const [productionClients, setProductionClients] = useState("");
   const [notes, setNotes] = useState("");
-  // const [showCountriesOptions, setShowCountriesOptions] = useState(false);
-  // const [filterCountryBy, setFilterCountryBy] = useState("");
-  // const [filteredCountries, setFilteredCountries] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndtDate] = useState("");
-
   const [isFormInitializing, setIsFormInitializing] = useState(false);
-
   const { id } = useParams();
-
   const navigate = useNavigate();
-
-  const { setPeriods, fetchBusinessUnitsPeriod, setSelectedPeriod } =
-    usePeriod();
+  const { selectedPeriod } = usePeriod();
 
   const continents = [
     "Europe",
@@ -77,18 +65,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
     setOwnershipPercentage(100);
     setProductionClients("");
     setNotes("");
-    setStartDate("");
-    setEndtDate("");
   };
-
-  // const isBusinessUnitUnique = () => {
-  //   for (let bu = 0; bu < userBusinessUnits.length; bu++) {
-  //     if (businessUnitTitle === userBusinessUnits[bu].title) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -97,23 +74,11 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       !selectedContinent ||
       !selectedCountry ||
       !selectedRegion ||
-      // revenue ||
-      // employees ||
-      !ownershipPercentage ||
-      // productionClients ||
-      // notes
-      !startDate ||
-      !endDate
+      !ownershipPercentage
     ) {
       toast.warn("Please fill all fields");
       return;
     }
-
-    // if (!isBusinessUnitUnique()) {
-    //   toast.warn("Businessunits title must be unique for within period");
-    //   return;
-    // }
-
     const payload = {
       title: businessUnitTitle,
       continent: selectedContinent,
@@ -124,9 +89,8 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       partnership: ownershipPercentage,
       production: productionClients,
       notes: notes,
-      period: formatDate(startDate) + " - " + formatDate(endDate),
+      periodId: selectedPeriod,
     };
-
     request(
       `${import.meta.env.VITE_API_BASE_URL}/businessUnits`,
       "POST",
@@ -140,13 +104,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
         resetForm();
       })
       .then(async () => {
-        fetchUserBusinessUnits();
-        const updatedPeriods = await fetchBusinessUnitsPeriod();
-        if (updatedPeriods) {
-          setPeriods(updatedPeriods);
-        } else {
-          toast.error("Error fetching periods");
-        }
+        fetchBusinessUnits();
       })
       .catch((error) => {
         const errorMessage = JSON.parse(error.message).error;
@@ -204,18 +162,11 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       !selectedContinent ||
       !selectedCountry ||
       !selectedRegion ||
-      // revenue ||
-      // employees ||
-      !ownershipPercentage ||
-      // productionClients ||
-      // notes
-      !startDate ||
-      !endDate
+      !ownershipPercentage
     ) {
       toast.warn("Please fill all fields");
       return;
     }
-
     const payload = {
       title: businessUnitTitle,
       continent: selectedContinent,
@@ -226,9 +177,8 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
       partnership: ownershipPercentage,
       production: productionClients,
       notes: notes,
-      period: formatDate(startDate) + " - " + formatDate(endDate),
+      periodId: selectedPeriod,
     };
-
     request(
       `${import.meta.env.VITE_API_BASE_URL}/businessUnits/${id}`,
       "PUT",
@@ -240,17 +190,10 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
         }
         toast.success((await response.json()).message);
         resetForm();
-        navigate("/profile");
       })
       .then(async () => {
-        fetchUserBusinessUnits();
-        const updatedPeriods = await fetchBusinessUnitsPeriod();
-        if (updatedPeriods) {
-          setPeriods(updatedPeriods);
-          setSelectedPeriod(payload.period);
-        } else {
-          toast.error("Error fetching periods");
-        }
+        fetchBusinessUnits();
+        navigate("/profile");
       })
       .catch((error) => {
         const errorMessage = JSON.parse(error.message).error;
@@ -313,17 +256,6 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
     }
   }, [id]);
 
-  // useEffect(() => {
-  //   if (filterCountryBy === "") {
-  //     setFilteredCountries(countries);
-  //   } else {
-  //     setFilteredCountries(
-  //       countries.filter((country) => {
-  //         return country.toLowerCase().includes(filterCountryBy.toLowerCase());
-  //       })
-  //     );
-  //   }
-  // }, [filterCountryBy, countries]);
   useEffect(() => {
     if (
       businessUnitTitle &&
@@ -353,28 +285,10 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
   return (
     <form
       onSubmit={handleFormSubmit}
-      className="flex flex-col gap-y-3 bg-white rounded-md p-6"
+      className="flex flex-col gap-y-3 bg-white rounded-md p-6 mt-4"
     >
       <h3 className="m-0 mb-4 font-extrabold text-2xl">Create Your Profile</h3>
       <div className="grid gap-4  ">
-        <div className="flex gap-4">
-          <FormControl className="flex-1">
-            <Label>Start date</Label>
-            <Input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-          </FormControl>
-          <FormControl className="flex-1">
-            <Label>End date</Label>
-            <Input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndtDate(e.target.value)}
-            />
-          </FormControl>
-        </div>
         {/* Business Unit Title */}
         <FormControl>
           <Label>Business unit title</Label>
@@ -414,7 +328,7 @@ const PortfolioForm = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
         </FormControl>
 
         {/* Region */}
-        <FormControl class="relative">
+        <FormControl className="relative">
           <Label>Region</Label>
           <SearchableSelect
             data={regions}

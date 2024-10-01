@@ -175,6 +175,7 @@ const forgetPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   try {
+    console.log("reset password");
     const { password } = req.body;
     const { token } = req.query;
     if (!token) {
@@ -186,6 +187,7 @@ const resetPassword = async (req, res) => {
     }
     const tokenRecord = await ResetPasswordToken.findOne({ where: { token } });
     if (!tokenRecord) {
+      console.log("no tokenRecord found");
       return res.status(400).json({ error: "Invalid token" });
     }
     const { userId } = tokenRecord;

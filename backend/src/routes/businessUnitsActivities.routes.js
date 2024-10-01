@@ -8,7 +8,7 @@ import {
 import {
   isBusinessUnitActivityOwner,
   isbusinessUnitIdBelongsToUser,
-} from "../middlewares/businessUnitsActivities.middleware.js";
+} from "../middlewares/businessUnitsActivities.middlewares.js";
 
 const businessUnitsActivitiesRouter = express.Router();
 

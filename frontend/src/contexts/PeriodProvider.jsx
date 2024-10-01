@@ -4,23 +4,23 @@ import { DataContext } from "./DataContext.jsx";
 const PeriodContext = createContext();
 
 const PeriodProvider = ({ children }) => {
-  const { businessUnitsPeriod, fetchBusinessUnitsPeriod } =
-    useContext(DataContext).data;
+  const { allPeriods } = useContext(DataContext).data;
   const [periods, setPeriods] = useState([]);
   const [selectedPeriod, setSelectedPeriod] = useState("");
 
   useEffect(() => {
-    if (businessUnitsPeriod) {
-      setPeriods(businessUnitsPeriod);
+    if (allPeriods) {
+      setPeriods(allPeriods);
     }
-  }, [businessUnitsPeriod]);
+  }, []);
 
   useEffect(() => {
     if (periods.length > 0) {
-      if (periods.includes(selectedPeriod)) {
+      if (selectedPeriod) {
         setSelectedPeriod(selectedPeriod);
       } else {
-        setSelectedPeriod(periods[0]);
+        // Select first period initially
+        setSelectedPeriod(periods[0].id);
       }
     }
   }, [periods]);
@@ -32,7 +32,6 @@ const PeriodProvider = ({ children }) => {
         setPeriods,
         selectedPeriod,
         setSelectedPeriod,
-        fetchBusinessUnitsPeriod,
       }}
     >
       {children}

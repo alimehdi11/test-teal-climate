@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllAirports } from "../controllers/airports.controller.js";
+import { getAllAirports } from "../controllers/airports.controllers.js";
 
 const airportsRouter = express.Router();
 

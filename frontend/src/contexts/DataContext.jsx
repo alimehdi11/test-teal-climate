@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import Loader from "../components/ui/Loader.jsx";
 import { request } from "../utils/request.js";
 import { UserContext } from "./UserContext.jsx";
+import { api } from "../../api/index.js";
 
 const DataContext = createContext();
 
@@ -60,35 +61,19 @@ const DataProvider = ({ children }) => {
             console.error("Error fetching airports data:", error);
           }
         };
-        const fetchBusinessUnitsPeriod = async () => {
-          try {
-            const response = await request(
-              `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnits?sortOrder=DESC&column=period&distinct=true`,
-              "GET"
-            );
-            if (!response.ok) {
-              throw new Error("Failed to fetch airports");
-            }
-            const result = await response.json();
-            return result.map((item) => item.period);
-          } catch (error) {
-            console.error("Error fetching airports data:", error);
-          }
-        };
-        const [activities, level1Categories, airports, businessUnitsPeriod] =
+        const [activities, level1Categories, airports, getAllPeriodsResponse] =
           await Promise.all([
             fetchActivities(),
             fetchLevel1Categories(),
             fetchAirports(),
-            fetchBusinessUnitsPeriod(),
+            api.periods.getAllPeriods(),
           ]);
 
         setData({
           activities,
           level1Categories,
           airports,
-          businessUnitsPeriod,
-          fetchBusinessUnitsPeriod,
+          allPeriods: getAllPeriodsResponse.data,
         });
         setIsLoding(false);
       })();

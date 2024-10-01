@@ -36,7 +36,7 @@ const sendMail = async (email, resetToken) => {
 
   // Function to send the reset password email
   const sendResetPasswordEmail = async (email, resetToken) => {
-    const resetLink = `http://app.tealclimate.com/reset-password?token=${resetToken}`;
+    const resetLink = `${process.env.FRONTEND_ORIGIN}/reset-password?token=${resetToken}`;
     const mailOptions = {
       from: `"Teal Climate" <${outlookEmail}>`,
       to: email, // Recipient email

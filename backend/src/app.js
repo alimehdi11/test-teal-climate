@@ -16,6 +16,7 @@ import { electricVehiclesRouter } from "./routes/electricVehicles.routes.js";
 import { eeiosRouter } from "./routes/eeios.routes.js";
 import { usersRouter } from "./routes/users.routes.js";
 import { reitsRouter } from "./routes/reits.routes.js";
+import { periodsRouter } from "./routes/periods.routes.js";
 
 const app = express();
 
@@ -24,15 +25,8 @@ const app = express();
  */
 const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: process.env.FRONTEND_ORIGIN,
 };
-if (process.env.NODE_ENV === "development") {
-  corsOptions.origin = process.env.FRONTEND_ORIGIN;
-} else if (process.env.NODE_ENV === "production") {
-  corsOptions.origin = [
-    "http://app.tealclimate.com",
-    "http://carbon.tealclimate.com",
-  ];
-}
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static(path.join(process.cwd(), "public")));
@@ -40,40 +34,46 @@ app.use(express.static(path.join(process.cwd(), "public")));
 /**
  * ---------- Routes ----------
  */
-app.use("/auth", authRouter);
-
 /* ---------------------------------------------------------------------  */
-
-app.get("/activities", isLoggedIn, isSubscribed, getAllActivities);
-app.get("/level1Categories", isLoggedIn, isSubscribed, getAllLevel1Categories);
-app.get("/countries", isLoggedIn, isSubscribed, getAllCountries);
-app.use("/airports", isLoggedIn, isSubscribed, airportsRouter);
-app.use("/electricVehicles", isLoggedIn, isSubscribed, electricVehiclesRouter);
-app.use("/eeios", isLoggedIn, isSubscribed, eeiosRouter);
-app.use("/reits", isLoggedIn, isSubscribed, reitsRouter);
-
-/* ---------------------------------------------------------------------  */
-
-app.use("/users", isLoggedIn, isSubscribed, usersRouter);
-app.use("/subscriptions", isLoggedIn, isSubscribed, subscriptionsRouter);
-app.use("/stripe", isLoggedIn, isSubscribed, stripeRouter);
-app.use("/businessUnits", isLoggedIn, isSubscribed, businessUnitsRouter);
+app.get("/api/activities", isLoggedIn, isSubscribed, getAllActivities);
+app.get(
+  "/api/level1Categories",
+  isLoggedIn,
+  isSubscribed,
+  getAllLevel1Categories
+);
+app.get("/api/countries", isLoggedIn, isSubscribed, getAllCountries);
+app.use("/api/airports", isLoggedIn, isSubscribed, airportsRouter);
 app.use(
-  "/businessUnitsActivities",
+  "/api/electricVehicles",
+  isLoggedIn,
+  isSubscribed,
+  electricVehiclesRouter
+);
+app.use("/api/eeios", isLoggedIn, isSubscribed, eeiosRouter);
+app.use("/api/reits", isLoggedIn, isSubscribed, reitsRouter);
+/* ---------------------------------------------------------------------  */
+app.use("/api/auth", authRouter);
+app.use("/api/users", isLoggedIn, isSubscribed, usersRouter);
+app.use("/api/subscriptions", isLoggedIn, isSubscribed, subscriptionsRouter);
+app.use("/api/stripe", isLoggedIn, isSubscribed, stripeRouter);
+app.use("/api/periods", isLoggedIn, isSubscribed, periodsRouter);
+app.use("/api/businessUnits", isLoggedIn, isSubscribed, businessUnitsRouter);
+app.use(
+  "/api/businessUnitsActivities",
   isLoggedIn,
   isSubscribed,
   businessUnitsActivitiesRouter
 );
-
 // TODO : check webhook setup needed or not
 // app.post(
-//   "/webhook",
+//   "/api/webhook",
 //   express.raw({ type: "application/json" }),
 //   handleWebhookEvents
 // );
-
 app.get("*", (req, res) => {
   res.sendFile(path.join(process.cwd(), "public", "index.html"));
 });
+/* ---------------------------------------------------------------------  */
 
 export { app };

@@ -12,7 +12,7 @@ const createBusinessUnit = async (req, res) => {
       production,
       partnership,
       notes,
-      period,
+      periodId,
     } = req.body;
     await BusinessUnit.create({
       userId: req.user.id,
@@ -25,16 +25,18 @@ const createBusinessUnit = async (req, res) => {
       production: Number(production),
       partnership,
       notes,
-      period,
+      periodId,
     });
     return res
       .status(200)
-      .json({ message: "Businessunit created successfully" });
+      .json({ message: "Business unit created successfully" });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
-      if (error.parent.constraint === "businessUnits_userId_title_period_key") {
+      if (
+        error.parent.constraint === "businessUnits_userId_title_periodId_key"
+      ) {
         return res.status(400).json({
-          error: "Businessunits title must be unique for within period",
+          error: "Businessunits title must be unique within period",
         });
       }
     }
@@ -125,9 +127,34 @@ const deleteBusinessUnitById = async (req, res) => {
   }
 };
 
+const getAllBusinessUnits = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { periodId } = req.query;
+    const query = {
+      where: {
+        userId,
+        periodId,
+      },
+    };
+    if (periodId) {
+      query.where.periodId = periodId;
+    }
+    const businessUnits = await BusinessUnit.findAll(query);
+    return res.status(200).json({
+      data: businessUnits,
+    });
+  } catch (error) {
+    console.log("Could not getAllBusinessUnits");
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export {
   createBusinessUnit,
   getBusinessUnitById,
   updateBusinessUnitById,
   deleteBusinessUnitById,
+  getAllBusinessUnits,
 };

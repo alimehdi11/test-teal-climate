@@ -17,8 +17,8 @@ const PeriodSelector = () => {
         {periods.length > 0 ? (
           periods.map((period) => {
             return (
-              <option key={period} value={period}>
-                {period}
+              <option key={period.id} value={period.id}>
+                {period.period}
               </option>
             );
           })

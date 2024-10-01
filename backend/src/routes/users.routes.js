@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  getBusinessUnitsByUserId,
+  // getBusinessUnitsByUserId,
   getBusinessUnitsActivitiesByUserId,
   updateUserbyId,
   getUserbyId,
@@ -10,12 +10,12 @@ import { isUserExists } from "../middlewares/users.middlewares.js";
 
 const usersRouter = express.Router();
 
-// Get user's businessUnits for given userId
-usersRouter.get(
-  "/:userId/businessUnits",
-  isUserExists,
-  getBusinessUnitsByUserId
-);
+// // Get user's businessUnits for given userId
+// usersRouter.get(
+//   "/:userId/businessUnits",
+//   isUserExists,
+//   getBusinessUnitsByUserId
+// );
 
 /**
  * @route GET /users/:userId/businessUnitsActivities

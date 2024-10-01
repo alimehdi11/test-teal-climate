@@ -28,6 +28,7 @@ const CountryMask = sequelize.define(
     },
   },
   {
+    timestamps: false,
     tableName: "countriesMasks",
   }
 );

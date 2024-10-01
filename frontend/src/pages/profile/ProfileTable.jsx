@@ -12,10 +12,8 @@ import {
   TableRow,
   TableCell,
 } from "../../components/ui/Table.jsx";
-import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
-const ProfileTable = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
-  const { fetchBusinessUnitsPeriod, setPeriods } = usePeriod();
+const ProfileTable = ({ businessUnits, fetchBusinessUnits }) => {
   const handleDelete = (id) => {
     return () => {
       request(
@@ -29,13 +27,7 @@ const ProfileTable = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
           toast.success("Data deleted successfully");
         })
         .then(async () => {
-          fetchUserBusinessUnits();
-          const updatedPeriods = await fetchBusinessUnitsPeriod();
-          if (updatedPeriods) {
-            setPeriods(updatedPeriods);
-          } else {
-            toast.error("Error fetching periods");
-          }
+          await fetchBusinessUnits();
         })
         .catch((error) => {
           toast.error("Error deleting data");
@@ -44,7 +36,7 @@ const ProfileTable = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
     };
   };
 
-  if (userBusinessUnits.length === 0) {
+  if (businessUnits.length === 0) {
     return null;
   }
 
@@ -72,7 +64,7 @@ const ProfileTable = ({ userBusinessUnits, fetchUserBusinessUnits }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {userBusinessUnits.map((userBusinessUnit, index) => (
+          {businessUnits.map((userBusinessUnit, index) => (
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>{userBusinessUnit.title}</TableCell>

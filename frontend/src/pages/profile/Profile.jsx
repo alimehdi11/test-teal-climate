@@ -1,42 +1,34 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import PortfolioForm from "./PortfolioForm.jsx";
 import ProfileTable from "./ProfileTable.jsx";
 import { useState } from "react";
-import { UserContext } from "../../contexts/UserContext.jsx";
-import { request } from "../../utils/request.js";
 import Sidebar from "../../components/layout/Sidebar.jsx";
 import Main from "../../components/layout/Main.jsx";
 import PeriodSelector from "../../components/PeriodSelector.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
+import PeriodForm from "./PeriodForm.jsx";
+import Button from "../../components/ui/Button.jsx";
+import { api } from "../../../api/index.js";
+import { toast } from "react-toastify";
 
 const Profile = () => {
-  const [userBusinessUnits, setUserBusinessUnits] = useState([]);
-  const { user } = useContext(UserContext);
+  const [businessUnits, setBusinessUnits] = useState([]);
   const { selectedPeriod } = usePeriod();
+  const [addPeriod, setAddPeriod] = useState(false);
 
-  const fetchUserBusinessUnits = async () => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnits`,
-        "GET"
-      );
-      if (!response.ok) {
-        console.log(response);
-        throw new Error(`Failed to fetch data: ${response.statusText}`);
-      }
-      let businessUnits = await response.json();
-      businessUnits = businessUnits.filter((businessUnit) => {
-        return businessUnit.period === selectedPeriod;
-      });
-      setUserBusinessUnits(businessUnits);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+  const fetchBusinessUnits = async () => {
+    const { data, success, message } =
+      await api.businessUnits.getAllBusinessUnits(selectedPeriod);
+    if (success) {
+      setBusinessUnits(data);
+    } else {
+      toast.error(message);
     }
   };
 
   useEffect(() => {
     if (selectedPeriod) {
-      fetchUserBusinessUnits();
+      fetchBusinessUnits();
     }
   }, [selectedPeriod]);
 
@@ -47,15 +39,25 @@ const Profile = () => {
         <>
           <div className="my-5 flex justify-between">
             <span className=" font-extrabold text-2xl">Profile</span>
-            <PeriodSelector />
+            <div className="flex gap-4">
+              <Button
+                onClick={() => {
+                  setAddPeriod(true);
+                }}
+              >
+                Add period
+              </Button>
+              <PeriodSelector />
+            </div>
           </div>
+          {addPeriod && <PeriodForm setAddPeriod={setAddPeriod} />}
           <PortfolioForm
-            userBusinessUnits={userBusinessUnits}
-            fetchUserBusinessUnits={fetchUserBusinessUnits}
+            businessUnits={businessUnits}
+            fetchBusinessUnits={fetchBusinessUnits}
           />
           <ProfileTable
-            userBusinessUnits={userBusinessUnits}
-            fetchUserBusinessUnits={fetchUserBusinessUnits}
+            businessUnits={businessUnits}
+            fetchBusinessUnits={fetchBusinessUnits}
           />
         </>
       </Main>

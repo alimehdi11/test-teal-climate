@@ -3,58 +3,58 @@ import { BusinessUnitActivity } from "../models/businessUnitActivity.model.js";
 import { User } from "../models/user.model.js";
 // import { Sequelize } from "sequelize";
 
-const getBusinessUnitsByUserId = async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const { limit, sortOrder = "ASC", column, distinct } = req.query;
-    const query = {
-      where: {
-        userId,
-      },
-      order: [["createdAt", sortOrder]],
-    };
-    if (limit) {
-      query.limit = parseInt(limit, 10);
-    }
-    if (column) {
-      // if (distinct === "true") {
-      //   query.attributes = [
-      //     [Sequelize.fn("DISTINCT", Sequelize.col(column)), column],
-      //     "createdAt",
-      //   ];
-      // } else {
-      query.attributes = [column];
-      // }
-    }
-    let businessUnits = await BusinessUnit.findAll(query);
-    const uniquePeriods = [];
-    if (distinct) {
-      // If distinct is passed we are manually making each record unique by "period" column.
-      // The above commented code is not working as intended.
-      // Thats why we are doing this manually.
-      businessUnits.forEach((businessUnit) => {
-        let isPeriodExists = false;
-        for (let up = 0; up < uniquePeriods.length; up++) {
-          const { period } = uniquePeriods[up];
-          if (period === businessUnit.period) {
-            isPeriodExists = true;
-            break;
-          }
-        }
-        if (!isPeriodExists) {
-          uniquePeriods.push(businessUnit);
-        }
-      });
-      businessUnits = uniquePeriods;
-    }
+// const getBusinessUnitsByUserId = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+//     const { limit, sortOrder = "ASC", column, distinct } = req.query;
+//     const query = {
+//       where: {
+//         userId,
+//       },
+//       order: [["createdAt", sortOrder]],
+//     };
+//     if (limit) {
+//       query.limit = parseInt(limit, 10);
+//     }
+//     if (column) {
+//       // if (distinct === "true") {
+//       //   query.attributes = [
+//       //     [Sequelize.fn("DISTINCT", Sequelize.col(column)), column],
+//       //     "createdAt",
+//       //   ];
+//       // } else {
+//       query.attributes = [column];
+//       // }
+//     }
+//     let businessUnits = await BusinessUnit.findAll(query);
+//     const uniquePeriods = [];
+//     if (distinct) {
+//       // If distinct is passed we are manually making each record unique by "period" column.
+//       // The above commented code is not working as intended.
+//       // Thats why we are doing this manually.
+//       businessUnits.forEach((businessUnit) => {
+//         let isPeriodExists = false;
+//         for (let up = 0; up < uniquePeriods.length; up++) {
+//           const { period } = uniquePeriods[up];
+//           if (period === businessUnit.period) {
+//             isPeriodExists = true;
+//             break;
+//           }
+//         }
+//         if (!isPeriodExists) {
+//           uniquePeriods.push(businessUnit);
+//         }
+//       });
+//       businessUnits = uniquePeriods;
+//     }
 
-    return res.status(200).json(businessUnits);
-  } catch (error) {
-    console.log("Could not getBusinessUnitsByUserId");
-    console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
+//     return res.status(200).json(businessUnits);
+//   } catch (error) {
+//     console.log("Could not getBusinessUnitsByUserId");
+//     console.log(error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
 
 const getBusinessUnitsActivitiesByUserId = async (req, res) => {
   try {
@@ -155,7 +155,7 @@ const getUserbyId = async (req, res) => {
 };
 
 export {
-  getBusinessUnitsByUserId,
+  // getBusinessUnitsByUserId,
   getBusinessUnitsActivitiesByUserId,
   updateUserbyId,
   getUserbyId,
