@@ -135,18 +135,16 @@ const getAllBusinessUnits = async (req, res) => {
     const query = {
       where: {
         userId,
+        ...(periodId && { periodId }),
       },
       include: [
         {
           model: Period,
-          as: "period", // Include the Period model
+          as: "period",
         },
       ],
       attributes: { exclude: ["periodId"] },
     };
-    if (periodId) {
-      query.where.periodId = periodId;
-    }
     const businessUnits = await BusinessUnit.findAll(query);
     return res.status(200).json({
       data: businessUnits,

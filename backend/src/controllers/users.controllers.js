@@ -2,47 +2,6 @@ import { BusinessUnit } from "../models/businessUnit.model.js";
 import { BusinessUnitActivity } from "../models/businessUnitActivity.model.js";
 import { User } from "../models/user.model.js";
 import { Period } from "../models/period.model.js";
-// import { Sequelize } from "sequelize";
-
-const getBusinessUnitsActivitiesByUserId = async (req, res) => {
-  try {
-    const { userId } = req.params;
-
-    const { sortOrder = "ASC", limit, sortByColumn = "createdAt" } = req.query;
-
-    const query = {
-      where: {
-        userId,
-      },
-      include: [
-        {
-          model: BusinessUnit,
-          as: "businessUnit",
-          include: [
-            {
-              model: Period,
-              as: "period", // Include the Period model
-            },
-          ],
-          attributes: { exclude: ["periodId"] },
-        },
-      ],
-      attributes: { exclude: ["businessUnitId"] },
-      order: [[sortByColumn, sortOrder]],
-    };
-
-    if (limit) {
-      query.limit = parseInt(limit, 10);
-    }
-
-    let userBusinessUnitsActivities = await BusinessUnitActivity.findAll(query);
-    return res.status(200).json(userBusinessUnitsActivities);
-  } catch (error) {
-    console.log("Could not getBusinessUnitsActivitiesByUserId");
-    console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
 
 const updateUserbyId = async (req, res) => {
   try {
@@ -102,9 +61,4 @@ const getUserbyId = async (req, res) => {
   }
 };
 
-export {
-  // getBusinessUnitsByUserId,
-  getBusinessUnitsActivitiesByUserId,
-  updateUserbyId,
-  getUserbyId,
-};
+export { updateUserbyId, getUserbyId };

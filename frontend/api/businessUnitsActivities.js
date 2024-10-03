@@ -1,18 +1,14 @@
 import { request } from "../src/utils/request";
 
-const businessUnits = {
-  getAllBusinessUnits: async (periodId) => {
+const businessUnitsActivities = {
+  getAllBusinessUnitsActivities: async () => {
     let response;
     try {
-      let queryParams = "";
-      if (periodId) {
-        queryParams += `?periodId=${periodId}`;
-      }
-      const url = `${import.meta.env.VITE_API_BASE_URL}/businessUnits${queryParams}`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities`;
       const method = "GET";
       response = await request(url, method);
       if (!response.ok) {
-        throw new Error("Failed to getAllBusinessUnits");
+        throw new Error("Failed to getAllBusinessUnitsActivities");
       }
       const { data } = await response.json();
       return { success: true, data };
@@ -25,4 +21,4 @@ const businessUnits = {
   },
 };
 
-export { businessUnits };
+export { businessUnitsActivities };

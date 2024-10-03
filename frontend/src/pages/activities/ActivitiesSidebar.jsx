@@ -26,37 +26,48 @@ const ActivitiesSidebar = ({
     let level1 = activities
       ?.filter((item) => item.scope === selectedScope)
       .map((item) => item.level1);
-
     level1 = [...new Set(level1)];
     return level1;
   };
 
   useEffect(() => {
     if (selectedScope) {
-      if (searchQuery === "") {
-        setLevel1(filterLevel1(selectedScope));
-      } else {
-        const filteredLevel1 = level1.filter((level) =>
-          level.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-
-        setLevel1(
-          filteredLevel1.length === 0
-            ? filterLevel1(selectedScope)
-            : filteredLevel1
-        );
-      }
-    } else {
-      setLevel1([]);
+      setLevel1(filterLevel1(selectedScope));
     }
-  }, [selectedScope, searchQuery]);
+  }, [selectedScope]);
+
+  useEffect(() => {
+    if (selectedScope && level1.length > 0) {
+      // Always select first level1 initially or when selectedScope changes
+      setSelectedLevel(level1[0]);
+    }
+  }, [level1]);
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      setLevel1(filterLevel1(selectedScope));
+    } else {
+      const filteredLevel1 = level1.filter((level) =>
+        level.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setLevel1(
+        filteredLevel1.length === 0
+          ? filterLevel1(selectedScope)
+          : filteredLevel1
+      );
+    }
+  }, [searchQuery]);
+
+  useEffect(() => {
+    console.log("selectedScope inside sidebar", selectedScope);
+  }, [selectedScope]);
 
   return (
     <>
       <DropdownMenu
         children={
           <>
-            {["Scope 1", "Scope 2", "Scope 3"]?.map((scope) => (
+            {["Scope 1", "Scope 2", "Scope 3"].map((scope) => (
               <SidebarItem
                 key={scope}
                 className={
@@ -67,18 +78,13 @@ const ActivitiesSidebar = ({
                 onClick={(e) => {
                   setIsReitSelected(false);
                   setIsSpendBaseScope3Selected(false);
-                  setProductOrIndustry("");
-                  setSelectedScope(null);
                   setSelectedScope(e.target.innerText);
-                  if (e.target.innerText !== selectedScope) {
-                    setSelectedLevel(null);
-                  }
                 }}
               >
-                <>{scope}</>
+                {scope}
               </SidebarItem>
             ))}
-            <hr />
+            <hr className="border-t-[2px]" />
             <SidebarItem
               className={
                 isSpendBaseScope3Selected
@@ -87,12 +93,9 @@ const ActivitiesSidebar = ({
               }
               onClick={() => {
                 setIsReitSelected(false);
-                setSelectedScope(null);
-                setSelectedLevel(null);
+                setSelectedScope("");
+                setSelectedLevel("");
                 setIsSpendBaseScope3Selected(true);
-                if (!productOrIndustry) {
-                  setProductOrIndustry("Industry");
-                }
               }}
             >
               Spend Base Scope 3
@@ -102,20 +105,19 @@ const ActivitiesSidebar = ({
                 isReitSelected ? "bg-tc-indigo-light text-tc-blue" : ""
               }
               onClick={() => {
-                setProductOrIndustry("");
-                setSelectedScope(null);
-                setSelectedLevel(null);
+                setSelectedScope("");
+                setSelectedLevel("");
                 setIsSpendBaseScope3Selected(false);
                 setIsReitSelected(true);
               }}
             >
               Real State Scope 3
             </SidebarItem>
-            <hr />
+            <hr className="border-t-[2px]" />
           </>
         }
       />
-      {level1.length > 0 && (
+      {selectedScope && level1.length > 0 && (
         <div className="my-2">
           {/* Search query input */}
           <div className="mt-2">
@@ -139,11 +141,7 @@ const ActivitiesSidebar = ({
                     : "")
                 }
                 onClick={(e) => {
-                  if (e.target.innerText === selectedLevel) {
-                    setSelectedLevel(null);
-                  } else {
-                    setSelectedLevel(e.target.innerText);
-                  }
+                  setSelectedLevel(e.target.innerText);
                 }}
               >
                 {level}
@@ -156,8 +154,6 @@ const ActivitiesSidebar = ({
         <EeioSidebar
           productOrIndustry={productOrIndustry}
           setProductOrIndustry={setProductOrIndustry}
-          selectedLevel={selectedLevel}
-          setSelectedLevel={setSelectedLevel}
         />
       )}
     </>

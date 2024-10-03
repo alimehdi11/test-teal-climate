@@ -9,16 +9,17 @@ import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
 import { DataContext } from "../../contexts/DataContext.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
-import { getPeriodMonths } from "../../utils/date.js";
 import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
 import { api } from "../../../api/index.js";
+import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
 
 const ActivitesForm = ({
   selectedScope,
   selectedLevel,
-  fetchUserBusinessUnitsActivities,
+  setBusinessUnitsActivities,
   setSelectedScope,
   setSelectedLevel,
+  businessUnits,
 }) => {
   const [scopeCategoryValue, setScopeCategoryValue] = useState("");
   const [fuelTypeValue, setFuelTypeValue] = useState(""); // level2
@@ -28,8 +29,6 @@ const ActivitesForm = ({
   const [quantityValue, setQuantityValue] = useState("");
   const [level4Value, setLevel4Value] = useState("");
   const [level5Value, setLevel5Value] = useState("");
-
-  const [businessUnits, setBusinessUnits] = useState([]);
 
   const [unitOfMeasurements, setUnitOfMeasurements] = useState([]);
   const [scopeCategories, setScopeCategories] = useState([]);
@@ -65,17 +64,7 @@ const ActivitesForm = ({
   const currentYear = new Date().getFullYear();
   const years = [currentYear, currentYear - 1];
 
-  const { selectedPeriod, periods } = usePeriod();
-
-  const fetchBusinessUnits = async () => {
-    const { data, success, message } =
-      await api.businessUnits.getAllBusinessUnits(selectedPeriod);
-    if (success) {
-      setBusinessUnits(data);
-    } else {
-      toast.error(message);
-    }
-  };
+  const { selectedPeriod, getPeriodMonths } = usePeriod();
 
   const filterScopeCategories = () => {
     let level2 = [];
@@ -630,9 +619,20 @@ const ActivitesForm = ({
           resetForm();
         }
       })
-      .then(() => {
+      .then(async () => {
         if (!marketBased) {
-          fetchUserBusinessUnitsActivities();
+          const { success, message, data } =
+            await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+          if (success) {
+            setBusinessUnitsActivities(
+              filterBusinessUnitsActivitiesForSelectedPeriod(
+                data,
+                selectedPeriod
+              )
+            );
+          } else {
+            toast.error(message);
+          }
         }
       })
       .catch((error) => {
@@ -656,8 +656,19 @@ const ActivitesForm = ({
           toast.success("Data submitted successfully");
           resetForm();
         })
-        .then(() => {
-          fetchUserBusinessUnitsActivities();
+        .then(async () => {
+          const { success, message, data } =
+            await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+          if (success) {
+            setBusinessUnitsActivities(
+              filterBusinessUnitsActivitiesForSelectedPeriod(
+                data,
+                selectedPeriod
+              )
+            );
+          } else {
+            toast.error(message);
+          }
         })
         .catch((error) => {
           toast.error("Error adding data");
@@ -940,9 +951,20 @@ const ActivitesForm = ({
           resetForm();
         }
       })
-      .then(() => {
+      .then(async () => {
         if (!marketBased) {
-          fetchUserBusinessUnitsActivities();
+          const { success, message, data } =
+            await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+          if (success) {
+            setBusinessUnitsActivities(
+              filterBusinessUnitsActivitiesForSelectedPeriod(
+                data,
+                selectedPeriod
+              )
+            );
+          } else {
+            toast.error(message);
+          }
         }
       })
       .catch((error) => {
@@ -966,8 +988,19 @@ const ActivitesForm = ({
           toast.success("Data updated successfully");
           navigate("/activities");
         })
-        .then(() => {
-          fetchUserBusinessUnitsActivities();
+        .then(async () => {
+          const { success, message, data } =
+            await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+          if (success) {
+            setBusinessUnitsActivities(
+              filterBusinessUnitsActivitiesForSelectedPeriod(
+                data,
+                selectedPeriod
+              )
+            );
+          } else {
+            toast.error(message);
+          }
         })
         .catch((error) => {
           toast.error("Error updating data");
@@ -1180,12 +1213,6 @@ const ActivitesForm = ({
     "Business travel- air": "Airport To",
     "WTT- business travel- air": "Airport To",
   };
-
-  useEffect(() => {
-    if (selectedPeriod) {
-      fetchBusinessUnits();
-    }
-  }, [selectedPeriod]);
 
   useEffect(() => {
     // if (!id) {
@@ -1543,6 +1570,7 @@ const ActivitesForm = ({
     if (id) {
       fetchActivityById()
         .then((activity) => {
+          console.log("Inside ActivitesForm.jsx");
           setScopeCategoryValue(activity.level1Category);
           setBusinessUnitValue(activity.businessUnit.id);
           if (selectedLevel !== "District heat and steam TandD") {
@@ -1554,6 +1582,8 @@ const ActivitesForm = ({
           setLevel4Value(activity.level4 || "");
           setLevel5Value(activity.level5 || "");
           setMonth(activity.month);
+          setSelectedScope(activity.scope);
+          setSelectedLevel(activity.level1);
           // setYear(activity.year);
         })
         .catch((error) => {
@@ -1581,40 +1611,13 @@ const ActivitesForm = ({
           <FormControl className="flex-1 relative">
             <Label>Month</Label>
             <SearchableSelect
-              data={getPeriodMonths(
-                periods.filter((period) => {
-                  return Number(selectedPeriod) === period.id;
-                })[0]
-              )}
+              data={getPeriodMonths()}
               item={month}
               setItem={setMonth}
               text={"Select month"}
               placeholder={"Search month"}
             />
-            {/* <Select value={month} onChange={(e) => setMonth(e.target.value)}>
-              <option value="">Select Option</option>
-              {getPeriodMonths(selectedPeriod).map((option) => {
-                return (
-                  <option key={option} value={option}>
-                    {option.toUpperCase()}
-                  </option>
-                );
-              })}
-            </Select> */}
           </FormControl>
-          {/* <FormControl className="flex-1">
-            <Label>Year</Label>
-            <Select value={year} onChange={(e) => setYear(e.target.value)}>
-              <option value="">Select Option</option>
-              {years.map((option, index) => {
-                return (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                );
-              })}
-            </Select>
-          </FormControl> */}
         </div>
         {/* Scope Category */}
         <FormControl className="relative">
@@ -1626,49 +1629,28 @@ const ActivitesForm = ({
             text={"Select scope category"}
             placeholder={"Search scope category"}
           />
-          {/* <Select
-            value={scopeCategoryValue}
-            onChange={(e) => setScopeCategoryValue(e.target.value)}
-          >
-            <option value="">Select Option</option>
-            {scopeCategories.map((option, index) => {
-              return (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              );
-            })}
-          </Select> */}
         </FormControl>
-
         {/* Business Unit */}
         <FormControl className="relative">
           <Label>Business Unit</Label>
-          {/* <SearchableSelect
-            data={businessUnits.map(
-              (businessUnit, index) => businessUnit.title
-            )}
-            item={businessUnitValue}
-            setItem={setBusinessUnitValue}
-            text={"Select business unit"}
-            placeholder={"Search business unit"}
-          /> */}
           <Select
             value={businessUnitValue}
             onChange={(e) => setBusinessUnitValue(e.target.value)}
           >
             <option value="">Select Option</option>
-            {businessUnits &&
-              businessUnits.map((businessUnit) => {
+            {businessUnits.length > 0 ? (
+              businessUnits.map((options, index) => {
                 return (
-                  <option key={businessUnit.id} value={businessUnit.id}>
-                    {businessUnit.title}
+                  <option value={options.id} key={index}>
+                    {options.title}
                   </option>
                 );
-              })}
+              })
+            ) : (
+              <option disabled>'Profile not found create profile first'</option>
+            )}
           </Select>
         </FormControl>
-
         {/* Fuel Type (level2) */}
         {
           /* Not operator here ==>*/ ![
@@ -1712,23 +1694,9 @@ const ActivitesForm = ({
                     `${selectedLevel} Type`)
                 }
               />
-              {/* <Select
-                value={fuelTypeValue}
-                onChange={(e) => setFuelTypeValue(e.target.value)}
-              >
-                <option value="">Select Option</option>
-                {fuelTypes.map((option, index) => {
-                  return (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  );
-                })}
-              </Select> */}
             </FormControl>
           )
         }
-
         {/* Fuel Name (level3) */}
         {showFuelNamesField && (
           <FormControl className="relative">
@@ -1751,19 +1719,6 @@ const ActivitesForm = ({
                   `${selectedLevel} Name`)
               }
             />
-            {/* <Select
-              value={fuelNameValue}
-              onChange={(e) => setFuelNameValue(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {fuelNames.map((option, index) => {
-                return (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                );
-              })}
-            </Select> */}
           </FormControl>
         )}
 
@@ -1808,19 +1763,6 @@ const ActivitesForm = ({
                   : "Level 4")
               }
             />
-            {/* <Select
-              onChange={(e) => setLevel4Value(e.target.value)}
-              value={level4Value}
-            >
-              <option value="">Select Option</option>
-              {level4Options.map((option, index) => {
-                return (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                );
-              })}
-            </Select> */}
           </FormControl>
         )}
 
@@ -1943,19 +1885,6 @@ const ActivitesForm = ({
                                             : "Level 5")
               }
             />
-            {/* <Select
-              value={level5Value}
-              onChange={(e) => setLevel5Value(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {level5Options.map((option, index) => {
-                return (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                );
-              })}
-            </Select> */}
           </FormControl>
         )}
 
@@ -1969,21 +1898,7 @@ const ActivitesForm = ({
             text={"Select unit of measurement"}
             placeholder={"Search unit of measurement"}
           />
-          {/* <Select
-            value={unitOfMeasurementValue}
-            onChange={(e) => setUnitOfMeasurementValue(e.target.value)}
-          >
-            <option value="">Select Option</option>
-            {unitOfMeasurements.map((option, index) => {
-              return (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              );
-            })}
-          </Select> */}
         </FormControl>
-
         {/* Quantity */}
         {selectedLevel !== "Business travel- air" &&
           selectedLevel !== "WTT- business travel- air" && (

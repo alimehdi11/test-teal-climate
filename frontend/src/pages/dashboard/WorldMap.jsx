@@ -1,34 +1,31 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import worldMapJson from "../../data/worldMap.json";
-import { UserContext } from "../../contexts/UserContext.jsx";
 import { request } from "../../utils/request.js";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
 const WorldMap = () => {
-  const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
-    useState([]);
-  const { user } = useContext(UserContext);
+  const [businessUnitsActivities, setUserBusinessUnitsActivities] = useState(
+    []
+  );
   const { selectedPeriod } = usePeriod();
 
   const fetchUserBusinessUnitsActivities = async () => {
     try {
       const userBusinessUnitsActivitiesResponse = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnitsActivities`,
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities`,
         "GET"
       );
       if (!userBusinessUnitsActivitiesResponse.ok) {
         throw new Error(`Failed to fetch data:`);
       }
-      let userBusinessUnitsActivities =
+      let businessUnitsActivities =
         await userBusinessUnitsActivitiesResponse.json();
-      userBusinessUnitsActivities = userBusinessUnitsActivities.filter(
-        (activity) => {
-          return activity.businessUnit.period === selectedPeriod;
-        }
-      );
-      setUserBusinessUnitsActivities(userBusinessUnitsActivities);
+      businessUnitsActivities = businessUnitsActivities.filter((activity) => {
+        return activity.businessUnit.period === selectedPeriod;
+      });
+      setUserBusinessUnitsActivities(businessUnitsActivities);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -39,7 +36,7 @@ const WorldMap = () => {
     let emissionsValue = 0;
 
     // Extracting emissions from user activities and adding all emissions if available for given country
-    userBusinessUnitsActivities.forEach((userBusinessUnitActivity) => {
+    businessUnitsActivities.forEach((userBusinessUnitActivity) => {
       if (
         userBusinessUnitActivity.businessUnit.country ===
           feature.properties.formal_en ||
@@ -77,7 +74,7 @@ const WorldMap = () => {
     let emissionsValue = 0;
 
     // Extracting emissions from user activities and adding all emissions if available for given country
-    userBusinessUnitsActivities.forEach((userBusinessUnitActivity) => {
+    businessUnitsActivities.forEach((userBusinessUnitActivity) => {
       if (
         userBusinessUnitActivity.businessUnit.country ===
           feature.properties.formal_en ||

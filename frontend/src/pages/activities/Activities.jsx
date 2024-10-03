@@ -2,60 +2,74 @@ import { useState, useEffect, useContext } from "react";
 import ActivitesForm from "./ActivitesForm.jsx";
 import ActivitiesTable from "./ActivitiesTable.jsx";
 import ActivitiesSidebar from "./ActivitiesSidebar.jsx";
-import { UserContext } from "../../contexts/UserContext.jsx";
-import { request } from "../../utils/request.js";
 import Sidebar from "../../components/layout/Sidebar.jsx";
 import Main from "../../components/layout/Main.jsx";
 import EeioForm from "./EeioForm.jsx";
 import ReitForm from "./ReitForm.jsx";
 import PeriodSelector from "../../components/PeriodSelector.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
+import { api } from "../../../api/index.js";
+import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
+import { useSearchParams, useParams } from "react-router-dom";
 
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState("Scope 1");
-  const [selectedLevel, setSelectedLevel] = useState("Fuels");
-  const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
-    useState([]);
+  const [selectedLevel, setSelectedLevel] = useState("");
+  const [businessUnitsActivities, setBusinessUnitsActivities] = useState([]);
   const [isSpendBaseScope3Selected, setIsSpendBaseScope3Selected] =
     useState(false);
   const [productOrIndustry, setProductOrIndustry] = useState("Industry");
-  const { user } = useContext(UserContext);
   const { selectedPeriod } = usePeriod();
   const [isReitSelected, setIsReitSelected] = useState(false);
-
-  const fetchUserBusinessUnitsActivities = async () => {
-    try {
-      const userBusinessUnitsActivitiesResponse = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnitsActivities`,
-        "GET"
-      );
-      if (!userBusinessUnitsActivitiesResponse.ok) {
-        throw new Error(
-          `${JSON.stringify(await userBusinessUnitsActivitiesResponse.json())}`
-        );
-      }
-      let userBusinessUnitsActivities =
-        await userBusinessUnitsActivitiesResponse.json();
-      console.log(userBusinessUnitsActivities);
-      userBusinessUnitsActivities = userBusinessUnitsActivities.filter(
-        (userBusinessUnitsActivity) => {
-          return (
-            userBusinessUnitsActivity.businessUnit.period.id ===
-            Number(selectedPeriod)
-          );
-        }
-      );
-      setUserBusinessUnitsActivities(userBusinessUnitsActivities);
-    } catch (error) {
-      const errorMessage = JSON.parse(error.message).error;
-      console.error("Error fetching data:", error);
-      console.error(errorMessage);
-    }
-  };
+  const [businessUnits, setBusinessUnits] = useState([]);
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    fetchUserBusinessUnitsActivities();
+    (async () => {
+      const { data, success, message } =
+        await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+      if (success) {
+        setBusinessUnitsActivities(
+          filterBusinessUnitsActivitiesForSelectedPeriod(data, selectedPeriod)
+        );
+      } else {
+        toast.error(message);
+      }
+    })();
+    (async () => {
+      const { data, success, message } =
+        await api.businessUnits.getAllBusinessUnits(selectedPeriod);
+      if (success) {
+        setBusinessUnits(data);
+      } else {
+        toast.error(message);
+      }
+    })();
   }, [selectedPeriod]);
+
+  useEffect(() => {
+    if (id) {
+      if (searchParams.get("eeio")) {
+        setSelectedScope("");
+        setSelectedLevel("");
+        setIsReitSelected(false);
+        setIsSpendBaseScope3Selected(true);
+      } else if (searchParams.get("reit")) {
+        setSelectedScope("");
+        setSelectedLevel("");
+        setIsReitSelected(true);
+        setIsSpendBaseScope3Selected(false);
+      } else {
+        setIsReitSelected(false);
+        setIsSpendBaseScope3Selected(false);
+      }
+    }
+  }, [id]);
+
+  useEffect(() => {
+    console.log("selectedScope", selectedScope);
+  }, [selectedScope]);
 
   return (
     <>
@@ -75,7 +89,7 @@ const Activities = () => {
       </Sidebar>
       <Main>
         <>
-          {selectedScope && selectedLevel ? (
+          {selectedScope && (
             <>
               <div className="my-5 flex justify-between">
                 <span className=" font-extrabold text-2xl">
@@ -86,14 +100,14 @@ const Activities = () => {
               <ActivitesForm
                 selectedScope={selectedScope}
                 selectedLevel={selectedLevel}
-                fetchUserBusinessUnitsActivities={
-                  fetchUserBusinessUnitsActivities
-                }
+                setBusinessUnitsActivities={setBusinessUnitsActivities}
                 setSelectedScope={setSelectedScope}
                 setSelectedLevel={setSelectedLevel}
+                businessUnits={businessUnits}
               />
             </>
-          ) : isSpendBaseScope3Selected && productOrIndustry ? (
+          )}
+          {isSpendBaseScope3Selected && (
             <>
               <div className="my-5 flex justify-between">
                 <span className=" font-extrabold text-2xl">
@@ -104,35 +118,27 @@ const Activities = () => {
               <EeioForm
                 productOrIndustry={productOrIndustry}
                 setProductOrIndustry={setProductOrIndustry}
-                setIsSpendBaseScope3Selected={setIsSpendBaseScope3Selected}
-                fetchUserBusinessUnitsActivities={
-                  fetchUserBusinessUnitsActivities
-                }
+                setBusinessUnitsActivities={setBusinessUnitsActivities}
+                businessUnits={businessUnits}
               />
             </>
-          ) : (
-            isReitSelected && (
-              <>
-                <div className="my-5 flex justify-between">
-                  <span className=" font-extrabold text-2xl">{"REIT"}</span>
-                  <PeriodSelector />
-                </div>
-                <ReitForm
-                  fetchUserBusinessUnitsActivities={
-                    fetchUserBusinessUnitsActivities
-                  }
-                />
-              </>
-            )
+          )}
+          {isReitSelected && (
+            <>
+              <div className="my-5 flex justify-between">
+                <span className=" font-extrabold text-2xl">{"REIT"}</span>
+                <PeriodSelector />
+              </div>
+              <ReitForm
+                setBusinessUnitsActivities={setBusinessUnitsActivities}
+                businessUnits={businessUnits}
+              />
+            </>
           )}
           <ActivitiesTable
-            userBusinessUnitsActivities={userBusinessUnitsActivities}
-            fetchUserBusinessUnitsActivities={fetchUserBusinessUnitsActivities}
-            setSelectedScope={setSelectedScope}
-            setSelectedLevel={setSelectedLevel}
-            setIsSpendBaseScope3Selected={setIsSpendBaseScope3Selected}
-            setProductOrIndustry={setProductOrIndustry}
-            setIsReitSelected={setIsReitSelected}
+            businessUnitsActivities={businessUnitsActivities}
+            setBusinessUnitsActivities={setBusinessUnitsActivities}
+            selectedPeriod={selectedPeriod}
           />
         </>
       </Main>

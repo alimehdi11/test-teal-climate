@@ -10,17 +10,17 @@ import Select from "../../components/ui/Select.jsx";
 import { UserContext } from "../../contexts/UserContext.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
-import { getPeriodMonths } from "../../utils/date.js";
+import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
+import { api } from "../../../api/index.js";
 
 const EeioForm = ({
   productOrIndustry,
-  fetchUserBusinessUnitsActivities,
   setProductOrIndustry,
-  setIsSpendBaseScope3Selected,
+  setBusinessUnitsActivities,
+  businessUnits,
 }) => {
   const { user } = useContext(UserContext);
 
-  const [businessUnits, setBusinessUnits] = useState("");
   const [businessUnitValue, setBusinessUnitValue] = useState("");
   const [level1Value, setLevel1Value] = useState("");
   const [level2Options, setLevel2Options] = useState([]);
@@ -39,7 +39,7 @@ const EeioForm = ({
   // const [year, setYear] = useState("");
   const { id } = useParams();
   const navigation = useNavigate();
-  const { selectedPeriod } = usePeriod();
+  const { selectedPeriod, getPeriodMonths } = usePeriod();
   const level1Options = [
     "Activities of households",
     "Public administration and defence; compulsory social security",
@@ -95,11 +95,9 @@ const EeioForm = ({
     setSectorValue("");
     setQuantity("");
     setMonth("");
-    // setProductOrIndustry("");
-    // setIsSpendBaseScope3Selected(false);
   };
 
-  const handleFormSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     // Checking for missing values
     if (
@@ -146,9 +144,17 @@ const EeioForm = ({
         }
         resetForm();
       })
-      .then(() => {
+      .then(async () => {
         toast.success("Data submitted successfully");
-        fetchUserBusinessUnitsActivities();
+        const { success, message, data } =
+          await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+        if (success) {
+          setBusinessUnitsActivities(
+            filterBusinessUnitsActivitiesForSelectedPeriod(data, selectedPeriod)
+          );
+        } else {
+          toast.error(message);
+        }
       })
       .catch((error) => {
         toast.error("Error adding data");
@@ -207,8 +213,19 @@ const EeioForm = ({
           resetForm();
           navigation("/activities");
         })
-        .then(() => {
-          fetchUserBusinessUnitsActivities();
+        .then(async () => {
+          const { success, message, data } =
+            await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+          if (success) {
+            setBusinessUnitsActivities(
+              filterBusinessUnitsActivitiesForSelectedPeriod(
+                data,
+                selectedPeriod
+              )
+            );
+          } else {
+            toast.error(message);
+          }
         });
     } catch (error) {
       const errorMessage = JSON.parse(error.message).error;
@@ -312,21 +329,6 @@ const EeioForm = ({
   };
 
   useEffect(() => {
-    if (selectedPeriod) {
-      fetchBusinessUnits().then(async (businessUnits) => {
-        if (businessUnits.length === 0) {
-          toast.info("Please add business unit first");
-          return;
-        }
-        businessUnits = businessUnits.filter((businessUnit) => {
-          return businessUnit.period === selectedPeriod;
-        });
-        setBusinessUnits(businessUnits);
-      });
-    }
-  }, [selectedPeriod]);
-
-  useEffect(() => {
     if (level1Value) {
       fetchEeioLevel2();
       if (!isFormInitializing) {
@@ -404,6 +406,7 @@ const EeioForm = ({
         setSectorValue(activity.sector);
         setQuantity(activity.quantity);
         setMonth(activity.month);
+        setProductOrIndustry(activity.productOrIndustry);
         // setYear(activity.year);
       });
     }
@@ -440,7 +443,7 @@ const EeioForm = ({
   return (
     <>
       <form
-        onSubmit={handleFormSubmit}
+        onSubmit={handleSubmit}
         className="flex flex-col gap-y-3 bg-white rounded-md p-6"
       >
         <h3 className="m-0 mb-3 font-extrabold text-2xl">
@@ -452,49 +455,13 @@ const EeioForm = ({
             <FormControl className="flex-1 relative">
               <Label>Month</Label>
               <SearchableSelect
-                data={getPeriodMonths(selectedPeriod)}
+                data={getPeriodMonths()}
                 item={month}
                 setItem={setMonth}
                 text={"Select month"}
                 placeholder={"Search month"}
               />
-              {/* <Select value={month} onChange={(e) => setMonth(e.target.value)}>
-                <option value="">Select Option</option>
-                {[
-                  "january",
-                  "february",
-                  "march",
-                  "april",
-                  "may",
-                  "june",
-                  "july",
-                  "august",
-                  "september",
-                  "october",
-                  "november",
-                  "december",
-                ].map((option) => {
-                  return (
-                    <option key={option} value={option}>
-                      {option.toUpperCase()}
-                    </option>
-                  );
-                })}
-              </Select> */}
             </FormControl>
-            {/* <FormControl className="flex-1">
-              <Label>Year</Label>
-              <Select value={year} onChange={(e) => setYear(e.target.value)}>
-                <option value="">Select Option</option>
-                {years.map((option, index) => {
-                  return (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  );
-                })}
-              </Select>
-            </FormControl> */}
           </div>
           {/* Business Unit */}
           <FormControl>
@@ -504,7 +471,7 @@ const EeioForm = ({
               onChange={(e) => setBusinessUnitValue(e.target.value)}
             >
               <option value="">Select Option</option>
-              {businessUnits && businessUnits.length > 0 ? (
+              {businessUnits.length > 0 ? (
                 businessUnits.map((options, index) => {
                   return (
                     <option value={options.id} key={index}>
@@ -529,15 +496,6 @@ const EeioForm = ({
               text={"Select level 1"}
               placeholder={"Search level 1"}
             />
-            {/* <Select
-              value={level1Value}
-              onChange={(e) => setLevel1Value(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {level1Options.map((item, index) => (
-                <option key={index}>{item}</option>
-              ))}
-            </Select> */}
           </FormControl>
           {/* Level 2 */}
           <FormControl className="relative">
@@ -549,20 +507,6 @@ const EeioForm = ({
               text={"Select level 2"}
               placeholder={"Search level 2"}
             />
-            {/* <Select
-              value={level2Value}
-              onChange={(e) => setLevel2Value(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {level2Options &&
-                level2Options.map((options, index) => {
-                  return (
-                    <option value={options.level2} key={index}>
-                      {options.level2}
-                    </option>
-                  );
-                })}
-            </Select> */}
           </FormControl>
           {/* Level 3 */}
           <FormControl className="relative">
@@ -574,20 +518,6 @@ const EeioForm = ({
               text={"Select level 3"}
               placeholder={"Search level 3"}
             />
-            {/* <Select
-              value={level3Value}
-              onChange={(e) => setLevel3Value(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {level3Options &&
-                level3Options.map((options, index) => {
-                  return (
-                    <option value={options.level3} key={index}>
-                      {options.level3}
-                    </option>
-                  );
-                })}
-            </Select> */}
           </FormControl>
           {/* Level 4 */}
           <FormControl className="relative">
@@ -599,20 +529,6 @@ const EeioForm = ({
               text={"Select level 4"}
               placeholder={"Search level 4"}
             />
-            {/* <Select
-              value={level4Value}
-              onChange={(e) => setLevel4Value(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {level4Options &&
-                level4Options.map((options, index) => {
-                  return (
-                    <option value={options.level4} key={index}>
-                      {options.level4}
-                    </option>
-                  );
-                })}
-            </Select> */}
           </FormControl>
           {/* Level 5 */}
           <FormControl className="relative">
@@ -624,20 +540,6 @@ const EeioForm = ({
               text={"Select level 5"}
               placeholder={"Search level 5"}
             />
-            {/* <Select
-              value={level5Value}
-              onChange={(e) => setLevel5Value(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {level5Options &&
-                level5Options.map((options, index) => {
-                  return (
-                    <option value={options.level5} key={index}>
-                      {options.level5}
-                    </option>
-                  );
-                })}
-            </Select> */}
           </FormControl>
           {/* Sector */}
           <FormControl className="relative">
@@ -649,20 +551,6 @@ const EeioForm = ({
               text={"Select sector"}
               placeholder={"Search sector"}
             />
-            {/* <Select
-              value={sectorValue}
-              onChange={(e) => setSectorValue(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {sectorOptions &&
-                sectorOptions.map((options, index) => {
-                  return (
-                    <option value={options.sector} key={index}>
-                      {options.sector}
-                    </option>
-                  );
-                })}
-            </Select> */}
           </FormControl>
           {/* Currency */}
           <FormControl>

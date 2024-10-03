@@ -10,8 +10,10 @@ import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
 import Select from "../../components/ui/Select.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import { UserContext } from "../../contexts/UserContext.jsx";
+import { api } from "../../../api/index.js";
+import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
 
-const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
+const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
   const [businessUnitId, setBusinessUnitId] = useState("");
   const [continent, setContinent] = useState("");
   const [country, setCountry] = useState("");
@@ -21,7 +23,6 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
   const [unitOfMeasurement, setUnitOfMeasurement] = useState("");
   const [quantity, setQuantity] = useState("");
 
-  const [businessUnitOptions, setBusinessUnitOptions] = useState([]);
   const [continentOptions, setContinentOptions] = useState([]);
   const [countryOptions, setCountryOptions] = useState([]);
   const [regionOptions, setRegionOptions] = useState([]);
@@ -109,9 +110,17 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
         }
         resetForm();
       })
-      .then(() => {
+      .then(async () => {
         toast.success("Data submitted successfully");
-        fetchUserBusinessUnitsActivities();
+        const { success, message, data } =
+          await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+        if (success) {
+          setBusinessUnitsActivities(
+            filterBusinessUnitsActivitiesForSelectedPeriod(data, selectedPeriod)
+          );
+        } else {
+          toast.error(message);
+        }
       })
       .catch((error) => {
         toast.error("Error adding data");
@@ -158,8 +167,19 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
           resetForm();
           navigation("/activities");
         })
-        .then(() => {
-          fetchUserBusinessUnitsActivities();
+        .then(async () => {
+          const { success, message, data } =
+            await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+          if (success) {
+            setBusinessUnitsActivities(
+              filterBusinessUnitsActivitiesForSelectedPeriod(
+                data,
+                selectedPeriod
+              )
+            );
+          } else {
+            toast.error(message);
+          }
         });
     } catch (error) {
       const errorMessage = JSON.parse(error.message).error;
@@ -280,21 +300,6 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
       console.error("Error fetching businessUnits:", error);
     }
   };
-
-  useEffect(() => {
-    if (selectedPeriod) {
-      fetchBusinessUnits().then(async (businessUnits) => {
-        if (businessUnits.length === 0) {
-          toast.info("Please add business unit first");
-          return;
-        }
-        businessUnits = businessUnits.filter((businessUnit) => {
-          return businessUnit.period === selectedPeriod;
-        });
-        setBusinessUnitOptions(businessUnits);
-      });
-    }
-  }, [selectedPeriod]);
 
   useEffect(() => {
     if (businessUnitId) {
@@ -440,8 +445,8 @@ const ReitForm = ({ fetchUserBusinessUnitsActivities }) => {
               onChange={(e) => setBusinessUnitId(e.target.value)}
             >
               <option value="">Select Option</option>
-              {businessUnitOptions.length > 0 ? (
-                businessUnitOptions.map((options, index) => {
+              {businessUnits.length > 0 ? (
+                businessUnits.map((options, index) => {
                   return (
                     <option value={options.id} key={index}>
                       {options.title}

@@ -4,6 +4,7 @@ import {
   getBusinessUnitActivityById,
   updateBusinessUnitActivityById,
   deleteBusinessUnitActivityById,
+  getAllBusinessUnitsActivities,
 } from "../controllers/businessUnitsActivities.controllers.js";
 import {
   isBusinessUnitActivityOwner,
@@ -40,5 +41,8 @@ businessUnitsActivitiesRouter.delete(
   isBusinessUnitActivityOwner,
   deleteBusinessUnitActivityById
 );
+
+// Get businessUnitsActivities for loggedIn user
+businessUnitsActivitiesRouter.get("/", getAllBusinessUnitsActivities);
 
 export { businessUnitsActivitiesRouter };

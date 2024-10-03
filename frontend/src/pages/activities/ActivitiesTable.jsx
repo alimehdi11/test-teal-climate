@@ -12,15 +12,13 @@ import {
   TableRow,
   TableCell,
 } from "../../components/ui/Table.jsx";
+import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
+import { api } from "../../../api/index.js";
 
 const ActivitiesTable = ({
-  userBusinessUnitsActivities,
-  fetchUserBusinessUnitsActivities,
-  setSelectedScope,
-  setSelectedLevel,
-  setIsSpendBaseScope3Selected,
-  setProductOrIndustry,
-  setIsReitSelected,
+  businessUnitsActivities,
+  setBusinessUnitsActivities,
+  selectedPeriod,
 }) => {
   const handleDelete = (id) => {
     return () => {
@@ -34,9 +32,19 @@ const ActivitiesTable = ({
           }
           toast.success("Data delete successfully");
         })
-        .then(() => {
-          // Row deleted fetched data again
-          fetchUserBusinessUnitsActivities();
+        .then(async () => {
+          const { success, message, data } =
+            await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+          if (success) {
+            setBusinessUnitsActivities(
+              filterBusinessUnitsActivitiesForSelectedPeriod(
+                data,
+                selectedPeriod
+              )
+            );
+          } else {
+            toast.error(message);
+          }
         })
         .catch((error) => {
           toast.error("Error deleting data");
@@ -45,7 +53,7 @@ const ActivitiesTable = ({
     };
   };
 
-  if (userBusinessUnitsActivities.length === 0) {
+  if (businessUnitsActivities.length === 0) {
     return null;
   }
 
@@ -108,133 +116,105 @@ const ActivitiesTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {userBusinessUnitsActivities.map(
-            (userBusinessUnitActivity, index) => (
-              <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{userBusinessUnitActivity.scope || "-"}</TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.businessUnit.title || "-"}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.level1Category || "-"}
-                </TableCell>
-                <TableCell>{userBusinessUnitActivity.level1 || "-"}</TableCell>
-                <TableCell>{userBusinessUnitActivity.level2 || "-"}</TableCell>
-                <TableCell>{userBusinessUnitActivity.level3 || "-"}</TableCell>
-                <TableCell>{userBusinessUnitActivity.level4 || "-"}</TableCell>
-                <TableCell>{userBusinessUnitActivity.level5 || "-"}</TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.unitOfMeasurement || "-"}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.quantity || "-"}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.month.charAt(0).toUpperCase() +
-                    userBusinessUnitActivity.month.slice(1) || "-"}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.level1Category || "-"}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.exioBaseCode || "-"}
-                </TableCell>
-                <TableCell>{userBusinessUnitActivity.country || "-"}</TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.continent || "-"}
-                </TableCell>
-                <TableCell>{userBusinessUnitActivity.sector || "-"}</TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.productOrIndustry || "-"}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.reference || "-"}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.eeio
-                    ? String(userBusinessUnitActivity.eeio)
-                    : "-"}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.reit
-                    ? String(userBusinessUnitActivity.reit)
-                    : "-"}
-                </TableCell>
-                <TableCell>{userBusinessUnitActivity.region || "-"}</TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.assetType || "-"}
-                </TableCell>
-                <TableCell>{userBusinessUnitActivity.year || "-"}</TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.CO2e === 0
-                    ? "-"
-                    : userBusinessUnitActivity.CO2e?.toFixed(2)}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.CO2e_of_CO2 === 0
-                    ? "-"
-                    : userBusinessUnitActivity.CO2e_of_CO2?.toFixed(2)}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.CO2e_of_CH4 === 0
-                    ? "-"
-                    : userBusinessUnitActivity.CO2e_of_CH4?.toFixed(2)}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.CO2e_of_N2O === 0
-                    ? "-"
-                    : userBusinessUnitActivity.CO2e_of_N2O?.toFixed(2)}
-                </TableCell>
-                <TableCell>
-                  {userBusinessUnitActivity.CO2e_of_other === 0
-                    ? "-"
-                    : userBusinessUnitActivity.CO2e_of_other?.toFixed(2)}
-                </TableCell>
-                <TableCell>
-                  <div className="flex justify-center gap-x-1">
-                    <Link
-                      to={`/activities/${userBusinessUnitActivity.id}/edit`}
-                      className="flex justify-center items-center"
-                      onClick={() => {
-                        if (userBusinessUnitActivity.eeio) {
-                          setIsSpendBaseScope3Selected(true);
-                          setProductOrIndustry(
-                            userBusinessUnitActivity.productOrIndustry
-                          );
-                          setSelectedScope(null);
-                          setSelectedLevel(null);
-                          setIsReitSelected(false);
-                        } else if (userBusinessUnitActivity.reit) {
-                          setIsSpendBaseScope3Selected(false);
-                          setProductOrIndustry("");
-                          setSelectedScope(null);
-                          setSelectedLevel(null);
-                          setIsReitSelected(true);
-                        } else {
-                          setIsSpendBaseScope3Selected(false);
-                          setProductOrIndustry("");
-                          setIsReitSelected(false);
-                          setSelectedScope(userBusinessUnitActivity.scope);
-                          setSelectedLevel(userBusinessUnitActivity.level1);
-                        }
-                      }}
-                    >
-                      <img
-                        src={editIcon}
-                        className="p-1 rounded hover:bg-slate-300 size-7"
-                      />
-                    </Link>
+          {businessUnitsActivities.map((businessUnitActivity, index) => (
+            <TableRow key={index}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{businessUnitActivity.scope || "-"}</TableCell>
+              <TableCell>
+                {businessUnitActivity.businessUnit.title || "-"}
+              </TableCell>
+              <TableCell>
+                {businessUnitActivity.level1Category || "-"}
+              </TableCell>
+              <TableCell>{businessUnitActivity.level1 || "-"}</TableCell>
+              <TableCell>{businessUnitActivity.level2 || "-"}</TableCell>
+              <TableCell>{businessUnitActivity.level3 || "-"}</TableCell>
+              <TableCell>{businessUnitActivity.level4 || "-"}</TableCell>
+              <TableCell>{businessUnitActivity.level5 || "-"}</TableCell>
+              <TableCell>
+                {businessUnitActivity.unitOfMeasurement || "-"}
+              </TableCell>
+              <TableCell>{businessUnitActivity.quantity || "-"}</TableCell>
+              <TableCell>
+                {businessUnitActivity.month.charAt(0).toUpperCase() +
+                  businessUnitActivity.month.slice(1) || "-"}
+              </TableCell>
+              <TableCell>
+                {businessUnitActivity.level1Category || "-"}
+              </TableCell>
+              <TableCell>{businessUnitActivity.exioBaseCode || "-"}</TableCell>
+              <TableCell>{businessUnitActivity.country || "-"}</TableCell>
+              <TableCell>{businessUnitActivity.continent || "-"}</TableCell>
+              <TableCell>{businessUnitActivity.sector || "-"}</TableCell>
+              <TableCell>
+                {businessUnitActivity.productOrIndustry || "-"}
+              </TableCell>
+              <TableCell>{businessUnitActivity.reference || "-"}</TableCell>
+              <TableCell>
+                {businessUnitActivity.eeio
+                  ? String(businessUnitActivity.eeio)
+                  : "-"}
+              </TableCell>
+              <TableCell>
+                {businessUnitActivity.reit
+                  ? String(businessUnitActivity.reit)
+                  : "-"}
+              </TableCell>
+              <TableCell>{businessUnitActivity.region || "-"}</TableCell>
+              <TableCell>{businessUnitActivity.assetType || "-"}</TableCell>
+              <TableCell>{businessUnitActivity.year || "-"}</TableCell>
+              <TableCell>
+                {businessUnitActivity.CO2e === 0
+                  ? "-"
+                  : businessUnitActivity.CO2e?.toFixed(2)}
+              </TableCell>
+              <TableCell>
+                {businessUnitActivity.CO2e_of_CO2 === 0
+                  ? "-"
+                  : businessUnitActivity.CO2e_of_CO2?.toFixed(2)}
+              </TableCell>
+              <TableCell>
+                {businessUnitActivity.CO2e_of_CH4 === 0
+                  ? "-"
+                  : businessUnitActivity.CO2e_of_CH4?.toFixed(2)}
+              </TableCell>
+              <TableCell>
+                {businessUnitActivity.CO2e_of_N2O === 0
+                  ? "-"
+                  : businessUnitActivity.CO2e_of_N2O?.toFixed(2)}
+              </TableCell>
+              <TableCell>
+                {businessUnitActivity.CO2e_of_other === 0
+                  ? "-"
+                  : businessUnitActivity.CO2e_of_other?.toFixed(2)}
+              </TableCell>
+              <TableCell>
+                <div className="flex justify-center gap-x-1">
+                  <Link
+                    to={
+                      `/activities/${businessUnitActivity.id}/edit` +
+                      (businessUnitActivity.eeio
+                        ? "?eeio=true"
+                        : businessUnitActivity.reit
+                          ? "?reit=true"
+                          : "")
+                    }
+                    className="flex justify-center items-center"
+                  >
                     <img
-                      src={trashIcon}
+                      src={editIcon}
                       className="p-1 rounded hover:bg-slate-300 size-7"
-                      onClick={handleDelete(userBusinessUnitActivity.id)}
                     />
-                  </div>
-                </TableCell>
-              </TableRow>
-            )
-          )}
+                  </Link>
+                  <img
+                    src={trashIcon}
+                    className="p-1 rounded hover:bg-slate-300 size-7"
+                    onClick={handleDelete(businessUnitActivity.id)}
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

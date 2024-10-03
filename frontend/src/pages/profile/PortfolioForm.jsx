@@ -7,12 +7,11 @@ import FormControl from "../../components/FormControl.jsx";
 import Input from "../../components/ui/Input.jsx";
 import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
-import { FaAngleDown } from "react-icons/fa6";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
-import { formatDate } from "../../utils/date.js";
 import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
+import { api } from "../../../api/index.js";
 
-const PortfolioForm = ({ fetchBusinessUnits }) => {
+const PortfolioForm = ({ setBusinessUnits }) => {
   const [countriesData, setCountriesData] = useState([]);
   const [regions, setRegions] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -104,7 +103,14 @@ const PortfolioForm = ({ fetchBusinessUnits }) => {
         resetForm();
       })
       .then(async () => {
-        fetchBusinessUnits();
+        const { data, success, message } =
+          await api.businessUnits.getAllBusinessUnits(selectedPeriod);
+        console.log("data", data);
+        if (success) {
+          setBusinessUnits(data);
+        } else {
+          toast.error(message);
+        }
       })
       .catch((error) => {
         const errorMessage = JSON.parse(error.message).error;
@@ -192,7 +198,13 @@ const PortfolioForm = ({ fetchBusinessUnits }) => {
         resetForm();
       })
       .then(async () => {
-        fetchBusinessUnits();
+        const { data, success, message } =
+          await api.businessUnits.getAllBusinessUnits(selectedPeriod);
+        if (success) {
+          setBusinessUnits(data);
+        } else {
+          toast.error(message);
+        }
         navigate("/profile");
       })
       .catch((error) => {
