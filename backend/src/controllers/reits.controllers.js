@@ -20,7 +20,7 @@ const getReits = async (req, res) => {
     if (assetType) whereClause.assetType = assetType;
     if (year) whereClause.year = year;
     if (unitOfMeasurement) whereClause.unitOfMeasurement = unitOfMeasurement;
-    let attributes = [];
+    const attributes = [];
     if (column) {
       if (distinct === "true") {
         attributes.push([

@@ -286,23 +286,6 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
     }
   };
 
-  const fetchBusinessUnits = async () => {
-    try {
-      const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnits`,
-        "GET"
-      );
-      if (!response.ok) {
-        throw new Error(JSON.stringify((await response.json()).error));
-      }
-      return await response.json();
-    } catch (error) {
-      let errorMessage = JSON.parse(error.message).error;
-      console.log(errorMessage);
-      console.error("Error fetching businessUnits:", error);
-    }
-  };
-
   useEffect(() => {
     if (businessUnitId) {
       fetchContinents();
