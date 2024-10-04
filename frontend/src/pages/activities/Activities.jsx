@@ -24,6 +24,7 @@ const Activities = () => {
   const [businessUnits, setBusinessUnits] = useState([]);
   const { id } = useParams();
   const [searchParams] = useSearchParams();
+  const [isScopeSelected, setIsScopeSelected] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -55,21 +56,20 @@ const Activities = () => {
         setSelectedLevel("");
         setIsReitSelected(false);
         setIsSpendBaseScope3Selected(true);
+        setIsScopeSelected(false);
       } else if (searchParams.get("reit")) {
         setSelectedScope("");
         setSelectedLevel("");
         setIsReitSelected(true);
         setIsSpendBaseScope3Selected(false);
+        setIsScopeSelected(false);
       } else {
-        setIsReitSelected(false);
         setIsSpendBaseScope3Selected(false);
+        setIsReitSelected(false);
+        setIsScopeSelected(true);
       }
     }
   }, [id]);
-
-  useEffect(() => {
-    console.log("selectedScope", selectedScope);
-  }, [selectedScope]);
 
   return (
     <>
@@ -85,6 +85,7 @@ const Activities = () => {
           setProductOrIndustry={setProductOrIndustry}
           setIsReitSelected={setIsReitSelected}
           isReitSelected={isReitSelected}
+          setIsScopeSelected={setIsScopeSelected}
         />
       </Sidebar>
       <Main>

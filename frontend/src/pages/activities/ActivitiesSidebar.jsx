@@ -16,6 +16,7 @@ const ActivitiesSidebar = ({
   setProductOrIndustry,
   setIsReitSelected,
   isReitSelected,
+  setIsScopeSelected,
 }) => {
   const [level1, setLevel1] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,10 +59,6 @@ const ActivitiesSidebar = ({
     }
   }, [searchQuery]);
 
-  useEffect(() => {
-    console.log("selectedScope inside sidebar", selectedScope);
-  }, [selectedScope]);
-
   return (
     <>
       <DropdownMenu
@@ -79,6 +76,7 @@ const ActivitiesSidebar = ({
                   setIsReitSelected(false);
                   setIsSpendBaseScope3Selected(false);
                   setSelectedScope(e.target.innerText);
+                  setIsScopeSelected(true);
                 }}
               >
                 {scope}
@@ -96,6 +94,7 @@ const ActivitiesSidebar = ({
                 setSelectedScope("");
                 setSelectedLevel("");
                 setIsSpendBaseScope3Selected(true);
+                setIsScopeSelected(false);
               }}
             >
               Spend Base Scope 3
@@ -109,6 +108,7 @@ const ActivitiesSidebar = ({
                 setSelectedLevel("");
                 setIsSpendBaseScope3Selected(false);
                 setIsReitSelected(true);
+                setIsScopeSelected(false);
               }}
             >
               Real State Scope 3

@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";
@@ -40,6 +40,7 @@ const EeioForm = ({
   const { id } = useParams();
   const navigation = useNavigate();
   const { selectedPeriod, getPeriodMonths } = usePeriod();
+  const [searchParams] = useSearchParams();
   const level1Options = [
     "Activities of households",
     "Public administration and defence; compulsory social security",
@@ -394,9 +395,10 @@ const EeioForm = ({
   }, [level5Value]);
 
   useEffect(() => {
-    if (id) {
+    if (id && searchParams.get("eeio")) {
       setIsFormInitializing(true);
       fetchActivityById().then((activity) => {
+        console.log("Inside EeioForm.jsx");
         setBusinessUnitValue(activity.businessUnit.id);
         setLevel1Value(activity.level1);
         setLevel2Value(activity.level2);

@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";
 import FormControl from "../../components/FormControl.jsx";
@@ -65,6 +65,7 @@ const ActivitesForm = ({
   const years = [currentYear, currentYear - 1];
 
   const { selectedPeriod, getPeriodMonths } = usePeriod();
+  const [searchParams] = useSearchParams();
 
   const filterScopeCategories = () => {
     let level2 = [];
@@ -1567,7 +1568,7 @@ const ActivitesForm = ({
   }, [unitOfMeasurementValue]);
 
   useEffect(() => {
-    if (id) {
+    if (id && !searchParams.get("eeio") && !searchParams.get("reit")) {
       fetchActivityById()
         .then((activity) => {
           console.log("Inside ActivitesForm.jsx");

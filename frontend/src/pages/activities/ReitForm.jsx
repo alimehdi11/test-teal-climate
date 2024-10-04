@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext, useLayoutEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";
@@ -36,6 +36,8 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
   const { user } = useContext(UserContext);
 
   const [isFormInitializing, setIsFormInitializing] = useState(false);
+
+  const [searchParams] = useSearchParams();
 
   const fetchActivityById = async () => {
     try {
@@ -386,9 +388,10 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
   }, [year]);
 
   useEffect(() => {
-    if (id) {
+    if (id && searchParams.get("reit")) {
       setIsFormInitializing(true);
       fetchActivityById().then((activity) => {
+        console.log("Inside ReitForm.jsx");
         setBusinessUnitId(activity.businessUnit.id);
         setContinent(activity.continent);
         setCountry(activity.country);

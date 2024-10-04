@@ -105,7 +105,6 @@ const PortfolioForm = ({ setBusinessUnits }) => {
       .then(async () => {
         const { data, success, message } =
           await api.businessUnits.getAllBusinessUnits(selectedPeriod);
-        console.log("data", data);
         if (success) {
           setBusinessUnits(data);
         } else {
@@ -242,22 +241,21 @@ const PortfolioForm = ({ setBusinessUnits }) => {
 
   useEffect(() => {
     if (selectedContinent) {
+      filterCountriesByContinent();
       if (!isFormInitializing) {
         setSelectedCountry("");
+        setSelectedRegion("");
+        setRegions([]);
       }
-      filterCountriesByContinent();
-    } else {
-      setSelectedCountry("");
-      setCountries([]);
     }
   }, [selectedContinent]);
 
   useEffect(() => {
     if (selectedCountry) {
       filterRegionByCountries();
-    } else {
-      setSelectedRegion("");
-      setRegions([]);
+      if (!isFormInitializing) {
+        setSelectedRegion("");
+      }
     }
   }, [selectedCountry]);
 
