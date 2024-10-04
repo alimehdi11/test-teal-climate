@@ -398,7 +398,6 @@ const EeioForm = ({
     if (id && searchParams.get("eeio")) {
       setIsFormInitializing(true);
       fetchActivityById().then((activity) => {
-        console.log("Inside EeioForm.jsx");
         setBusinessUnitValue(activity.businessUnit.id);
         setLevel1Value(activity.level1);
         setLevel2Value(activity.level2);

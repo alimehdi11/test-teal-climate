@@ -1571,7 +1571,6 @@ const ActivitesForm = ({
     if (id && !searchParams.get("eeio") && !searchParams.get("reit")) {
       fetchActivityById()
         .then((activity) => {
-          console.log("Inside ActivitesForm.jsx");
           setScopeCategoryValue(activity.level1Category);
           setBusinessUnitValue(activity.businessUnit.id);
           if (selectedLevel !== "District heat and steam TandD") {

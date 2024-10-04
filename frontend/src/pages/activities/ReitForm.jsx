@@ -374,7 +374,6 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
     if (id && searchParams.get("reit")) {
       setIsFormInitializing(true);
       fetchActivityById().then((activity) => {
-        console.log("Inside ReitForm.jsx");
         setBusinessUnitId(activity.businessUnit.id);
         setContinent(activity.continent);
         setCountry(activity.country);
