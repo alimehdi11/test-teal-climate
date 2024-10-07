@@ -10,6 +10,7 @@ export default {
         "tc-sidebar-heading": "rgba(8,36,49,0.5)",
         "tc-black": "rgba(39, 50, 64, 1)",
         "tc-input-background": "rgba(247, 248, 250, 1)",
+        "tc-input-disabled-background": "rgba(230, 230, 230, 1)",
         "tc-indigo-light": "rgba(112, 127, 221, 0.1)",
         "forest-green": "#32b950",
         "golden-rod": "#e6ba1f",

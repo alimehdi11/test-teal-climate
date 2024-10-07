@@ -67,15 +67,8 @@ const ActivitesForm = ({
   const { selectedPeriod, getPeriodMonths } = usePeriod();
   const [searchParams] = useSearchParams();
 
-  const filterScopeCategories = () => {
-    let level2 = [];
-    level1Categories?.forEach((item) => {
-      if (item.level1 === selectedLevel) {
-        level2.push(item.category);
-      }
-    });
-    level2 = [...new Set(level2)];
-    return level2;
+  const getLevel1Categories = async () => {
+   return await api.level1Categories.getAllLevel1Categories()
   };
 
   const filterUnitOfMeasurements = () => {
@@ -1215,8 +1208,10 @@ const ActivitesForm = ({
     "WTT- business travel- air": "Airport To",
   };
 
-  useEffect(() => {
-    // if (!id) {
+  useEffect(
+    () => {
+    (async() => {
+      // if (!id) {
     setScopeCategoryValue("");
     setShowFuelNamesField(false);
     setShowLevel4Field(false);
@@ -1230,8 +1225,9 @@ const ActivitesForm = ({
       activities !== null &&
       businessUnits.length > 0
     ) {
-      const scopeCategories = filterScopeCategories();
+      const scopeCategories = await getLevel1Categories();
       setScopeCategories(scopeCategories);
+      console.log(scopeCategories)
       // show fields that are available
       if (
         selectedLevel !== "Electricity" &&
@@ -1336,6 +1332,8 @@ const ActivitesForm = ({
         // }
       }
     }
+    })()  
+    
   }, [selectedLevel, /*level1Categories, activities,*/ businessUnits]);
 
   /**

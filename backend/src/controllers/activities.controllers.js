@@ -14,6 +14,9 @@ const getAllActivities = async (req, res) => {
     if (level5) whereClause.level5 = level5;
     const attributes = [];
     if (column) {
+      whereClause[column] = {
+        [Sequelize.Op.not]: "",
+      };
       if (distinct === "true") {
         attributes.push([
           Sequelize.fn("DISTINCT", Sequelize.col(column)),

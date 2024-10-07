@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react";
-import ActivitesForm from "./ActivitesForm.jsx";
 import ActivitiesTable from "./ActivitiesTable.jsx";
 import ActivitiesSidebar from "./ActivitiesSidebar.jsx";
 import Sidebar from "../../components/layout/Sidebar.jsx";
@@ -11,6 +10,7 @@ import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import { api } from "../../../api/index.js";
 import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
 import { useSearchParams, useParams } from "react-router-dom";
+import ActivitesForm from "./ActivitiesForm2.jsx";
 
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState("Scope 1");
