@@ -4,7 +4,7 @@ const activities = {
   getAllActivities: async (queryParams) => {
     let response;
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/activities?${queryParams}`;     
+      const url = `${import.meta.env.VITE_API_BASE_URL}/activities${queryParams}`;
       const method = "GET";
       response = await request(url, method);
       if (!response.ok) {
@@ -18,7 +18,6 @@ const activities = {
       return { message: errorMessage, success: false };
     }
   },
-}
+};
 
-
-export {activities}
+export { activities };

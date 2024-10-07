@@ -1,179 +1,159 @@
-import { useEffect, useState } from 'react';
-import FormControl from '../../components/FormControl';
-import Label from '../../components/ui/Label';
-import SearchableSelect from '../../components/ui/SearchableSelect';
-import Select from '../../components/ui/Select';
-import { usePeriod } from '../../contexts/PeriodProvider';
+import { useEffect, useState } from "react";
+import FormControl from "../../components/FormControl";
+import Label from "../../components/ui/Label";
+import SearchableSelect from "../../components/ui/SearchableSelect";
+import Select from "../../components/ui/Select";
+import { usePeriod } from "../../contexts/PeriodProvider";
 import { api } from "../../../api/index.js";
-import Input from './../../components/ui/Input';
+import Input from "./../../components/ui/Input";
 const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
-  const [selectedBusinessUnitId, setSelectedBusinessUnitId] = useState();
-  const [level1CategoryOptions, setLevel1CategoryOptions] = useState([]);
-  const [level2CategoryOptions, setLevel2CategoryOptions] = useState([]);
-  const [level3CategoryOptions, setLevel3CategoryOptions] = useState([]);
-  const [level4CategoryOptions, setLevel4CategoryOptions] = useState([]);
-  const [level5CategoryOptions, setLevel5CategoryOptions] = useState([]);
+  const [businessUnitId, setBusinessUnitId] = useState("");
+  const [level1CategoriesOptions, setlevel1CategoriesOptions] = useState([]);
+  const [level2Options, setLevel2Options] = useState([]);
+  const [level3Options, setLevel3Options] = useState([]);
+  const [level4Options, setLevel4Options] = useState([]);
+  const [level5Options, setLevel5Options] = useState([]);
   const [unitOfMeasurementOptions, setUnitOfMeasurementOptions] = useState([]);
-  const [selectedLevel1Category, setSelectedLevel1Category] = useState();
-  const [selectedLevel2Category, setSelectedLevel2Category] = useState();
-  const [selectedLevel3Category, setSelectedLevel3Category] = useState();
-  const [selectedLevel4Category, setSelectedLevel4Category] = useState();
-  const [selectedLevel5Category, setSelectedLevel5Category] = useState();
-  const [selectedUnitOfMeasurement, setSelectedUnitOfMeasurement] = useState();
+
+  const [level1Category, setLevel1Category] = useState();
+  const [level2, setLevel2] = useState();
+  const [level3, setLevel3] = useState();
+  const [level4, setLevel4] = useState();
+  const [level5, setLevel5] = useState();
+  const [unitOfMeasurement, setUnitOfMeasurement] = useState();
   const [quantity, setQuantity] = useState("");
   const [month, setMonth] = useState();
+
   const { getPeriodMonths } = usePeriod();
 
-
-
-
-  // Automatically set selectedBusinessUnitId if there's only one business unit
+  // Automatically set businessUnitId if there's only one business unit
   useEffect(() => {
     if (businessUnits.length === 1) {
-      setSelectedBusinessUnitId(businessUnits[0].id);
+      setBusinessUnitId(businessUnits[0].id);
     }
   }, [businessUnits]);
 
-
-
-
-
-  // Reusable fetch function for categories
-  const fetchCategories = async (fetchFunction, setOptions, selectedId) => {
-    if (selectedId == undefined) return;
+  // Reusable fetch function for activities
+  const fetchActivities = async (
+    callback,
+    setOptions,
+    previousInputValue,
+    setCurrentInputValue,
+    queryParams = {}
+  ) => {
+    if (previousInputValue === undefined) return;
     try {
-      const categories = await fetchFunction();
-      setOptions(categories.map(item => Object.values(item)[0]));
+      const queryString = "?" + new URLSearchParams(queryParams).toString();
+      const options = await callback(queryString);
+      if (options.length === 0) {
+        setOptions(options);
+        setCurrentInputValue("");
+      } else if (options.length > 0) {
+        setOptions(options.map((item) => Object.values(item)[0]));
+      }
     } catch (error) {
-      console.error("Failed to fetch categories:", error);
+      console.error("Failed to fetch activities:", error);
     }
   };
 
-  // Fetch Level 1 Categories based on the selected business unit
+  // Fetch "Level 1 Category" when business unit is selected
   useEffect(() => {
-    fetchCategories(
+    fetchActivities(
       () => api.level1Categories.getAllLevel1Categories(selectedLevel),
-      setLevel1CategoryOptions,
-      selectedBusinessUnitId
+      setlevel1CategoriesOptions,
+      businessUnitId
     );
-  }, [selectedBusinessUnitId]);
+  }, [businessUnitId]);
 
-  // Fetch Level 2 Categories based on the selected Level 1 Category
+  // Fetch level2 options when "Level 1 Category" is selected
   useEffect(() => {
-    const queryParams = `?scope=${selectedScope}&level1=${selectedLevel}&column=level2&distinct=true`
-    fetchCategories(
-      () => api.activities.getAllActivities(queryParams),
-      setLevel2CategoryOptions,
-      selectedLevel1Category
+    fetchActivities(
+      api.activities.getAllActivities,
+      setLevel2Options,
+      level1Category,
+      null,
+      {
+        scope: selectedScope,
+        level1: selectedLevel,
+        column: "level2",
+        distinct: "true",
+      }
     );
+  }, [level1Category]);
 
-  }, [selectedLevel1Category]);
-
-  // Fetch Level 3 Categories based on the selected Level 2 Category
+  // Fetch level3 options based on level2 when level2 is selected
   useEffect(() => {
-    const queryParams = `?scope=${selectedScope}&level1=${selectedLevel}&level2=${selectedLevel2Category}&column=level3&distinct=true`
-    fetchCategories(
-      () => api.activities.getAllActivities(queryParams),
-      setLevel3CategoryOptions,
-      selectedLevel2Category
+    fetchActivities(
+      api.activities.getAllActivities,
+      setLevel3Options,
+      level2,
+      null,
+      {
+        scope: selectedScope,
+        level1: selectedLevel,
+        level2: level2,
+        column: "level3",
+        distinct: "true",
+      }
     );
+  }, [level2]);
 
-
-  }, [selectedLevel2Category]);
-
-
+  // Fetch level4 options based on level3 when level3 is selected
   useEffect(() => {
-    const queryParams = `?scope=${selectedScope}&level1=${selectedLevel}&level2=${selectedLevel2Category}&level3=${selectedLevel3Category}&column=level4&distinct=true`
-    // fetchCategories(
-    //   () => api.activities.getAllActivities(queryParams),
-    //   setLevel4CategoryOptions,
-    //   selectedLevel3Category
-    // ).then(() => {
-    //   console.log("level4CategoryOptions", level4CategoryOptions)
-    //   console.log("level5CategoryOptions", level5CategoryOptions)
-    //   if(selectedLevel3Category){
-    //     if (level4CategoryOptions.length == 0) {
-    //       console.log("heloo");
-    //       setSelectedLevel4Category("")
-    //       setSelectedLevel5Category("")
-    //     }
-    //   }
-    // })
-    if (selectedLevel3Category) {
-      (async () => {
-        const level4Categories = await api.activities.getAllActivities(queryParams);
-        setSelectedLevel4Category(level4Categories)
+    fetchActivities(
+      api.activities.getAllActivities,
+      setLevel4Options,
+      level3,
+      setLevel4,
+      {
+        scope: selectedScope,
+        level1: selectedLevel,
+        level2: level2,
+        level3: level3,
+        column: "level4",
+        distinct: "true",
+      }
+    );
+  }, [level3]);
 
-        console.log("level4Categories", level4Categories)
-        if (level4Categories.length == 0) {
-          console.log("hello");
-          setSelectedLevel4Category("")
-          setSelectedLevel5Category("")
-        } 
-      })()
-    }
-
-  }, [selectedLevel3Category])
-
+  // Fetch level5 options based on level4 when level4 is selected
   useEffect(() => {
-    const queryParams = `?scope=${selectedScope}&level1=${selectedLevel}&level2=${selectedLevel2Category}&level3=${selectedLevel3Category}&level4=${selectedLevel4Category}&column=level5&distinct=true`
-    if (level4CategoryOptions.length > 0 && level4CategoryOptions) {
-      fetchCategories(
-        () => api.activities.getAllActivities(queryParams),
-        setLevel5CategoryOptions,
-        selectedLevel4Category
-      );
-      if (level5CategoryOptions.length == 0) {
-        setSelectedLevel5Category("")
+    fetchActivities(
+      api.activities.getAllActivities,
+      setLevel5Options,
+      level4,
+      setLevel5,
+      {
+        scope: selectedScope,
+        level1: selectedLevel,
+        level2: level2,
+        level3: level3,
+        level4: level4,
+        column: "level5",
+        distinct: "true",
       }
-    }
-  }, [selectedLevel4Category])
+    );
+  }, [level4]);
 
+  // Fetch unitOfMeasurementOptions based on level5 when level5 is selected
   useEffect(() => {
-
-    const queryParams = `?scope=${selectedScope}&level1=${selectedLevel}&level2=${selectedLevel2Category}&level3=${selectedLevel3Category}&level4=${selectedLevel4Category}&level5=${selectedLevel5Category}&column=unitOfMeasurement&distinct=true`;
-
-    const fetchCategories = async () => {
-      try {
-        const categories = await api.activities.getAllActivities(queryParams);
-        setUnitOfMeasurementOptions(categories.map(item => Object.values(item)[0]));
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
+    fetchActivities(
+      api.activities.getAllActivities,
+      setUnitOfMeasurementOptions,
+      level5,
+      null,
+      {
+        scope: selectedScope,
+        level1: selectedLevel,
+        level2: level2,
+        level3: level3,
+        level4: level4,
+        level5: level5,
+        column: "unitOfMeasurement",
+        distinct: "true",
       }
-    };
-
-
-    if (selectedLevel4Category !== undefined && selectedLevel5Category !== undefined) {
-      fetchCategories();
-    }
-
-
-  }, [selectedLevel4Category, selectedLevel5Category]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-  const handleQuantity = (val) => {
-    let qty = Number(val);
-    if (qty != NaN || val == "") {
-      if (isNaN(qty) && val != "") {
-        return;
-      } else {
-        setQuantity(val)
-      }
-    }
-
-  }
-
+    );
+  }, [level5]);
 
   return (
     <form className="flex flex-col gap-y-3 bg-white rounded-md p-6">
@@ -189,12 +169,11 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
             placeholder={"Search month"}
           />
         </FormControl>
-
         <FormControl className="flex-1 relative">
           <Label>Business Unit</Label>
           <Select
-            value={selectedBusinessUnitId || ""}
-            onChange={(e) => setSelectedBusinessUnitId(e.target.value)}
+            value={businessUnitId}
+            onChange={(e) => setBusinessUnitId(e.target.value)}
           >
             <option value="">Select Option</option>
             {businessUnits.length > 0 ? (
@@ -204,75 +183,72 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
                 </option>
               ))
             ) : (
-              <option disabled>'Profile not found, create profile first'</option>
+              <option disabled>
+                'Profile not found, create profile first'
+              </option>
             )}
           </Select>
         </FormControl>
-
         <FormControl className="flex-1 relative">
           <Label>Level 1 Category</Label>
           <SearchableSelect
-            data={level1CategoryOptions}
-            item={selectedLevel1Category}
-            setItem={setSelectedLevel1Category}
+            data={level1CategoriesOptions}
+            item={level1Category}
+            setItem={setLevel1Category}
             text={"Select Level 1 Category"}
             placeholder={"Search Level 1 Category"}
           />
         </FormControl>
-
         <FormControl className="flex-1 relative">
           <Label>Level 2</Label>
           <SearchableSelect
-            data={level2CategoryOptions}
-            item={selectedLevel2Category}
-            setItem={setSelectedLevel2Category}
+            data={level2Options}
+            item={level2}
+            setItem={setLevel2}
             text={"Select Level 2 Category"}
             placeholder={"Search Level 2 Category"}
           />
         </FormControl>
-
         <FormControl className="flex-1 relative">
           <Label>Level 3</Label>
           <SearchableSelect
-            data={level3CategoryOptions}
-            item={selectedLevel3Category}
-            setItem={setSelectedLevel3Category}
+            data={level3Options}
+            item={level3}
+            setItem={setLevel3}
             text={"Select Level 3 Category"}
             placeholder={"Search Level 3 Category"}
           />
         </FormControl>
-        {
-          level4CategoryOptions.length > 0 &&
+        {level4Options.length > 0 && (
           <FormControl className="flex-1 relative">
             <Label>Level 4</Label>
             <SearchableSelect
-              data={level4CategoryOptions}
-              item={selectedLevel4Category}
-              setItem={setSelectedLevel4Category}
+              data={level4Options}
+              item={level4}
+              setItem={setLevel4}
               text={"Select Level 4 Category"}
               placeholder={"Search Level 4 Category"}
             />
           </FormControl>
-        }
-        {
-          level5CategoryOptions.length > 0 &&
+        )}
+        {level5Options.length > 0 && (
           <FormControl className="flex-1 relative">
             <Label>Level 5</Label>
             <SearchableSelect
-              data={level5CategoryOptions}
-              item={selectedLevel5Category}
-              setItem={setSelectedLevel5Category}
+              data={level5Options}
+              item={level5}
+              setItem={setLevel5}
               text={"Select Level 5 Category"}
               placeholder={"Search Level 5 Category"}
             />
           </FormControl>
-        }
+        )}
         <FormControl className="flex-1 relative">
           <Label>Unit Of Measurement</Label>
           <SearchableSelect
             data={unitOfMeasurementOptions}
-            item={selectedUnitOfMeasurement}
-            setItem={setSelectedUnitOfMeasurement}
+            item={unitOfMeasurement}
+            setItem={setUnitOfMeasurement}
             text={"Select Unit Of Measurement"}
             placeholder={"Select Unit Of Measurement"}
           />
@@ -283,7 +259,14 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
           <Input
             type="text"
             value={quantity}
-            onChange={e => handleQuantity(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === "0") {
+                setQuantity("");
+              } else if (!isNaN(Number(value))) {
+                setQuantity(value);
+              }
+            }}
             placeholder="Enter Quantity"
           />
         </FormControl>
