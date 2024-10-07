@@ -68,7 +68,7 @@ const ActivitesForm = ({
   const [searchParams] = useSearchParams();
 
   const getLevel1Categories = async () => {
-   return await api.level1Categories.getAllLevel1Categories()
+    return await api.level1Categories.getAllLevel1Categories();
   };
 
   const filterUnitOfMeasurements = () => {
@@ -1208,132 +1208,130 @@ const ActivitesForm = ({
     "WTT- business travel- air": "Airport To",
   };
 
-  useEffect(
-    () => {
-    (async() => {
+  useEffect(() => {
+    (async () => {
       // if (!id) {
-    setScopeCategoryValue("");
-    setShowFuelNamesField(false);
-    setShowLevel4Field(false);
-    setShowLevel5Field(false);
-    setUnitOfMeasurementValue("");
-    setUnitOfMeasurements([]);
-    // }
-    // initialialy blocking not to filter if level1Categories or activities or businessUnits is empty
-    if (
-      level1Categories !== null &&
-      activities !== null &&
-      businessUnits.length > 0
-    ) {
-      const scopeCategories = await getLevel1Categories();
-      setScopeCategories(scopeCategories);
-      console.log(scopeCategories)
-      // show fields that are available
+      setScopeCategoryValue("");
+      setShowFuelNamesField(false);
+      setShowLevel4Field(false);
+      setShowLevel5Field(false);
+      setUnitOfMeasurementValue("");
+      setUnitOfMeasurements([]);
+      // }
+      // initialialy blocking not to filter if level1Categories or activities or businessUnits is empty
       if (
-        selectedLevel !== "Electricity" &&
-        selectedLevel !== "Electricity TandD" &&
-        selectedLevel !== "WTT- electricity (generation)" &&
-        selectedLevel !== "WTT- electricity (TandD)" &&
-        selectedLevel !== "WTT- electricity" &&
-        selectedLevel !== "Water supply" &&
-        selectedLevel !== "Water treatment" &&
-        selectedLevel !== "WTT- district heat and steam distribution" &&
-        selectedLevel !== "Managed assets- electricity" &&
-        selectedLevel !== "WTT- electricity (T&D)" &&
-        selectedLevel !== "Electricity T&D"
+        level1Categories !== null &&
+        activities !== null &&
+        businessUnits.length > 0
       ) {
-        // This is only to show inputs. There options will be filtered when its previous value input is selected
-        setShowFuelNamesField(isFuelNamesAvaialble());
+        const scopeCategories = await getLevel1Categories();
+        setScopeCategories(scopeCategories);
+        console.log(scopeCategories);
+        // show fields that are available
         if (
-          selectedLevel !== "Delivery Evs" &&
-          selectedLevel !== "Heat and steam" &&
-          selectedLevel !== "Electricity TandD for delivery Evs" &&
-          selectedLevel !== "WTT- heat and steam" &&
-          selectedLevel !== "Hotel stay"
+          selectedLevel !== "Electricity" &&
+          selectedLevel !== "Electricity TandD" &&
+          selectedLevel !== "WTT- electricity (generation)" &&
+          selectedLevel !== "WTT- electricity (TandD)" &&
+          selectedLevel !== "WTT- electricity" &&
+          selectedLevel !== "Water supply" &&
+          selectedLevel !== "Water treatment" &&
+          selectedLevel !== "WTT- district heat and steam distribution" &&
+          selectedLevel !== "Managed assets- electricity" &&
+          selectedLevel !== "WTT- electricity (T&D)" &&
+          selectedLevel !== "Electricity T&D"
+        ) {
+          // This is only to show inputs. There options will be filtered when its previous value input is selected
+          setShowFuelNamesField(isFuelNamesAvaialble());
+          if (
+            selectedLevel !== "Delivery Evs" &&
+            selectedLevel !== "Heat and steam" &&
+            selectedLevel !== "Electricity TandD for delivery Evs" &&
+            selectedLevel !== "WTT- heat and steam" &&
+            selectedLevel !== "Hotel stay"
+          ) {
+            if (
+              selectedLevel !== "Business travel- air" &&
+              selectedLevel !== "WTT- business travel- air"
+            ) {
+              setShowLevel4Field(isLevel4Available());
+            }
+            setShowLevel5Field(
+              selectedLevel === "Business travel- air" ||
+                selectedLevel === "WTT- business travel- air"
+                ? true
+                : isLevel5Available()
+            );
+          }
+        }
+
+        if (
+          selectedLevel === "Electricity" ||
+          selectedLevel === "Electricity TandD" ||
+          selectedLevel === "WTT- electricity (generation)" ||
+          selectedLevel === "WTT- electricity (TandD)" ||
+          selectedLevel === "WTT- electricity" ||
+          selectedLevel === "Water supply" ||
+          selectedLevel === "Water treatment" ||
+          selectedLevel === "District heat and steam TandD" ||
+          selectedLevel === "WTT- district heat and steam distribution" ||
+          selectedLevel === "Managed assets- electricity" ||
+          selectedLevel === "WTT- electricity (T&D)" ||
+          selectedLevel === "Electricity T&D" ||
+          selectedLevel === "Delivery Evs" ||
+          selectedLevel === "Heat and steam" ||
+          selectedLevel === "Electricity TandD for delivery Evs" ||
+          selectedLevel === "WTT- heat and steam" ||
+          selectedLevel === "Hotel stay" ||
+          selectedLevel === "Business travel- air" ||
+          selectedLevel === "WTT- business travel- air"
+        ) {
+          const unitOfMeasurements =
+            filterUnitOfMeasurementsBasedOnScopeAndLevel1();
+          setUnitOfMeasurements(unitOfMeasurements);
+        }
+
+        if (
+          selectedLevel === "Delivery Evs" ||
+          selectedLevel === "Heat and steam" ||
+          selectedLevel === "Electricity TandD for delivery Evs" ||
+          selectedLevel === "WTT- heat and steam" ||
+          selectedLevel === "Hotel stay" ||
+          selectedLevel === "Business travel- air" ||
+          selectedLevel === "WTT- business travel- air"
         ) {
           if (
             selectedLevel !== "Business travel- air" &&
             selectedLevel !== "WTT- business travel- air"
           ) {
-            setShowLevel4Field(isLevel4Available());
+            const level3 = filterLevel3BasedOnScopeAndLevel1();
+            setFuelNames(level3);
           }
-          setShowLevel5Field(
-            selectedLevel === "Business travel- air" ||
-              selectedLevel === "WTT- business travel- air"
-              ? true
-              : isLevel5Available()
-          );
+
+          // if (
+          // selectedLevel === "Business travel- air" ||
+          // selectedLevel === "WTT- business travel- air"
+          // ) {
+          const level4Options = (() => {
+            let level4Options = [];
+            activities?.forEach((item) => {
+              if (
+                item.scope === selectedScope &&
+                item.level1 === selectedLevel &&
+                item.level4 !== "null" &&
+                item.level4
+              ) {
+                level4Options.push(item.level4);
+              }
+            });
+            level4Options = [...new Set(level4Options)];
+            return level4Options;
+          })();
+          setLevel4Options(level4Options);
+          // }
         }
       }
-
-      if (
-        selectedLevel === "Electricity" ||
-        selectedLevel === "Electricity TandD" ||
-        selectedLevel === "WTT- electricity (generation)" ||
-        selectedLevel === "WTT- electricity (TandD)" ||
-        selectedLevel === "WTT- electricity" ||
-        selectedLevel === "Water supply" ||
-        selectedLevel === "Water treatment" ||
-        selectedLevel === "District heat and steam TandD" ||
-        selectedLevel === "WTT- district heat and steam distribution" ||
-        selectedLevel === "Managed assets- electricity" ||
-        selectedLevel === "WTT- electricity (T&D)" ||
-        selectedLevel === "Electricity T&D" ||
-        selectedLevel === "Delivery Evs" ||
-        selectedLevel === "Heat and steam" ||
-        selectedLevel === "Electricity TandD for delivery Evs" ||
-        selectedLevel === "WTT- heat and steam" ||
-        selectedLevel === "Hotel stay" ||
-        selectedLevel === "Business travel- air" ||
-        selectedLevel === "WTT- business travel- air"
-      ) {
-        const unitOfMeasurements =
-          filterUnitOfMeasurementsBasedOnScopeAndLevel1();
-        setUnitOfMeasurements(unitOfMeasurements);
-      }
-
-      if (
-        selectedLevel === "Delivery Evs" ||
-        selectedLevel === "Heat and steam" ||
-        selectedLevel === "Electricity TandD for delivery Evs" ||
-        selectedLevel === "WTT- heat and steam" ||
-        selectedLevel === "Hotel stay" ||
-        selectedLevel === "Business travel- air" ||
-        selectedLevel === "WTT- business travel- air"
-      ) {
-        if (
-          selectedLevel !== "Business travel- air" &&
-          selectedLevel !== "WTT- business travel- air"
-        ) {
-          const level3 = filterLevel3BasedOnScopeAndLevel1();
-          setFuelNames(level3);
-        }
-
-        // if (
-        // selectedLevel === "Business travel- air" ||
-        // selectedLevel === "WTT- business travel- air"
-        // ) {
-        const level4Options = (() => {
-          let level4Options = [];
-          activities?.forEach((item) => {
-            if (
-              item.scope === selectedScope &&
-              item.level1 === selectedLevel &&
-              item.level4 !== "null" &&
-              item.level4
-            ) {
-              level4Options.push(item.level4);
-            }
-          });
-          level4Options = [...new Set(level4Options)];
-          return level4Options;
-        })();
-        setLevel4Options(level4Options);
-        // }
-      }
-    }
-    })()  
-    
+    })();
   }, [selectedLevel, /*level1Categories, activities,*/ businessUnits]);
 
   /**

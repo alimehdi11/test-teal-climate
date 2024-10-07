@@ -17,7 +17,7 @@ const level1Categories = {
       console.error(errorMessage);
       return { message: errorMessage, success: false };
     }
-  }
+  },
 };
 
 export { level1Categories };
