@@ -27,25 +27,6 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
 
   const { getPeriodMonths } = usePeriod();
 
-  // Reset form fields when selectedLevel changes
-  // useEffect(() => {
-  // // Reset form fields
-  // setLevel1Category(undefined);
-  // setLevel2(undefined);
-  // setLevel3(undefined);
-  // setLevel4(undefined);
-  // setLevel5(undefined);
-  // setUnitOfMeasurement(undefined);
-  // setQuantity("");
-  // // Reset options arrays
-  // setlevel1CategoriesOptions([]);
-  // setLevel2Options([]);
-  // setLevel3Options([]);
-  // setLevel4Options([]);
-  // setLevel5Options([]);
-  // setUnitOfMeasurementOptions([]);
-  // }, [selectedLevel]);
-
   // Automatically set businessUnitId if there's only one business unit
   useEffect(() => {
     if (businessUnits.length === 1) {
@@ -225,6 +206,8 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
     e.preventDefault();
 
     const payload = {
+      scope: selectedScope,
+      level1: selectedLevel,
       businessUnitId,
       level1Category,
       level2,

@@ -27,6 +27,7 @@ const Activities = () => {
   const [isScopeSelected, setIsScopeSelected] = useState(true);
 
   useEffect(() => {
+    if (!selectedPeriod) return; // Early return
     (async () => {
       const { data, success, message } =
         await api.businessUnitsActivities.getAllBusinessUnitsActivities();
