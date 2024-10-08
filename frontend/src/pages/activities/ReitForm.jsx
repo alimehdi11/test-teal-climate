@@ -286,6 +286,13 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
     }
   };
 
+  // Automatically set businessUnitId if there's only one business unit
+  useEffect(() => {
+    if (businessUnits.length === 1) {
+      setBusinessUnitId(businessUnits[0].id);
+    }
+  }, [businessUnits]);
+
   useEffect(() => {
     if (businessUnitId) {
       fetchContinents();

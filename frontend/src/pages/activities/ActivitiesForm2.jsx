@@ -8,14 +8,8 @@ import { api } from "../../../api/index.js";
 import Input from "./../../components/ui/Input";
 import Button from "../../components/ui/Button.jsx";
 const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
+  const [month, setMonth] = useState();
   const [businessUnitId, setBusinessUnitId] = useState("");
-  const [level1CategoriesOptions, setlevel1CategoriesOptions] = useState([]);
-  const [level2Options, setLevel2Options] = useState([]);
-  const [level3Options, setLevel3Options] = useState([]);
-  const [level4Options, setLevel4Options] = useState([]);
-  const [level5Options, setLevel5Options] = useState([]);
-  const [unitOfMeasurementOptions, setUnitOfMeasurementOptions] = useState([]);
-
   const [level1Category, setLevel1Category] = useState();
   const [level2, setLevel2] = useState();
   const [level3, setLevel3] = useState();
@@ -23,32 +17,34 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
   const [level5, setLevel5] = useState();
   const [unitOfMeasurement, setUnitOfMeasurement] = useState();
   const [quantity, setQuantity] = useState("");
-  const [month, setMonth] = useState();
+
+  const [level1CategoriesOptions, setlevel1CategoriesOptions] = useState([]);
+  const [level2Options, setLevel2Options] = useState([]);
+  const [level3Options, setLevel3Options] = useState([]);
+  const [level4Options, setLevel4Options] = useState([]);
+  const [level5Options, setLevel5Options] = useState([]);
+  const [unitOfMeasurementOptions, setUnitOfMeasurementOptions] = useState([]);
 
   const { getPeriodMonths } = usePeriod();
 
   // Reset form fields when selectedLevel changes
-
-  useEffect(() => {
-    // Reset form fields
-    setLevel1Category("");
-    setLevel2("");
-    setLevel3("");
-    setLevel4("");
-    setLevel5("");
-    setUnitOfMeasurement("");
-    setQuantity("");
-  
-    // Reset options arrays
-    setlevel1CategoriesOptions([]);
-    setLevel2Options([]);
-    setLevel3Options([]);
-    setLevel4Options([]);
-    setLevel5Options([]);
-    setUnitOfMeasurementOptions([]);
-  }, [selectedLevel]);
-  
-
+  // useEffect(() => {
+  // // Reset form fields
+  // setLevel1Category(undefined);
+  // setLevel2(undefined);
+  // setLevel3(undefined);
+  // setLevel4(undefined);
+  // setLevel5(undefined);
+  // setUnitOfMeasurement(undefined);
+  // setQuantity("");
+  // // Reset options arrays
+  // setlevel1CategoriesOptions([]);
+  // setLevel2Options([]);
+  // setLevel3Options([]);
+  // setLevel4Options([]);
+  // setLevel5Options([]);
+  // setUnitOfMeasurementOptions([]);
+  // }, [selectedLevel]);
 
   // Automatically set businessUnitId if there's only one business unit
   useEffect(() => {
@@ -82,15 +78,40 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
 
   // Fetch "Level 1 Category" when business unit is selected
   useEffect(() => {
+    // Reset form fields
+    setLevel1Category(undefined);
+    setLevel2(undefined);
+    setLevel3(undefined);
+    setLevel4(undefined);
+    setLevel5(undefined);
+    setUnitOfMeasurement(undefined);
+    setQuantity("");
+    // Reset options arrays
+    setlevel1CategoriesOptions([]);
+    setLevel2Options([]);
+    setLevel3Options([]);
+    setLevel4Options([]);
+    setLevel5Options([]);
+    setUnitOfMeasurementOptions([]);
     fetchActivities(
       () => api.level1Categories.getAllLevel1Categories(selectedLevel),
       setlevel1CategoriesOptions,
-      businessUnitId
+      selectedLevel
     );
-  }, [businessUnitId]);
+  }, [selectedLevel]);
 
   // Fetch level2 options when "Level 1 Category" is selected
   useEffect(() => {
+    setLevel2(undefined);
+    setLevel3(undefined);
+    setLevel4(undefined);
+    setLevel5(undefined);
+    setUnitOfMeasurement(undefined);
+    setQuantity("");
+    setLevel3Options([]);
+    setLevel4Options([]);
+    setLevel5Options([]);
+    setUnitOfMeasurementOptions([]);
     fetchActivities(
       api.activities.getAllActivities,
       setLevel2Options,
@@ -107,6 +128,14 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
 
   // Fetch level3 options based on level2 when level2 is selected
   useEffect(() => {
+    setLevel3(undefined);
+    setLevel4(undefined);
+    setLevel5(undefined);
+    setUnitOfMeasurement(undefined);
+    setQuantity("");
+    setLevel4Options([]);
+    setLevel5Options([]);
+    setUnitOfMeasurementOptions([]);
     fetchActivities(
       api.activities.getAllActivities,
       setLevel3Options,
@@ -124,6 +153,12 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
 
   // Fetch level4 options based on level3 when level3 is selected
   useEffect(() => {
+    setLevel4(undefined);
+    setLevel5(undefined);
+    setUnitOfMeasurement(undefined);
+    setQuantity("");
+    setLevel5Options([]);
+    setUnitOfMeasurementOptions([]);
     fetchActivities(
       api.activities.getAllActivities,
       setLevel4Options,
@@ -142,6 +177,10 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
 
   // Fetch level5 options based on level4 when level4 is selected
   useEffect(() => {
+    setLevel5(undefined);
+    setUnitOfMeasurement(undefined);
+    setQuantity("");
+    setUnitOfMeasurementOptions([]);
     fetchActivities(
       api.activities.getAllActivities,
       setLevel5Options,
@@ -161,6 +200,8 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
 
   // Fetch unitOfMeasurementOptions based on level5 when level5 is selected
   useEffect(() => {
+    setUnitOfMeasurement(undefined);
+    setQuantity("");
     fetchActivities(
       api.activities.getAllActivities,
       setUnitOfMeasurementOptions,
@@ -179,29 +220,30 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
     );
   }, [level5]);
 
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    // Handle form submission
-    const handleSubmit = (e) => {
-      e.preventDefault();
-  
-      const payload = {
-        businessUnitId,
-        level1Category,
-        level2,
-        level3,
-        level4,
-        level5,
-        unitOfMeasurement,
-        quantity,
-        month,
-      };
-  
-      console.log("Form submitted with payload:", payload);
-  
+    const payload = {
+      businessUnitId,
+      level1Category,
+      level2,
+      level3,
+      level4,
+      level5,
+      unitOfMeasurement,
+      quantity,
+      month,
     };
 
+    console.log("Form submitted with payload:", payload);
+  };
+
   return (
-    <form className="flex flex-col gap-y-3 bg-white rounded-md p-6" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col gap-y-3 bg-white rounded-md p-6"
+      onSubmit={handleSubmit}
+    >
       <h3 className="m-0 font-extrabold text-2xl">Insert activity data here</h3>
       <div className="grid gap-4">
         <FormControl className="flex-1 relative">
@@ -316,15 +358,15 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
           />
         </FormControl>
       </div>
-       <Button
-            type="submit"
-            className="self-end"
-            style={{
-              backgroundColor: "rgba(0,204,156,1)",
-            }}
-          >
-            Add
-          </Button>
+      <Button
+        type="submit"
+        className="self-end"
+        style={{
+          backgroundColor: "rgba(0,204,156,1)",
+        }}
+      >
+        Add
+      </Button>
     </form>
   );
 };
