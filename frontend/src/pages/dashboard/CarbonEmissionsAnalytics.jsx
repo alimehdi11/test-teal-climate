@@ -31,7 +31,7 @@ const CarbonEmissionsAnalytics = () => {
         await userBusinessUnitsActivitiesResponse.json();
       userBusinessUnitsActivities = userBusinessUnitsActivities.filter(
         (activity) => {
-          return activity.businessUnit.period === selectedPeriod;
+          return activity.businessUnit.period.id === selectedPeriod;
         }
       );
       setUserBusinessUnitsActivities(userBusinessUnitsActivities);
