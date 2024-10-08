@@ -6,6 +6,7 @@ import Select from "../../components/ui/Select";
 import { usePeriod } from "../../contexts/PeriodProvider";
 import { api } from "../../../api/index.js";
 import Input from "./../../components/ui/Input";
+import Button from "../../components/ui/Button.jsx";
 const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
   const [businessUnitId, setBusinessUnitId] = useState("");
   const [level1CategoriesOptions, setlevel1CategoriesOptions] = useState([]);
@@ -25,6 +26,29 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
   const [month, setMonth] = useState();
 
   const { getPeriodMonths } = usePeriod();
+
+  // Reset form fields when selectedLevel changes
+
+  useEffect(() => {
+    // Reset form fields
+    setLevel1Category("");
+    setLevel2("");
+    setLevel3("");
+    setLevel4("");
+    setLevel5("");
+    setUnitOfMeasurement("");
+    setQuantity("");
+  
+    // Reset options arrays
+    setlevel1CategoriesOptions([]);
+    setLevel2Options([]);
+    setLevel3Options([]);
+    setLevel4Options([]);
+    setLevel5Options([]);
+    setUnitOfMeasurementOptions([]);
+  }, [selectedLevel]);
+  
+
 
   // Automatically set businessUnitId if there's only one business unit
   useEffect(() => {
@@ -155,8 +179,29 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
     );
   }, [level5]);
 
+
+    // Handle form submission
+    const handleSubmit = (e) => {
+      e.preventDefault();
+  
+      const payload = {
+        businessUnitId,
+        level1Category,
+        level2,
+        level3,
+        level4,
+        level5,
+        unitOfMeasurement,
+        quantity,
+        month,
+      };
+  
+      console.log("Form submitted with payload:", payload);
+  
+    };
+
   return (
-    <form className="flex flex-col gap-y-3 bg-white rounded-md p-6">
+    <form className="flex flex-col gap-y-3 bg-white rounded-md p-6" onSubmit={handleSubmit}>
       <h3 className="m-0 font-extrabold text-2xl">Insert activity data here</h3>
       <div className="grid gap-4">
         <FormControl className="flex-1 relative">
@@ -271,6 +316,15 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
           />
         </FormControl>
       </div>
+       <Button
+            type="submit"
+            className="self-end"
+            style={{
+              backgroundColor: "rgba(0,204,156,1)",
+            }}
+          >
+            Add
+          </Button>
     </form>
   );
 };
