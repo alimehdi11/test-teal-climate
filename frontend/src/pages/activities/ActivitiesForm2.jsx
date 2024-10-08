@@ -37,6 +37,11 @@ const ActivitiesForm2 = ({
 
   const { getPeriodMonths, selectedPeriod } = usePeriod();
 
+  const [marketBased, setMarketBased] = useState(false);
+  const [marketBasedQuantity, setMarketBasedQuantity] = useState("");
+  const [marketBasedEmissionFactor, setMarketBasedEmissionFactor] = useState("");
+  const [markedBasedUnitOfEmissionFactor, setMarkedBasedUnitOfEmissionFactor] = useState("");
+
   // Automatically set businessUnitId if there's only one business unit
   useEffect(() => {
     if (businessUnits.length === 1) {
@@ -83,6 +88,11 @@ const ActivitiesForm2 = ({
     setLevel4Options([]);
     setLevel5Options([]);
     setUnitOfMeasurementOptions([]);
+
+    setMarketBased(false)
+    setMarkedBasedUnitOfEmissionFactor("");
+    setMarketBasedQuantity("");
+    setMarkedBasedUnitOfEmissionFactor("")
   };
 
   // Fetch "Level 1 Category" when business unit is selected
@@ -241,22 +251,89 @@ const ActivitiesForm2 = ({
       !unitOfMeasurement ||
       !quantity
     ) {
-      console.log(payload);
       return toast.warn("Please fill all fields");
+
     }
-    const { success, message } =
-      await api.businessUnitsActivities.createBusinessUnitActivity(payload);
-    if (success) {
-      toast.success(message);
-      resetForm();
-    } else {
-      toast.error(message);
+    console.log(selectedScope == "Scope 2" ? { ...payload, level5: "locationBased" } : payload);
+    
+    // const { success, message } =
+    //   await api.businessUnitsActivities.createBusinessUnitActivity(selectedScope == "Scope 2" ? { ...payload, level5: "locationBased" } : payload);
+    // if (success) {
+    //   toast.success(message);
+    // } else {
+    //   toast.error(message);
+    // }
+    if (selectedScope == "Scope 2" && marketBased) {
+      const payload2 = { ...payload }
+      payload2.unitOfMeasurement = markedBasedUnitOfEmissionFactor;
+      payload2.quantity = marketBasedQuantity;
+      payload2.marketBasedEmissionFactor = marketBasedEmissionFactor
+      payload2.level5 = "marketBased";
+      console.log(payload2)
+      // const { success, message } =
+      //   await api.businessUnitsActivities.createBusinessUnitActivity(payload2);
+      // if (success) {
+      //   toast.success(message);
+      // } else {
+      //   toast.error(message);
+      // }
     }
-    const {} =
+
+    resetForm();
+
+    const { data } =
       await api.businessUnitsActivities.getAllBusinessUnitsActivities();
     setBusinessUnitsActivities(
       filterBusinessUnitsActivitiesForSelectedPeriod(data, selectedPeriod)
     );
+  };
+
+
+  const possibleLevel2Labels = {
+    "Refrigerant and other": "Refrigerant and other gas category",
+    "Passenger vehicles": "Passenger Vehicle Category",
+    "Delivery vehicles": "Delivery Vehicle Category",
+    "Passenger Evs": "Passenger EV Category",
+    "Delivery Evs": "Delivery Vehicle Category",
+    "WTT- fuels": "Fuel Type",
+    "WTT- bioenergy": "Bioenergy Type",
+    "Electricity TandD for passenger EVs": "Passenger EV Category",
+    "Business travel- land": "Passenger Vehicle Category",
+    "Material use": "Material Type",
+    "Waste disposal": "Waste Type",
+    "Business travel- sea": "Boat / Ship Type",
+    "WTT- business travel- sea": "Boat / Ship Type",
+    "WTT- pass vehs and travel- land": "Passenger Vehicle Category",
+    "Freighting goods": "Freighting medium",
+    "WTT- delivery vehs and freight": "Freighting medium",
+    "Managed assets- vehicles": "Vehicle Category",
+    "Business travel- air": "Airport From",
+    "WTT- business travel- air": "Airport From",
+  };
+  const possibleLevel3Labels = {
+    Bioenergy: "Bioenergy Fuel Name",
+    "Refrigerant and other": "Refrigerant and other gas name",
+    "Passenger vehicles": "Passenger Vehicle Segment / Size",
+    "Delivery vehicles": "Delivery Vehicle Class / Category",
+    "Passenger Evs": "Passenger EV Segment / Size",
+    "Delivery Evs": "Delivery Vehicle Segment / Size",
+    "Heat and steam": "Onsite / Offsite",
+    "WTT- fuels": "Fuel Name",
+    "WTT- bioenergy": "Bioenergy Fuel Name",
+    "Electricity TandD for passenger EVs": "Passenger EV Segment / Size",
+    "Business travel- land": "Passenger Vehicle Segment / Size",
+    "WTT- heat and steam": "Onsite / Offsite",
+    "Material use": "Material Name",
+    "Waste disposal": "Waste Name",
+    "Business travel- sea": "Passenger Type",
+    "WTT- business travel- sea": "Passenger Type",
+    "WTT- pass vehs and travel- land": "Passenger Vehicle Segment / Size",
+    "Freighting goods": "Class / Type / Haul",
+    "WTT- delivery vehs and freight": "Class / Type / Haul",
+    "Hotel stay": "Name of Country",
+    "Managed assets- vehicles": "Vehicle Segment / Size",
+    "Business travel- air": "Airport To",
+    "WTT- business travel- air": "Airport To",
   };
 
   return (
@@ -265,6 +342,11 @@ const ActivitiesForm2 = ({
       onSubmit={handleSubmit}
     >
       <h3 className="m-0 font-extrabold text-2xl">Insert activity data here</h3>
+      {selectedScope === "Scope 2" && (
+        <h4 className="bg-gray-200 col-span-full p-2 rounded-md">
+          Location based
+        </h4>
+      )}
       <div className="grid gap-4">
         <FormControl className="flex-1 relative">
           <Label>Month</Label>
@@ -307,7 +389,7 @@ const ActivitiesForm2 = ({
           />
         </FormControl>
         <FormControl className="flex-1 relative">
-          <Label>Level 2</Label>
+          <Label>{possibleLevel2Labels[selectedLevel] || "Fuel Type"}</Label>
           <SearchableSelect
             data={level2Options}
             item={level2}
@@ -317,7 +399,7 @@ const ActivitiesForm2 = ({
           />
         </FormControl>
         <FormControl className="flex-1 relative">
-          <Label>Level 3</Label>
+          <Label>{possibleLevel3Labels[selectedLevel] || "Fuel Name"}</Label>
           <SearchableSelect
             data={level3Options}
             item={level3}
@@ -378,6 +460,90 @@ const ActivitiesForm2 = ({
           />
         </FormControl>
       </div>
+      {selectedScope === "Scope 2" && (
+        <div>
+          {/* Radio buttons */}
+          <p>
+            Was a market based instrument purchases for this electricity use?
+          </p>
+          <div className="flex gap-x-3">
+            <span className="flex items-center gap-x-1">
+              <input
+                type="radio"
+                id="locationBased"
+                name="electricityBased"
+                value="0" // False
+                checked={!marketBased}
+                onChange={(event) => {
+                  setMarketBased(Boolean(Number(event.target.value)));
+                }}
+              />
+              <Label htmlFor="locationBased">
+                {/* Location Based */}
+                No
+              </Label>
+            </span>
+            <span className="flex items-center gap-x-1">
+              <input
+                type="radio"
+                id="marketBased"
+                name="electricityBased"
+                value="1"
+                checked={marketBased}
+                onChange={(event) => {
+                  setMarketBased(Boolean(Number(event.target.value)));
+                }}
+              />
+              <Label htmlFor="marketBased">
+                {/* Market Based */}
+                Yes
+              </Label>
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Market based form */}
+      {marketBased && (
+        <div className="grid lg:grid-cols-2 gap-4">
+          <h4 className="bg-gray-200 col-span-full p-2 rounded-md">
+            Market based
+          </h4>
+          <FormControl>
+            <Label>Quantity Purchased</Label>
+            <Input
+              type="number"
+              value={marketBasedQuantity}
+              onChange={(event) => {
+                setMarketBasedQuantity(event.target.value);
+              }}
+              placeholder="Enter Purchased Quantity"
+            />
+          </FormControl>
+          <FormControl>
+            <Label>Emission Factor</Label>
+            <Input
+              type="number"
+              value={marketBasedEmissionFactor}
+              onChange={(event) => {
+                setMarketBasedEmissionFactor(event.target.value);
+              }}
+              placeholder="Enter Quantity"
+            />
+          </FormControl>
+          <FormControl>
+            <Label>Unit of Emission Factor</Label>
+            <Select
+              value={markedBasedUnitOfEmissionFactor}
+              onChange={(e) => setMarkedBasedUnitOfEmissionFactor(e.target.value)}
+            >
+              <option value="">Select Option</option>
+              <option value="kgco2e/kwh">kgco2e / kwh</option>
+            </Select>
+          </FormControl>
+        </div>
+      )}
+
       <Button
         type="submit"
         className="self-end"
@@ -392,3 +558,4 @@ const ActivitiesForm2 = ({
 };
 
 export default ActivitiesForm2;
+
