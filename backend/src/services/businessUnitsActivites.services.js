@@ -3,49 +3,75 @@ import { CountryMask } from "../models/countryMask.model.js";
 import { BusinessUnitActivity } from "../models/businessUnitActivity.model.js";
 import { BusinessUnit } from "../models/businessUnit.model.js";
 import { Reit } from "../models/reit.model.js";
-import { where } from "sequelize";
+import { Activity } from "../models/activity.model.js";
 
 const createActivity = async (req, res) => {
   try {
     const {
-      businessUnitId,
       scope,
       level1,
+      month,
+      businessUnitId,
+      level1Category,
       level2,
       level3,
       level4,
       level5,
       unitOfMeasurement,
       quantity,
-      CO2e,
-      CO2e_of_CO2,
-      CO2e_of_CH4,
-      CO2e_of_N2O,
-      level1Category,
-      month,
-      // year,
     } = req.body;
-
-    await BusinessUnitActivity.create({
+    const activityRecords = await Activity.findAll({
+      where: {
+        scope,
+        level1,
+        level2,
+        level3,
+        level4,
+        level5,
+        unitOfMeasurement,
+      },
+    });
+    const payload = {
       userId: req.user.id,
-      businessUnitId,
       scope,
       level1,
+      month,
+      businessUnitId,
+      level1Category,
       level2,
       level3,
       level4,
       level5,
       unitOfMeasurement,
       quantity,
-      CO2e,
-      CO2e_of_CO2,
-      CO2e_of_CH4,
-      CO2e_of_N2O,
-      level1Category,
-      month,
-      // year,
+    };
+    let CO2e = "";
+    let CO2e_of_CO2 = "";
+    let CO2e_of_CH4 = "";
+    let CO2e_of_N2O = "";
+    const greenHouseGasValues = [
+      "kg CO2e",
+      "kg CO2e of CO2",
+      "kg CO2e of CH4",
+      "kg CO2e of N2O",
+    ];
+    activityRecords.forEach((activityRecord) => {
+      if (activityRecord.greenHouseGas === greenHouseGasValues[0]) {
+        CO2e = activityRecord.greenHouseGasEmissionFactor * quantity;
+      } else if (activityRecord.greenHouseGas === greenHouseGasValues[1]) {
+        CO2e_of_CO2 = activityRecord.greenHouseGasEmissionFactor * quantity;
+      } else if (activityRecord.greenHouseGas === greenHouseGasValues[2]) {
+        CO2e_of_CH4 = activityRecord.greenHouseGasEmissionFactor * quantity;
+      } else if (activityRecord.greenHouseGas === greenHouseGasValues[3]) {
+        CO2e_of_N2O = activityRecord.greenHouseGasEmissionFactor * quantity;
+      }
     });
-    res.status(200).json({ message: "Activity created sucessfully" });
+    payload.CO2e = CO2e;
+    payload.CO2e_of_CO2 = CO2e_of_CO2;
+    payload.CO2e_of_CH4 = CO2e_of_CH4;
+    payload.CO2e_of_N2O = CO2e_of_N2O;
+    await BusinessUnitActivity.create(payload);
+    return res.status(200).json({ message: "Activity created sucessfully" });
   } catch (error) {
     console.log("Could not createBusinessUnitActivity -> createActivity");
     console.log(error);

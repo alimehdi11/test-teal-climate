@@ -19,6 +19,24 @@ const businessUnitsActivities = {
       return { message: errorMessage, success: false };
     }
   },
+  createBusinessUnitActivity: async (payload) => {
+    let response;
+    try {
+      const url = `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities`;
+      const method = "POST";
+      response = await request(url, method, payload);
+      if (!response.ok) {
+        throw new Error("Failed to createBusinessUnitActivity");
+      }
+      const { message, data } = await response.json();
+      return { success: true, message, data };
+    } catch (error) {
+      const { error: errorMessage } = await response.json();
+      console.error(error.message);
+      console.error(errorMessage);
+      return { message: errorMessage, success: false };
+    }
+  },
 };
 
 export { businessUnitsActivities };

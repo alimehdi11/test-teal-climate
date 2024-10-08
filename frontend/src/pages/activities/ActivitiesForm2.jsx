@@ -7,7 +7,17 @@ import { usePeriod } from "../../contexts/PeriodProvider";
 import { api } from "../../../api/index.js";
 import Input from "./../../components/ui/Input";
 import Button from "../../components/ui/Button.jsx";
-const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
+import { toast } from "react-toastify";
+import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
+
+const ActivitiesForm2 = ({
+  selectedScope,
+  selectedLevel,
+  setBusinessUnitsActivities,
+  setSelectedScope,
+  setSelectedLevel,
+  businessUnits,
+}) => {
   const [month, setMonth] = useState();
   const [businessUnitId, setBusinessUnitId] = useState("");
   const [level1Category, setLevel1Category] = useState();
@@ -25,7 +35,7 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
   const [level5Options, setLevel5Options] = useState([]);
   const [unitOfMeasurementOptions, setUnitOfMeasurementOptions] = useState([]);
 
-  const { getPeriodMonths } = usePeriod();
+  const { getPeriodMonths, selectedPeriod } = usePeriod();
 
   // Automatically set businessUnitId if there's only one business unit
   useEffect(() => {
@@ -57,8 +67,7 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
     }
   };
 
-  // Fetch "Level 1 Category" when business unit is selected
-  useEffect(() => {
+  const resetForm = () => {
     // Reset form fields
     setLevel1Category(undefined);
     setLevel2(undefined);
@@ -74,6 +83,11 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
     setLevel4Options([]);
     setLevel5Options([]);
     setUnitOfMeasurementOptions([]);
+  };
+
+  // Fetch "Level 1 Category" when business unit is selected
+  useEffect(() => {
+    resetForm();
     fetchActivities(
       () => api.level1Categories.getAllLevel1Categories(selectedLevel),
       setlevel1CategoriesOptions,
@@ -201,10 +215,8 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
     );
   }, [level5]);
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     const payload = {
       scope: selectedScope,
       level1: selectedLevel,
@@ -218,8 +230,33 @@ const ActivitiesForm2 = ({ businessUnits, selectedLevel, selectedScope }) => {
       quantity,
       month,
     };
-
-    console.log("Form submitted with payload:", payload);
+    if (
+      !month ||
+      !businessUnitId ||
+      !level1Category ||
+      !level2 ||
+      !level3 ||
+      (level4Options.length > 0 && !level4) ||
+      (level5Options.length > 0 && !level5) ||
+      !unitOfMeasurement ||
+      !quantity
+    ) {
+      console.log(payload);
+      return toast.warn("Please fill all fields");
+    }
+    const { success, message } =
+      await api.businessUnitsActivities.createBusinessUnitActivity(payload);
+    if (success) {
+      toast.success(message);
+      resetForm();
+    } else {
+      toast.error(message);
+    }
+    const {} =
+      await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+    setBusinessUnitsActivities(
+      filterBusinessUnitsActivitiesForSelectedPeriod(data, selectedPeriod)
+    );
   };
 
   return (
