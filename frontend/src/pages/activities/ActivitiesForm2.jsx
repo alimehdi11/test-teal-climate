@@ -39,15 +39,58 @@ const ActivitiesForm2 = ({
 
   const [marketBased, setMarketBased] = useState(false);
   const [marketBasedQuantity, setMarketBasedQuantity] = useState("");
-  const [marketBasedEmissionFactor, setMarketBasedEmissionFactor] = useState("");
-  const [markedBasedUnitOfEmissionFactor, setMarkedBasedUnitOfEmissionFactor] = useState("");
+  const [marketBasedEmissionFactor, setMarketBasedEmissionFactor] =
+    useState("");
+  const [markedBasedUnitOfEmissionFactor, setMarkedBasedUnitOfEmissionFactor] =
+    useState("kgco2e/kwh");
 
-  // Automatically set businessUnitId if there's only one business unit
-  useEffect(() => {
-    if (businessUnits.length === 1) {
-      setBusinessUnitId(businessUnits[0].id);
-    }
-  }, [businessUnits]);
+  const possibleLevel2Labels = {
+    "Refrigerant and other": "Refrigerant and other gas category",
+    "Passenger vehicles": "Passenger Vehicle Category",
+    "Delivery vehicles": "Delivery Vehicle Category",
+    "Passenger Evs": "Passenger EV Category",
+    "Delivery Evs": "Delivery Vehicle Category",
+    "WTT- fuels": "Fuel Type",
+    "WTT- bioenergy": "Bioenergy Type",
+    "Electricity TandD for passenger EVs": "Passenger EV Category",
+    "Business travel- land": "Passenger Vehicle Category",
+    "Material use": "Material Type",
+    "Waste disposal": "Waste Type",
+    "Business travel- sea": "Boat / Ship Type",
+    "WTT- business travel- sea": "Boat / Ship Type",
+    "WTT- pass vehs and travel- land": "Passenger Vehicle Category",
+    "Freighting goods": "Freighting medium",
+    "WTT- delivery vehs and freight": "Freighting medium",
+    "Managed assets- vehicles": "Vehicle Category",
+    "Business travel- air": "Airport From",
+    "WTT- business travel- air": "Airport From",
+  };
+
+  const possibleLevel3Labels = {
+    Bioenergy: "Bioenergy Fuel Name",
+    "Refrigerant and other": "Refrigerant and other gas name",
+    "Passenger vehicles": "Passenger Vehicle Segment / Size",
+    "Delivery vehicles": "Delivery Vehicle Class / Category",
+    "Passenger Evs": "Passenger EV Segment / Size",
+    "Delivery Evs": "Delivery Vehicle Segment / Size",
+    "Heat and steam": "Onsite / Offsite",
+    "WTT- fuels": "Fuel Name",
+    "WTT- bioenergy": "Bioenergy Fuel Name",
+    "Electricity TandD for passenger EVs": "Passenger EV Segment / Size",
+    "Business travel- land": "Passenger Vehicle Segment / Size",
+    "WTT- heat and steam": "Onsite / Offsite",
+    "Material use": "Material Name",
+    "Waste disposal": "Waste Name",
+    "Business travel- sea": "Passenger Type",
+    "WTT- business travel- sea": "Passenger Type",
+    "WTT- pass vehs and travel- land": "Passenger Vehicle Segment / Size",
+    "Freighting goods": "Class / Type / Haul",
+    "WTT- delivery vehs and freight": "Class / Type / Haul",
+    "Hotel stay": "Name of Country",
+    "Managed assets- vehicles": "Vehicle Segment / Size",
+    "Business travel- air": "Airport To",
+    "WTT- business travel- air": "Airport To",
+  };
 
   // Reusable fetch function for activities
   const fetchActivities = async (
@@ -82,22 +125,114 @@ const ActivitiesForm2 = ({
     setUnitOfMeasurement(undefined);
     setQuantity("");
     // Reset options arrays
-    setlevel1CategoriesOptions([]);
     setLevel2Options([]);
     setLevel3Options([]);
     setLevel4Options([]);
     setLevel5Options([]);
     setUnitOfMeasurementOptions([]);
 
-    setMarketBased(false)
-    setMarkedBasedUnitOfEmissionFactor("");
+    setMarketBased(false);
+    setMarketBasedEmissionFactor("");
     setMarketBasedQuantity("");
-    setMarkedBasedUnitOfEmissionFactor("")
+    setMarkedBasedUnitOfEmissionFactor("");
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (
+      !month ||
+      !businessUnitId ||
+      !level1Category ||
+      !level2 ||
+      !level3 ||
+      (level4Options.length > 0 && !level4) ||
+      (level5Options.length > 0 && !level5) ||
+      !unitOfMeasurement ||
+      !quantity
+    ) {
+      return toast.warn("Please fill all fields");
+    }
+    /**
+     * For Scope 2  && marketBased
+     */
+    if (marketBased) {
+      if (
+        !marketBasedQuantity ||
+        !marketBasedEmissionFactor ||
+        !markedBasedUnitOfEmissionFactor
+      ) {
+        return toast.warn("Please fill all fields");
+      }
+    }
+    const payload = {
+      scope: selectedScope,
+      level1: selectedLevel,
+      businessUnitId,
+      level1Category,
+      level2,
+      level3,
+      level4,
+      level5,
+      unitOfMeasurement,
+      quantity,
+      month,
+    };
+    // return console.table(payload);
+    const { success, message } =
+      await api.businessUnitsActivities.createBusinessUnitActivity(
+        selectedScope == "Scope 2"
+          ? { ...payload, level5: "locationBased" }
+          : payload
+      );
+    if (success) {
+      toast.success(message);
+    } else {
+      toast.error(message);
+    }
+    if (selectedScope === "Scope 2" && marketBased) {
+      const payload2 = { ...payload };
+      console.log(markedBasedUnitOfEmissionFactor);
+      payload2.unitOfMeasurement = markedBasedUnitOfEmissionFactor;
+      payload2.quantity = marketBasedQuantity;
+      payload2.marketBasedEmissionFactor = marketBasedEmissionFactor;
+      payload2.level5 = "marketBased";
+      const { success, message } =
+        await api.businessUnitsActivities.createBusinessUnitActivity(payload2);
+      if (success) {
+        toast.success(message);
+      } else {
+        toast.error(message);
+      }
+    }
+    resetForm();
+    const { data } =
+      await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+    setBusinessUnitsActivities(
+      filterBusinessUnitsActivitiesForSelectedPeriod(data, selectedPeriod)
+    );
+  };
+
+  // Automatically set businessUnitId if there's only one business unit
+  useEffect(() => {
+    if (businessUnits.length === 1) {
+      setBusinessUnitId(businessUnits[0].id);
+    }
+  }, [businessUnits]);
 
   // Fetch "Level 1 Category" when business unit is selected
   useEffect(() => {
-    resetForm();
+    setLevel1Category(undefined);
+    setLevel2(undefined);
+    setLevel3(undefined);
+    setLevel4(undefined);
+    setLevel5(undefined);
+    setUnitOfMeasurement(undefined);
+    setQuantity("");
+    setLevel2Options([]);
+    setLevel3Options([]);
+    setLevel4Options([]);
+    setLevel5Options([]);
+    setUnitOfMeasurementOptions([]);
     fetchActivities(
       () => api.level1Categories.getAllLevel1Categories(selectedLevel),
       setlevel1CategoriesOptions,
@@ -225,117 +360,6 @@ const ActivitiesForm2 = ({
     );
   }, [level5]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const payload = {
-      scope: selectedScope,
-      level1: selectedLevel,
-      businessUnitId,
-      level1Category,
-      level2,
-      level3,
-      level4,
-      level5,
-      unitOfMeasurement,
-      quantity,
-      month,
-    };
-    if (
-      !month ||
-      !businessUnitId ||
-      !level1Category ||
-      !level2 ||
-      !level3 ||
-      (level4Options.length > 0 && !level4) ||
-      (level5Options.length > 0 && !level5) ||
-      !unitOfMeasurement ||
-      !quantity
-    ) {
-      return toast.warn("Please fill all fields");
-
-    }
-    console.log(selectedScope == "Scope 2" ? { ...payload, level5: "locationBased" } : payload);
-    
-    // const { success, message } =
-    //   await api.businessUnitsActivities.createBusinessUnitActivity(selectedScope == "Scope 2" ? { ...payload, level5: "locationBased" } : payload);
-    // if (success) {
-    //   toast.success(message);
-    // } else {
-    //   toast.error(message);
-    // }
-    if (selectedScope == "Scope 2" && marketBased) {
-      const payload2 = { ...payload }
-      payload2.unitOfMeasurement = markedBasedUnitOfEmissionFactor;
-      payload2.quantity = marketBasedQuantity;
-      payload2.marketBasedEmissionFactor = marketBasedEmissionFactor
-      payload2.level5 = "marketBased";
-      console.log(payload2)
-      // const { success, message } =
-      //   await api.businessUnitsActivities.createBusinessUnitActivity(payload2);
-      // if (success) {
-      //   toast.success(message);
-      // } else {
-      //   toast.error(message);
-      // }
-    }
-
-    resetForm();
-
-    const { data } =
-      await api.businessUnitsActivities.getAllBusinessUnitsActivities();
-    setBusinessUnitsActivities(
-      filterBusinessUnitsActivitiesForSelectedPeriod(data, selectedPeriod)
-    );
-  };
-
-
-  const possibleLevel2Labels = {
-    "Refrigerant and other": "Refrigerant and other gas category",
-    "Passenger vehicles": "Passenger Vehicle Category",
-    "Delivery vehicles": "Delivery Vehicle Category",
-    "Passenger Evs": "Passenger EV Category",
-    "Delivery Evs": "Delivery Vehicle Category",
-    "WTT- fuels": "Fuel Type",
-    "WTT- bioenergy": "Bioenergy Type",
-    "Electricity TandD for passenger EVs": "Passenger EV Category",
-    "Business travel- land": "Passenger Vehicle Category",
-    "Material use": "Material Type",
-    "Waste disposal": "Waste Type",
-    "Business travel- sea": "Boat / Ship Type",
-    "WTT- business travel- sea": "Boat / Ship Type",
-    "WTT- pass vehs and travel- land": "Passenger Vehicle Category",
-    "Freighting goods": "Freighting medium",
-    "WTT- delivery vehs and freight": "Freighting medium",
-    "Managed assets- vehicles": "Vehicle Category",
-    "Business travel- air": "Airport From",
-    "WTT- business travel- air": "Airport From",
-  };
-  const possibleLevel3Labels = {
-    Bioenergy: "Bioenergy Fuel Name",
-    "Refrigerant and other": "Refrigerant and other gas name",
-    "Passenger vehicles": "Passenger Vehicle Segment / Size",
-    "Delivery vehicles": "Delivery Vehicle Class / Category",
-    "Passenger Evs": "Passenger EV Segment / Size",
-    "Delivery Evs": "Delivery Vehicle Segment / Size",
-    "Heat and steam": "Onsite / Offsite",
-    "WTT- fuels": "Fuel Name",
-    "WTT- bioenergy": "Bioenergy Fuel Name",
-    "Electricity TandD for passenger EVs": "Passenger EV Segment / Size",
-    "Business travel- land": "Passenger Vehicle Segment / Size",
-    "WTT- heat and steam": "Onsite / Offsite",
-    "Material use": "Material Name",
-    "Waste disposal": "Waste Name",
-    "Business travel- sea": "Passenger Type",
-    "WTT- business travel- sea": "Passenger Type",
-    "WTT- pass vehs and travel- land": "Passenger Vehicle Segment / Size",
-    "Freighting goods": "Class / Type / Haul",
-    "WTT- delivery vehs and freight": "Class / Type / Haul",
-    "Hotel stay": "Name of Country",
-    "Managed assets- vehicles": "Vehicle Segment / Size",
-    "Business travel- air": "Airport To",
-    "WTT- business travel- air": "Airport To",
-  };
-
   return (
     <form
       className="flex flex-col gap-y-3 bg-white rounded-md p-6"
@@ -442,7 +466,6 @@ const ActivitiesForm2 = ({
             placeholder={"Select Unit Of Measurement"}
           />
         </FormControl>
-
         <FormControl className="flex-1 relative">
           <Label>Quantity</Label>
           <Input
@@ -502,7 +525,6 @@ const ActivitiesForm2 = ({
           </div>
         </div>
       )}
-
       {/* Market based form */}
       {marketBased && (
         <div className="grid lg:grid-cols-2 gap-4">
@@ -535,15 +557,15 @@ const ActivitiesForm2 = ({
             <Label>Unit of Emission Factor</Label>
             <Select
               value={markedBasedUnitOfEmissionFactor}
-              onChange={(e) => setMarkedBasedUnitOfEmissionFactor(e.target.value)}
+              onChange={(e) =>
+                setMarkedBasedUnitOfEmissionFactor(e.target.value)
+              }
             >
-              <option value="">Select Option</option>
-              <option value="kgco2e/kwh">kgco2e / kwh</option>
+              <option value="kgco2e/kwh">kgco2e/kwh</option>
             </Select>
           </FormControl>
         </div>
       )}
-
       <Button
         type="submit"
         className="self-end"
@@ -558,4 +580,3 @@ const ActivitiesForm2 = ({
 };
 
 export default ActivitiesForm2;
-
