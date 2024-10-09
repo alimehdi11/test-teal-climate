@@ -34,6 +34,7 @@ const ActivitiesForm2 = ({
   const [level4Options, setLevel4Options] = useState([]);
   const [level5Options, setLevel5Options] = useState([]);
   const [unitOfMeasurementOptions, setUnitOfMeasurementOptions] = useState([]);
+  const [airports, setAirports] = useState([]);
 
   const { getPeriodMonths, selectedPeriod } = usePeriod();
 
@@ -91,6 +92,9 @@ const ActivitiesForm2 = ({
     "Business travel- air": "Airport To",
     "WTT- business travel- air": "Airport To",
   };
+
+
+
 
   // Reusable fetch function for activities
   const fetchActivities = async (
@@ -177,7 +181,7 @@ const ActivitiesForm2 = ({
       quantity,
       month,
     };
-    // return console.table(payload);
+    return console.table(payload);
     const { success, message } =
       await api.businessUnitsActivities.createBusinessUnitActivity(
         selectedScope == "Scope 2"
@@ -252,18 +256,30 @@ const ActivitiesForm2 = ({
     setLevel4Options([]);
     setLevel5Options([]);
     setUnitOfMeasurementOptions([]);
-    fetchActivities(
-      api.activities.getAllActivities,
-      setLevel2Options,
-      level1Category,
-      null,
-      {
-        scope: selectedScope,
-        level1: selectedLevel,
-        column: "level2",
-        distinct: "true",
+    if (selectedLevel === "Business travel- air" || selectedLevel === "WTT- business travel- air") {
+      if (level1Category) {
+        const getAirports = async () => {
+          const airports = await api.airports.getAllAirports();
+          setLevel2Options(airports.map(item => item.name));
+        }
+        getAirports();
       }
-    );
+    } else {
+      fetchActivities(
+        api.activities.getAllActivities,
+        setLevel2Options,
+        level1Category,
+        null,
+        {
+          scope: selectedScope,
+          level1: selectedLevel,
+          column: "level2",
+          distinct: "true",
+        }
+      );
+    }
+
+
   }, [level1Category]);
 
   // Fetch level3 options based on level2 when level2 is selected
@@ -276,19 +292,29 @@ const ActivitiesForm2 = ({
     setLevel4Options([]);
     setLevel5Options([]);
     setUnitOfMeasurementOptions([]);
-    fetchActivities(
-      api.activities.getAllActivities,
-      setLevel3Options,
-      level2,
-      null,
-      {
-        scope: selectedScope,
-        level1: selectedLevel,
-        level2: level2,
-        column: "level3",
-        distinct: "true",
+
+    if (selectedLevel == "Business travel- air" || selectedLevel == "WTT- business travel- air") {
+      if (level2) {
+        setLevel3Options(level2Options.filter(item => item != level2))
       }
-    );
+    }
+    else {
+      fetchActivities(
+        api.activities.getAllActivities,
+        setLevel3Options,
+        level2,
+        null,
+        {
+          scope: selectedScope,
+          level1: selectedLevel,
+          level2: level2,
+          column: "level3",
+          distinct: "true",
+        }
+      );
+    }
+
+
   }, [level2]);
 
   // Fetch level4 options based on level3 when level3 is selected
@@ -299,20 +325,28 @@ const ActivitiesForm2 = ({
     setQuantity("");
     setLevel5Options([]);
     setUnitOfMeasurementOptions([]);
-    fetchActivities(
-      api.activities.getAllActivities,
-      setLevel4Options,
-      level3,
-      setLevel4,
-      {
-        scope: selectedScope,
-        level1: selectedLevel,
-        level2: level2,
-        level3: level3,
-        column: "level4",
-        distinct: "true",
-      }
-    );
+
+
+    if (selectedLevel === "Business travel- air" || selectedLevel === "WTT- business travel- air") {
+      setLevel4("")
+      return; 
+    }
+    else{
+      fetchActivities(
+        api.activities.getAllActivities,
+        setLevel4Options,
+        level3,
+        setLevel4,
+        {
+          scope: selectedScope,
+          level1: selectedLevel,
+          level2: level2,
+          level3: level3,
+          column: "level4",
+          distinct: "true",
+        }
+      );
+    }
   }, [level3]);
 
   // Fetch level5 options based on level4 when level4 is selected
@@ -321,43 +355,70 @@ const ActivitiesForm2 = ({
     setUnitOfMeasurement(undefined);
     setQuantity("");
     setUnitOfMeasurementOptions([]);
-    fetchActivities(
-      api.activities.getAllActivities,
-      setLevel5Options,
-      level4,
-      setLevel5,
-      {
-        scope: selectedScope,
-        level1: selectedLevel,
-        level2: level2,
-        level3: level3,
-        level4: level4,
-        column: "level5",
-        distinct: "true",
+    if (selectedLevel == "Business travel- air" || selectedLevel == "WTT- business travel- air") {
+      if (level3) {
+        setLevel5Options(
+          [
+            "First class",
+            "Economy class",
+            "Business class",
+            "Premium economy class",
+          ]
+        )
       }
-    );
+
+    }
+    else {
+      fetchActivities(
+        api.activities.getAllActivities,
+        setLevel5Options,
+        level4,
+        setLevel5,
+        {
+          scope: selectedScope,
+          level1: selectedLevel,
+          level2: level2,
+          level3: level3,
+          level4: level4,
+          column: "level5",
+          distinct: "true",
+        }
+      );
+    }
   }, [level4]);
 
   // Fetch unitOfMeasurementOptions based on level5 when level5 is selected
   useEffect(() => {
     setUnitOfMeasurement(undefined);
     setQuantity("");
-    fetchActivities(
-      api.activities.getAllActivities,
-      setUnitOfMeasurementOptions,
-      level5,
-      null,
-      {
-        scope: selectedScope,
-        level1: selectedLevel,
-        level2: level2,
-        level3: level3,
-        level4: level4,
-        level5: level5,
-        column: "unitOfMeasurement",
-        distinct: "true",
+    if (selectedLevel == "Business travel- air" || selectedLevel == "WTT- business travel- air") {
+      if (level5) {
+        setUnitOfMeasurementOptions([
+          "passenger-mile",
+          "passenger.km"
+        ])
       }
-    );
+    }
+    else {
+      fetchActivities(
+        api.activities.getAllActivities,
+        setUnitOfMeasurementOptions,
+        level5,
+        null,
+        {
+          scope: selectedScope,
+          level1: selectedLevel,
+          level2: level2,
+          level3: level3,
+          level4: level4,
+          level5: level5,
+          column: "unitOfMeasurement",
+          distinct: "true",
+        }
+      );
+    }
+
+
   }, [level5]);
 
   return (
