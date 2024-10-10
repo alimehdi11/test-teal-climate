@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useDebugValue, useEffect, useState } from "react";
 import FormControl from "../../components/FormControl";
 import Label from "../../components/ui/Label";
 import SearchableSelect from "../../components/ui/SearchableSelect";
@@ -95,6 +95,17 @@ const ActivitiesForm2 = ({
     "WTT- business travel- air": "Airport To",
   };
 
+  const specialLevel = [
+    "Electricity",
+    "Electricity TandD",
+    "WTT- electricity (generation)",
+    "WTT- electricity (TandD)",
+    "WTT- electricity",
+    "Managed assets- electricity",
+    "WTT- electricity (T&D)",
+    "Electricity T&D",
+  ];
+
   // Reusable fetch function for activities
   const fetchActivities = async (
     callback,
@@ -147,7 +158,7 @@ const ActivitiesForm2 = ({
       !businessUnitId ||
       !level1Category ||
       !level2 ||
-      !level3 ||
+      (level3Options.length > 0 && !level3) ||
       (level4Options.length > 0 && !level4) ||
       (level5Options.length > 0 && !level5) ||
       !unitOfMeasurement ||
@@ -180,6 +191,7 @@ const ActivitiesForm2 = ({
       quantity,
       month,
     };
+    // return console.table(payload);
     const { success, message } =
       await api.businessUnitsActivities.createBusinessUnitActivity(
         selectedScope == "Scope 2"
@@ -325,12 +337,13 @@ const ActivitiesForm2 = ({
     setUnitOfMeasurementOptions([]);
 
     if (
-      selectedLevel == "Business travel- air" ||
-      selectedLevel == "WTT- business travel- air"
+      level2 &
+      (selectedLevel == "Business travel- air" ||
+        selectedLevel == "WTT- business travel- air")
     ) {
-      if (level2) {
-        setLevel3Options(level2Options.filter((item) => item != level2));
-      }
+      setLevel3Options(level2Options.filter((item) => item != level2));
+    } else if (level2 && specialLevel.includes(selectedLevel)) {
+      setLevel3("");
     } else {
       fetchActivities(
         api.activities.getAllActivities,
@@ -358,34 +371,35 @@ const ActivitiesForm2 = ({
     setUnitOfMeasurementOptions([]);
 
     if (
-      selectedLevel === "Business travel- air" ||
-      selectedLevel === "WTT- business travel- air"
+      level3 &&
+      (selectedLevel === "Business travel- air" ||
+        selectedLevel === "WTT- business travel- air")
     ) {
-      if (level3) {
-        const { latitude: lat1, longitude: lon1 } = getAirportCoordinates(
-          airports,
-          level2
-        );
-        const { latitude: lat2, longitude: lon2 } = getAirportCoordinates(
-          airports,
-          level3
-        );
-        const distanceInMiles = calculateDistanceBetweenAirports(
-          lat1,
-          lon1,
-          lat2,
-          lon2
-        );
-        // Determining level4
-        if (distanceInMiles < 300) {
-          setLevel4Options(["Air Travel - Short Haul"]);
-        } else if (distanceInMiles >= 300 && distanceInMiles < 2300) {
-          setLevel4Options(["Air Travel - Medium Haul"]);
-        } else if (distanceInMiles >= 2300) {
-          setLevel4Options(["Air Travel - Long Haul"]);
-        }
-        setAirportsDistance(distanceInMiles);
+      const { latitude: lat1, longitude: lon1 } = getAirportCoordinates(
+        airports,
+        level2
+      );
+      const { latitude: lat2, longitude: lon2 } = getAirportCoordinates(
+        airports,
+        level3
+      );
+      const distanceInMiles = calculateDistanceBetweenAirports(
+        lat1,
+        lon1,
+        lat2,
+        lon2
+      );
+      // Determining level4
+      if (distanceInMiles < 300) {
+        setLevel4Options(["Air Travel - Short Haul"]);
+      } else if (distanceInMiles >= 300 && distanceInMiles < 2300) {
+        setLevel4Options(["Air Travel - Medium Haul"]);
+      } else if (distanceInMiles >= 2300) {
+        setLevel4Options(["Air Travel - Long Haul"]);
       }
+      setAirportsDistance(distanceInMiles);
+    } else if (level3 !== undefined && specialLevel.includes(selectedLevel)) {
+      setLevel4("");
     } else {
       fetchActivities(
         api.activities.getAllActivities,
@@ -411,17 +425,18 @@ const ActivitiesForm2 = ({
     setQuantity("");
     setUnitOfMeasurementOptions([]);
     if (
-      selectedLevel == "Business travel- air" ||
-      selectedLevel == "WTT- business travel- air"
+      level4 &&
+      (selectedLevel == "Business travel- air" ||
+        selectedLevel == "WTT- business travel- air")
     ) {
-      if (level4) {
-        setLevel5Options([
-          "First class",
-          "Economy class",
-          "Business class",
-          "Premium economy class",
-        ]);
-      }
+      setLevel5Options([
+        "First class",
+        "Economy class",
+        "Business class",
+        "Premium economy class",
+      ]);
+    } else if (level4 !== undefined && specialLevel.includes(selectedLevel)) {
+      setLevel5("");
     } else {
       fetchActivities(
         api.activities.getAllActivities,
@@ -535,16 +550,18 @@ const ActivitiesForm2 = ({
             placeholder={"Search Level 2 Category"}
           />
         </FormControl>
-        <FormControl className="flex-1 relative">
-          <Label>{possibleLevel3Labels[selectedLevel] || "Fuel Name"}</Label>
-          <SearchableSelect
-            data={level3Options}
-            item={level3}
-            setItem={setLevel3}
-            text={"Select Level 3 Category"}
-            placeholder={"Search Level 3 Category"}
-          />
-        </FormControl>
+        {!specialLevel.includes(selectedLevel) && (
+          <FormControl className="flex-1 relative">
+            <Label>{possibleLevel3Labels[selectedLevel] || "Fuel Name"}</Label>
+            <SearchableSelect
+              data={level3Options}
+              item={level3}
+              setItem={setLevel3}
+              text={"Select Level 3 Category"}
+              placeholder={"Search Level 3 Category"}
+            />
+          </FormControl>
+        )}
         {level4Options.length > 0 && (
           <FormControl className="flex-1 relative">
             <Label>Level 4</Label>

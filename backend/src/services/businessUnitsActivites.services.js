@@ -136,6 +136,57 @@ const createActivity = async (req, res) => {
         payload.quantity = Number((payload.quantity * 1.60934).toFixed(4));
       }
       payload = calculateGHGEmissions(activityRecords, payload);
+    } else if (
+      [
+        "Electricity",
+        "Electricity TandD",
+        "WTT- electricity (generation)",
+        "WTT- electricity (TandD)",
+        "WTT- electricity",
+        "Managed assets- electricity",
+        "WTT- electricity (T&D)",
+        "Electricity T&D",
+      ].includes(payload.level1)
+    ) {
+      // Handle special level1
+      const businessUnitRecord = await BusinessUnit.findOne({
+        where: { id: businessUnitId },
+      });
+      const { country, region } = businessUnitRecord;
+      const activityRecords = await Activity.findAll({
+        where: {
+          scope,
+          level1,
+          level2,
+          level3: country,
+          level4: region,
+          // level5,
+          unitOfMeasurement,
+        },
+      });
+      if (activityRecords.length === 0) {
+        return res.status(200).json({
+          message:
+            "No electricity emission factor found for the country/region",
+        });
+      } else if (activityRecords.length > 0) {
+        let emissionFactorAvailable = true;
+        activityRecords.forEach((record) => {
+          if (
+            record.greenHouseGas === "kg CO2e" &&
+            record.greenHouseGasEmissionFactor === 0
+          ) {
+            emissionFactorAvailable = false;
+          }
+        });
+        if (!emissionFactorAvailable) {
+          return res.status(200).json({
+            message:
+              "No electricity emission factor found for the country/region",
+          });
+        }
+      }
+      payload = calculateGHGEmissions(activityRecords, payload);
     } else {
       const activityRecords = await Activity.findAll({
         where: {
