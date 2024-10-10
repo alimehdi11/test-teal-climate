@@ -111,7 +111,7 @@ const createActivity = async (req, res) => {
           unitOfMeasurement,
         },
       });
-      payload = calculateGHGEmissions(activityRecords, payload);
+      payload = calculateActivityGHGEmissions(activityRecords, payload);
     } else if (
       scope === "Scope 3" &&
       (level1 === "Business travel- air" ||
@@ -185,7 +185,7 @@ const createActivity = async (req, res) => {
           });
         }
       }
-      payload = calculateGHGEmissions(activityRecords, payload);
+      payload = calculateActivityGHGEmissions(activityRecords, payload);
     } else {
       const activityRecords = await Activity.findAll({
         where: {
@@ -198,7 +198,7 @@ const createActivity = async (req, res) => {
           unitOfMeasurement,
         },
       });
-      payload = calculateGHGEmissions(activityRecords, payload);
+      payload = calculateActivityGHGEmissions(activityRecords, payload);
     }
     await BusinessUnitActivity.create(payload);
     return res.status(200).json({ message: "Activity created sucessfully" });
@@ -284,7 +284,7 @@ const updateActivityById = async (req, res) => {
           unitOfMeasurement,
         },
       });
-      payload = calculateGHGEmissions(activityRecords, payload);
+      payload = calculateActivityGHGEmissions(activityRecords, payload);
     } else if (
       scope === "Scope 3" &&
       (level1 === "Business travel- air" ||
@@ -358,7 +358,7 @@ const updateActivityById = async (req, res) => {
           });
         }
       }
-      payload = calculateGHGEmissions(activityRecords, payload);
+      payload = calculateActivityGHGEmissions(activityRecords, payload);
     } else {
       const activityRecords = await Activity.findAll({
         where: {
@@ -371,14 +371,14 @@ const updateActivityById = async (req, res) => {
           unitOfMeasurement,
         },
       });
-      payload = calculateGHGEmissions(activityRecords, payload);
+      payload = calculateActivityGHGEmissions(activityRecords, payload);
     }
     await BusinessUnitActivity.update(payload, {
       where: {
         id,
       },
     });
-    return res.status(200).json({ message: "Activity created sucessfully" });
+    return res.status(200).json({ message: "Activity updated sucessfully" });
   } catch (error) {
     console.log("Could not updateBusinessUnitActivity -> updateActivityById");
     console.log(error);
