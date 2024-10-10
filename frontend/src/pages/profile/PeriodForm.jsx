@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { api } from "../../../api/index.js";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
-const PeriodForm = ({ setAddPeriod }) => {
+const PeriodForm = ({ setShowPeriodForm }) => {
   const { setPeriods } = usePeriod();
 
   const handleSubmit = async (event) => {
@@ -23,14 +23,14 @@ const PeriodForm = ({ setAddPeriod }) => {
     if (success) {
       toast.success(message);
       event.target.reset();
-      setAddPeriod(false);
+      setShowPeriodForm(false);
       setPeriods((previousPeriods) => [...previousPeriods, data]);
     } else {
       toast.error(message);
     }
   };
   const handleCancel = () => {
-    setAddPeriod(false);
+    setShowPeriodForm(false);
   };
   const handleUpdate = (event) => {
     event.preventDefault();

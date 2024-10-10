@@ -14,20 +14,24 @@ import { toast } from "react-toastify";
 const Profile = () => {
   const [businessUnits, setBusinessUnits] = useState([]);
   const { selectedPeriod } = usePeriod();
-  const [addPeriod, setAddPeriod] = useState(false);
+  const [showPeriodForm, setShowPeriodForm] = useState(false);
 
   useEffect(() => {
     if (selectedPeriod) {
       (async () => {
         const { data, success, message } =
-          await api.businessUnits.getAllBusinessUnits(selectedPeriod);
+        await api.businessUnits.getAllBusinessUnits(selectedPeriod);
         if (success) {
           setBusinessUnits(data);
         } else {
           toast.error(message);
         }
       })();
+      setShowPeriodForm(false)
+    } else {
+      setShowPeriodForm(true)
     }
+
   }, [selectedPeriod]);
 
   return (
@@ -48,7 +52,7 @@ const Profile = () => {
               <PeriodSelector />
             </div>
           </div>
-          {addPeriod && <PeriodForm setAddPeriod={setAddPeriod} />}
+          {showPeriodForm && <PeriodForm setShowPeriodForm={setShowPeriodForm} />}
           <PortfolioForm setBusinessUnits={setBusinessUnits} />
           <ProfileTable
             businessUnits={businessUnits}

@@ -1,4 +1,4 @@
-import { useDebugValue, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import FormControl from "../../components/FormControl";
 import Label from "../../components/ui/Label";
 import SearchableSelect from "../../components/ui/SearchableSelect";
@@ -9,6 +9,8 @@ import Input from "./../../components/ui/Input";
 import Button from "../../components/ui/Button.jsx";
 import { toast } from "react-toastify";
 import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+
 
 const ActivitiesForm2 = ({
   selectedScope,
@@ -37,7 +39,7 @@ const ActivitiesForm2 = ({
   const [unitOfMeasurementOptions, setUnitOfMeasurementOptions] = useState([]);
   const [airports, setAirports] = useState([]);
 
-  const { getPeriodMonths, selectedPeriod } = usePeriod();
+  const { getPeriodMonths, selectedPeriod, setSelectedPeriod } = usePeriod();
 
   const [marketBased, setMarketBased] = useState(false);
   const [marketBasedQuantity, setMarketBasedQuantity] = useState("");
@@ -46,6 +48,12 @@ const ActivitiesForm2 = ({
   const [markedBasedUnitOfEmissionFactor, setMarkedBasedUnitOfEmissionFactor] =
     useState("kgco2e/kwh");
   const [airportsDistance, setAirportsDistance] = useState(0);
+  const [isFormInitializing, setIsFormInitializing] = useState(false)
+
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
 
   const possibleLevel2Labels = {
     "Refrigerant and other": "Refrigerant and other gas category",
@@ -158,9 +166,9 @@ const ActivitiesForm2 = ({
       !businessUnitId ||
       !level1Category ||
       !level2 ||
-      (level3Options.length > 0 && !level3) ||
-      (level4Options.length > 0 && !level4) ||
-      (level5Options.length > 0 && !level5) ||
+      (level3 === undefined) ||
+      (level4 === undefined) ||
+      (level5 === undefined) ||
       !unitOfMeasurement ||
       !quantity
     ) {
@@ -192,30 +200,61 @@ const ActivitiesForm2 = ({
       month,
     };
     // return console.table(payload);
-    const { success, message } =
-      await api.businessUnitsActivities.createBusinessUnitActivity(
-        selectedScope == "Scope 2"
-          ? { ...payload, level5: "locationBased" }
-          : payload
-      );
-    if (success) {
-      toast.success(message);
-    } else {
-      toast.error(message);
-    }
-    if (selectedScope === "Scope 2" && marketBased) {
-      const payload2 = { ...payload };
-      console.log(markedBasedUnitOfEmissionFactor);
-      payload2.unitOfMeasurement = markedBasedUnitOfEmissionFactor;
-      payload2.quantity = marketBasedQuantity;
-      payload2.marketBasedEmissionFactor = marketBasedEmissionFactor;
-      payload2.level5 = "marketBased";
+    if (id) {
       const { success, message } =
-        await api.businessUnitsActivities.createBusinessUnitActivity(payload2);
+        await api.businessUnitsActivities.updateBusinessUnitActivityById(id,
+          selectedScope == "Scope 2"
+            ? { ...payload, level5: "locationBased" }
+            : payload
+        );
+      if (success) {
+        toast.success(message);
+        navigate("/activities")
+      } else {
+        toast.error(message);
+      };
+      if (selectedScope === "Scope 2" && marketBased) {
+        const payload2 = { ...payload };
+        payload2.unitOfMeasurement = markedBasedUnitOfEmissionFactor;
+        payload2.quantity = marketBasedQuantity;
+        payload2.marketBasedEmissionFactor = marketBasedEmissionFactor;
+        payload2.level5 = "marketBased";
+        const { success, message } =
+          await api.businessUnitsActivities.updateBusinessUnitActivityById(id, payload2);
+        if (success) {
+          toast.success(message);
+          navigate("/activities")
+        } else {
+          toast.error(message);
+        }
+      }
+    }
+    else {
+      const { success, message } =
+        await api.businessUnitsActivities.createBusinessUnitActivity(
+          selectedScope == "Scope 2"
+            ? { ...payload, level5: "locationBased" }
+            : payload
+        );
       if (success) {
         toast.success(message);
       } else {
         toast.error(message);
+      };
+
+      if (selectedScope === "Scope 2" && marketBased) {
+        const payload2 = { ...payload };
+        payload2.unitOfMeasurement = markedBasedUnitOfEmissionFactor;
+        payload2.quantity = marketBasedQuantity;
+        payload2.marketBasedEmissionFactor = marketBasedEmissionFactor;
+        payload2.level5 = "marketBased";
+        const { success, message } =
+          await api.businessUnitsActivities.createBusinessUnitActivity(payload2);
+        if (success) {
+          toast.success(message);
+        } else {
+          toast.error(message);
+        }
       }
     }
     resetForm();
@@ -242,7 +281,7 @@ const ActivitiesForm2 = ({
       EARTH_RADIUS_IN_MILES *
       Math.acos(
         Math.sin(lat1) * Math.sin(lat2) +
-          Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)
+        Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)
       );
     distanceInMiles = Number(distanceInMiles.toFixed(2));
     return distanceInMiles;
@@ -266,37 +305,41 @@ const ActivitiesForm2 = ({
 
   // Fetch "Level 1 Category" when business unit is selected
   useEffect(() => {
-    setLevel1Category(undefined);
-    setLevel2(undefined);
-    setLevel3(undefined);
-    setLevel4(undefined);
-    setLevel5(undefined);
-    setUnitOfMeasurement(undefined);
-    setQuantity("");
-    setLevel2Options([]);
-    setLevel3Options([]);
-    setLevel4Options([]);
-    setLevel5Options([]);
-    setUnitOfMeasurementOptions([]);
-    fetchActivities(
-      () => api.level1Categories.getAllLevel1Categories(selectedLevel),
-      setlevel1CategoriesOptions,
-      selectedLevel
-    );
+    if (!isFormInitializing) {
+      setLevel1Category(undefined);
+      setLevel2(undefined);
+      setLevel3(undefined);
+      setLevel4(undefined);
+      setLevel5(undefined);
+      setUnitOfMeasurement(undefined);
+      setQuantity("");
+      setLevel2Options([]);
+      setLevel3Options([]);
+      setLevel4Options([]);
+      setLevel5Options([]);
+      setUnitOfMeasurementOptions([]);
+      fetchActivities(
+        () => api.level1Categories.getAllLevel1Categories(selectedLevel),
+        setlevel1CategoriesOptions,
+        selectedLevel
+      );
+    }
   }, [selectedLevel]);
 
   // Fetch level2 options when "Level 1 Category" is selected
   useEffect(() => {
-    setLevel2(undefined);
-    setLevel3(undefined);
-    setLevel4(undefined);
-    setLevel5(undefined);
-    setUnitOfMeasurement(undefined);
-    setQuantity("");
-    setLevel3Options([]);
-    setLevel4Options([]);
-    setLevel5Options([]);
-    setUnitOfMeasurementOptions([]);
+    if (!isFormInitializing) {
+      setLevel2(undefined);
+      setLevel3(undefined);
+      setLevel4(undefined);
+      setLevel5(undefined);
+      setUnitOfMeasurement(undefined);
+      setQuantity("");
+      setLevel3Options([]);
+      setLevel4Options([]);
+      setLevel5Options([]);
+      setUnitOfMeasurementOptions([]);
+    }
     if (
       selectedLevel === "Business travel- air" ||
       selectedLevel === "WTT- business travel- air"
@@ -327,15 +370,16 @@ const ActivitiesForm2 = ({
 
   // Fetch level3 options based on level2 when level2 is selected
   useEffect(() => {
-    setLevel3(undefined);
-    setLevel4(undefined);
-    setLevel5(undefined);
-    setUnitOfMeasurement(undefined);
-    setQuantity("");
-    setLevel4Options([]);
-    setLevel5Options([]);
-    setUnitOfMeasurementOptions([]);
-
+    if (!isFormInitializing) {
+      setLevel3(undefined);
+      setLevel4(undefined);
+      setLevel5(undefined);
+      setUnitOfMeasurement(undefined);
+      setQuantity("");
+      setLevel4Options([]);
+      setLevel5Options([]);
+      setUnitOfMeasurementOptions([]);
+    }
     if (
       level2 &
       (selectedLevel == "Business travel- air" ||
@@ -363,12 +407,14 @@ const ActivitiesForm2 = ({
 
   // Fetch level4 options based on level3 when level3 is selected
   useEffect(() => {
-    setLevel4(undefined);
-    setLevel5(undefined);
-    setUnitOfMeasurement(undefined);
-    setQuantity("");
-    setLevel5Options([]);
-    setUnitOfMeasurementOptions([]);
+    if (!isFormInitializing) {
+      setLevel4(undefined);
+      setLevel5(undefined);
+      setUnitOfMeasurement(undefined);
+      setQuantity("");
+      setLevel5Options([]);
+      setUnitOfMeasurementOptions([]);
+    }
 
     if (
       level3 &&
@@ -420,10 +466,12 @@ const ActivitiesForm2 = ({
 
   // Fetch level5 options based on level4 when level4 is selected
   useEffect(() => {
-    setLevel5(undefined);
-    setUnitOfMeasurement(undefined);
-    setQuantity("");
-    setUnitOfMeasurementOptions([]);
+    if (!isFormInitializing) {
+      setLevel5(undefined);
+      setUnitOfMeasurement(undefined);
+      setQuantity("");
+      setUnitOfMeasurementOptions([]);
+    }
     if (
       level4 &&
       (selectedLevel == "Business travel- air" ||
@@ -458,8 +506,10 @@ const ActivitiesForm2 = ({
 
   // Fetch unitOfMeasurementOptions based on level5 when level5 is selected
   useEffect(() => {
-    setUnitOfMeasurement(undefined);
-    setQuantity("");
+    if (!isFormInitializing) {
+      setUnitOfMeasurement(undefined);
+      setQuantity("");
+    }
     if (
       selectedLevel == "Business travel- air" ||
       selectedLevel == "WTT- business travel- air"
@@ -487,6 +537,47 @@ const ActivitiesForm2 = ({
       );
     }
   }, [level5]);
+
+
+  useEffect(() => {
+    if (id && !searchParams.get("eeio") && !searchParams.get("reit")) {
+      setIsFormInitializing(true);
+      api.businessUnitsActivities.getBusinessUnitActivityById(id).then(bussinessUnitActivity => {
+        setSelectedScope(bussinessUnitActivity.data.scope);
+        setSelectedLevel(bussinessUnitActivity.data.level1);
+        setMonth(bussinessUnitActivity.data.month);
+        setBusinessUnitId(bussinessUnitActivity.data.businessUnit.id);
+        setLevel1Category(bussinessUnitActivity.data.level1Category);
+        setLevel2(bussinessUnitActivity.data.level2);
+        setLevel3(bussinessUnitActivity.data.level3);
+        setLevel4(bussinessUnitActivity.data.level4);
+        setLevel5(bussinessUnitActivity.data.level5);
+        setUnitOfMeasurement(bussinessUnitActivity.data.unitOfMeasurement);
+        setQuantity(bussinessUnitActivity.data.quantity);
+        setSelectedPeriod(bussinessUnitActivity.data.businessUnit.period.id);
+      });
+
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (id && selectedScope && selectedLevel && month && businessUnitId &&
+      level1Category !== undefined && level2 !== undefined &&
+      level3 !== undefined && level4 !== undefined &&
+      level5 !== undefined && unitOfMeasurement !== undefined && quantity) {
+      setIsFormInitializing(false);
+    }
+  }, [
+    businessUnitId, level1Category, level2, level3, level4, level5, quantity,
+    unitOfMeasurement, month
+  ]);
+
+
+
+  const handleCancel = () => {
+    resetForm();
+    navigate("/activities");
+  };
 
   return (
     <form
@@ -697,16 +788,21 @@ const ActivitiesForm2 = ({
           </FormControl>
         </div>
       )}
-      <Button
-        type="submit"
-        className="self-end"
-        style={{
-          backgroundColor: "rgba(0,204,156,1)",
-        }}
-      >
-        Add
-      </Button>
+      <div className="flex justify-end gap-4">
+        {
+          id &&
+          <Button type="button" onClick={handleCancel}>
+            Cancel
+          </Button>
+        }
+        <Button type="submit">
+          {id ? "Edit" : "Add"}
+        </Button>
+      </div>
+
+
     </form>
+    // Give me 5 
   );
 };
 
