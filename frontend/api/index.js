@@ -10,7 +10,7 @@ const api = {
   businessUnitsActivities,
   level1Categories,
   activities,
-  airports
+  airports,
 };
 
 export { api };
