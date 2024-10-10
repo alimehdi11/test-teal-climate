@@ -28,6 +28,7 @@ const ActivitiesForm2 = ({
   const [unitOfMeasurement, setUnitOfMeasurement] = useState();
   const [quantity, setQuantity] = useState("");
 
+  const [monthOptions, setMonthOptions] = useState([]);
   const [level1CategoriesOptions, setlevel1CategoriesOptions] = useState([]);
   const [level2Options, setLevel2Options] = useState([]);
   const [level3Options, setLevel3Options] = useState([]);
@@ -44,6 +45,7 @@ const ActivitiesForm2 = ({
     useState("");
   const [markedBasedUnitOfEmissionFactor, setMarkedBasedUnitOfEmissionFactor] =
     useState("kgco2e/kwh");
+  const [airportsDistance, setAirportsDistance] = useState(0);
 
   const possibleLevel2Labels = {
     "Refrigerant and other": "Refrigerant and other gas category",
@@ -92,9 +94,6 @@ const ActivitiesForm2 = ({
     "Business travel- air": "Airport To",
     "WTT- business travel- air": "Airport To",
   };
-
-
-
 
   // Reusable fetch function for activities
   const fetchActivities = async (
@@ -181,7 +180,6 @@ const ActivitiesForm2 = ({
       quantity,
       month,
     };
-    return console.table(payload);
     const { success, message } =
       await api.businessUnitsActivities.createBusinessUnitActivity(
         selectedScope == "Scope 2"
@@ -216,8 +214,39 @@ const ActivitiesForm2 = ({
     );
   };
 
+  const getAirportCoordinates = (airports, airportName) => {
+    const airport = airports.filter(
+      (airport) => airport.name === airportName
+    )[0];
+    return {
+      latitude: airport.latitude,
+      longitude: airport.longitude,
+    };
+  };
+
+  const calculateDistanceBetweenAirports = (lat1, lon1, lat2, lon2) => {
+    const EARTH_RADIUS_IN_MILES = 3963.19;
+    let distanceInMiles =
+      EARTH_RADIUS_IN_MILES *
+      Math.acos(
+        Math.sin(lat1) * Math.sin(lat2) +
+          Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)
+      );
+    distanceInMiles = Number(distanceInMiles.toFixed(2));
+    return distanceInMiles;
+  };
+
   // Automatically set businessUnitId if there's only one business unit
   useEffect(() => {
+    setMonth(undefined);
+    if (selectedPeriod) {
+      setMonthOptions(getPeriodMonths());
+    }
+  }, [selectedPeriod]);
+
+  // Automatically set businessUnitId if there's only one business unit
+  useEffect(() => {
+    setBusinessUnitId("");
     if (businessUnits.length === 1) {
       setBusinessUnitId(businessUnits[0].id);
     }
@@ -256,12 +285,16 @@ const ActivitiesForm2 = ({
     setLevel4Options([]);
     setLevel5Options([]);
     setUnitOfMeasurementOptions([]);
-    if (selectedLevel === "Business travel- air" || selectedLevel === "WTT- business travel- air") {
+    if (
+      selectedLevel === "Business travel- air" ||
+      selectedLevel === "WTT- business travel- air"
+    ) {
       if (level1Category) {
         const getAirports = async () => {
           const airports = await api.airports.getAllAirports();
-          setLevel2Options(airports.map(item => item.name));
-        }
+          setLevel2Options(airports.map((item) => item.name));
+          setAirports(airports);
+        };
         getAirports();
       }
     } else {
@@ -278,8 +311,6 @@ const ActivitiesForm2 = ({
         }
       );
     }
-
-
   }, [level1Category]);
 
   // Fetch level3 options based on level2 when level2 is selected
@@ -293,12 +324,14 @@ const ActivitiesForm2 = ({
     setLevel5Options([]);
     setUnitOfMeasurementOptions([]);
 
-    if (selectedLevel == "Business travel- air" || selectedLevel == "WTT- business travel- air") {
+    if (
+      selectedLevel == "Business travel- air" ||
+      selectedLevel == "WTT- business travel- air"
+    ) {
       if (level2) {
-        setLevel3Options(level2Options.filter(item => item != level2))
+        setLevel3Options(level2Options.filter((item) => item != level2));
       }
-    }
-    else {
+    } else {
       fetchActivities(
         api.activities.getAllActivities,
         setLevel3Options,
@@ -313,8 +346,6 @@ const ActivitiesForm2 = ({
         }
       );
     }
-
-
   }, [level2]);
 
   // Fetch level4 options based on level3 when level3 is selected
@@ -326,12 +357,36 @@ const ActivitiesForm2 = ({
     setLevel5Options([]);
     setUnitOfMeasurementOptions([]);
 
-
-    if (selectedLevel === "Business travel- air" || selectedLevel === "WTT- business travel- air") {
-      setLevel4("")
-      return; 
-    }
-    else{
+    if (
+      selectedLevel === "Business travel- air" ||
+      selectedLevel === "WTT- business travel- air"
+    ) {
+      if (level3) {
+        const { latitude: lat1, longitude: lon1 } = getAirportCoordinates(
+          airports,
+          level2
+        );
+        const { latitude: lat2, longitude: lon2 } = getAirportCoordinates(
+          airports,
+          level3
+        );
+        const distanceInMiles = calculateDistanceBetweenAirports(
+          lat1,
+          lon1,
+          lat2,
+          lon2
+        );
+        // Determining level4
+        if (distanceInMiles < 300) {
+          setLevel4Options(["Air Travel - Short Haul"]);
+        } else if (distanceInMiles >= 300 && distanceInMiles < 2300) {
+          setLevel4Options(["Air Travel - Medium Haul"]);
+        } else if (distanceInMiles >= 2300) {
+          setLevel4Options(["Air Travel - Long Haul"]);
+        }
+        setAirportsDistance(distanceInMiles);
+      }
+    } else {
       fetchActivities(
         api.activities.getAllActivities,
         setLevel4Options,
@@ -355,20 +410,19 @@ const ActivitiesForm2 = ({
     setUnitOfMeasurement(undefined);
     setQuantity("");
     setUnitOfMeasurementOptions([]);
-    if (selectedLevel == "Business travel- air" || selectedLevel == "WTT- business travel- air") {
-      if (level3) {
-        setLevel5Options(
-          [
-            "First class",
-            "Economy class",
-            "Business class",
-            "Premium economy class",
-          ]
-        )
+    if (
+      selectedLevel == "Business travel- air" ||
+      selectedLevel == "WTT- business travel- air"
+    ) {
+      if (level4) {
+        setLevel5Options([
+          "First class",
+          "Economy class",
+          "Business class",
+          "Premium economy class",
+        ]);
       }
-
-    }
-    else {
+    } else {
       fetchActivities(
         api.activities.getAllActivities,
         setLevel5Options,
@@ -391,15 +445,15 @@ const ActivitiesForm2 = ({
   useEffect(() => {
     setUnitOfMeasurement(undefined);
     setQuantity("");
-    if (selectedLevel == "Business travel- air" || selectedLevel == "WTT- business travel- air") {
+    if (
+      selectedLevel == "Business travel- air" ||
+      selectedLevel == "WTT- business travel- air"
+    ) {
       if (level5) {
-        setUnitOfMeasurementOptions([
-          "passenger-mile",
-          "passenger.km"
-        ])
+        setUnitOfMeasurementOptions(["passenger-mile", "passenger.km"]);
+        setQuantity(airportsDistance);
       }
-    }
-    else {
+    } else {
       fetchActivities(
         api.activities.getAllActivities,
         setUnitOfMeasurementOptions,
@@ -417,8 +471,6 @@ const ActivitiesForm2 = ({
         }
       );
     }
-
-
   }, [level5]);
 
   return (
@@ -436,7 +488,7 @@ const ActivitiesForm2 = ({
         <FormControl className="flex-1 relative">
           <Label>Month</Label>
           <SearchableSelect
-            data={getPeriodMonths()}
+            data={monthOptions}
             item={month}
             setItem={setMonth}
             text={"Select month"}
@@ -541,6 +593,7 @@ const ActivitiesForm2 = ({
               }
             }}
             placeholder="Enter Quantity"
+            readOnly={airportsDistance !== 0}
           />
         </FormControl>
       </div>

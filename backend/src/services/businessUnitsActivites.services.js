@@ -95,6 +95,8 @@ const createActivity = async (req, res) => {
           unitOfMeasurement,
         },
       });
+      payload.quantity =
+        payload.quantity * electricVehicleRecord.electricityConsumptionPerUnit;
       const businessUnitRecord = await BusinessUnit.findOne({
         where: { id: businessUnitId },
       });
@@ -110,6 +112,29 @@ const createActivity = async (req, res) => {
           unitOfMeasurement,
         },
       });
+      payload = calculateGHGEmissions(activityRecords, payload);
+    } else if (
+      scope === "Scope 3" &&
+      (level1 === "Business travel- air" ||
+        level1 === "WTT- business travel- air")
+    ) {
+      // Deal with airports data
+      const activityRecords = await Activity.findAll({
+        where: {
+          scope,
+          level1,
+          // level2,
+          // level3,
+          level4,
+          level5,
+          unitOfMeasurement,
+        },
+      });
+      // convert distance to "km" if "unitOfMeasurement" is "passenger.km"
+      if (payload.unitOfMeasurement === "passenger.km") {
+        // distanceInKm = distanceInMiles * 1.60934
+        payload.quantity = Number((payload.quantity * 1.60934).toFixed(4));
+      }
       payload = calculateGHGEmissions(activityRecords, payload);
     } else {
       const activityRecords = await Activity.findAll({

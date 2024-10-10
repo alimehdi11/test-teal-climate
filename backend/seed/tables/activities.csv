@@ -438,7 +438,6 @@ id,scope,level1,level2,level3,level4,level5,unitOfMeasurement,greenHouseGas,gree
 439,Scope 3,WTT- bioenergy,WTT- biogas,Biogas,"","",kWh,kg CO2e,0.02841
 440,Scope 3,WTT- bioenergy,WTT- biogas,Landfill gas,"","",tonnes,kg CO2e,0
 441,Scope 3,WTT- bioenergy,WTT- biogas,Landfill gas,"","",kWh,kg CO2e,0
-442,Scope 3,District heat and steam TandD,District heat and steam,"","","",kWh,kg CO2e,0.00945
 443,Scope 3,WTT- heat and steam,WTT- heat and steam,District heat and steam,"","",kWh,kg CO2e,0.03341
 444,Scope 3,WTT- heat and steam,WTT- heat and steam,Onsite heat and steam,"","",kWh,kg CO2e,0.03341
 445,Scope 3,WTT- district heat and steam distribution,WTT- district heat and steam distribution,5% loss,"","",kWh,kg CO2e,0.00176
@@ -707,7 +706,7 @@ id,scope,level1,level2,level3,level4,level5,unitOfMeasurement,greenHouseGas,gree
 708,Outside of Scopes,Outside of scopes,Biogas,Landfill gas,"","",tonnes,kg CO2e,679.98674
 709,Outside of Scopes,Outside of scopes,Biogas,Landfill gas,"","",kWh,kg CO2e,0.19902
 753,Scope 3,Electricity T&D,Electricity T&D,United States of America,Alaska,"",kWh,kg CO2e,0.021223616
-710,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e,2.3338
+710,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Economy class,passenger-mile,kg CO2e,2.3338
 764,Scope 3,WTT- electricity (generation),WTT- electricity (generation),United Kingdom of Great Britain and Northern Ireland,United Kingdom of Great Britain and Northern Ireland,"",kWh,kg CO2e,0.0459
 765,Scope 3,WTT- electricity (T&D),WTT- electricity (T&D),United Kingdom of Great Britain and Northern Ireland,United Kingdom of Great Britain and Northern Ireland,"",kWh,kg CO2e,0.00397
 766,Scope 3,Electricity T&D,Electricity T&D,United Kingdom of Great Britain and Northern Ireland,United Kingdom of Great Britain and Northern Ireland,"",kWh,kg CO2e,0.017915111
@@ -3197,9 +3196,6 @@ id,scope,level1,level2,level3,level4,level5,unitOfMeasurement,greenHouseGas,gree
 3777,Scope 1,Passenger vehicles,Motorbike,Average,"","",miles,kg CO2e of CO2,0.17925
 3778,Scope 1,Passenger vehicles,Motorbike,Average,"","",miles,kg CO2e of CH4,0.00284
 3779,Scope 1,Passenger vehicles,Motorbike,Average,"","",miles,kg CO2e of N2O,0.00084
-3786,Scope 3,District heat and steam TandD,District heat and steam,"","","",kWh,kg CO2e of CO2,0.00936
-3787,Scope 3,District heat and steam TandD,District heat and steam,"","","",kWh,kg CO2e of CH4,7e-05
-3788,Scope 3,District heat and steam TandD,District heat and steam,"","","",kWh,kg CO2e of N2O,3e-05
 3789,Scope 3,Business travel- sea,Ferry,Foot passenger,"","",passenger.km,kg CO2e of CO2,0.01848
 3790,Scope 3,Business travel- sea,Ferry,Foot passenger,"","",passenger.km,kg CO2e of CH4,1e-05
 3791,Scope 3,Business travel- sea,Ferry,Foot passenger,"","",passenger.km,kg CO2e of N2O,0.00022
@@ -3234,6 +3230,9 @@ id,scope,level1,level2,level3,level4,level5,unitOfMeasurement,greenHouseGas,gree
 3820,Scope 3,Business travel- land,Motorbike,Average,"","",miles,kg CO2e of CH4,0.00284
 3821,Scope 3,Business travel- land,Motorbike,Average,"","",miles,kg CO2e of N2O,0.00084
 3822,Scope 3,Business travel- land,Taxis,Regular taxi,"","",passenger.km,kg CO2e of CO2,0.14742
+3786,Scope 3,District heat and steam TandD,District heat and steam,District heat and steam,"","",kWh,kg CO2e of CO2,0.00936
+3787,Scope 3,District heat and steam TandD,District heat and steam,District heat and steam,"","",kWh,kg CO2e of CH4,7e-05
+3788,Scope 3,District heat and steam TandD,District heat and steam,District heat and steam,"","",kWh,kg CO2e of N2O,3e-05
 3823,Scope 3,Business travel- land,Taxis,Regular taxi,"","",passenger.km,kg CO2e of CH4,0
 3824,Scope 3,Business travel- land,Taxis,Regular taxi,"","",passenger.km,kg CO2e of N2O,0.00119
 3825,Scope 3,Business travel- land,Taxis,Regular taxi,"","",km,kg CO2e of CO2,0.20638
@@ -8563,122 +8562,123 @@ id,scope,level1,level2,level3,level4,level5,unitOfMeasurement,greenHouseGas,gree
 6693,Scope 2,Delivery Evs,Vans,Average (up to 3.5 tonnes),Battery Electric Vehicle,locationBased,km,kg CO2e of N2O,0.00028
 6694,Scope 2,Delivery Evs,Vans,Average (up to 3.5 tonnes),Battery Electric Vehicle,locationBased,miles,kg CO2e of CO2,0.10802
 6695,Scope 2,Delivery Evs,Vans,Average (up to 3.5 tonnes),Battery Electric Vehicle,locationBased,miles,kg CO2e of CH4,0.00034
-711,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e,3.73408
-712,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e,6.76802
-713,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e,9.3352
-714,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e,1.3658
-715,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e,2.18528
-716,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e,3.96082
-717,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e,5.4632
-718,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e,1.7276
-719,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e,2.76416
-720,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e,5.01004
-721,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e,6.9104
-722,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e,1.45015564
-723,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e,2.320249024
-724,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e,4.205451355
-725,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e,5.800622559
-726,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e,0.848668512
-727,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e,1.357869619
-728,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e,2.461138684
-729,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e,3.394674047
-730,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e,1.07348054
-731,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e,1.717568863
-732,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e,3.113093565
-733,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e,4.293922158
-734,Scope 3,WTT- business travel- air,"","","",Economy class,passenger-mile,kg CO2e,0.485940515
-736,Scope 3,WTT- business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e,0.777504824
-737,Scope 3,WTT- business travel- air,"","","",Business class,passenger-mile,kg CO2e,1.409227494
-738,Scope 3,WTT- business travel- air,"","","",First class,passenger-mile,kg CO2e,1.94376206
-739,Scope 3,WTT- business travel- air,"","","",Economy class,passenger-mile,kg CO2e,0.284384932
-740,Scope 3,WTT- business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e,0.455015892
-741,Scope 3,WTT- business travel- air,"","","",Business class,passenger-mile,kg CO2e,0.824716304
-742,Scope 3,WTT- business travel- air,"","","",First class,passenger-mile,kg CO2e,1.13753973
-743,Scope 3,WTT- business travel- air,"","","",Economy class,passenger-mile,kg CO2e,0.359718414
-744,Scope 3,WTT- business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e,0.575549462
-745,Scope 3,WTT- business travel- air,"","","",Business class,passenger-mile,kg CO2e,1.0431834
-746,Scope 3,WTT- business travel- air,"","","",First class,passenger-mile,kg CO2e,1.438873655
-747,Scope 3,WTT- business travel- air,"","","",Economy class,passenger.km,kg CO2e,0.301949344
-748,Scope 3,WTT- business travel- air,"","","",Premium economy class,passenger.km,kg CO2e,0.48311895
-749,Scope 3,WTT- business travel- air,"","","",Business class,passenger.km,kg CO2e,0.875653097
-750,Scope 3,WTT- business travel- air,"","","",First class,passenger.km,kg CO2e,1.207797375
-751,Scope 3,WTT- business travel- air,"","","",Economy class,passenger.km,kg CO2e,0.17670855
-752,Scope 3,WTT- business travel- air,"","","",Premium economy class,passenger.km,kg CO2e,0.28273368
-754,Scope 3,WTT- business travel- air,"","","",Business class,passenger.km,kg CO2e,0.512454795
-755,Scope 3,WTT- business travel- air,"","","",First class,passenger.km,kg CO2e,0.706834199
-756,Scope 3,WTT- business travel- air,"","","",Economy class,passenger.km,kg CO2e,0.22351859
-757,Scope 3,WTT- business travel- air,"","","",Premium economy class,passenger.km,kg CO2e,0.357629745
-758,Scope 3,WTT- business travel- air,"","","",Business class,passenger.km,kg CO2e,0.648203912
-759,Scope 3,WTT- business travel- air,"","","",First class,passenger.km,kg CO2e,0.894074362
-4043,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e of CO2,0.207
-4044,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e of CO2,0.3312
-4045,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e of CO2,0.6003
-4046,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e of CO2,0.828
-4047,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e of CO2,0.129
-4048,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e of CO2,0.2064
-4049,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e of CO2,0.3741
-4050,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e of CO2,0.516
-4051,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e of CO2,0.163
-4052,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e of CO2,0.2608
-4053,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e of CO2,0.4727
-4054,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e of CO2,0.652
-4055,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e of CH4,0.16
-4056,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e of CH4,0.256
-4057,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e of CH4,0.464
-4058,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e of CH4,0.64
-4059,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e of CH4,0.015
-4060,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e of CH4,0.024
-4061,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e of CH4,0.0435
-4062,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e of CH4,0.06
-4063,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e of CH4,0.015
-4064,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e of CH4,0.024
-4065,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e of CH4,0.0435
-4066,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e of CH4,0.06
-4067,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e of N2O,1.9668
-4068,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e of N2O,3.14688
-4069,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e of N2O,5.70372
-4070,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e of N2O,7.8672
-4071,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e of N2O,1.2218
-4072,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e of N2O,1.95488
-4073,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e of N2O,3.54322
-4074,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e of N2O,4.8872
-4075,Scope 3,Business travel- air,"","","",Economy class,passenger-mile,kg CO2e of N2O,1.5496
-4076,Scope 3,Business travel- air,"","","",Premium economy class,passenger-mile,kg CO2e of N2O,2.47936
-4077,Scope 3,Business travel- air,"","","",Business class,passenger-mile,kg CO2e of N2O,4.49384
-4078,Scope 3,Business travel- air,"","","",First class,passenger-mile,kg CO2e of N2O,6.1984
-4079,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e of CO2,0.128623797
-4080,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e of CO2,0.205798075
-4081,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e of CO2,0.373009011
-4082,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e of CO2,0.514495188
-4083,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e of CO2,0.080156859
-4084,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e of CO2,0.128250974
-4085,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e of CO2,0.232454891
-4086,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e of CO2,0.320627436
-4087,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e of CO2,0.101283473
-4088,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e of CO2,0.162053557
-4089,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e of CO2,0.293722072
-4090,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e of CO2,0.405133892
-4091,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e of CH4,0.09941936
-4092,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e of CH4,0.159070976
-4093,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e of CH4,0.288316144
-4095,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e of CH4,0.39767744
-4096,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e of CH4,0.009320565
-4097,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e of CH4,0.014912904
-4098,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e of CH4,0.027029639
-4099,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e of CH4,0.03728226
-4100,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e of CH4,0.009320565
-4101,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e of CH4,0.014912904
-4102,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e of CH4,0.027029639
-4103,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e of CH4,0.03728226
-4104,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e of N2O,1.222112483
-4105,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e of N2O,1.955379972
-4106,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e of N2O,3.5441262
-4107,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e of N2O,4.888449931
-4108,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e of N2O,0.759191088
-4109,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e of N2O,1.21470574
-4110,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e of N2O,2.201654155
-4111,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e of N2O,3.036764351
-4112,Scope 3,Business travel- air,"","","",Economy class,passenger.km,kg CO2e of N2O,0.962876502
-4113,Scope 3,Business travel- air,"","","",Premium economy class,passenger.km,kg CO2e of N2O,1.540602403
-4114,Scope 3,Business travel- air,"","","",Business class,passenger.km,kg CO2e of N2O,2.792341855
-4115,Scope 3,Business travel- air,"","","",First class,passenger.km,kg CO2e of N2O,3.851506006
+711,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Premium economy class,passenger-mile,kg CO2e,3.73408
+712,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Business class,passenger-mile,kg CO2e,6.76802
+713,Scope 3,Business travel- air,"","",Air Travel - Short Haul,First class,passenger-mile,kg CO2e,9.3352
+714,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Economy class,passenger-mile,kg CO2e,1.3658
+715,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Premium economy class,passenger-mile,kg CO2e,2.18528
+716,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Business class,passenger-mile,kg CO2e,3.96082
+717,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,First class,passenger-mile,kg CO2e,5.4632
+718,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Economy class,passenger-mile,kg CO2e,1.7276
+719,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Premium economy class,passenger-mile,kg CO2e,2.76416
+720,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Business class,passenger-mile,kg CO2e,5.01004
+721,Scope 3,Business travel- air,"","",Air Travel - Long Haul,First class,passenger-mile,kg CO2e,6.9104
+722,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Economy class,passenger.km,kg CO2e,1.45015564
+723,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Premium economy class,passenger.km,kg CO2e,2.320249024
+724,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Business class,passenger.km,kg CO2e,4.205451355
+442,Scope 3,District heat and steam TandD,District heat and steam,District heat and steam,"","",kWh,kg CO2e,0.00945
+725,Scope 3,Business travel- air,"","",Air Travel - Short Haul,First class,passenger.km,kg CO2e,5.800622559
+726,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Economy class,passenger.km,kg CO2e,0.848668512
+727,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Premium economy class,passenger.km,kg CO2e,1.357869619
+728,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Business class,passenger.km,kg CO2e,2.461138684
+729,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,First class,passenger.km,kg CO2e,3.394674047
+730,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Economy class,passenger.km,kg CO2e,1.07348054
+731,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Premium economy class,passenger.km,kg CO2e,1.717568863
+732,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Business class,passenger.km,kg CO2e,3.113093565
+733,Scope 3,Business travel- air,"","",Air Travel - Long Haul,First class,passenger.km,kg CO2e,4.293922158
+734,Scope 3,WTT- business travel- air,"","",Air Travel - Short Haul,Economy class,passenger-mile,kg CO2e,0.485940515
+736,Scope 3,WTT- business travel- air,"","",Air Travel - Short Haul,Premium economy class,passenger-mile,kg CO2e,0.777504824
+737,Scope 3,WTT- business travel- air,"","",Air Travel - Short Haul,Business class,passenger-mile,kg CO2e,1.409227494
+738,Scope 3,WTT- business travel- air,"","",Air Travel - Short Haul,First class,passenger-mile,kg CO2e,1.94376206
+739,Scope 3,WTT- business travel- air,"","",Air Travel - Medium Haul,Economy class,passenger-mile,kg CO2e,0.284384932
+740,Scope 3,WTT- business travel- air,"","",Air Travel - Medium Haul,Premium economy class,passenger-mile,kg CO2e,0.455015892
+741,Scope 3,WTT- business travel- air,"","",Air Travel - Medium Haul,Business class,passenger-mile,kg CO2e,0.824716304
+742,Scope 3,WTT- business travel- air,"","",Air Travel - Medium Haul,First class,passenger-mile,kg CO2e,1.13753973
+743,Scope 3,WTT- business travel- air,"","",Air Travel - Long Haul,Economy class,passenger-mile,kg CO2e,0.359718414
+744,Scope 3,WTT- business travel- air,"","",Air Travel - Long Haul,Premium economy class,passenger-mile,kg CO2e,0.575549462
+745,Scope 3,WTT- business travel- air,"","",Air Travel - Long Haul,Business class,passenger-mile,kg CO2e,1.0431834
+746,Scope 3,WTT- business travel- air,"","",Air Travel - Long Haul,First class,passenger-mile,kg CO2e,1.438873655
+747,Scope 3,WTT- business travel- air,"","",Air Travel - Short Haul,Economy class,passenger.km,kg CO2e,0.301949344
+748,Scope 3,WTT- business travel- air,"","",Air Travel - Short Haul,Premium economy class,passenger.km,kg CO2e,0.48311895
+749,Scope 3,WTT- business travel- air,"","",Air Travel - Short Haul,Business class,passenger.km,kg CO2e,0.875653097
+750,Scope 3,WTT- business travel- air,"","",Air Travel - Short Haul,First class,passenger.km,kg CO2e,1.207797375
+751,Scope 3,WTT- business travel- air,"","",Air Travel - Medium Haul,Economy class,passenger.km,kg CO2e,0.17670855
+752,Scope 3,WTT- business travel- air,"","",Air Travel - Medium Haul,Premium economy class,passenger.km,kg CO2e,0.28273368
+754,Scope 3,WTT- business travel- air,"","",Air Travel - Medium Haul,Business class,passenger.km,kg CO2e,0.512454795
+755,Scope 3,WTT- business travel- air,"","",Air Travel - Medium Haul,First class,passenger.km,kg CO2e,0.706834199
+756,Scope 3,WTT- business travel- air,"","",Air Travel - Long Haul,Economy class,passenger.km,kg CO2e,0.22351859
+757,Scope 3,WTT- business travel- air,"","",Air Travel - Long Haul,Premium economy class,passenger.km,kg CO2e,0.357629745
+758,Scope 3,WTT- business travel- air,"","",Air Travel - Long Haul,Business class,passenger.km,kg CO2e,0.648203912
+759,Scope 3,WTT- business travel- air,"","",Air Travel - Long Haul,First class,passenger.km,kg CO2e,0.894074362
+4043,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Economy class,passenger-mile,kg CO2e of CO2,0.207
+4044,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Premium economy class,passenger-mile,kg CO2e of CO2,0.3312
+4045,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Business class,passenger-mile,kg CO2e of CO2,0.6003
+4046,Scope 3,Business travel- air,"","",Air Travel - Short Haul,First class,passenger-mile,kg CO2e of CO2,0.828
+4047,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Economy class,passenger-mile,kg CO2e of CO2,0.129
+4048,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Premium economy class,passenger-mile,kg CO2e of CO2,0.2064
+4049,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Business class,passenger-mile,kg CO2e of CO2,0.3741
+4050,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,First class,passenger-mile,kg CO2e of CO2,0.516
+4051,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Economy class,passenger-mile,kg CO2e of CO2,0.163
+4052,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Premium economy class,passenger-mile,kg CO2e of CO2,0.2608
+4053,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Business class,passenger-mile,kg CO2e of CO2,0.4727
+4054,Scope 3,Business travel- air,"","",Air Travel - Long Haul,First class,passenger-mile,kg CO2e of CO2,0.652
+4055,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Economy class,passenger-mile,kg CO2e of CH4,0.16
+4056,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Premium economy class,passenger-mile,kg CO2e of CH4,0.256
+4057,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Business class,passenger-mile,kg CO2e of CH4,0.464
+4058,Scope 3,Business travel- air,"","",Air Travel - Short Haul,First class,passenger-mile,kg CO2e of CH4,0.64
+4059,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Economy class,passenger-mile,kg CO2e of CH4,0.015
+4060,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Premium economy class,passenger-mile,kg CO2e of CH4,0.024
+4061,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Business class,passenger-mile,kg CO2e of CH4,0.0435
+4062,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,First class,passenger-mile,kg CO2e of CH4,0.06
+4063,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Economy class,passenger-mile,kg CO2e of CH4,0.015
+4064,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Premium economy class,passenger-mile,kg CO2e of CH4,0.024
+4065,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Business class,passenger-mile,kg CO2e of CH4,0.0435
+4066,Scope 3,Business travel- air,"","",Air Travel - Long Haul,First class,passenger-mile,kg CO2e of CH4,0.06
+4067,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Economy class,passenger-mile,kg CO2e of N2O,1.9668
+4068,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Premium economy class,passenger-mile,kg CO2e of N2O,3.14688
+4069,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Business class,passenger-mile,kg CO2e of N2O,5.70372
+4070,Scope 3,Business travel- air,"","",Air Travel - Short Haul,First class,passenger-mile,kg CO2e of N2O,7.8672
+4071,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Economy class,passenger-mile,kg CO2e of N2O,1.2218
+4072,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Premium economy class,passenger-mile,kg CO2e of N2O,1.95488
+4073,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Business class,passenger-mile,kg CO2e of N2O,3.54322
+4074,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,First class,passenger-mile,kg CO2e of N2O,4.8872
+4075,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Economy class,passenger-mile,kg CO2e of N2O,1.5496
+4076,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Premium economy class,passenger-mile,kg CO2e of N2O,2.47936
+4077,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Business class,passenger-mile,kg CO2e of N2O,4.49384
+4078,Scope 3,Business travel- air,"","",Air Travel - Long Haul,First class,passenger-mile,kg CO2e of N2O,6.1984
+4079,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Economy class,passenger.km,kg CO2e of CO2,0.128623797
+4080,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Premium economy class,passenger.km,kg CO2e of CO2,0.205798075
+4081,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Business class,passenger.km,kg CO2e of CO2,0.373009011
+4082,Scope 3,Business travel- air,"","",Air Travel - Short Haul,First class,passenger.km,kg CO2e of CO2,0.514495188
+4083,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Economy class,passenger.km,kg CO2e of CO2,0.080156859
+4084,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Premium economy class,passenger.km,kg CO2e of CO2,0.128250974
+4085,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Business class,passenger.km,kg CO2e of CO2,0.232454891
+4086,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,First class,passenger.km,kg CO2e of CO2,0.320627436
+4087,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Economy class,passenger.km,kg CO2e of CO2,0.101283473
+4088,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Premium economy class,passenger.km,kg CO2e of CO2,0.162053557
+4089,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Business class,passenger.km,kg CO2e of CO2,0.293722072
+4090,Scope 3,Business travel- air,"","",Air Travel - Long Haul,First class,passenger.km,kg CO2e of CO2,0.405133892
+4091,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Economy class,passenger.km,kg CO2e of CH4,0.09941936
+4092,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Premium economy class,passenger.km,kg CO2e of CH4,0.159070976
+4093,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Business class,passenger.km,kg CO2e of CH4,0.288316144
+4095,Scope 3,Business travel- air,"","",Air Travel - Short Haul,First class,passenger.km,kg CO2e of CH4,0.39767744
+4096,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Economy class,passenger.km,kg CO2e of CH4,0.009320565
+4097,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Premium economy class,passenger.km,kg CO2e of CH4,0.014912904
+4098,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Business class,passenger.km,kg CO2e of CH4,0.027029639
+4099,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,First class,passenger.km,kg CO2e of CH4,0.03728226
+4100,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Economy class,passenger.km,kg CO2e of CH4,0.009320565
+4101,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Premium economy class,passenger.km,kg CO2e of CH4,0.014912904
+4102,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Business class,passenger.km,kg CO2e of CH4,0.027029639
+4103,Scope 3,Business travel- air,"","",Air Travel - Long Haul,First class,passenger.km,kg CO2e of CH4,0.03728226
+4104,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Economy class,passenger.km,kg CO2e of N2O,1.222112483
+4105,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Premium economy class,passenger.km,kg CO2e of N2O,1.955379972
+4106,Scope 3,Business travel- air,"","",Air Travel - Short Haul,Business class,passenger.km,kg CO2e of N2O,3.5441262
+4107,Scope 3,Business travel- air,"","",Air Travel - Short Haul,First class,passenger.km,kg CO2e of N2O,4.888449931
+4108,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Economy class,passenger.km,kg CO2e of N2O,0.759191088
+4109,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Premium economy class,passenger.km,kg CO2e of N2O,1.21470574
+4110,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,Business class,passenger.km,kg CO2e of N2O,2.201654155
+4111,Scope 3,Business travel- air,"","",Air Travel - Medium Haul,First class,passenger.km,kg CO2e of N2O,3.036764351
+4112,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Economy class,passenger.km,kg CO2e of N2O,0.962876502
+4113,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Premium economy class,passenger.km,kg CO2e of N2O,1.540602403
+4114,Scope 3,Business travel- air,"","",Air Travel - Long Haul,Business class,passenger.km,kg CO2e of N2O,2.792341855
+4115,Scope 3,Business travel- air,"","",Air Travel - Long Haul,First class,passenger.km,kg CO2e of N2O,3.851506006
