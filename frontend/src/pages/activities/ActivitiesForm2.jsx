@@ -754,48 +754,49 @@ const ActivitiesForm2 = ({
           />
         </FormControl>
       </div>
-      {selectedScope === "Scope 2" && (
-        <div>
-          {/* Radio buttons */}
-          <p>
-            Was a market based instrument purchases for this electricity use?
-          </p>
-          <div className="flex gap-x-3">
-            <span className="flex items-center gap-x-1">
-              <input
-                type="radio"
-                id="locationBased"
-                name="electricityBased"
-                value="0" // False
-                checked={!marketBased}
-                onChange={(event) => {
-                  setMarketBased(Boolean(Number(event.target.value)));
-                }}
-              />
-              <Label htmlFor="locationBased">
-                {/* Location Based */}
-                No
-              </Label>
-            </span>
-            <span className="flex items-center gap-x-1">
-              <input
-                type="radio"
-                id="marketBased"
-                name="electricityBased"
-                value="1"
-                checked={marketBased}
-                onChange={(event) => {
-                  setMarketBased(Boolean(Number(event.target.value)));
-                }}
-              />
-              <Label htmlFor="marketBased">
-                {/* Market Based */}
-                Yes
-              </Label>
-            </span>
+      {selectedScope === "Scope 2" &&
+        (id && !marketBased ? null : (
+          <div>
+            {/* Radio buttons */}
+            <p>
+              Was a market based instrument purchases for this electricity use?
+            </p>
+            <div className="flex gap-x-3">
+              <span className="flex items-center gap-x-1">
+                <input
+                  type="radio"
+                  id="locationBased"
+                  name="electricityBased"
+                  value="0" // False
+                  checked={!marketBased}
+                  onChange={(event) => {
+                    setMarketBased(Boolean(Number(event.target.value)));
+                  }}
+                />
+                <Label htmlFor="locationBased">
+                  {/* Location Based */}
+                  No
+                </Label>
+              </span>
+              <span className="flex items-center gap-x-1">
+                <input
+                  type="radio"
+                  id="marketBased"
+                  name="electricityBased"
+                  value="1"
+                  checked={marketBased}
+                  onChange={(event) => {
+                    setMarketBased(Boolean(Number(event.target.value)));
+                  }}
+                />
+                <Label htmlFor="marketBased">
+                  {/* Market Based */}
+                  Yes
+                </Label>
+              </span>
+            </div>
           </div>
-        </div>
-      )}
+        ))}
       {/* Market based form */}
       {marketBased && (
         <div className="grid lg:grid-cols-2 gap-4">
