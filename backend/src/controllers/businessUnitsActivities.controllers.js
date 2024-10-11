@@ -1,5 +1,6 @@
 import { BusinessUnit } from "../models/businessUnit.model.js";
 import { BusinessUnitActivity } from "../models/businessUnitActivity.model.js";
+import { Period } from "../models/period.model.js";
 import {
   createActivity,
   createEeioActivity,
@@ -30,6 +31,13 @@ const getBusinessUnitActivityById = async (req, res) => {
         {
           model: BusinessUnit,
           as: "businessUnit",
+          include: [
+            {
+              model: Period,
+              as: "period",
+            },
+          ],
+          attributes: { exclude: ["periodId"] },
         },
       ],
     });
@@ -70,9 +78,46 @@ const deleteBusinessUnitActivityById = async (req, res) => {
   }
 };
 
+const getAllBusinessUnitsActivities = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { sortOrder = "ASC", limit, sortByColumn = "createdAt" } = req.query;
+    const query = {
+      where: {
+        userId,
+      },
+      include: [
+        {
+          model: BusinessUnit,
+          as: "businessUnit",
+          include: [
+            {
+              model: Period,
+              as: "period",
+            },
+          ],
+          attributes: { exclude: ["periodId"] },
+        },
+      ],
+      attributes: { exclude: ["businessUnitId"] },
+      order: [[sortByColumn, sortOrder]],
+    };
+    if (limit) {
+      query.limit = parseInt(limit, 10);
+    }
+    let businessUnitsActivities = await BusinessUnitActivity.findAll(query);
+    return res.status(200).json({ data: businessUnitsActivities });
+  } catch (error) {
+    console.log("Could not getAllBusinessUnitsActivities");
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export {
   createBusinessUnitActivity,
   getBusinessUnitActivityById,
   updateBusinessUnitActivityById,
   deleteBusinessUnitActivityById,
+  getAllBusinessUnitsActivities,
 };

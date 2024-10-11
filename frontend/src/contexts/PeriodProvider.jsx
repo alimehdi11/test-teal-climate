@@ -7,6 +7,44 @@ const PeriodProvider = ({ children }) => {
   const { allPeriods } = useContext(DataContext).data;
   const [periods, setPeriods] = useState([]);
   const [selectedPeriod, setSelectedPeriod] = useState("");
+  const getPeriodMonths = () => {
+    const currentPeriod = periods.filter((period) => {
+      return Number(selectedPeriod) === period.id;
+    })[0];
+    if (!currentPeriod) {
+      return [];
+    }
+    const months = [
+      "january",
+      "february",
+      "march",
+      "april",
+      "may",
+      "june",
+      "july",
+      "august",
+      "september",
+      "october",
+      "november",
+      "december",
+    ];
+    const [periodStartData, periodEndData] = currentPeriod.period.split("-");
+    const periodStartMonthIndex = new Date(periodStartData.trim()).getMonth();
+    const periodEndMonthIndex = new Date(periodEndData.trim()).getMonth();
+    let monthsFromPeriod = [];
+    if (periodStartMonthIndex <= periodEndMonthIndex) {
+      monthsFromPeriod = months.slice(
+        periodStartMonthIndex,
+        periodEndMonthIndex + 1
+      );
+    } else {
+      monthsFromPeriod = [
+        ...months.slice(periodStartMonthIndex),
+        ...months.slice(0, periodEndMonthIndex + 1),
+      ];
+    }
+    return monthsFromPeriod;
+  };
 
   useEffect(() => {
     if (allPeriods) {
@@ -32,6 +70,7 @@ const PeriodProvider = ({ children }) => {
         setPeriods,
         selectedPeriod,
         setSelectedPeriod,
+        getPeriodMonths,
       }}
     >
       {children}

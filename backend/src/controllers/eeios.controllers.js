@@ -22,7 +22,7 @@ const getEeios = async (req, res) => {
     if (level4) whereClause.level4 = level4;
     if (level5) whereClause.level5 = level5;
     if (sector) whereClause.sector = sector;
-    let attributes = [];
+    const attributes = [];
     if (column) {
       if (distinct === "true") {
         attributes.push([

@@ -11,7 +11,7 @@ const periods = {
         throw new Error("Failed to createPeriod");
       }
       const { message, data } = await response.json();
-      return { message, success: true, data };
+      return { success: true, message, data };
     } catch (error) {
       const { error: errorMessage } = await response.json();
       console.error(error.message);

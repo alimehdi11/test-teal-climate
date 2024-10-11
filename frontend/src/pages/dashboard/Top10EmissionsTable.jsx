@@ -18,15 +18,15 @@ const Top10EmissionsTable = () => {
   const fetchUserTop10Emissions = async () => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnitsActivities?limit=10&sortByColumn=CO2e&sortOrder=DESC`,
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?limit=10&sortByColumn=CO2e&sortOrder=DESC`,
         "GET"
       );
       if (!response.ok) {
         console.log(response);
         throw new Error(`Failed to fetch data:`);
       }
-      const jsonData = await response.json();
-      return jsonData;
+      const { data } = await response.json();
+      return data;
     } catch (error) {
       console.error("Error fetching data:", error);
     }

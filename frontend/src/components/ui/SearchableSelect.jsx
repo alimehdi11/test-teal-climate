@@ -28,6 +28,10 @@ const SearchableSelect = ({ data = [], item, setItem, text, placeholder }) => {
         return item.toLowerCase().includes(filterBy.toLowerCase());
       })
     );
+    // Automatically select the only available item if there's just one
+    if (data.length === 1) {
+      setItem(data[0]);
+    }
   }, [data]);
 
   useEffect(() => {

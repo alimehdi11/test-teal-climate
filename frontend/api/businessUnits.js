@@ -4,7 +4,11 @@ const businessUnits = {
   getAllBusinessUnits: async (periodId) => {
     let response;
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/businessUnits?periodId=${periodId}`;
+      let queryParams = "";
+      if (periodId) {
+        queryParams += `?periodId=${periodId}`;
+      }
+      const url = `${import.meta.env.VITE_API_BASE_URL}/businessUnits${queryParams}`;
       const method = "GET";
       response = await request(url, method);
       if (!response.ok) {

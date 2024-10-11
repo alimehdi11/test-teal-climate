@@ -12,8 +12,11 @@ import {
   TableRow,
   TableCell,
 } from "../../components/ui/Table.jsx";
+import { api } from "../../../api/index.js";
+import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
-const ProfileTable = ({ businessUnits, fetchBusinessUnits }) => {
+const ProfileTable = ({ businessUnits, setBusinessUnits }) => {
+  const { selectedPeriod } = usePeriod();
   const handleDelete = (id) => {
     return () => {
       request(
@@ -27,7 +30,13 @@ const ProfileTable = ({ businessUnits, fetchBusinessUnits }) => {
           toast.success("Data deleted successfully");
         })
         .then(async () => {
-          await fetchBusinessUnits();
+          const { data, success, message } =
+            await api.businessUnits.getAllBusinessUnits(selectedPeriod);
+          if (success) {
+            setBusinessUnits(data);
+          } else {
+            toast.error(message);
+          }
         })
         .catch((error) => {
           toast.error("Error deleting data");

@@ -1,14 +1,13 @@
 import TC_PieChartWithPaddingAngle from "../../components/TC_PieChartWithPaddingAngle.jsx";
 import { useState, useEffect, useContext } from "react";
 import TC_RadialBarChart from "../../components/TC_RadialBarChart.jsx";
-import { UserContext } from "../../contexts/UserContext.jsx";
 import { request } from "../../utils/request.js";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
+import { api } from "../../../api/index.js";
+import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
 
 const CarbonEmissionsAnalytics = () => {
-  const { user } = useContext(UserContext);
-  const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
-    useState([]);
+  const [businessUnitsActivities, setBusinessUnitsActivities] = useState([]);
   const { selectedPeriod } = usePeriod();
   const [totalCO2e, setTotalCO2e] = useState(0);
   const [totalScope1CO2e, setTotalScope1CO2e] = useState(0);
@@ -18,30 +17,8 @@ const CarbonEmissionsAnalytics = () => {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   ]);
 
-  const fetchUserBusinessUnitsActivities = async () => {
-    try {
-      const userBusinessUnitsActivitiesResponse = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnitsActivities`,
-        "GET"
-      );
-      if (!userBusinessUnitsActivitiesResponse.ok) {
-        throw new Error(`Failed to fetch data:`);
-      }
-      let userBusinessUnitsActivities =
-        await userBusinessUnitsActivitiesResponse.json();
-      userBusinessUnitsActivities = userBusinessUnitsActivities.filter(
-        (activity) => {
-          return activity.businessUnit.period.id === selectedPeriod;
-        }
-      );
-      setUserBusinessUnitsActivities(userBusinessUnitsActivities);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   const calculateTotalC02e = () => {
-    const totalCO2e = userBusinessUnitsActivities.reduce(
+    const totalCO2e = businessUnitsActivities.reduce(
       (accumulator, obj) => accumulator + obj.CO2e,
       0
     );
@@ -49,7 +26,7 @@ const CarbonEmissionsAnalytics = () => {
   };
 
   const calculateTotalC02eOfGivenScope = (scope) => {
-    const totalC02eOfGivenScope = userBusinessUnitsActivities.reduce(
+    const totalC02eOfGivenScope = businessUnitsActivities.reduce(
       (accumulator, obj) => {
         if (obj.scope === scope) {
           return accumulator + obj.CO2e;
@@ -70,7 +47,7 @@ const CarbonEmissionsAnalytics = () => {
   };
 
   const calculateC02ePercentageOfGivenScopeCategory = (scopeCategory) => {
-    const totalC02eOfGivenScopeCategory = userBusinessUnitsActivities.reduce(
+    const totalC02eOfGivenScopeCategory = businessUnitsActivities.reduce(
       (accumulator, obj) => {
         if (obj.level1Category === scopeCategory) {
           return accumulator + obj.CO2e;
@@ -91,7 +68,7 @@ const CarbonEmissionsAnalytics = () => {
   };
 
   const calculateTotalC02eOfScope2 = () => {
-    const totalC02eOfScope2 = userBusinessUnitsActivities.reduce(
+    const totalC02eOfScope2 = businessUnitsActivities.reduce(
       (accumulator, obj) => {
         // Here we are excluding marketBased data(Scope 2)
         if (obj.scope === "Scope 2" && obj.level5 !== "marketBased") {
@@ -115,7 +92,7 @@ const CarbonEmissionsAnalytics = () => {
   const calculateC02ePercentageOfLocationBasedScopeCategory = (
     scopeCategory
   ) => {
-    const totalC02eOfGivenScopeCategory = userBusinessUnitsActivities.reduce(
+    const totalC02eOfGivenScopeCategory = businessUnitsActivities.reduce(
       (accumulator, obj) => {
         // Here we are excluding marketBased data(Scope 2)
         if (
@@ -140,7 +117,7 @@ const CarbonEmissionsAnalytics = () => {
   };
 
   const calculateC02ePercentageOfMarketBasedScopeCategory = (scopeCategory) => {
-    const totalC02eOfGivenScopeCategory = userBusinessUnitsActivities.reduce(
+    const totalC02eOfGivenScopeCategory = businessUnitsActivities.reduce(
       (accumulator, obj) => {
         if (
           obj.level1Category === scopeCategory &&
@@ -201,16 +178,26 @@ const CarbonEmissionsAnalytics = () => {
 
   useEffect(() => {
     if (selectedPeriod) {
-      fetchUserBusinessUnitsActivities();
+      (async () => {
+        const { data, success, message } =
+          await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+        if (success) {
+          setBusinessUnitsActivities(
+            filterBusinessUnitsActivitiesForSelectedPeriod(data, selectedPeriod)
+          );
+        } else {
+          toast.error(message);
+        }
+      })();
     }
   }, [selectedPeriod]);
 
   useEffect(() => {
-    if (userBusinessUnitsActivities.length > 0) {
+    if (businessUnitsActivities.length > 0) {
       const totalCO2e = calculateTotalC02e();
       setTotalCO2e(totalCO2e);
     }
-  }, [userBusinessUnitsActivities]);
+  }, [businessUnitsActivities]);
 
   useEffect(() => {
     if (totalCO2e) {

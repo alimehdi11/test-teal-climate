@@ -1,34 +1,28 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import worldMapJson from "../../data/worldMap.json";
-import { UserContext } from "../../contexts/UserContext.jsx";
 import { request } from "../../utils/request.js";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
 const WorldMap = () => {
-  const [userBusinessUnitsActivities, setUserBusinessUnitsActivities] =
-    useState([]);
-  const { user } = useContext(UserContext);
+  const [businessUnitsActivities, setBusinessUnitsActivities] = useState([]);
   const { selectedPeriod } = usePeriod();
 
-  const fetchUserBusinessUnitsActivities = async () => {
+  const fetchBusinessUnitsActivities = async () => {
     try {
-      const userBusinessUnitsActivitiesResponse = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}/businessUnitsActivities`,
+      const businessUnitsActivitiesResponse = await request(
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities`,
         "GET"
       );
-      if (!userBusinessUnitsActivitiesResponse.ok) {
+      if (!businessUnitsActivitiesResponse.ok) {
         throw new Error(`Failed to fetch data:`);
       }
-      let userBusinessUnitsActivities =
-        await userBusinessUnitsActivitiesResponse.json();
-      userBusinessUnitsActivities = userBusinessUnitsActivities.filter(
-        (activity) => {
-          return activity.businessUnit.period === selectedPeriod;
-        }
-      );
-      setUserBusinessUnitsActivities(userBusinessUnitsActivities);
+      const { data } = await businessUnitsActivitiesResponse.json();
+      let businessUnitsActivities = data.filter((activity) => {
+        return activity.businessUnit.period.id === selectedPeriod;
+      });
+      setBusinessUnitsActivities(businessUnitsActivities);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -39,14 +33,13 @@ const WorldMap = () => {
     let emissionsValue = 0;
 
     // Extracting emissions from user activities and adding all emissions if available for given country
-    userBusinessUnitsActivities.forEach((userBusinessUnitActivity) => {
+    businessUnitsActivities.forEach((businessUnitActivity) => {
       if (
-        userBusinessUnitActivity.businessUnit.country ===
+        businessUnitActivity.businessUnit.country ===
           feature.properties.formal_en ||
-        userBusinessUnitActivity.businessUnit.country ===
-          feature.properties.name
+        businessUnitActivity.businessUnit.country === feature.properties.name
       ) {
-        emissionsValue += userBusinessUnitActivity.CO2e;
+        emissionsValue += businessUnitActivity.CO2e;
       }
     });
 
@@ -77,14 +70,13 @@ const WorldMap = () => {
     let emissionsValue = 0;
 
     // Extracting emissions from user activities and adding all emissions if available for given country
-    userBusinessUnitsActivities.forEach((userBusinessUnitActivity) => {
+    businessUnitsActivities.forEach((businessUnitActivity) => {
       if (
-        userBusinessUnitActivity.businessUnit.country ===
+        businessUnitActivity.businessUnit.country ===
           feature.properties.formal_en ||
-        userBusinessUnitActivity.businessUnit.country ===
-          feature.properties.name
+        businessUnitActivity.businessUnit.country === feature.properties.name
       ) {
-        emissionsValue += userBusinessUnitActivity.CO2e;
+        emissionsValue += businessUnitActivity.CO2e;
       }
     });
 
@@ -96,7 +88,7 @@ const WorldMap = () => {
 
   useEffect(() => {
     if (selectedPeriod) {
-      fetchUserBusinessUnitsActivities();
+      fetchBusinessUnitsActivities();
     }
   }, [selectedPeriod]);
 

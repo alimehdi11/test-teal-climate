@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { request } from "../../utils/request.js";
 import Button from "../../components/ui/Button.jsx";
 import FormControl from "../../components/FormControl.jsx";
@@ -9,16 +9,17 @@ import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
 import { DataContext } from "../../contexts/DataContext.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
-import { getPeriodMonths } from "../../utils/date.js";
 import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
 import { api } from "../../../api/index.js";
+import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
 
 const ActivitesForm = ({
   selectedScope,
   selectedLevel,
-  fetchUserBusinessUnitsActivities,
+  setBusinessUnitsActivities,
   setSelectedScope,
   setSelectedLevel,
+  businessUnits,
 }) => {
   const [scopeCategoryValue, setScopeCategoryValue] = useState("");
   const [fuelTypeValue, setFuelTypeValue] = useState(""); // level2
@@ -28,8 +29,6 @@ const ActivitesForm = ({
   const [quantityValue, setQuantityValue] = useState("");
   const [level4Value, setLevel4Value] = useState("");
   const [level5Value, setLevel5Value] = useState("");
-
-  const [businessUnits, setBusinessUnits] = useState([]);
 
   const [unitOfMeasurements, setUnitOfMeasurements] = useState([]);
   const [scopeCategories, setScopeCategories] = useState([]);
@@ -65,27 +64,11 @@ const ActivitesForm = ({
   const currentYear = new Date().getFullYear();
   const years = [currentYear, currentYear - 1];
 
-  const { selectedPeriod, periods } = usePeriod();
+  const { selectedPeriod, getPeriodMonths } = usePeriod();
+  const [searchParams] = useSearchParams();
 
-  const fetchBusinessUnits = async () => {
-    const { data, success, message } =
-      await api.businessUnits.getAllBusinessUnits(selectedPeriod);
-    if (success) {
-      setBusinessUnits(data);
-    } else {
-      toast.error(message);
-    }
-  };
-
-  const filterScopeCategories = () => {
-    let level2 = [];
-    level1Categories?.forEach((item) => {
-      if (item.level1 === selectedLevel) {
-        level2.push(item.category);
-      }
-    });
-    level2 = [...new Set(level2)];
-    return level2;
+  const getLevel1Categories = async () => {
+    return await api.level1Categories.getAllLevel1Categories();
   };
 
   const filterUnitOfMeasurements = () => {
@@ -630,9 +613,20 @@ const ActivitesForm = ({
           resetForm();
         }
       })
-      .then(() => {
+      .then(async () => {
         if (!marketBased) {
-          fetchUserBusinessUnitsActivities();
+          const { success, message, data } =
+            await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+          if (success) {
+            setBusinessUnitsActivities(
+              filterBusinessUnitsActivitiesForSelectedPeriod(
+                data,
+                selectedPeriod
+              )
+            );
+          } else {
+            toast.error(message);
+          }
         }
       })
       .catch((error) => {
@@ -656,8 +650,19 @@ const ActivitesForm = ({
           toast.success("Data submitted successfully");
           resetForm();
         })
-        .then(() => {
-          fetchUserBusinessUnitsActivities();
+        .then(async () => {
+          const { success, message, data } =
+            await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+          if (success) {
+            setBusinessUnitsActivities(
+              filterBusinessUnitsActivitiesForSelectedPeriod(
+                data,
+                selectedPeriod
+              )
+            );
+          } else {
+            toast.error(message);
+          }
         })
         .catch((error) => {
           toast.error("Error adding data");
@@ -940,9 +945,20 @@ const ActivitesForm = ({
           resetForm();
         }
       })
-      .then(() => {
+      .then(async () => {
         if (!marketBased) {
-          fetchUserBusinessUnitsActivities();
+          const { success, message, data } =
+            await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+          if (success) {
+            setBusinessUnitsActivities(
+              filterBusinessUnitsActivitiesForSelectedPeriod(
+                data,
+                selectedPeriod
+              )
+            );
+          } else {
+            toast.error(message);
+          }
         }
       })
       .catch((error) => {
@@ -966,8 +982,19 @@ const ActivitesForm = ({
           toast.success("Data updated successfully");
           navigate("/activities");
         })
-        .then(() => {
-          fetchUserBusinessUnitsActivities();
+        .then(async () => {
+          const { success, message, data } =
+            await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+          if (success) {
+            setBusinessUnitsActivities(
+              filterBusinessUnitsActivitiesForSelectedPeriod(
+                data,
+                selectedPeriod
+              )
+            );
+          } else {
+            toast.error(message);
+          }
         })
         .catch((error) => {
           toast.error("Error updating data");
@@ -1182,132 +1209,129 @@ const ActivitesForm = ({
   };
 
   useEffect(() => {
-    if (selectedPeriod) {
-      fetchBusinessUnits();
-    }
-  }, [selectedPeriod]);
-
-  useEffect(() => {
-    // if (!id) {
-    setScopeCategoryValue("");
-    setShowFuelNamesField(false);
-    setShowLevel4Field(false);
-    setShowLevel5Field(false);
-    setUnitOfMeasurementValue("");
-    setUnitOfMeasurements([]);
-    // }
-    // initialialy blocking not to filter if level1Categories or activities or businessUnits is empty
-    if (
-      level1Categories !== null &&
-      activities !== null &&
-      businessUnits.length > 0
-    ) {
-      const scopeCategories = filterScopeCategories();
-      setScopeCategories(scopeCategories);
-      // show fields that are available
+    (async () => {
+      // if (!id) {
+      setScopeCategoryValue("");
+      setShowFuelNamesField(false);
+      setShowLevel4Field(false);
+      setShowLevel5Field(false);
+      setUnitOfMeasurementValue("");
+      setUnitOfMeasurements([]);
+      // }
+      // initialialy blocking not to filter if level1Categories or activities or businessUnits is empty
       if (
-        selectedLevel !== "Electricity" &&
-        selectedLevel !== "Electricity TandD" &&
-        selectedLevel !== "WTT- electricity (generation)" &&
-        selectedLevel !== "WTT- electricity (TandD)" &&
-        selectedLevel !== "WTT- electricity" &&
-        selectedLevel !== "Water supply" &&
-        selectedLevel !== "Water treatment" &&
-        selectedLevel !== "WTT- district heat and steam distribution" &&
-        selectedLevel !== "Managed assets- electricity" &&
-        selectedLevel !== "WTT- electricity (T&D)" &&
-        selectedLevel !== "Electricity T&D"
+        level1Categories !== null &&
+        activities !== null &&
+        businessUnits.length > 0
       ) {
-        // This is only to show inputs. There options will be filtered when its previous value input is selected
-        setShowFuelNamesField(isFuelNamesAvaialble());
+        const scopeCategories = await getLevel1Categories();
+        setScopeCategories(scopeCategories);
+        console.log(scopeCategories);
+        // show fields that are available
         if (
-          selectedLevel !== "Delivery Evs" &&
-          selectedLevel !== "Heat and steam" &&
-          selectedLevel !== "Electricity TandD for delivery Evs" &&
-          selectedLevel !== "WTT- heat and steam" &&
-          selectedLevel !== "Hotel stay"
+          selectedLevel !== "Electricity" &&
+          selectedLevel !== "Electricity TandD" &&
+          selectedLevel !== "WTT- electricity (generation)" &&
+          selectedLevel !== "WTT- electricity (TandD)" &&
+          selectedLevel !== "WTT- electricity" &&
+          selectedLevel !== "Water supply" &&
+          selectedLevel !== "Water treatment" &&
+          selectedLevel !== "WTT- district heat and steam distribution" &&
+          selectedLevel !== "Managed assets- electricity" &&
+          selectedLevel !== "WTT- electricity (T&D)" &&
+          selectedLevel !== "Electricity T&D"
+        ) {
+          // This is only to show inputs. There options will be filtered when its previous value input is selected
+          setShowFuelNamesField(isFuelNamesAvaialble());
+          if (
+            selectedLevel !== "Delivery Evs" &&
+            selectedLevel !== "Heat and steam" &&
+            selectedLevel !== "Electricity TandD for delivery Evs" &&
+            selectedLevel !== "WTT- heat and steam" &&
+            selectedLevel !== "Hotel stay"
+          ) {
+            if (
+              selectedLevel !== "Business travel- air" &&
+              selectedLevel !== "WTT- business travel- air"
+            ) {
+              setShowLevel4Field(isLevel4Available());
+            }
+            setShowLevel5Field(
+              selectedLevel === "Business travel- air" ||
+                selectedLevel === "WTT- business travel- air"
+                ? true
+                : isLevel5Available()
+            );
+          }
+        }
+
+        if (
+          selectedLevel === "Electricity" ||
+          selectedLevel === "Electricity TandD" ||
+          selectedLevel === "WTT- electricity (generation)" ||
+          selectedLevel === "WTT- electricity (TandD)" ||
+          selectedLevel === "WTT- electricity" ||
+          selectedLevel === "Water supply" ||
+          selectedLevel === "Water treatment" ||
+          selectedLevel === "District heat and steam TandD" ||
+          selectedLevel === "WTT- district heat and steam distribution" ||
+          selectedLevel === "Managed assets- electricity" ||
+          selectedLevel === "WTT- electricity (T&D)" ||
+          selectedLevel === "Electricity T&D" ||
+          selectedLevel === "Delivery Evs" ||
+          selectedLevel === "Heat and steam" ||
+          selectedLevel === "Electricity TandD for delivery Evs" ||
+          selectedLevel === "WTT- heat and steam" ||
+          selectedLevel === "Hotel stay" ||
+          selectedLevel === "Business travel- air" ||
+          selectedLevel === "WTT- business travel- air"
+        ) {
+          const unitOfMeasurements =
+            filterUnitOfMeasurementsBasedOnScopeAndLevel1();
+          setUnitOfMeasurements(unitOfMeasurements);
+        }
+
+        if (
+          selectedLevel === "Delivery Evs" ||
+          selectedLevel === "Heat and steam" ||
+          selectedLevel === "Electricity TandD for delivery Evs" ||
+          selectedLevel === "WTT- heat and steam" ||
+          selectedLevel === "Hotel stay" ||
+          selectedLevel === "Business travel- air" ||
+          selectedLevel === "WTT- business travel- air"
         ) {
           if (
             selectedLevel !== "Business travel- air" &&
             selectedLevel !== "WTT- business travel- air"
           ) {
-            setShowLevel4Field(isLevel4Available());
+            const level3 = filterLevel3BasedOnScopeAndLevel1();
+            setFuelNames(level3);
           }
-          setShowLevel5Field(
-            selectedLevel === "Business travel- air" ||
-              selectedLevel === "WTT- business travel- air"
-              ? true
-              : isLevel5Available()
-          );
+
+          // if (
+          // selectedLevel === "Business travel- air" ||
+          // selectedLevel === "WTT- business travel- air"
+          // ) {
+          const level4Options = (() => {
+            let level4Options = [];
+            activities?.forEach((item) => {
+              if (
+                item.scope === selectedScope &&
+                item.level1 === selectedLevel &&
+                item.level4 !== "null" &&
+                item.level4
+              ) {
+                level4Options.push(item.level4);
+              }
+            });
+            level4Options = [...new Set(level4Options)];
+            return level4Options;
+          })();
+          setLevel4Options(level4Options);
+          // }
         }
       }
-
-      if (
-        selectedLevel === "Electricity" ||
-        selectedLevel === "Electricity TandD" ||
-        selectedLevel === "WTT- electricity (generation)" ||
-        selectedLevel === "WTT- electricity (TandD)" ||
-        selectedLevel === "WTT- electricity" ||
-        selectedLevel === "Water supply" ||
-        selectedLevel === "Water treatment" ||
-        selectedLevel === "District heat and steam TandD" ||
-        selectedLevel === "WTT- district heat and steam distribution" ||
-        selectedLevel === "Managed assets- electricity" ||
-        selectedLevel === "WTT- electricity (T&D)" ||
-        selectedLevel === "Electricity T&D" ||
-        selectedLevel === "Delivery Evs" ||
-        selectedLevel === "Heat and steam" ||
-        selectedLevel === "Electricity TandD for delivery Evs" ||
-        selectedLevel === "WTT- heat and steam" ||
-        selectedLevel === "Hotel stay" ||
-        selectedLevel === "Business travel- air" ||
-        selectedLevel === "WTT- business travel- air"
-      ) {
-        const unitOfMeasurements =
-          filterUnitOfMeasurementsBasedOnScopeAndLevel1();
-        setUnitOfMeasurements(unitOfMeasurements);
-      }
-
-      if (
-        selectedLevel === "Delivery Evs" ||
-        selectedLevel === "Heat and steam" ||
-        selectedLevel === "Electricity TandD for delivery Evs" ||
-        selectedLevel === "WTT- heat and steam" ||
-        selectedLevel === "Hotel stay" ||
-        selectedLevel === "Business travel- air" ||
-        selectedLevel === "WTT- business travel- air"
-      ) {
-        if (
-          selectedLevel !== "Business travel- air" &&
-          selectedLevel !== "WTT- business travel- air"
-        ) {
-          const level3 = filterLevel3BasedOnScopeAndLevel1();
-          setFuelNames(level3);
-        }
-
-        // if (
-        // selectedLevel === "Business travel- air" ||
-        // selectedLevel === "WTT- business travel- air"
-        // ) {
-        const level4Options = (() => {
-          let level4Options = [];
-          activities?.forEach((item) => {
-            if (
-              item.scope === selectedScope &&
-              item.level1 === selectedLevel &&
-              item.level4 !== "null" &&
-              item.level4
-            ) {
-              level4Options.push(item.level4);
-            }
-          });
-          level4Options = [...new Set(level4Options)];
-          return level4Options;
-        })();
-        setLevel4Options(level4Options);
-        // }
-      }
-    }
+    })();
   }, [selectedLevel, /*level1Categories, activities,*/ businessUnits]);
 
   /**
@@ -1540,7 +1564,7 @@ const ActivitesForm = ({
   }, [unitOfMeasurementValue]);
 
   useEffect(() => {
-    if (id) {
+    if (id && !searchParams.get("eeio") && !searchParams.get("reit")) {
       fetchActivityById()
         .then((activity) => {
           setScopeCategoryValue(activity.level1Category);
@@ -1554,6 +1578,8 @@ const ActivitesForm = ({
           setLevel4Value(activity.level4 || "");
           setLevel5Value(activity.level5 || "");
           setMonth(activity.month);
+          setSelectedScope(activity.scope);
+          setSelectedLevel(activity.level1);
           // setYear(activity.year);
         })
         .catch((error) => {
@@ -1581,40 +1607,13 @@ const ActivitesForm = ({
           <FormControl className="flex-1 relative">
             <Label>Month</Label>
             <SearchableSelect
-              data={getPeriodMonths(
-                periods.filter((period) => {
-                  return Number(selectedPeriod) === period.id;
-                })[0]
-              )}
+              data={getPeriodMonths()}
               item={month}
               setItem={setMonth}
               text={"Select month"}
               placeholder={"Search month"}
             />
-            {/* <Select value={month} onChange={(e) => setMonth(e.target.value)}>
-              <option value="">Select Option</option>
-              {getPeriodMonths(selectedPeriod).map((option) => {
-                return (
-                  <option key={option} value={option}>
-                    {option.toUpperCase()}
-                  </option>
-                );
-              })}
-            </Select> */}
           </FormControl>
-          {/* <FormControl className="flex-1">
-            <Label>Year</Label>
-            <Select value={year} onChange={(e) => setYear(e.target.value)}>
-              <option value="">Select Option</option>
-              {years.map((option, index) => {
-                return (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                );
-              })}
-            </Select>
-          </FormControl> */}
         </div>
         {/* Scope Category */}
         <FormControl className="relative">
@@ -1626,49 +1625,28 @@ const ActivitesForm = ({
             text={"Select scope category"}
             placeholder={"Search scope category"}
           />
-          {/* <Select
-            value={scopeCategoryValue}
-            onChange={(e) => setScopeCategoryValue(e.target.value)}
-          >
-            <option value="">Select Option</option>
-            {scopeCategories.map((option, index) => {
-              return (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              );
-            })}
-          </Select> */}
         </FormControl>
-
         {/* Business Unit */}
         <FormControl className="relative">
           <Label>Business Unit</Label>
-          {/* <SearchableSelect
-            data={businessUnits.map(
-              (businessUnit, index) => businessUnit.title
-            )}
-            item={businessUnitValue}
-            setItem={setBusinessUnitValue}
-            text={"Select business unit"}
-            placeholder={"Search business unit"}
-          /> */}
           <Select
             value={businessUnitValue}
             onChange={(e) => setBusinessUnitValue(e.target.value)}
           >
             <option value="">Select Option</option>
-            {businessUnits &&
-              businessUnits.map((businessUnit) => {
+            {businessUnits.length > 0 ? (
+              businessUnits.map((options, index) => {
                 return (
-                  <option key={businessUnit.id} value={businessUnit.id}>
-                    {businessUnit.title}
+                  <option value={options.id} key={index}>
+                    {options.title}
                   </option>
                 );
-              })}
+              })
+            ) : (
+              <option disabled>'Profile not found create profile first'</option>
+            )}
           </Select>
         </FormControl>
-
         {/* Fuel Type (level2) */}
         {
           /* Not operator here ==>*/ ![
@@ -1712,23 +1690,9 @@ const ActivitesForm = ({
                     `${selectedLevel} Type`)
                 }
               />
-              {/* <Select
-                value={fuelTypeValue}
-                onChange={(e) => setFuelTypeValue(e.target.value)}
-              >
-                <option value="">Select Option</option>
-                {fuelTypes.map((option, index) => {
-                  return (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  );
-                })}
-              </Select> */}
             </FormControl>
           )
         }
-
         {/* Fuel Name (level3) */}
         {showFuelNamesField && (
           <FormControl className="relative">
@@ -1751,19 +1715,6 @@ const ActivitesForm = ({
                   `${selectedLevel} Name`)
               }
             />
-            {/* <Select
-              value={fuelNameValue}
-              onChange={(e) => setFuelNameValue(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {fuelNames.map((option, index) => {
-                return (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                );
-              })}
-            </Select> */}
           </FormControl>
         )}
 
@@ -1808,19 +1759,6 @@ const ActivitesForm = ({
                   : "Level 4")
               }
             />
-            {/* <Select
-              onChange={(e) => setLevel4Value(e.target.value)}
-              value={level4Value}
-            >
-              <option value="">Select Option</option>
-              {level4Options.map((option, index) => {
-                return (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                );
-              })}
-            </Select> */}
           </FormControl>
         )}
 
@@ -1943,19 +1881,6 @@ const ActivitesForm = ({
                                             : "Level 5")
               }
             />
-            {/* <Select
-              value={level5Value}
-              onChange={(e) => setLevel5Value(e.target.value)}
-            >
-              <option value="">Select Option</option>
-              {level5Options.map((option, index) => {
-                return (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                );
-              })}
-            </Select> */}
           </FormControl>
         )}
 
@@ -1969,21 +1894,7 @@ const ActivitesForm = ({
             text={"Select unit of measurement"}
             placeholder={"Search unit of measurement"}
           />
-          {/* <Select
-            value={unitOfMeasurementValue}
-            onChange={(e) => setUnitOfMeasurementValue(e.target.value)}
-          >
-            <option value="">Select Option</option>
-            {unitOfMeasurements.map((option, index) => {
-              return (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              );
-            })}
-          </Select> */}
         </FormControl>
-
         {/* Quantity */}
         {selectedLevel !== "Business travel- air" &&
           selectedLevel !== "WTT- business travel- air" && (
