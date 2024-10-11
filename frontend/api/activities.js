@@ -18,7 +18,6 @@ const activities = {
       return { message: errorMessage, success: false };
     }
   },
-
 };
 
 export { activities };

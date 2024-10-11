@@ -20,18 +20,17 @@ const Profile = () => {
     if (selectedPeriod) {
       (async () => {
         const { data, success, message } =
-        await api.businessUnits.getAllBusinessUnits(selectedPeriod);
+          await api.businessUnits.getAllBusinessUnits(selectedPeriod);
         if (success) {
           setBusinessUnits(data);
         } else {
           toast.error(message);
         }
       })();
-      setShowPeriodForm(false)
+      setShowPeriodForm(false);
     } else {
-      setShowPeriodForm(true)
+      setShowPeriodForm(true);
     }
-
   }, [selectedPeriod]);
 
   return (
@@ -52,7 +51,9 @@ const Profile = () => {
               <PeriodSelector />
             </div>
           </div>
-          {showPeriodForm && <PeriodForm setShowPeriodForm={setShowPeriodForm} />}
+          {showPeriodForm && (
+            <PeriodForm setShowPeriodForm={setShowPeriodForm} />
+          )}
           <PortfolioForm setBusinessUnits={setBusinessUnits} />
           <ProfileTable
             businessUnits={businessUnits}

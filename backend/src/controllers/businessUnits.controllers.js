@@ -16,7 +16,7 @@ const createBusinessUnit = async (req, res) => {
       periodId,
     } = req.body;
     if (!periodId) {
-      return res.status(400).json({ error: "Please add period first" })
+      return res.status(400).json({ error: "Please add period first" });
     }
     await BusinessUnit.create({
       userId: req.user.id,

@@ -63,7 +63,7 @@ const businessUnitsActivities = {
       response = await request(url, method);
       if (!response.ok) {
         throw new Error("Failed to getBusinessUnitsActivityById");
-      };
+      }
       const data = await response.json();
       return { success: true, data };
     } catch (error) {
@@ -72,7 +72,7 @@ const businessUnitsActivities = {
       console.error(errorMessage);
       return { message: errorMessage, success: false };
     }
-  }
+  },
 };
 
 export { businessUnitsActivities };
