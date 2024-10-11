@@ -244,7 +244,14 @@ const updateActivityById = async (req, res) => {
     if (scope === "Scope 2" && level5 === "marketBased") {
       const CO2e = payload.quantity * payload.marketBasedEmissionFactor;
       delete payload.marketBasedEmissionFactor;
-      await BusinessUnitActivity.create({ ...payload, CO2e });
+      await BusinessUnitActivity.update(
+        { ...payload, CO2e },
+        {
+          where: {
+            id,
+          },
+        }
+      );
       return res.status(200).json({ message: "Activity created sucessfully" });
     } else if (
       scope === "Scope 2" &&

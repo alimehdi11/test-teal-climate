@@ -31,6 +31,13 @@ const getBusinessUnitActivityById = async (req, res) => {
         {
           model: BusinessUnit,
           as: "businessUnit",
+          include: [
+            {
+              model: Period,
+              as: "period",
+            },
+          ],
+          attributes: { exclude: ["periodId"] },
         },
       ],
     });

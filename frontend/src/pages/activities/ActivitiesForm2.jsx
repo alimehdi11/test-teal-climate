@@ -9,8 +9,7 @@ import Input from "./../../components/ui/Input";
 import Button from "../../components/ui/Button.jsx";
 import { toast } from "react-toastify";
 import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 const ActivitiesForm2 = ({
   selectedScope,
@@ -45,15 +44,14 @@ const ActivitiesForm2 = ({
   const [marketBasedQuantity, setMarketBasedQuantity] = useState("");
   const [marketBasedEmissionFactor, setMarketBasedEmissionFactor] =
     useState("");
-  const [markedBasedUnitOfEmissionFactor, setMarkedBasedUnitOfEmissionFactor] =
+  const [marketBasedUnitOfEmissionFactor, setMarketBasedUnitOfEmissionFactor] =
     useState("kgco2e/kwh");
   const [airportsDistance, setAirportsDistance] = useState(0);
-  const [isFormInitializing, setIsFormInitializing] = useState(false)
+  const [isFormInitializing, setIsFormInitializing] = useState(false);
 
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-
 
   const possibleLevel2Labels = {
     "Refrigerant and other": "Refrigerant and other gas category",
@@ -156,19 +154,35 @@ const ActivitiesForm2 = ({
     setMarketBased(false);
     setMarketBasedEmissionFactor("");
     setMarketBasedQuantity("");
-    setMarkedBasedUnitOfEmissionFactor("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.table({
+      scope: selectedScope,
+      level1: selectedLevel,
+      businessUnitId,
+      level1Category,
+      level2,
+      level3,
+      level4,
+      level5,
+      unitOfMeasurement,
+      quantity,
+      month,
+      marketBasedQuantity,
+      marketBasedEmissionFactor,
+      marketBasedUnitOfEmissionFactor,
+    });
+    // return;
     if (
       !month ||
       !businessUnitId ||
       !level1Category ||
       !level2 ||
-      (level3 === undefined) ||
-      (level4 === undefined) ||
-      (level5 === undefined) ||
+      level3 === undefined ||
+      level4 === undefined ||
+      level5 === undefined ||
       !unitOfMeasurement ||
       !quantity
     ) {
@@ -181,7 +195,7 @@ const ActivitiesForm2 = ({
       if (
         !marketBasedQuantity ||
         !marketBasedEmissionFactor ||
-        !markedBasedUnitOfEmissionFactor
+        !marketBasedUnitOfEmissionFactor
       ) {
         return toast.warn("Please fill all fields");
       }
@@ -201,35 +215,40 @@ const ActivitiesForm2 = ({
     };
     // return console.table(payload);
     if (id) {
-      const { success, message } =
-        await api.businessUnitsActivities.updateBusinessUnitActivityById(id,
-          selectedScope == "Scope 2"
-            ? { ...payload, level5: "locationBased" }
-            : payload
-        );
-      if (success) {
-        toast.success(message);
-        navigate("/activities")
-      } else {
-        toast.error(message);
-      };
-      if (selectedScope === "Scope 2" && marketBased) {
-        const payload2 = { ...payload };
-        payload2.unitOfMeasurement = markedBasedUnitOfEmissionFactor;
-        payload2.quantity = marketBasedQuantity;
-        payload2.marketBasedEmissionFactor = marketBasedEmissionFactor;
-        payload2.level5 = "marketBased";
+      if (!marketBased) {
         const { success, message } =
-          await api.businessUnitsActivities.updateBusinessUnitActivityById(id, payload2);
+          await api.businessUnitsActivities.updateBusinessUnitActivityById(
+            id,
+            selectedScope == "Scope 2"
+              ? { ...payload, level5: "locationBased" }
+              : payload
+          );
         if (success) {
           toast.success(message);
-          navigate("/activities")
+          navigate("/activities");
         } else {
           toast.error(message);
         }
       }
-    }
-    else {
+      if (selectedScope === "Scope 2" && marketBased) {
+        const payload2 = { ...payload };
+        payload2.unitOfMeasurement = marketBasedUnitOfEmissionFactor;
+        payload2.quantity = marketBasedQuantity;
+        payload2.marketBasedEmissionFactor = marketBasedEmissionFactor;
+        payload2.level5 = "marketBased";
+        const { success, message } =
+          await api.businessUnitsActivities.updateBusinessUnitActivityById(
+            id,
+            payload2
+          );
+        if (success) {
+          toast.success(message);
+          navigate("/activities");
+        } else {
+          toast.error(message);
+        }
+      }
+    } else {
       const { success, message } =
         await api.businessUnitsActivities.createBusinessUnitActivity(
           selectedScope == "Scope 2"
@@ -240,16 +259,18 @@ const ActivitiesForm2 = ({
         toast.success(message);
       } else {
         toast.error(message);
-      };
+      }
 
       if (selectedScope === "Scope 2" && marketBased) {
         const payload2 = { ...payload };
-        payload2.unitOfMeasurement = markedBasedUnitOfEmissionFactor;
+        payload2.unitOfMeasurement = marketBasedUnitOfEmissionFactor;
         payload2.quantity = marketBasedQuantity;
         payload2.marketBasedEmissionFactor = marketBasedEmissionFactor;
         payload2.level5 = "marketBased";
         const { success, message } =
-          await api.businessUnitsActivities.createBusinessUnitActivity(payload2);
+          await api.businessUnitsActivities.createBusinessUnitActivity(
+            payload2
+          );
         if (success) {
           toast.success(message);
         } else {
@@ -281,7 +302,7 @@ const ActivitiesForm2 = ({
       EARTH_RADIUS_IN_MILES *
       Math.acos(
         Math.sin(lat1) * Math.sin(lat2) +
-        Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)
+          Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)
       );
     distanceInMiles = Number(distanceInMiles.toFixed(2));
     return distanceInMiles;
@@ -538,41 +559,69 @@ const ActivitiesForm2 = ({
     }
   }, [level5]);
 
-
   useEffect(() => {
     if (id && !searchParams.get("eeio") && !searchParams.get("reit")) {
       setIsFormInitializing(true);
-      api.businessUnitsActivities.getBusinessUnitActivityById(id).then(bussinessUnitActivity => {
-        setSelectedScope(bussinessUnitActivity.data.scope);
-        setSelectedLevel(bussinessUnitActivity.data.level1);
-        setMonth(bussinessUnitActivity.data.month);
-        setBusinessUnitId(bussinessUnitActivity.data.businessUnit.id);
-        setLevel1Category(bussinessUnitActivity.data.level1Category);
-        setLevel2(bussinessUnitActivity.data.level2);
-        setLevel3(bussinessUnitActivity.data.level3);
-        setLevel4(bussinessUnitActivity.data.level4);
-        setLevel5(bussinessUnitActivity.data.level5);
-        setUnitOfMeasurement(bussinessUnitActivity.data.unitOfMeasurement);
-        setQuantity(bussinessUnitActivity.data.quantity);
-        setSelectedPeriod(bussinessUnitActivity.data.businessUnit.period.id);
-      });
-
+      api.businessUnitsActivities
+        .getBusinessUnitActivityById(id)
+        .then(({ data: bussinessUnitActivity }) => {
+          setSelectedScope(bussinessUnitActivity.scope);
+          setSelectedLevel(bussinessUnitActivity.level1);
+          setMonth(bussinessUnitActivity.month);
+          setBusinessUnitId(bussinessUnitActivity.businessUnit.id);
+          setLevel1Category(bussinessUnitActivity.level1Category);
+          setLevel2(bussinessUnitActivity.level2);
+          setLevel3(bussinessUnitActivity.level3);
+          setLevel4(bussinessUnitActivity.level4);
+          setLevel5(bussinessUnitActivity.level5);
+          setUnitOfMeasurement(bussinessUnitActivity.unitOfMeasurement);
+          setQuantity(bussinessUnitActivity.quantity);
+          setSelectedPeriod(bussinessUnitActivity.businessUnit.period.id);
+          if (bussinessUnitActivity.level5 === "marketBased") {
+            setMarketBased(true);
+            setMarketBasedUnitOfEmissionFactor(
+              bussinessUnitActivity.unitOfMeasurement
+            );
+            setMarketBasedQuantity(bussinessUnitActivity.quantity);
+          }
+        });
     }
   }, [id]);
 
   useEffect(() => {
-    if (id && selectedScope && selectedLevel && month && businessUnitId &&
-      level1Category !== undefined && level2 !== undefined &&
-      level3 !== undefined && level4 !== undefined &&
-      level5 !== undefined && unitOfMeasurement !== undefined && quantity) {
+    if (
+      id &&
+      selectedScope &&
+      selectedLevel &&
+      month &&
+      businessUnitId &&
+      level1Category !== undefined &&
+      level2 !== undefined &&
+      level3 !== undefined &&
+      level4 !== undefined &&
+      level5 !== undefined &&
+      unitOfMeasurement !== undefined &&
+      quantity &&
+      marketBasedQuantity &&
+      marketBasedEmissionFactor &&
+      marketBasedUnitOfEmissionFactor
+    ) {
       setIsFormInitializing(false);
     }
   }, [
-    businessUnitId, level1Category, level2, level3, level4, level5, quantity,
-    unitOfMeasurement, month
+    businessUnitId,
+    level1Category,
+    level2,
+    level3,
+    level4,
+    level5,
+    quantity,
+    unitOfMeasurement,
+    month,
+    marketBasedQuantity,
+    marketBasedEmissionFactor,
+    marketBasedUnitOfEmissionFactor,
   ]);
-
-
 
   const handleCancel = () => {
     resetForm();
@@ -778,9 +827,9 @@ const ActivitiesForm2 = ({
           <FormControl>
             <Label>Unit of Emission Factor</Label>
             <Select
-              value={markedBasedUnitOfEmissionFactor}
+              value={marketBasedUnitOfEmissionFactor}
               onChange={(e) =>
-                setMarkedBasedUnitOfEmissionFactor(e.target.value)
+                setMarketBasedUnitOfEmissionFactor(e.target.value)
               }
             >
               <option value="kgco2e/kwh">kgco2e/kwh</option>
@@ -789,20 +838,15 @@ const ActivitiesForm2 = ({
         </div>
       )}
       <div className="flex justify-end gap-4">
-        {
-          id &&
+        {id && (
           <Button type="button" onClick={handleCancel}>
             Cancel
           </Button>
-        }
-        <Button type="submit">
-          {id ? "Edit" : "Add"}
-        </Button>
+        )}
+        <Button type="submit">{id ? "Edit" : "Add"}</Button>
       </div>
-
-
     </form>
-    // Give me 5 
+    // Give me 5
   );
 };
 
