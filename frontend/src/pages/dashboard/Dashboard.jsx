@@ -44,7 +44,8 @@ const Dashboard = () => {
       <Sidebar></Sidebar>
       <Main>
         <div ref={pdfRef}>
-          <div className="flex flex-col-reverse xs:flex-row gap-y-4 justify-between">
+          <div className="flex flex-col-reverse xs:flex-row gap-y-4 justify-end">
+            {/* <div className="flex flex-col-reverse xs:flex-row gap-y-4 justify-between"> */}
             {/* <Button onClick={downloadPDF}>Download PDF</Button> */}
             <PeriodSelector />
           </div>
