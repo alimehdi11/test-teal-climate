@@ -45,7 +45,7 @@ const Dashboard = () => {
       <Main>
         <div ref={pdfRef}>
           <div className="flex flex-col-reverse xs:flex-row gap-y-4 justify-between">
-            <Button onClick={downloadPDF}>Download PDF</Button>
+            {/* <Button onClick={downloadPDF}>Download PDF</Button> */}
             <PeriodSelector />
           </div>
           <CarbonEmissionsAnalytics />
