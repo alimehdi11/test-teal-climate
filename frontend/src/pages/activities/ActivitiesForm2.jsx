@@ -45,7 +45,7 @@ const ActivitiesForm2 = ({
   const [marketBasedEmissionFactor, setMarketBasedEmissionFactor] =
     useState("");
   const [marketBasedUnitOfEmissionFactor, setMarketBasedUnitOfEmissionFactor] =
-    useState("kgco2e/kwh");
+    useState("kg CO2e/kWh");
   const [airportsDistance, setAirportsDistance] = useState(0);
   const [isFormInitializing, setIsFormInitializing] = useState(false);
 
@@ -286,6 +286,11 @@ const ActivitiesForm2 = ({
     );
   };
 
+  const handleCancel = () => {
+    resetForm();
+    navigate("/activities");
+  };
+
   const getAirportCoordinates = (airports, airportName) => {
     const airport = airports.filter(
       (airport) => airport.name === airportName
@@ -308,7 +313,7 @@ const ActivitiesForm2 = ({
     return distanceInMiles;
   };
 
-  // Automatically set businessUnitId if there's only one business unit
+  // Automatically set month if there's only one month
   useEffect(() => {
     setMonth(undefined);
     if (selectedPeriod) {
@@ -402,7 +407,7 @@ const ActivitiesForm2 = ({
       setUnitOfMeasurementOptions([]);
     }
     if (
-      level2 &
+      level2 &&
       (selectedLevel == "Business travel- air" ||
         selectedLevel == "WTT- business travel- air")
     ) {
@@ -623,10 +628,16 @@ const ActivitiesForm2 = ({
     marketBasedUnitOfEmissionFactor,
   ]);
 
-  const handleCancel = () => {
-    resetForm();
-    navigate("/activities");
-  };
+  /**
+   *  If user is in "Scope 2" and user select marketBased to true.
+   *  If user switch to any other scope.
+   *  We have to make sure that marketBased gets to false in other scopes
+   */
+  useEffect(() => {
+    if (selectedScope === "Scope 1" || selectedScope === "Scope 3") {
+      setMarketBased(false);
+    }
+  }, [selectedScope]);
 
   return (
     <form
@@ -833,7 +844,7 @@ const ActivitiesForm2 = ({
                 setMarketBasedUnitOfEmissionFactor(e.target.value)
               }
             >
-              <option value="kgco2e/kwh">kgco2e/kwh</option>
+              <option value="kg CO2e/kWh">kg CO2e/kWh</option>
             </Select>
           </FormControl>
         </div>

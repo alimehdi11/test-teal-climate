@@ -43,7 +43,7 @@ const Profile = () => {
             <div className="flex gap-4">
               <Button
                 onClick={() => {
-                  setAddPeriod(true);
+                  setShowPeriodForm(true);
                 }}
               >
                 Add period
