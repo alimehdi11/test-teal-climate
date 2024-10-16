@@ -344,6 +344,7 @@ const ActivitiesForm2 = ({
       setLevel4Options([]);
       setLevel5Options([]);
       setUnitOfMeasurementOptions([]);
+      console.log("selectedLevel", selectedLevel);
       fetchActivities(
         () => api.level1Categories.getAllLevel1Categories(selectedLevel),
         setlevel1CategoriesOptions,

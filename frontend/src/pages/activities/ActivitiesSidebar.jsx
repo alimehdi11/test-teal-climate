@@ -4,6 +4,7 @@ import { DataContext } from "../../contexts/DataContext";
 import EeioSidebar from "./EeioSidebar";
 import DropdownMenu from "../../components/DropdownMenu";
 import SidebarItem from "../../components/SidebarItem";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const ActivitiesSidebar = ({
   selectedScope,
@@ -20,7 +21,7 @@ const ActivitiesSidebar = ({
 }) => {
   const [level1, setLevel1] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-
+  const debouncedSearchQuery = useDebounce(searchQuery, 100);
   const { activities } = useContext(DataContext).data;
 
   const filterLevel1 = (selectedScope) => {
@@ -45,11 +46,11 @@ const ActivitiesSidebar = ({
   }, [level1]);
 
   useEffect(() => {
-    if (searchQuery === "") {
+    if (debouncedSearchQuery === "") {
       setLevel1(filterLevel1(selectedScope));
     } else {
       const filteredLevel1 = level1.filter((level) =>
-        level.toLowerCase().includes(searchQuery.toLowerCase())
+        level.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
       );
       setLevel1(
         filteredLevel1.length === 0
@@ -57,7 +58,7 @@ const ActivitiesSidebar = ({
           : filteredLevel1
       );
     }
-  }, [searchQuery]);
+  }, [debouncedSearchQuery]);
 
   return (
     <>
