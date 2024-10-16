@@ -21,7 +21,7 @@ const ActivitiesSidebar = ({
 }) => {
   const [level1, setLevel1] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const debouncedSearchQuery = useDebounce(searchQuery, 100);
+  const debouncedSearchQuery = useDebounce(searchQuery, 200);
   const { activities } = useContext(DataContext).data;
 
   const filterLevel1 = (selectedScope) => {
