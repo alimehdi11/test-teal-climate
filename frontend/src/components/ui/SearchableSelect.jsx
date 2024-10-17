@@ -69,6 +69,7 @@ const SearchableSelect = ({ data = [], item, setItem, text, placeholder }) => {
                 placeholder={placeholder}
                 value={filterBy}
                 onChange={(e) => setFilterBy(e.target.value)}
+                defaultFocus={true}
                 className="block my-[4px] mx-auto w-[calc(100%-10px)] border border-black"
               />
             </li>

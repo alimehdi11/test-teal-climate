@@ -59,7 +59,7 @@ const TableRow = ({ className = "", children }) => (
 // );
 
 const TableHead = ({ className = "", children }) => (
-  <th className={("border-0 text-left" + className).trim()}>{children}</th>
+  <th className={("border-0 text-left " + className).trim()}>{children}</th>
 );
 
 // const TableCell = ({ className = "", children }) => (

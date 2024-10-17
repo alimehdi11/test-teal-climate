@@ -137,7 +137,7 @@ const ActivitiesForm2 = ({
 
   const resetForm = () => {
     // Reset form fields
-    setLevel1Category(undefined);
+    // setLevel1Category(undefined);
     setLevel2(undefined);
     setLevel3(undefined);
     setLevel4(undefined);
@@ -145,7 +145,7 @@ const ActivitiesForm2 = ({
     setUnitOfMeasurement(undefined);
     setQuantity("");
     // Reset options arrays
-    setLevel2Options([]);
+    // setLevel2Options([]);
     setLevel3Options([]);
     setLevel4Options([]);
     setLevel5Options([]);
@@ -307,7 +307,7 @@ const ActivitiesForm2 = ({
       EARTH_RADIUS_IN_MILES *
       Math.acos(
         Math.sin(lat1) * Math.sin(lat2) +
-          Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)
+        Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)
       );
     distanceInMiles = Number(distanceInMiles.toFixed(2));
     return distanceInMiles;
@@ -344,7 +344,6 @@ const ActivitiesForm2 = ({
       setLevel4Options([]);
       setLevel5Options([]);
       setUnitOfMeasurementOptions([]);
-      console.log("selectedLevel", selectedLevel);
       fetchActivities(
         () => api.level1Categories.getAllLevel1Categories(selectedLevel),
         setlevel1CategoriesOptions,
@@ -647,7 +646,7 @@ const ActivitiesForm2 = ({
     >
       <h3 className="m-0 font-extrabold text-2xl">Insert activity data here</h3>
       {selectedScope === "Scope 2" && (
-        <h4 className="bg-gray-200 col-span-full p-2 rounded-md">
+        <h4 className="bg-tc-blue text-white col-span-full p-2 rounded-md">
           Location based
         </h4>
       )}
@@ -812,7 +811,7 @@ const ActivitiesForm2 = ({
       {/* Market based form */}
       {marketBased && (
         <div className="grid lg:grid-cols-2 gap-4">
-          <h4 className="bg-gray-200 col-span-full p-2 rounded-md">
+          <h4 className="bg-tc-blue text-white col-span-full p-2 rounded-md">
             Market based
           </h4>
           <FormControl>

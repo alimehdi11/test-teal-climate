@@ -11,7 +11,7 @@ const DropdownMenu = ({ children }) => {
     <div className="mt-2">
       <div
         onClick={toggleDropdown}
-        className="flex font-medium justify-between items-center bg-tc-indigo-light text-tc-blue py-3 px-4 rounded-md hover:bg-tc-indigo-light hover:text-tc-blue"
+        className="flex font-medium cursor-pointer justify-between items-center bg-tc-indigo-light text-tc-blue py-3 px-4 rounded-md hover:bg-tc-indigo-light hover:text-tc-blue"
       >
         Scopes
         <svg

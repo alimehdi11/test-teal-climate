@@ -8,12 +8,14 @@ const Input = ({
   value,
   placeholder,
   onChange,
+  defaultFocus,
   ...props
 }) => {
   const inputRef = useRef(null);
 
   useEffect(() => {
     const input = inputRef.current;
+    defaultFocus && input.focus()
     const handleWheel = (event) => {
       if (document.activeElement === input) {
         event.preventDefault();

@@ -4,6 +4,7 @@ import { businessUnitsActivities } from "./businessUnitsActivities.js";
 import { level1Categories } from "./levelCategories.js";
 import { activities } from "./activities.js";
 import { airports } from "./airports.js";
+import { countries } from "./countries.js";
 const api = {
   periods,
   businessUnits,
@@ -11,6 +12,7 @@ const api = {
   level1Categories,
   activities,
   airports,
+  countries
 };
 
 export { api };

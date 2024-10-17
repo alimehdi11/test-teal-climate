@@ -73,7 +73,6 @@ const ActivitiesTable = ({
               "Level 4",
               "Level 5",
               "Unit Of Measurement",
-              "Quantity",
               "Month",
               "Level1 Category",
               "Exio Base Code",
@@ -87,6 +86,7 @@ const ActivitiesTable = ({
               "Region",
               "Asset Type",
               "Year",
+              "Quantity",
               <>
                 kg CO<span style={{ fontSize: "0.6em" }}>2</span>e
               </>,
@@ -109,10 +109,10 @@ const ActivitiesTable = ({
                 kg CO
                 <span style={{ fontSize: "0.6em" }}>2</span>e of other
               </>,
-              "Actions",
             ].map((item, index) => (
               <TableHead key={index}>{item}</TableHead>
             ))}
+            <TableHead key="Actions" className="bg-tc-blue sticky right-0">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -134,7 +134,6 @@ const ActivitiesTable = ({
               <TableCell>
                 {businessUnitActivity.unitOfMeasurement || "-"}
               </TableCell>
-              <TableCell>{businessUnitActivity.quantity || "-"}</TableCell>
               <TableCell>
                 {businessUnitActivity.month.charAt(0).toUpperCase() +
                   businessUnitActivity.month.slice(1) || "-"}
@@ -163,6 +162,7 @@ const ActivitiesTable = ({
               <TableCell>{businessUnitActivity.region || "-"}</TableCell>
               <TableCell>{businessUnitActivity.assetType || "-"}</TableCell>
               <TableCell>{businessUnitActivity.year || "-"}</TableCell>
+              <TableCell>{businessUnitActivity.quantity || "-"}</TableCell>
               <TableCell>
                 {businessUnitActivity.CO2e === 0
                   ? "-"
@@ -188,7 +188,7 @@ const ActivitiesTable = ({
                   ? "-"
                   : businessUnitActivity.CO2e_of_other?.toFixed(2)}
               </TableCell>
-              <TableCell>
+              <TableCell className="sticky right-0 bg-white">
                 <div className="flex justify-center gap-x-1">
                   <Link
                     to={

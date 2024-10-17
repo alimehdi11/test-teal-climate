@@ -9,18 +9,36 @@ import { UserContext } from "../contexts/UserContext.jsx";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar.jsx";
 import Main from "../components/layout/Main.jsx";
+import SearchableSelect from "../components/ui/SearchableSelect.jsx";
+import { api } from "../../api/index.js";
 
 const AccountEdit = () => {
   const { user } = useContext(UserContext);
+  const [countries, setCountries] = useState([])
+  const [selectedCountry, setSelectedCountry] = useState("");
+
+
   const [formData, setFormData] = useState({
-    country: "",
     companyName: "",
     phoneNumber: "",
     primaryIndustry: "",
     secondaryIndustry: "",
     sustainabilityManager: "",
   });
+
+
+  useEffect(() => {
+    const getCountries = async () => {
+      const countries = await api.countries.getCountries("?column=name&distinct=true");
+      setCountries(countries.map(country=>country.name));
+    }
+    getCountries();
+  }, []);
+
   const navigate = useNavigate();
+
+
+
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -31,7 +49,7 @@ const AccountEdit = () => {
     event.preventDefault();
     try {
       const url = `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}`;
-      const response = await request(url, "PUT", formData);
+      const response = await request(url, "PUT", { ...formData, country: selectedCountry });
       if (!response.ok) {
         throw new Error(`${JSON.stringify(await response.json())}`);
       }
@@ -97,13 +115,14 @@ const AccountEdit = () => {
                     onChange={(event) => handleInputChange(event)}
                   />
                 </FormControl>
-                <FormControl>
+                <FormControl className="flex-1 relative">
                   <Label>Country</Label>
-                  <Input
-                    type="text"
-                    name="country"
-                    value={formData.country}
-                    onChange={(event) => handleInputChange(event)}
+                  <SearchableSelect
+                    data={countries}
+                    item={selectedCountry}
+                    setItem={setSelectedCountry}
+                    text={"Select Country"}
+                    placeholder={"Search Country"}
                   />
                 </FormControl>
                 <FormControl>
