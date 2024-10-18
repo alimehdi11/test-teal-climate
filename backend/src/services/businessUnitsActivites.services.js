@@ -629,20 +629,18 @@ const createReitActivity = async (req, res) => {
   try {
     const {
       businessUnitId,
-      continent,
       country,
-      region,
-      assetType,
+      stateOrRegion,
+      assetClass,
       year,
       unitOfMeasurement,
       quantity,
     } = req.body;
     const reitRecord = await Reit.findOne({
       where: {
-        continent,
         country,
-        region,
-        assetType,
+        stateOrRegion,
+        assetClass,
         year,
         unitOfMeasurement,
       },
@@ -657,14 +655,13 @@ const createReitActivity = async (req, res) => {
       businessUnitId,
       scope: "Scope 3",
       unitOfMeasurement,
-      quantity,
-      continent,
+      quantity: Number(quantity),
       country,
-      region,
-      assetType,
+      stateOrRegion,
+      assetClass,
       year,
       unitOfMeasurement,
-      CO2e: reitRecord.greenHouseGasEmissionFactor * quantity,
+      CO2e: reitRecord.greenHouseGasEmissionFactor * Number(quantity),
       reit: true,
     };
     await BusinessUnitActivity.create(payload);
@@ -683,20 +680,18 @@ const updateReitActivityById = async (req, res) => {
     const { id } = req.params;
     const {
       businessUnitId,
-      continent,
       country,
-      region,
-      assetType,
+      stateOrRegion,
+      assetClass,
       year,
       unitOfMeasurement,
       quantity,
     } = req.body;
     const reitRecord = await Reit.findOne({
       where: {
-        continent,
         country,
-        region,
-        assetType,
+        stateOrRegion,
+        assetClass,
         year,
         unitOfMeasurement,
       },
@@ -712,10 +707,9 @@ const updateReitActivityById = async (req, res) => {
       scope: "Scope 3",
       unitOfMeasurement,
       quantity,
-      continent,
       country,
-      region,
-      assetType,
+      stateOrRegion,
+      assetClass,
       year,
       unitOfMeasurement,
       CO2e: reitRecord.greenHouseGasEmissionFactor * quantity,

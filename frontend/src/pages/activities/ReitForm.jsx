@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { request } from "../../utils/request.js";
@@ -9,31 +9,27 @@ import Label from "../../components/ui/Label.jsx";
 import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
 import Select from "../../components/ui/Select.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
-import { UserContext } from "../../contexts/UserContext.jsx";
 import { api } from "../../../api/index.js";
 import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
 
 const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
   const [businessUnitId, setBusinessUnitId] = useState("");
-  const [continent, setContinent] = useState("");
   const [country, setCountry] = useState("");
-  const [region, setRegion] = useState("");
-  const [assetType, setAssetType] = useState("");
+  const [stateOrRegion, setStateOrRegion] = useState("");
+  const [assetClass, setAssetClass] = useState("");
   const [year, setYear] = useState("");
   const [unitOfMeasurement, setUnitOfMeasurement] = useState("");
   const [quantity, setQuantity] = useState("");
 
-  const [continentOptions, setContinentOptions] = useState([]);
   const [countryOptions, setCountryOptions] = useState([]);
-  const [regionOptions, setRegionOptions] = useState([]);
-  const [assetTypeOptions, setAssetTypeOptions] = useState([]);
+  const [stateOrRegionOptions, setStateOrRegionOptions] = useState([]);
+  const [assetClassOptions, setAssetClassOptions] = useState([]);
   const [yearOptions, setYearOptions] = useState([]);
   const [unitOfMeasurementOptions, setUnitOfMeasurementOptions] = useState([]);
 
   const { id } = useParams();
   const navigation = useNavigate();
   const { selectedPeriod } = usePeriod();
-  const { user } = useContext(UserContext);
 
   const [isFormInitializing, setIsFormInitializing] = useState(false);
 
@@ -60,17 +56,15 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
 
   const resetForm = () => {
     setBusinessUnitId("");
-    setContinent("");
     setCountry("");
-    setRegion("");
-    setAssetType("");
+    setStateOrRegion("");
+    setAssetClass("");
     setYear("");
     setUnitOfMeasurement("");
     setQuantity("");
-    setContinentOptions([]);
     setCountryOptions([]);
-    setRegionOptions([]);
-    setAssetTypeOptions([]);
+    setStateOrRegionOptions([]);
+    setAssetClassOptions([]);
     setYearOptions([]);
     setUnitOfMeasurementOptions([]);
   };
@@ -80,10 +74,9 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
     // Checking for missing values
     if (
       !businessUnitId ||
-      !continent ||
       !country ||
-      !region ||
-      !assetType ||
+      !stateOrRegion ||
+      !assetClass ||
       !year ||
       !unitOfMeasurement ||
       !quantity
@@ -93,10 +86,9 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
     }
     const payload = {
       businessUnitId,
-      continent,
       country,
-      region,
-      assetType,
+      stateOrRegion,
+      assetClass,
       year,
       unitOfMeasurement,
       quantity,
@@ -134,10 +126,9 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
     // Checking for missing values
     if (
       !businessUnitId ||
-      !continent ||
       !country ||
-      !region ||
-      !assetType ||
+      !stateOrRegion ||
+      !assetClass ||
       !year ||
       !unitOfMeasurement ||
       !quantity
@@ -147,10 +138,9 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
     }
     const payload = {
       businessUnitId,
-      continent,
       country,
-      region,
-      assetType,
+      stateOrRegion,
+      assetClass,
       year,
       unitOfMeasurement,
       quantity,
@@ -196,24 +186,9 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
     navigation("/activities");
   };
 
-  const fetchContinents = async () => {
-    try {
-      const queryParams = `column=continent&distinct=true`;
-      const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
-      const response = await request(url, "GET");
-      if (!response.ok) {
-        throw new Error(`Failed to fetch continents`);
-      }
-      const result = await response.json();
-      setContinentOptions(result.map((item) => item.continent));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const fetchCountries = async () => {
     try {
-      const queryParams = `continent=${continent}&column=country&distinct=true`;
+      const queryParams = `column=country&distinct=true`;
       const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
       const response = await request(url, "GET");
       if (!response.ok) {
@@ -228,14 +203,14 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
 
   const fetchRegions = async () => {
     try {
-      const queryParams = `continent=${continent}&country=${country}&column=region&distinct=true`;
+      const queryParams = `country=${country}&column=stateOrRegion&distinct=true`;
       const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
       const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch regions`);
       }
       const result = await response.json();
-      setRegionOptions(result.map((item) => item.region));
+      setStateOrRegionOptions(result.map((item) => item.stateOrRegion));
     } catch (error) {
       console.log(error);
     }
@@ -243,14 +218,14 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
 
   const fetchAssetTypes = async () => {
     try {
-      const queryParams = `continent=${continent}&country=${country}&region=${region}&column=assetType&distinct=true`;
+      const queryParams = `country=${country}&stateOrRegion=${stateOrRegion}&column=assetClass&distinct=true`;
       const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
       const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch asset types`);
       }
       const result = await response.json();
-      setAssetTypeOptions(result.map((item) => item.assetType));
+      setAssetClassOptions(result.map((item) => item.assetClass));
     } catch (error) {
       console.log(error);
     }
@@ -258,7 +233,7 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
 
   const fetchYears = async () => {
     try {
-      const queryParams = `continent=${continent}&country=${country}&region=${region}&assetType=${assetType}&column=year&distinct=true`;
+      const queryParams = `country=${country}&stateOrRegion=${stateOrRegion}&assetClass=${assetClass}&column=year&distinct=true`;
       const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
       const response = await request(url, "GET");
       if (!response.ok) {
@@ -273,7 +248,7 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
 
   const fetchUnitsOfMeasurement = async () => {
     try {
-      const queryParams = `continent=${continent}&country=${country}&region=${region}&assetType=${assetType}&year=${year}&column=unitOfMeasurement&distinct=true`;
+      const queryParams = `country=${country}&stateOrRegion=${stateOrRegion}&assetClass=${assetClass}&year=${year}&column=unitOfMeasurement&distinct=true`;
       const url = `${import.meta.env.VITE_API_BASE_URL}/reits?${queryParams}`;
       const response = await request(url, "GET");
       if (!response.ok) {
@@ -295,17 +270,16 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
 
   useEffect(() => {
     if (businessUnitId) {
-      fetchContinents();
+      fetchCountries();
       if (!isFormInitializing) {
-        setContinent("");
         setCountry("");
-        setRegion("");
-        setAssetType("");
+        setStateOrRegion("");
+        setAssetClass("");
         setYear("");
         setUnitOfMeasurement("");
         setCountryOptions([]);
-        setRegionOptions([]);
-        setAssetTypeOptions([]);
+        setStateOrRegionOptions([]);
+        setAssetClassOptions([]);
         setYearOptions([]);
         setUnitOfMeasurementOptions([]);
       }
@@ -313,31 +287,14 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
   }, [businessUnitId]);
 
   useEffect(() => {
-    if (continent) {
-      fetchCountries();
-      if (!isFormInitializing) {
-        setCountry("");
-        setRegion("");
-        setAssetType("");
-        setYear("");
-        setUnitOfMeasurement("");
-        setRegionOptions([]);
-        setAssetTypeOptions([]);
-        setYearOptions([]);
-        setUnitOfMeasurementOptions([]);
-      }
-    }
-  }, [continent]);
-
-  useEffect(() => {
     if (country) {
       fetchRegions();
       if (!isFormInitializing) {
-        setRegion("");
-        setAssetType("");
+        setStateOrRegion("");
+        setAssetClass("");
         setYear("");
         setUnitOfMeasurement("");
-        setAssetTypeOptions([]);
+        setAssetClassOptions([]);
         setYearOptions([]);
         setUnitOfMeasurementOptions([]);
       }
@@ -345,20 +302,20 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
   }, [country]);
 
   useEffect(() => {
-    if (region) {
+    if (stateOrRegion) {
       fetchAssetTypes();
       if (!isFormInitializing) {
-        setAssetType("");
+        setAssetClass("");
         setYear("");
         setUnitOfMeasurement("");
         setYearOptions([]);
         setUnitOfMeasurementOptions([]);
       }
     }
-  }, [region]);
+  }, [stateOrRegion]);
 
   useEffect(() => {
-    if (assetType) {
+    if (assetClass) {
       fetchYears();
       if (!isFormInitializing) {
         setYear("");
@@ -366,7 +323,7 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
         setUnitOfMeasurementOptions([]);
       }
     }
-  }, [assetType]);
+  }, [assetClass]);
 
   useEffect(() => {
     if (year) {
@@ -382,10 +339,9 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
       setIsFormInitializing(true);
       fetchActivityById().then((activity) => {
         setBusinessUnitId(activity.businessUnit.id);
-        setContinent(activity.continent);
         setCountry(activity.country);
-        setRegion(activity.region);
-        setAssetType(activity.assetType);
+        setStateOrRegion(activity.stateOrRegion);
+        setAssetClass(activity.assetClass);
         setYear(activity.year);
         setUnitOfMeasurement(activity.unitOfMeasurement);
         setQuantity(activity.quantity);
@@ -397,10 +353,9 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
     if (id) {
       if (
         businessUnitId &&
-        continent &&
         country &&
-        region &&
-        assetType &&
+        stateOrRegion &&
+        assetClass &&
         year &&
         unitOfMeasurement &&
         quantity
@@ -410,10 +365,9 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
     }
   }, [
     businessUnitId,
-    continent,
     country,
-    region,
-    assetType,
+    stateOrRegion,
+    assetClass,
     year,
     unitOfMeasurement,
     quantity,
@@ -452,17 +406,6 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
               )}
             </Select>
           </FormControl>
-          {/* Continent */}
-          <FormControl className="relative">
-            <Label>Continent</Label>
-            <SearchableSelect
-              data={continentOptions}
-              item={continent}
-              setItem={setContinent}
-              text={"Select continent"}
-              placeholder={"Search continent"}
-            />
-          </FormControl>
           {/* Country */}
           <FormControl className="relative">
             <Label>Country</Label>
@@ -476,24 +419,24 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
           </FormControl>
           {/* Region */}
           <FormControl className="relative">
-            <Label>Region</Label>
+            <Label>State or region</Label>
             <SearchableSelect
-              data={regionOptions}
-              item={region}
-              setItem={setRegion}
-              text={"Select region"}
-              placeholder={"Search region"}
+              data={stateOrRegionOptions}
+              item={stateOrRegion}
+              setItem={setStateOrRegion}
+              text={"Select state or region"}
+              placeholder={"Search state or region"}
             />
           </FormControl>
-          {/* Asset type */}
+          {/* Asset class */}
           <FormControl className="relative">
-            <Label>Asset type</Label>
+            <Label>Asset class</Label>
             <SearchableSelect
-              data={assetTypeOptions}
-              item={assetType}
-              setItem={setAssetType}
-              text={"Select asset type"}
-              placeholder={"Search asset type"}
+              data={assetClassOptions}
+              item={assetClass}
+              setItem={setAssetClass}
+              text={"Select asset class"}
+              placeholder={"Search asset class"}
             />
           </FormControl>
           {/* Year */}
@@ -522,6 +465,7 @@ const ReitForm = ({ setBusinessUnitsActivities, businessUnits }) => {
           <FormControl>
             <Label>Quantity</Label>
             <Input
+              type="number"
               value={quantity}
               onChange={(e) => {
                 setQuantity(e.target.value);

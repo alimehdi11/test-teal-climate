@@ -10,7 +10,7 @@ const Reit = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    continent: {
+    code: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -18,11 +18,11 @@ const Reit = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    region: {
+    stateOrRegion: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    assetType: {
+    assetClass: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -34,15 +34,7 @@ const Reit = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    greenHouseGas: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     greenHouseGasEmissionFactor: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    averageTemprature: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },

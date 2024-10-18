@@ -40,6 +40,21 @@ const Activity = sequelize.define(
     greenHouseGasEmissionFactor: {
       type: DataTypes.FLOAT,
     },
+    yearOfData: {
+      type: DataTypes.STRING,
+    },
+    yearOfRelease: {
+      type: DataTypes.STRING,
+    },
+    reference: {
+      type: DataTypes.STRING,
+    },
+    referenceFile: {
+      type: DataTypes.STRING,
+    },
+    notes: {
+      type: DataTypes.STRING,
+    },
   },
   {
     timestamps: false,

@@ -4,23 +4,22 @@ import { Reit } from "../models/reit.model.js";
 const getReits = async (req, res) => {
   try {
     const {
-      continent,
       country,
-      region,
-      assetType,
+      stateOrRegion,
+      assetClass,
       year,
       unitOfMeasurement,
       column,
       distinct,
     } = req.query;
+    const query = {};
+    const attributes = [];
     const whereClause = {};
-    if (continent) whereClause.continent = continent;
     if (country) whereClause.country = country;
-    if (region) whereClause.region = region;
-    if (assetType) whereClause.assetType = assetType;
+    if (stateOrRegion) whereClause.stateOrRegion = stateOrRegion;
+    if (assetClass) whereClause.assetClass = assetClass;
     if (year) whereClause.year = year;
     if (unitOfMeasurement) whereClause.unitOfMeasurement = unitOfMeasurement;
-    const attributes = [];
     if (column) {
       if (distinct === "true") {
         attributes.push([
@@ -30,8 +29,8 @@ const getReits = async (req, res) => {
       } else {
         attributes.push(column);
       }
+      query.order = [[column, "ASC"]];
     }
-    const query = {};
     query.where = whereClause;
     query.attributes = attributes.length > 0 ? attributes : undefined;
     const records = await Reit.findAll(query);

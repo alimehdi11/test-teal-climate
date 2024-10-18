@@ -158,7 +158,7 @@ const BusinessUnitActivity = sequelize.define(
       allowNull: false,
       defaultValue: "",
     },
-    assetType: {
+    assetClass: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "",
@@ -178,5 +178,5 @@ BusinessUnitActivity.belongsTo(BusinessUnit, {
   foreignKey: "businessUnitId",
   as: "businessUnit",
 });
-
+// BusinessUnitActivity.sync({ alter: true });
 export { BusinessUnitActivity };

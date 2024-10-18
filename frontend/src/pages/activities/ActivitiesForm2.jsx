@@ -154,26 +154,28 @@ const ActivitiesForm2 = ({
     setMarketBased(false);
     setMarketBasedEmissionFactor("");
     setMarketBasedQuantity("");
+
+    setAirportsDistance(0);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.table({
-      scope: selectedScope,
-      level1: selectedLevel,
-      businessUnitId,
-      level1Category,
-      level2,
-      level3,
-      level4,
-      level5,
-      unitOfMeasurement,
-      quantity,
-      month,
-      marketBasedQuantity,
-      marketBasedEmissionFactor,
-      marketBasedUnitOfEmissionFactor,
-    });
+    // console.table({
+    //   scope: selectedScope,
+    //   level1: selectedLevel,
+    //   businessUnitId,
+    //   level1Category,
+    //   level2,
+    //   level3,
+    //   level4,
+    //   level5,
+    //   unitOfMeasurement,
+    //   quantity,
+    //   month,
+    //   marketBasedQuantity,
+    //   marketBasedEmissionFactor,
+    //   marketBasedUnitOfEmissionFactor,
+    // });
     // return;
     if (
       !month ||
