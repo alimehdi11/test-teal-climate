@@ -112,7 +112,7 @@ const ActivitiesTable = ({
             ].map((item, index) => (
               <TableHead key={index}>{item}</TableHead>
             ))}
-            <TableHead key="Actions" className="bg-tc-blue sticky right-0">Actions</TableHead>
+            <TableHead key="Actions" className="bg-tc-blue sticky right-0  shadow-xl">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -188,7 +188,7 @@ const ActivitiesTable = ({
                   ? "-"
                   : businessUnitActivity.CO2e_of_other?.toFixed(2)}
               </TableCell>
-              <TableCell className="sticky right-0 bg-white">
+              <TableCell className="sticky right-0 bg-white shadow-xl">
                 <div className="flex justify-center gap-x-1">
                   <Link
                     to={

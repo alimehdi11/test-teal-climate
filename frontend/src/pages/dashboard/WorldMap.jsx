@@ -7,6 +7,7 @@ import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 
 const WorldMap = () => {
   const [businessUnitsActivities, setBusinessUnitsActivities] = useState([]);
+  const [businessUnitsActivitiesForSelectedPeriod, setBusinessUnitsActivitiesForSelectedPeriod] = useState([]);
   const { selectedPeriod } = usePeriod();
 
   const fetchBusinessUnitsActivities = async () => {
@@ -19,10 +20,7 @@ const WorldMap = () => {
         throw new Error(`Failed to fetch data:`);
       }
       const { data } = await businessUnitsActivitiesResponse.json();
-      let businessUnitsActivities = data.filter((activity) => {
-        return activity.businessUnit.period.id === selectedPeriod;
-      });
-      setBusinessUnitsActivities(businessUnitsActivities);
+      setBusinessUnitsActivities(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -33,10 +31,10 @@ const WorldMap = () => {
     let emissionsValue = 0;
 
     // Extracting emissions from user activities and adding all emissions if available for given country
-    businessUnitsActivities.forEach((businessUnitActivity) => {
+    businessUnitsActivitiesForSelectedPeriod.forEach((businessUnitActivity) => {
       if (
         businessUnitActivity.businessUnit.country ===
-          feature.properties.formal_en ||
+        feature.properties.formal_en ||
         businessUnitActivity.businessUnit.country === feature.properties.name
       ) {
         emissionsValue += businessUnitActivity.CO2e;
@@ -70,10 +68,10 @@ const WorldMap = () => {
     let emissionsValue = 0;
 
     // Extracting emissions from user activities and adding all emissions if available for given country
-    businessUnitsActivities.forEach((businessUnitActivity) => {
+    businessUnitsActivitiesForSelectedPeriod.forEach((businessUnitActivity) => {
       if (
         businessUnitActivity.businessUnit.country ===
-          feature.properties.formal_en ||
+        feature.properties.formal_en ||
         businessUnitActivity.businessUnit.country === feature.properties.name
       ) {
         emissionsValue += businessUnitActivity.CO2e;
@@ -87,13 +85,24 @@ const WorldMap = () => {
   };
 
   useEffect(() => {
-    if (selectedPeriod) {
-      fetchBusinessUnitsActivities();
+    fetchBusinessUnitsActivities();
+  }, []);
+
+  useEffect(() => {
+    if (businessUnitsActivities.length > 0) {
+      const filterBusinessUnitsActivitiesForSelectedPeriod = async () => {
+        let filterdBusinessUnitsActivities = businessUnitsActivities.filter((activity) => {
+          return activity.businessUnit.period.id === selectedPeriod;
+        });
+        setBusinessUnitsActivitiesForSelectedPeriod(filterdBusinessUnitsActivities)
+      }
+      filterBusinessUnitsActivitiesForSelectedPeriod()
     }
-  }, [selectedPeriod]);
+  }, [businessUnitsActivities]);
 
   return (
-    <div className="p-4 flex flex-col lg:flex-row gap-4 mt-4 rounded-md bg-white">
+    businessUnitsActivities.length > 0 &&
+    (<div className="p-4 flex flex-col lg:flex-row gap-4 mt-4 rounded-md bg-white">
       {/* Emissions bar */}
       <div className="lg:flex-1 max-w-[400px]">
         <h3 className="lg:mt-0">Location wise Emissions</h3>
@@ -126,7 +135,7 @@ const WorldMap = () => {
           onEachFeature={onEachFeature}
         />
       </MapContainer>
-    </div>
+    </div>)
   );
 };
 export default WorldMap;
