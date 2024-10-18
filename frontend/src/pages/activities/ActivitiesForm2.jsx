@@ -307,7 +307,7 @@ const ActivitiesForm2 = ({
       EARTH_RADIUS_IN_MILES *
       Math.acos(
         Math.sin(lat1) * Math.sin(lat2) +
-        Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)
+          Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)
       );
     distanceInMiles = Number(distanceInMiles.toFixed(2));
     return distanceInMiles;

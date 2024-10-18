@@ -112,7 +112,12 @@ const ActivitiesTable = ({
             ].map((item, index) => (
               <TableHead key={index}>{item}</TableHead>
             ))}
-            <TableHead key="Actions" className="bg-tc-blue sticky right-0  shadow-xl">Actions</TableHead>
+            <TableHead
+              key="Actions"
+              className="bg-tc-blue sticky right-0  shadow-xl"
+            >
+              Actions
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

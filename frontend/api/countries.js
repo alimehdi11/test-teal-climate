@@ -1,5 +1,4 @@
-import { request } from "../src/utils/request"
-
+import { request } from "../src/utils/request";
 
 const countries = {
   getCountries: async (queryParams) => {
@@ -21,5 +20,4 @@ const countries = {
   },
 };
 
-
-export {countries}
+export { countries };

@@ -14,9 +14,8 @@ import { api } from "../../api/index.js";
 
 const AccountEdit = () => {
   const { user } = useContext(UserContext);
-  const [countries, setCountries] = useState([])
+  const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
-
 
   const [formData, setFormData] = useState({
     companyName: "",
@@ -26,19 +25,17 @@ const AccountEdit = () => {
     sustainabilityManager: "",
   });
 
-
   useEffect(() => {
     const getCountries = async () => {
-      const countries = await api.countries.getCountries("?column=name&distinct=true");
-      setCountries(countries.map(country=>country.name));
-    }
+      const countries = await api.countries.getCountries(
+        "?column=name&distinct=true"
+      );
+      setCountries(countries.map((country) => country.name));
+    };
     getCountries();
   }, []);
 
   const navigate = useNavigate();
-
-
-
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -49,7 +46,10 @@ const AccountEdit = () => {
     event.preventDefault();
     try {
       const url = `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}`;
-      const response = await request(url, "PUT", { ...formData, country: selectedCountry });
+      const response = await request(url, "PUT", {
+        ...formData,
+        country: selectedCountry,
+      });
       if (!response.ok) {
         throw new Error(`${JSON.stringify(await response.json())}`);
       }

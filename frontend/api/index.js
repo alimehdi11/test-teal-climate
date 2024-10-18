@@ -12,7 +12,7 @@ const api = {
   level1Categories,
   activities,
   airports,
-  countries
+  countries,
 };
 
 export { api };

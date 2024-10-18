@@ -3,8 +3,7 @@ import { Country } from "./../models/country.model.js";
 
 const getAllCountries = async (req, res) => {
   try {
-    const { column, distinct } =
-      req.query;
+    const { column, distinct } = req.query;
     const attributes = [];
     if (column) {
       if (distinct === "true") {
@@ -17,7 +16,7 @@ const getAllCountries = async (req, res) => {
       }
     }
     const query = {
-      order: [["name", "ASC"]]
+      order: [["name", "ASC"]],
     };
     query.attributes = attributes.length > 0 ? attributes : undefined;
     const allCountries = await Country.findAll(query);

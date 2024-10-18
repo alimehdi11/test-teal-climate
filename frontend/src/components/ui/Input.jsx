@@ -15,7 +15,7 @@ const Input = ({
 
   useEffect(() => {
     const input = inputRef.current;
-    defaultFocus && input.focus()
+    defaultFocus && input.focus();
     const handleWheel = (event) => {
       if (document.activeElement === input) {
         event.preventDefault();
