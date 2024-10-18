@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import worldMapJson from "../../data/worldMap.json";
-import { request } from "../../utils/request.js";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
+import { api } from "../../../api/index.js";
 
 const WorldMap = () => {
   const [businessUnitsActivities, setBusinessUnitsActivities] = useState([]);
@@ -15,15 +15,13 @@ const WorldMap = () => {
 
   const fetchBusinessUnitsActivities = async () => {
     try {
-      const businessUnitsActivitiesResponse = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities`,
-        "GET"
-      );
-      if (!businessUnitsActivitiesResponse.ok) {
-        throw new Error(`Failed to fetch data:`);
+      const { success, data, message } =
+        await api.businessUnitsActivities.getAllBusinessUnitsActivities();
+      if (success) {
+        setBusinessUnitsActivities(data);
+      } else {
+        toast.error(message);
       }
-      const { data } = await businessUnitsActivitiesResponse.json();
-      setBusinessUnitsActivities(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -63,7 +61,7 @@ const WorldMap = () => {
 
   // Function to handle tooltip content for each country
   const onEachFeature = (feature, layer) => {
-    const country = feature.properties.formal_en || feature.properties.name;
+    const country = feature.properties.name || feature.properties.formal_en;
     let emissionsValue = 0;
     // Extracting emissions from user activities and adding all emissions if available for given country
     businessUnitsActivitiesForSelectedPeriod.forEach((businessUnitActivity) => {
@@ -73,6 +71,7 @@ const WorldMap = () => {
         businessUnitActivity.businessUnit.country === feature.properties.name
       ) {
         emissionsValue += businessUnitActivity.CO2e;
+        console.log("emissionsValue", emissionsValue);
       }
     });
     const tooltipContent = emissionsValue
@@ -87,26 +86,27 @@ const WorldMap = () => {
 
   useEffect(() => {
     if (businessUnitsActivities.length > 0 && selectedPeriod) {
-      // console.log(businessUnitsActivities);
-      // setBusinessUnitsActivitiesForSelectedPeriod([]);
+      setBusinessUnitsActivitiesForSelectedPeriod([]);
       const filterBusinessUnitsActivitiesForSelectedPeriod = async () => {
         let filterdBusinessUnitsActivities = businessUnitsActivities.filter(
           (activity) => {
-            console.log(activity.businessUnit.period.id, selectedPeriod);
-            return activity.businessUnit.period.id === selectedPeriod;
+            return activity.businessUnit.period.id === Number(selectedPeriod);
           }
         );
-        // console.log(filterdBusinessUnitsActivities);
         setBusinessUnitsActivitiesForSelectedPeriod(
           filterdBusinessUnitsActivities
         );
       };
-      filterBusinessUnitsActivitiesForSelectedPeriod();
+      setTimeout(filterBusinessUnitsActivitiesForSelectedPeriod, 100);
     }
   }, [businessUnitsActivities, selectedPeriod]);
 
+  // useEffect(() => {
+  //   console.log(businessUnitsActivitiesForSelectedPeriod);
+  // }, [businessUnitsActivitiesForSelectedPeriod]);
+
   return (
-    businessUnitsActivities.length > 0 && (
+    businessUnitsActivitiesForSelectedPeriod.length > 0 && (
       <div className="p-4 flex flex-col lg:flex-row gap-4 mt-4 rounded-md bg-white">
         {/* Emissions bar */}
         <div className="flex items-start">
