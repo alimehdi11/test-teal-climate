@@ -71,7 +71,6 @@ const WorldMap = () => {
         businessUnitActivity.businessUnit.country === feature.properties.name
       ) {
         emissionsValue += businessUnitActivity.CO2e;
-        console.log("emissionsValue", emissionsValue);
       }
     });
     const tooltipContent = emissionsValue
@@ -100,10 +99,6 @@ const WorldMap = () => {
       setTimeout(filterBusinessUnitsActivitiesForSelectedPeriod, 100);
     }
   }, [businessUnitsActivities, selectedPeriod]);
-
-  // useEffect(() => {
-  //   console.log(businessUnitsActivitiesForSelectedPeriod);
-  // }, [businessUnitsActivitiesForSelectedPeriod]);
 
   return (
     businessUnitsActivitiesForSelectedPeriod.length > 0 && (

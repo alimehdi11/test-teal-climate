@@ -125,7 +125,6 @@ const ActivitiesForm2 = ({
     try {
       const queryString = "?" + new URLSearchParams(queryParams).toString();
       const options = await callback(queryString);
-      console.log(options);
       if (options.length === 0) {
         setOptions(options);
         setCurrentInputValue("");
@@ -217,6 +216,7 @@ const ActivitiesForm2 = ({
       quantity,
       month,
     };
+    console.log(payload);
     // return console.table(payload);
     if (id) {
       if (!marketBased) {

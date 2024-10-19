@@ -91,6 +91,9 @@ const ProfileTable = ({ businessUnits, setBusinessUnits }) => {
                   <Link
                     to={`/profile/${userBusinessUnit.id}/edit`}
                     className="flex justify-center items-center"
+                    onClick={
+                      () => window.scrollTo(0, 0) // Scroll to the very top
+                    }
                   >
                     <img
                       src={editIcon}

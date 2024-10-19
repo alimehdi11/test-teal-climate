@@ -177,6 +177,7 @@ const BusinessUnitActivity = sequelize.define(
 BusinessUnitActivity.belongsTo(BusinessUnit, {
   foreignKey: "businessUnitId",
   as: "businessUnit",
+  onDelete: "CASCADE",
 });
-// BusinessUnitActivity.sync({ alter: true });
+
 export { BusinessUnitActivity };

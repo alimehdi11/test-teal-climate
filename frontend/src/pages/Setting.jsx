@@ -6,23 +6,17 @@ import { deleteToken } from "../utils/auth.js";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar.jsx";
 import Main from "../components/layout/Main.jsx";
+import Modal from "../components/ui/Modal.jsx";
 
 const SubscriptionSettings = () => {
   const { user } = useContext(UserContext);
   const [subscriptionId, setSubscriptionId] = useState(null);
   const [subscriptionFromStripe, setSubscriptionFromStripe] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [nextInvoiceData, setNextInvoiceData] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirm, setIsConfirm] = useState(false);
 
   const navigate = useNavigate();
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
   useEffect(() => {
     request(
@@ -120,6 +114,10 @@ const SubscriptionSettings = () => {
     }
   };
 
+  if (isConfirm) {
+    handleUnsubscribe();
+  }
+
   return (
     <>
       <Sidebar></Sidebar>
@@ -134,34 +132,23 @@ const SubscriptionSettings = () => {
               <p>
                 {"Your next invoive will be on "} <b>{nextInvoiceData}</b>
               </p>
-              <Button type="button" className="mt-4" onClick={openModal}>
+              <Button
+                type="button"
+                className="mt-4"
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
+              >
                 Unsubscribe
               </Button>
             </div>
           </div>
-          {/* Modal */}
-          <div
-            className={`bg-slate-500 opacity-80 fixed z-[1000] top-0 left-0 right-0 bottom-0 text-black flex justify-center items-center ${
-              !isModalOpen && "hidden"
-            }`}
-          >
-            <div className="bg-white w-[40%] max-w-[400px] min-w-[350px] rounded-lg flex justify-center items-center font-poppins flex-col gap-3 opacity-100 py-8">
-              Are you sure you want to unsubscribe?
-              <div className="flex gap-2">
-                <Button type="button" className="w-28" onClick={closeModal}>
-                  No
-                </Button>
-                <Button
-                  disabled={subscriptionId ? false : true}
-                  type="button"
-                  className="w-28"
-                  onClick={handleUnsubscribe}
-                >
-                  Yes
-                </Button>
-              </div>
-            </div>
-          </div>
+          <Modal
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            setIsConfirm={setIsConfirm}
+            message="Are you sure you want to unsubscribe?"
+          />
         </>
       </Main>
     </>

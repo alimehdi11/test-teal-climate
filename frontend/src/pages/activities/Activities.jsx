@@ -69,6 +69,7 @@ const Activities = () => {
         setIsReitSelected(false);
         setIsScopeSelected(true);
       }
+      window.scrollTo(0, 0); // Scroll to the very top
     }
   }, [id]);
 

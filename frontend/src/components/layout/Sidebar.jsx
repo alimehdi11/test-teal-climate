@@ -15,6 +15,7 @@ import accountIcon from "../../assets/icons/account.svg";
 import accountSelectedOrHoverIcon from "../../assets/icons/accountSelectedOrHover.svg";
 import profileIcon from "../../assets/icons/profile.svg";
 import profileSelectedOrHoverIcon from "../../assets/icons/profileSelectedOrHover.svg";
+import Modal from "../../components/ui/Modal.jsx";
 
 const Sidebar = ({ children }) => {
   const [isSettingBtnHovered, setIsSettingBtnHovered] = useState(false);
@@ -23,6 +24,8 @@ const Sidebar = ({ children }) => {
   const [isDashboardBtnHovered, setIsDashboardBtnHovered] = useState(false);
   const [isProfileBtnHovered, setIsProfileBtnHovered] = useState(false);
   const [isActivitesBtnHovered, setIsActivitesBtnHovered] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirm, setIsConfirm] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -40,6 +43,10 @@ const Sidebar = ({ children }) => {
     deleteToken();
     navigate("/");
   };
+
+  if (isConfirm) {
+    handleLogout();
+  }
 
   return (
     <div className="bg-white flex-1 p-5 pt-0 max-w-[300px] min-w-[300px] overflow-auto fixed top-0 left-0 bottom-0">
@@ -160,7 +167,9 @@ const Sidebar = ({ children }) => {
             </SidebarItem>
           </Link>
           <SidebarItem
-            onClick={handleLogout}
+            onClick={() => {
+              setIsModalOpen(true);
+            }}
             onMouseEnter={() => {
               setIsLogoutBtnHovered(true);
             }}
@@ -177,6 +186,12 @@ const Sidebar = ({ children }) => {
           </SidebarItem>
         </div>
       </div>
+      <Modal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        setIsConfirm={setIsConfirm}
+        message="Are you sure you want to logout?"
+      />
     </div>
   );
 };
