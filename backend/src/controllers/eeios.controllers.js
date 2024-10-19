@@ -6,23 +6,24 @@ const getEeios = async (req, res) => {
     const {
       productOrIndustry,
       level1,
-      level2,
-      level3,
-      level4,
-      level5,
+      // level2,
+      // level3,
+      // level4,
+      // level5,
       sector,
       column,
       distinct,
     } = req.query;
+    const query = {};
     const whereClause = {};
+    const attributes = [];
     if (productOrIndustry) whereClause.productOrIndustry = productOrIndustry;
     if (level1) whereClause.level1 = level1;
-    if (level2) whereClause.level2 = level2;
-    if (level3) whereClause.level3 = level3;
-    if (level4) whereClause.level4 = level4;
-    if (level5) whereClause.level5 = level5;
+    // if (level2) whereClause.level2 = level2;
+    // if (level3) whereClause.level3 = level3;
+    // if (level4) whereClause.level4 = level4;
+    // if (level5) whereClause.level5 = level5;
     if (sector) whereClause.sector = sector;
-    const attributes = [];
     if (column) {
       if (distinct === "true") {
         attributes.push([
@@ -32,8 +33,8 @@ const getEeios = async (req, res) => {
       } else {
         attributes.push(column);
       }
+      query.order = [[column, "ASC"]];
     }
-    const query = {};
     query.where = whereClause;
     query.attributes = attributes.length > 0 ? attributes : undefined;
     const records = await Eeio.findAll(query);

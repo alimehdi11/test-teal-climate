@@ -55,50 +55,51 @@ const ActivitiesForm2 = ({
 
   const possibleLevel2Labels = {
     "Refrigerant and other": "Refrigerant and other gas category",
-    "Passenger vehicles": "Passenger Vehicle Category",
-    "Delivery vehicles": "Delivery Vehicle Category",
-    "Passenger Evs": "Passenger EV Category",
-    "Delivery Evs": "Delivery Vehicle Category",
-    "WTT- fuels": "Fuel Type",
-    "WTT- bioenergy": "Bioenergy Type",
-    "Electricity TandD for passenger EVs": "Passenger EV Category",
-    "Business travel- land": "Passenger Vehicle Category",
-    "Material use": "Material Type",
-    "Waste disposal": "Waste Type",
-    "Business travel- sea": "Boat / Ship Type",
-    "WTT- business travel- sea": "Boat / Ship Type",
-    "WTT- pass vehs and travel- land": "Passenger Vehicle Category",
+    "Passenger vehicles": "Passenger vehicle category",
+    "Delivery vehicles": "Delivery vehicle category",
+    "Passenger Evs": "Passenger ev category",
+    "Delivery Evs": "Delivery ev category",
+    "WTT- fuels": "Fuel type",
+    "WTT- bioenergy": "Bioenergy type",
+    "Electricity TandD for passenger EVs": "Passenger ev category",
+    "Business travel- land": "Passenger vehicle category",
+    "Material use": "Material type",
+    "Waste disposal": "Waste type",
+    "Business travel- sea": "Boat / ship type",
+    "WTT- business travel- sea": "Boat / ship type",
+    "WTT- pass vehs and travel- land": "Passenger vehicle category",
     "Freighting goods": "Freighting medium",
     "WTT- delivery vehs and freight": "Freighting medium",
-    "Managed assets- vehicles": "Vehicle Category",
-    "Business travel- air": "Airport From",
-    "WTT- business travel- air": "Airport From",
+    "Managed assets- vehicles": "Vehicle category",
+    "Business travel- air": "Airport from",
+    "WTT- business travel- air": "Airport from",
+    Electricity: "Electricity type",
   };
 
   const possibleLevel3Labels = {
-    Bioenergy: "Bioenergy Fuel Name",
+    Bioenergy: "Bioenergy fuel name",
     "Refrigerant and other": "Refrigerant and other gas name",
-    "Passenger vehicles": "Passenger Vehicle Segment / Size",
-    "Delivery vehicles": "Delivery Vehicle Class / Category",
-    "Passenger Evs": "Passenger EV Segment / Size",
-    "Delivery Evs": "Delivery Vehicle Segment / Size",
-    "Heat and steam": "Onsite / Offsite",
-    "WTT- fuels": "Fuel Name",
-    "WTT- bioenergy": "Bioenergy Fuel Name",
-    "Electricity TandD for passenger EVs": "Passenger EV Segment / Size",
-    "Business travel- land": "Passenger Vehicle Segment / Size",
-    "WTT- heat and steam": "Onsite / Offsite",
-    "Material use": "Material Name",
-    "Waste disposal": "Waste Name",
-    "Business travel- sea": "Passenger Type",
-    "WTT- business travel- sea": "Passenger Type",
-    "WTT- pass vehs and travel- land": "Passenger Vehicle Segment / Size",
-    "Freighting goods": "Class / Type / Haul",
-    "WTT- delivery vehs and freight": "Class / Type / Haul",
-    "Hotel stay": "Name of Country",
-    "Managed assets- vehicles": "Vehicle Segment / Size",
-    "Business travel- air": "Airport To",
-    "WTT- business travel- air": "Airport To",
+    "Passenger vehicles": "Passenger vehicle segment / size",
+    "Delivery vehicles": "Delivery vehicle class / category",
+    "Passenger Evs": "Passenger ev segment / size",
+    "Delivery Evs": "Delivery vehicle segment / size",
+    "Heat and steam": "Onsite / offsite",
+    "WTT- fuels": "Fuel name",
+    "WTT- bioenergy": "Bioenergy fuel name",
+    "Electricity TandD for passenger EVs": "Passenger ev segment / size",
+    "Business travel- land": "Passenger vehicle segment / size",
+    "WTT- heat and steam": "Onsite / offsite",
+    "Material use": "Material name",
+    "Waste disposal": "Waste name",
+    "Business travel- sea": "Passenger type",
+    "WTT- business travel- sea": "Passenger type",
+    "WTT- pass vehs and travel- land": "Passenger vehicle segment / size",
+    "Freighting goods": "Class / type / haul",
+    "WTT- delivery vehs and freight": "Class / type / haul",
+    "Hotel stay": "Name of country",
+    "Managed assets- vehicles": "Vehicle segment / size",
+    "Business travel- air": "Airport to",
+    "WTT- business travel- air": "Airport to",
   };
 
   const specialLevel = [
@@ -124,6 +125,7 @@ const ActivitiesForm2 = ({
     try {
       const queryString = "?" + new URLSearchParams(queryParams).toString();
       const options = await callback(queryString);
+      console.log(options);
       if (options.length === 0) {
         setOptions(options);
         setCurrentInputValue("");
@@ -664,12 +666,12 @@ const ActivitiesForm2 = ({
           />
         </FormControl>
         <FormControl className="flex-1 relative">
-          <Label>Business Unit</Label>
+          <Label>Business unit</Label>
           <Select
             value={businessUnitId}
             onChange={(e) => setBusinessUnitId(e.target.value)}
           >
-            <option value="">Select Option</option>
+            <option value="">Select option</option>
             {businessUnits.length > 0 ? (
               businessUnits.map((options, index) => (
                 <option value={options.id} key={index}>
@@ -684,34 +686,34 @@ const ActivitiesForm2 = ({
           </Select>
         </FormControl>
         <FormControl className="flex-1 relative">
-          <Label>Level 1 Category</Label>
+          <Label>Level 1 category</Label>
           <SearchableSelect
             data={level1CategoriesOptions}
             item={level1Category}
             setItem={setLevel1Category}
-            text={"Select Level 1 Category"}
-            placeholder={"Search Level 1 Category"}
+            text={"Select level 1 category"}
+            placeholder={"Search level 1 category"}
           />
         </FormControl>
         <FormControl className="flex-1 relative">
-          <Label>{possibleLevel2Labels[selectedLevel] || "Fuel Type"}</Label>
+          <Label>{possibleLevel2Labels[selectedLevel] || "Fuel type"}</Label>
           <SearchableSelect
             data={level2Options}
             item={level2}
             setItem={setLevel2}
-            text={"Select Level 2 Category"}
-            placeholder={"Search Level 2 Category"}
+            text={"Select level 2 category"}
+            placeholder={"Search Level 2 category"}
           />
         </FormControl>
         {!specialLevel.includes(selectedLevel) && (
           <FormControl className="flex-1 relative">
-            <Label>{possibleLevel3Labels[selectedLevel] || "Fuel Name"}</Label>
+            <Label>{possibleLevel3Labels[selectedLevel] || "Fuel name"}</Label>
             <SearchableSelect
               data={level3Options}
               item={level3}
               setItem={setLevel3}
-              text={"Select Level 3 Category"}
-              placeholder={"Search Level 3 Category"}
+              text={"Select level 3 category"}
+              placeholder={"Search level 3 category"}
             />
           </FormControl>
         )}
@@ -722,8 +724,8 @@ const ActivitiesForm2 = ({
               data={level4Options}
               item={level4}
               setItem={setLevel4}
-              text={"Select Level 4 Category"}
-              placeholder={"Search Level 4 Category"}
+              text={"Select level 4 category"}
+              placeholder={"Search level 4 category"}
             />
           </FormControl>
         )}
@@ -734,19 +736,19 @@ const ActivitiesForm2 = ({
               data={level5Options}
               item={level5}
               setItem={setLevel5}
-              text={"Select Level 5 Category"}
-              placeholder={"Search Level 5 Category"}
+              text={"Select level 5 category"}
+              placeholder={"Search level 5 category"}
             />
           </FormControl>
         )}
         <FormControl className="flex-1 relative">
-          <Label>Unit Of Measurement</Label>
+          <Label>Unit of measurement</Label>
           <SearchableSelect
             data={unitOfMeasurementOptions}
             item={unitOfMeasurement}
             setItem={setUnitOfMeasurement}
-            text={"Select Unit Of Measurement"}
-            placeholder={"Select Unit Of Measurement"}
+            text={"Select unit of measurement"}
+            placeholder={"Select unit of measurement"}
           />
         </FormControl>
         <FormControl className="flex-1 relative">
@@ -762,7 +764,7 @@ const ActivitiesForm2 = ({
                 setQuantity(value);
               }
             }}
-            placeholder="Enter Quantity"
+            placeholder="Enter quantity"
             readOnly={airportsDistance !== 0}
           />
         </FormControl>
@@ -817,29 +819,29 @@ const ActivitiesForm2 = ({
             Market based
           </h4>
           <FormControl>
-            <Label>Quantity Purchased</Label>
+            <Label>Quantity purchased</Label>
             <Input
               type="number"
               value={marketBasedQuantity}
               onChange={(event) => {
                 setMarketBasedQuantity(event.target.value);
               }}
-              placeholder="Enter Purchased Quantity"
+              placeholder="Enter purchased quantity"
             />
           </FormControl>
           <FormControl>
-            <Label>Emission Factor</Label>
+            <Label>Emission factor</Label>
             <Input
               type="number"
               value={marketBasedEmissionFactor}
               onChange={(event) => {
                 setMarketBasedEmissionFactor(event.target.value);
               }}
-              placeholder="Enter Quantity"
+              placeholder="Enter quantity"
             />
           </FormControl>
           <FormControl>
-            <Label>Unit of Emission Factor</Label>
+            <Label>Unit of emission factor</Label>
             <Select
               value={marketBasedUnitOfEmissionFactor}
               onChange={(e) =>

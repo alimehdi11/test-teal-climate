@@ -21,18 +21,9 @@ const EeioForm = ({
   const [month, setMonth] = useState("");
   const [businessUnitId, setBusinessUnitId] = useState("");
   const [level1, setLevel1] = useState("");
-  const [level2, setLevel2] = useState("");
-  const [level3, setLevel3] = useState("");
-  const [level4, setLevel4] = useState("");
-  const [level5Value, setLevel5Value] = useState("");
   const [sector, setSector] = useState("");
-  const [currency, setCurrency] = useState("perEuro");
   const [quantity, setQuantity] = useState("");
 
-  const [level2Options, setLevel2Options] = useState([]);
-  const [level3Options, setLevel3Options] = useState([]);
-  const [level4Options, setLevel4Options] = useState([]);
-  const [level5Options, setLevel5Options] = useState([]);
   const [sectorOptions, setSectorOptions] = useState([]);
 
   const { id } = useParams();
@@ -41,23 +32,24 @@ const EeioForm = ({
   const [searchParams] = useSearchParams();
   const level1Options = [
     "Activities of households",
-    "Public administration and defence; compulsory social security",
-    "Financial intermediation",
-    "Manufacturing",
-    "Construction",
-    "Real estate, renting and business activities",
-    "Hotels and restaurants",
-    "Wholesale and retail trade; repair of motor vehicles, motorcycles and personal and household goods",
-    "Electricity, gas and water supply",
     "Agriculture, hunting and forestry",
-    "Mining and quarrying",
-    "Other community, social and personal service activities",
+    "Construction",
+    "Education",
+    "Electricity, gas and water supply",
+    "Extra-territorial organizations and bodies",
+    "Financial intermediation",
     "Fishing",
     "Health and social work",
+    "Hotels and restaurants",
+    "Manufacturing",
+    "Mining and quarrying",
+    "Other community, social and personal service activities",
+    "Public administration and defence; compulsory social security",
+    "Real estate, renting and business activities",
     "Transport, storage and communication",
-    "Extra-territorial organizations and bodies",
-    "Education",
+    "Wholesale and retail trade; repair of motor vehicles, motorcycles and personal and household goods",
   ];
+
   const [isFormInitializing, setIsFormInitializing] = useState(false);
 
   const fetchActivityById = async () => {
@@ -80,15 +72,8 @@ const EeioForm = ({
   };
 
   const resetForm = () => {
-    setLevel3Options([]);
-    setLevel4Options([]);
-    setLevel5Options([]);
     setBusinessUnitId("");
     setLevel1("");
-    setLevel2("");
-    setLevel3("");
-    setLevel4("");
-    setLevel5Value("");
     setSector("");
     setQuantity("");
     setMonth("");
@@ -100,13 +85,7 @@ const EeioForm = ({
     if (
       !businessUnitId ||
       !productOrIndustry ||
-      !level1 ||
-      !level2 ||
-      !level3 ||
-      !level4 ||
-      !level5Value ||
       !sector ||
-      !currency ||
       !quantity ||
       !month
     ) {
@@ -118,12 +97,7 @@ const EeioForm = ({
       productOrIndustry,
       level1: level1,
       businessUnitId: businessUnitId,
-      level2: level2,
-      level3: level3,
-      level4: level4,
-      level5: level5Value,
       sector: sector,
-      unitOfMeasurement: currency,
       quantity,
       month,
     };
@@ -161,13 +135,7 @@ const EeioForm = ({
     if (
       !businessUnitId ||
       !productOrIndustry ||
-      !level1 ||
-      !level2 ||
-      !level3 ||
-      !level4 ||
-      !level5Value ||
       !sector ||
-      !currency ||
       !quantity ||
       !month
     ) {
@@ -180,12 +148,7 @@ const EeioForm = ({
       productOrIndustry,
       level1: level1,
       businessUnitId: businessUnitId,
-      level2: level2,
-      level3: level3,
-      level4: level4,
-      level5: level5Value,
       sector: sector,
-      unitOfMeasurement: currency,
       quantity,
       month,
     };
@@ -231,66 +194,9 @@ const EeioForm = ({
     navigation("/activities");
   };
 
-  const fetchEeioLevel2 = async () => {
-    try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1}&column=level2&distinct=true`;
-      const response = await request(url, "GET");
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
-      }
-      const result = await response.json();
-      setLevel2Options(result.map((item) => item.level2));
-    } catch (error) {
-      console.log(error);
-      setLevel2Options([]);
-    }
-  };
-
-  const fetchEeioLevel3 = async () => {
-    try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1}&level2=${level2}&column=level3&distinct=true`;
-      const response = await request(url, "GET");
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
-      }
-      const result = await response.json();
-      setLevel3Options(result.map((item) => item.level3));
-    } catch (error) {
-      setLevel3Options([]);
-    }
-  };
-
-  const fetchLevel4 = async () => {
-    try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1}&level2=${level2}&level3=${level3}&column=level4&distinct=true`;
-      const response = await request(url, "GET");
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
-      }
-      const result = await response.json();
-      setLevel4Options(result.map((item) => item.level4));
-    } catch (error) {
-      setLevel4Options([]);
-    }
-  };
-
-  const fetchLevel5 = async () => {
-    try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1}&level2=${level2}&level3=${level3}&level4=${level4}&column=level5&distinct=true`;
-      const response = await request(url, "GET");
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data:`);
-      }
-      const result = await response.json();
-      setLevel5Options(result.map((item) => item.level5));
-    } catch (error) {
-      setLevel5Options([]);
-    }
-  };
-
   const fetchSector = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1}&level2=${level2}&level3=${level3}&level4=${level4}&level5=${level5Value}&column=sector&distinct=true`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/eeios?productOrIndustry=${productOrIndustry}&level1=${level1}&column=sector&distinct=true`;
       const response = await request(url, "GET");
       if (!response.ok) {
         throw new Error(`Failed to fetch data:`);
@@ -311,68 +217,12 @@ const EeioForm = ({
 
   useEffect(() => {
     if (level1) {
-      fetchEeioLevel2();
-      if (!isFormInitializing) {
-        setLevel2("");
-        setLevel3("");
-        setLevel4("");
-        setLevel5Value("");
-        setSector("");
-        setLevel3Options([]);
-        setLevel4Options([]);
-        setLevel5Options([]);
-        setSectorOptions([]);
-      }
-    }
-  }, [level1]);
-
-  useEffect(() => {
-    if (level2) {
-      fetchEeioLevel3();
-      if (!isFormInitializing) {
-        setLevel3("");
-        setLevel4("");
-        setLevel5Value("");
-        setSector("");
-        setLevel4Options([]);
-        setLevel5Options([]);
-        setSectorOptions([]);
-      }
-    }
-  }, [level2]);
-
-  useEffect(() => {
-    if (level3) {
-      fetchLevel4();
-      if (!isFormInitializing) {
-        setLevel4("");
-        setLevel5Value("");
-        setSector("");
-        setLevel5Options([]);
-        setSectorOptions([]);
-      }
-    }
-  }, [level3]);
-
-  useEffect(() => {
-    if (level4) {
-      fetchLevel5();
-      if (!isFormInitializing) {
-        setLevel5Value("");
-        setSector("");
-        setSectorOptions([]);
-      }
-    }
-  }, [level4]);
-
-  useEffect(() => {
-    if (level5Value) {
       fetchSector();
       if (!isFormInitializing) {
         setSector("");
       }
     }
-  }, [level5Value]);
+  }, [level1]);
 
   useEffect(() => {
     if (id && searchParams.get("eeio")) {
@@ -380,10 +230,6 @@ const EeioForm = ({
       fetchActivityById().then((activity) => {
         setBusinessUnitId(activity.businessUnit.id);
         setLevel1(activity.level1);
-        setLevel2(activity.level2);
-        setLevel3(activity.level3);
-        setLevel4(activity.level4);
-        setLevel5Value(activity.level5);
         setSector(activity.sector);
         setQuantity(activity.quantity);
         setMonth(activity.month);
@@ -394,31 +240,11 @@ const EeioForm = ({
 
   useEffect(() => {
     if (id) {
-      if (
-        businessUnitId &&
-        level1 &&
-        level2 &&
-        level3 &&
-        level4 &&
-        level5Value &&
-        sector &&
-        quantity &&
-        month
-      ) {
+      if (businessUnitId && level1 && sector && quantity && month) {
         setIsFormInitializing(false);
       }
     }
-  }, [
-    businessUnitId,
-    level1,
-    level2,
-    level3,
-    level4,
-    level5Value,
-    sector,
-    quantity,
-    month,
-  ]);
+  }, [businessUnitId, level1, sector, quantity, month]);
 
   return (
     <>
@@ -475,50 +301,6 @@ const EeioForm = ({
               placeholder={"Search level 1"}
             />
           </FormControl>
-          {/* Level 2 */}
-          <FormControl className="relative">
-            <Label>Level 2</Label>
-            <SearchableSelect
-              data={level2Options}
-              item={level2}
-              setItem={setLevel2}
-              text={"Select level 2"}
-              placeholder={"Search level 2"}
-            />
-          </FormControl>
-          {/* Level 3 */}
-          <FormControl className="relative">
-            <Label>Level 3</Label>
-            <SearchableSelect
-              data={level3Options}
-              item={level3}
-              setItem={setLevel3}
-              text={"Select level 3"}
-              placeholder={"Search level 3"}
-            />
-          </FormControl>
-          {/* Level 4 */}
-          <FormControl className="relative">
-            <Label>Level 4</Label>
-            <SearchableSelect
-              data={level4Options}
-              item={level4}
-              setItem={setLevel4}
-              text={"Select level 4"}
-              placeholder={"Search level 4"}
-            />
-          </FormControl>
-          {/* Level 5 */}
-          <FormControl className="relative">
-            <Label>Level 5</Label>
-            <SearchableSelect
-              data={level5Options}
-              item={level5Value}
-              setItem={setLevel5Value}
-              text={"Select level 5"}
-              placeholder={"Search level 5"}
-            />
-          </FormControl>
           {/* Sector */}
           <FormControl className="relative">
             <Label>Sector</Label>
@@ -529,16 +311,6 @@ const EeioForm = ({
               text={"Select sector"}
               placeholder={"Search sector"}
             />
-          </FormControl>
-          {/* Currency */}
-          <FormControl>
-            <Label>Currency</Label>
-            <Select
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-            >
-              <option value="perEuro">Per Euro</option>
-            </Select>
           </FormControl>
           {/* Quantity */}
           <FormControl>

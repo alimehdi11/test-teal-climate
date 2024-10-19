@@ -397,17 +397,11 @@ const createEeioActivity = async (req, res) => {
   try {
     const {
       productOrIndustry,
-      level1,
-      businessUnitId,
-      level2,
-      level3,
-      level4,
-      level5,
-      sector,
-      unitOfMeasurement,
-      quantity,
       month,
-      // year,
+      businessUnitId,
+      level1,
+      sector,
+      quantity,
     } = req.body;
     const businessUnit = await BusinessUnit.findByPk(businessUnitId);
     const payload = {
@@ -416,26 +410,17 @@ const createEeioActivity = async (req, res) => {
       productOrIndustry,
       level1,
       businessUnitId,
-      level2,
-      level3,
-      level4,
-      level5,
       sector,
-      unitOfMeasurement,
       quantity,
       month,
-      // year,
     };
     payload.continent = businessUnit.continent;
     payload.country = businessUnit.country;
-    let eeioRecords = await Eeio.findAll({
+    let eeioRecords;
+    eeioRecords = await Eeio.findAll({
       where: {
         productOrIndustry,
         level1,
-        level2,
-        level3,
-        level4,
-        level5,
         sector,
         continent: payload.continent,
         country: payload.country,
@@ -454,21 +439,17 @@ const createEeioActivity = async (req, res) => {
         where: {
           productOrIndustry,
           level1,
-          level2,
-          level3,
-          level4,
-          level5,
           sector,
           continent: countryMaskRecord.continent,
           country: countryMaskRecord.countryMask,
         },
       });
     }
-    let CO2e = "";
-    let CO2e_of_CO2 = "";
-    let CO2e_of_CH4 = "";
-    let CO2e_of_N2O = "";
-    let CO2e_of_other = "";
+    let CO2e = 0;
+    let CO2e_of_CO2 = 0;
+    let CO2e_of_CH4 = 0;
+    let CO2e_of_N2O = 0;
+    let CO2e_of_other = 0;
     const greenHouseGasValues = [
       "kg CO2e",
       "kg CO2e of CO2",
@@ -496,6 +477,7 @@ const createEeioActivity = async (req, res) => {
     payload.CO2e_of_CH4 = CO2e_of_CH4;
     payload.CO2e_of_N2O = CO2e_of_N2O;
     payload.CO2e_of_other = CO2e_of_other;
+    payload.unitOfMeasurement = ""; // TODO : Ask sir or sohail about it.
     payload.eeio = true;
     await BusinessUnitActivity.create(payload);
     return res.status(200).json({ message: "Activity created sucessfully" });
@@ -513,15 +495,9 @@ const updateEeioActivityById = async (req, res) => {
       productOrIndustry,
       level1,
       businessUnitId,
-      level2,
-      level3,
-      level4,
-      level5,
       sector,
-      unitOfMeasurement,
       quantity,
       month,
-      // year,
     } = req.body;
     const businessUnit = await BusinessUnit.findByPk(businessUnitId);
     const payload = {
@@ -530,15 +506,9 @@ const updateEeioActivityById = async (req, res) => {
       productOrIndustry,
       level1,
       businessUnitId,
-      level2,
-      level3,
-      level4,
-      level5,
       sector,
-      unitOfMeasurement,
       quantity,
       month,
-      // year,
     };
     payload.continent = businessUnit.continent;
     payload.country = businessUnit.country;
@@ -546,10 +516,6 @@ const updateEeioActivityById = async (req, res) => {
       where: {
         productOrIndustry,
         level1,
-        level2,
-        level3,
-        level4,
-        level5,
         sector,
         continent: payload.continent,
         country: payload.country,
@@ -568,10 +534,6 @@ const updateEeioActivityById = async (req, res) => {
         where: {
           productOrIndustry,
           level1,
-          level2,
-          level3,
-          level4,
-          level5,
           sector,
           continent: countryMaskRecord.continent,
           country: countryMaskRecord.countryMask,
@@ -615,7 +577,7 @@ const updateEeioActivityById = async (req, res) => {
         id,
       },
     });
-    return res.status(200).json({ message: "Activity created sucessfully" });
+    return res.status(200).json({ message: "Activity updated sucessfully" });
   } catch (error) {
     console.log(
       "Could not updateBusinessUnitActivity -> updateEeioActivityById"
@@ -654,6 +616,7 @@ const createReitActivity = async (req, res) => {
       userId: req.user.id,
       businessUnitId,
       scope: "Scope 3",
+      level1Category: "Investments",
       unitOfMeasurement,
       quantity: Number(quantity),
       country,
