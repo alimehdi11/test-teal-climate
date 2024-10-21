@@ -10,7 +10,11 @@ const DataProvider = ({ children }) => {
   const [data, setData] = useState({});
   const { user } = useContext(UserContext);
   const [isLoding, setIsLoding] = useState(false);
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
   useEffect(() => {
     if (Object.keys(user).length > 0) {
       setIsLoding(true);
@@ -83,7 +87,7 @@ const DataProvider = ({ children }) => {
   return isLoding ? (
     <Loader />
   ) : (
-    <DataContext.Provider value={{ data, setData }}>
+    <DataContext.Provider value={{ data, setData ,isSidebarOpen,toggleSidebar}}>
       {children}
     </DataContext.Provider>
   );

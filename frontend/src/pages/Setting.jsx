@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar.jsx";
 import Main from "../components/layout/Main.jsx";
 import Modal from "../components/ui/Modal.jsx";
+import SidebarToggleBtn from "../components/ui/SidebarToggleBtn.jsx";
 
 const SubscriptionSettings = () => {
   const { user } = useContext(UserContext);
@@ -123,7 +124,10 @@ const SubscriptionSettings = () => {
       <Sidebar></Sidebar>
       <Main>
         <>
-          <div className="my-5 font-extrabold text-2xl">Setting</div>
+          <div className="mb-5 flex gap-3 ">
+            <SidebarToggleBtn/>
+            <h1 className="font-extrabold text-2xl">Setting</h1>
+          </div>
           <div className="bg-white p-6 rounded-md">
             <h2 className="m-0 mb-4 font-extrabold text-2xl">
               Subscription Details

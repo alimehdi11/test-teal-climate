@@ -19,6 +19,7 @@ const ActivitiesSidebar = ({
   isReitSelected,
   setIsScopeSelected,
 }) => {
+  const { toggleSidebar } = useContext(DataContext);
   const [level1, setLevel1] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 200);
@@ -105,6 +106,7 @@ const ActivitiesSidebar = ({
                 isReitSelected ? "bg-tc-indigo-light text-tc-blue" : ""
               }
               onClick={() => {
+                toggleSidebar();
                 setSelectedScope("");
                 setSelectedLevel("");
                 setIsSpendBaseScope3Selected(false);
@@ -142,6 +144,7 @@ const ActivitiesSidebar = ({
                     : "")
                 }
                 onClick={(e) => {
+                  toggleSidebar();
                   setSelectedLevel(e.target.innerText);
                 }}
               >

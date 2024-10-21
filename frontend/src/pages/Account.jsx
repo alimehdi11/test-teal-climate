@@ -5,6 +5,7 @@ import { UserContext } from "../contexts/UserContext.jsx";
 import { Link } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar.jsx";
 import Main from "../components/layout/Main.jsx";
+import SidebarToggleBtn from "../components/ui/SidebarToggleBtn.jsx";
 
 const Account = () => {
   const [userInfo, setUserInfo] = useState({});
@@ -35,7 +36,10 @@ const Account = () => {
       <Sidebar></Sidebar>
       <Main>
         <>
-          <div className="my-5 font-extrabold text-2xl">Account</div>
+          <div className="mb-5 flex gap-3 ">
+            <SidebarToggleBtn />
+            <h1 className="font-extrabold text-2xl">Account</h1>
+          </div>
           <div className="grid grid-cols-2 gap-4 bg-white p-6 rounded-md">
             <div>
               <h3 className="m-0 mb-4 font-extrabold text-2xl">Introduction</h3>

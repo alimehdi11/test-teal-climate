@@ -4,12 +4,12 @@ import ProfileTable from "./ProfileTable.jsx";
 import { useState } from "react";
 import Sidebar from "../../components/layout/Sidebar.jsx";
 import Main from "../../components/layout/Main.jsx";
-import PeriodSelector from "../../components/PeriodSelector.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import PeriodForm from "./PeriodForm.jsx";
 import Button from "../../components/ui/Button.jsx";
 import { api } from "../../../api/index.js";
 import { toast } from "react-toastify";
+import Topbar from "../../components/layout/Topbar.jsx";
 
 const Profile = () => {
   const [businessUnits, setBusinessUnits] = useState([]);
@@ -38,19 +38,20 @@ const Profile = () => {
       <Sidebar />
       <Main>
         <>
-          <div className="my-5 flex justify-between">
-            <span className=" font-extrabold text-2xl">Profile</span>
-            <div className="flex gap-4">
+          <Topbar
+            title="Profile"
+            comp={
               <Button
+                className="max-lg:min-w-32 "
                 onClick={() => {
                   setShowPeriodForm(true);
                 }}
               >
                 Add period
               </Button>
-              <PeriodSelector />
-            </div>
-          </div>
+            }
+          />
+    
           {showPeriodForm && (
             <PeriodForm setShowPeriodForm={setShowPeriodForm} />
           )}

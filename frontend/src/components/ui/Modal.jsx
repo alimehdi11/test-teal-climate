@@ -7,7 +7,7 @@ const Modal = ({ isModalOpen, setIsModalOpen, setIsConfirm, message }) => {
 
   return (
     <div
-      className={`bg-slate-500 opacity-80 fixed z-[999999] top-0 left-0 right-0 bottom-0 text-black flex justify-center items-center ${
+      className={`bg-tc-background fixed z-[999999] top-0 left-0 right-0 bottom-0 text-black flex justify-center items-center ${
         !isModalOpen && "hidden"
       }`}
     >

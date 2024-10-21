@@ -217,7 +217,7 @@ const CarbonEmissionsAnalytics = () => {
   }, [totalCO2e]);
 
   return (
-    <div className="grid grid-cols-1 mqMin850:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
+    <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4 mt-4">
       {/* Card total emissions */}
       <div className="bg-white rounded-md shadow-card p-6">
         <div className="font-medium text-[1rem] text-[#111111]">
@@ -269,7 +269,7 @@ const CarbonEmissionsAnalytics = () => {
               </div>
             </div>
           </div>
-          <div className="h-36 min-w-[144px] flex items-center justify-center">
+          <div className="h-36 max-w-[144px] flex items-center justify-center mx-auto w-1/2">
             <TC_RadialBarChart
               data={[
                 calculateC02ePercentageOfGivenScope(totalScope1CO2e),
@@ -341,7 +341,7 @@ const CarbonEmissionsAnalytics = () => {
               </div>
             </div>
           </div>
-          <div className="h-36 min-w-[144px] flex items-center justify-center">
+          <div className="h-36 max-w-[144px] flex items-center justify-center mx-auto w-1/2">
             <TC_RadialBarChart
               data={[
                 calculateC02ePercentageOfGivenScopeCategory(
@@ -361,8 +361,8 @@ const CarbonEmissionsAnalytics = () => {
 
       {/* Card scope 3 */}
       <div className="xl:row-span-2 bg-white rounded-md shadow-card p-6">
-        <div className="flex justify-between">
-          <div className="self-start">
+        <div className="flex justify-between items-center flex-wrap-reverse">
+          <div className="">
             <div className="font-medium text-[1rem] text-[#111111]">
               Scope 3 Emissions
             </div>
@@ -373,7 +373,7 @@ const CarbonEmissionsAnalytics = () => {
               Metric Tonnes CO<span className="text-[10px]">2</span>e
             </div>
           </div>
-          <div className="self-end mt-6 flex items-center justify-center -rotate-90">
+          <div className="self-end mt-6 flex items-center justify-center -rotate-90 mx-auto">
             <TC_PieChartWithPaddingAngle data={scope3CategoriesCO2e} />
           </div>
         </div>
@@ -453,7 +453,7 @@ const CarbonEmissionsAnalytics = () => {
                   </div>
                 </div>
               </div>
-              <div className="h-36 min-w-[144px] flex items-center justify-center">
+              <div className="h-36 max-w-[144px] flex items-center justify-center mx-auto w-1/2">
                 <TC_RadialBarChart
                   data={[
                     calculateC02ePercentageOfLocationBasedScopeCategory(
@@ -505,7 +505,7 @@ const CarbonEmissionsAnalytics = () => {
                   </div>
                 </div>
               </div>
-              <div className="h-36 min-w-[144px] flex items-center justify-center">
+              <div className="h-36 max-w-[144px] flex items-center justify-center mx-auto w-1/2">
                 <TC_RadialBarChart
                   data={[
                     calculateC02ePercentageOfMarketBasedScopeCategory(

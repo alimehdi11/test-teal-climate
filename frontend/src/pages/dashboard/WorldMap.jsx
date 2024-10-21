@@ -133,6 +133,7 @@ const WorldMap = () => {
           touchZoom={false}
           dragging={false}
           attributionControl={false}
+         style={{zIndex:1}}
         >
           <GeoJSON
             data={worldMapJson}

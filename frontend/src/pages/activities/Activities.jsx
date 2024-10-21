@@ -11,6 +11,7 @@ import { api } from "../../../api/index.js";
 import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
 import { useSearchParams, useParams } from "react-router-dom";
 import ActivitesForm from "./ActivitiesForm2.jsx";
+import Topbar from "../../components/layout/Topbar.jsx";
 
 const Activities = () => {
   const [selectedScope, setSelectedScope] = useState("Scope 1");
@@ -94,12 +95,7 @@ const Activities = () => {
         <>
           {isScopeSelected && (
             <>
-              <div className="my-5 flex justify-between">
-                <span className=" font-extrabold text-2xl">
-                  {selectedLevel}
-                </span>
-                <PeriodSelector />
-              </div>
+              <Topbar title={selectedLevel} />
               <ActivitesForm
                 selectedScope={selectedScope}
                 selectedLevel={selectedLevel}
@@ -112,12 +108,7 @@ const Activities = () => {
           )}
           {isSpendBaseScope3Selected && (
             <>
-              <div className="my-5 flex justify-between">
-                <span className=" font-extrabold text-2xl">
-                  {productOrIndustry}
-                </span>
-                <PeriodSelector />
-              </div>
+              <Topbar title={productOrIndustry} />
               <EeioForm
                 productOrIndustry={productOrIndustry}
                 setProductOrIndustry={setProductOrIndustry}
@@ -128,10 +119,8 @@ const Activities = () => {
           )}
           {isReitSelected && (
             <>
-              <div className="my-5 flex justify-between">
-                <span className=" font-extrabold text-2xl">{"REIT"}</span>
-                <PeriodSelector />
-              </div>
+              <Topbar title="REIT" />
+
               <ReitForm
                 setBusinessUnitsActivities={setBusinessUnitsActivities}
                 businessUnits={businessUnits}

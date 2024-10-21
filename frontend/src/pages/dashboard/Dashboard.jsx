@@ -9,6 +9,7 @@ import calendarIcon from "../../assets/calendar-icon.svg";
 import Sidebar from "../../components/layout/Sidebar.jsx";
 import Main from "../../components/layout/Main.jsx";
 import PeriodSelector from "../../components/PeriodSelector.jsx";
+import Topbar from "../../components/layout/Topbar.jsx";
 
 const Dashboard = () => {
   const pdfRef = useRef();
@@ -44,11 +45,7 @@ const Dashboard = () => {
       <Sidebar></Sidebar>
       <Main>
         <div ref={pdfRef}>
-          <div className="flex flex-col-reverse xs:flex-row gap-y-4 justify-end">
-            {/* <div className="flex flex-col-reverse xs:flex-row gap-y-4 justify-between"> */}
-            {/* <Button onClick={downloadPDF}>Download PDF</Button> */}
-            <PeriodSelector />
-          </div>
+          <Topbar/>
           <CarbonEmissionsAnalytics />
           <WorldMap />
           <Top10EmissionsTable />

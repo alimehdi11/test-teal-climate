@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import SidebarItem from "../../components/SidebarItem";
+import { DataContext } from "../../contexts/DataContext";
 
 const EeioSidebar = ({ productOrIndustry, setProductOrIndustry }) => {
+  const { toggleSidebar } = useContext(DataContext);
   return (
     <div className="flex flex-col gap-y-2 mt-2">
       <SidebarItem
@@ -9,7 +12,10 @@ const EeioSidebar = ({ productOrIndustry, setProductOrIndustry }) => {
             ? "bg-tc-indigo-light text-tc-blue"
             : ""
         }
-        onClick={() => setProductOrIndustry("Industry")}
+        onClick={() => {
+          toggleSidebar();
+          setProductOrIndustry("Industry");
+        } }
       >
         Industry
       </SidebarItem>
@@ -19,7 +25,11 @@ const EeioSidebar = ({ productOrIndustry, setProductOrIndustry }) => {
             ? "bg-tc-indigo-light text-tc-blue"
             : ""
         }
-        onClick={() => setProductOrIndustry("Product")}
+        onClick={() => {
+          toggleSidebar();
+          setProductOrIndustry("Product")
+        
+        }}
       >
         Product
       </SidebarItem>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Logo from "../ui/Logo";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { deleteToken } from "../../utils/auth.js";
@@ -16,8 +16,12 @@ import accountSelectedOrHoverIcon from "../../assets/icons/accountSelectedOrHove
 import profileIcon from "../../assets/icons/profile.svg";
 import profileSelectedOrHoverIcon from "../../assets/icons/profileSelectedOrHover.svg";
 import Modal from "../../components/ui/Modal.jsx";
+import SidebarToggleBtn from "../ui/SidebarToggleBtn.jsx";
+import { DataContext } from "../../contexts/DataContext.jsx";
 
 const Sidebar = ({ children }) => {
+  const { toggleSidebar } = useContext(DataContext);
+  const { isSidebarOpen } = useContext(DataContext);
   const [isSettingBtnHovered, setIsSettingBtnHovered] = useState(false);
   const [isAccountBtnHovered, setIsAccountBtnHovered] = useState(false);
   const [isLogoutBtnHovered, setIsLogoutBtnHovered] = useState(false);
@@ -49,13 +53,16 @@ const Sidebar = ({ children }) => {
   }
 
   return (
-    <div className="bg-white flex-1 p-5 pt-0 max-w-[300px] min-w-[300px] overflow-auto fixed top-0 left-0 bottom-0">
-      <div className="bg-white pt-5 sticky top-0">
+    <div
+      className={`z-[99] bg-white flex-1 p-5 pt-0 w-[300px]  overflow-auto fixed top-0 left-0 bottom-0 ${!isSidebarOpen && "max-md:-left-full"} duration-300`}
+    >
+      <div className="bg-white pt-5 sticky top-0 flex justify-between items-center">
         <Logo />
+        <SidebarToggleBtn />
       </div>
       <div className="mt-5 flex flex-col justify-between min-h-[calc(100%-20px-40px-20px)]">
         <div>
-          <Link to="/dashboard">
+          <Link to="/dashboard" onClick={toggleSidebar}>
             <SidebarItem
               className={
                 paths.isDashboardPath ? "bg-tc-indigo-light text-tc-blue" : ""
@@ -75,7 +82,7 @@ const Sidebar = ({ children }) => {
               Dashboard
             </SidebarItem>
           </Link>
-          <Link to="/profile">
+          <Link to="/profile" onClick={toggleSidebar}>
             <SidebarItem
               className={
                 "my-2" +
@@ -119,7 +126,7 @@ const Sidebar = ({ children }) => {
           {children}
         </div>
         <div className="pt-2">
-          <Link to="/setting">
+          <Link to="/setting" onClick={toggleSidebar}>
             <SidebarItem
               className={
                 location.pathname.startsWith("/setting")
@@ -142,7 +149,7 @@ const Sidebar = ({ children }) => {
               Setting
             </SidebarItem>
           </Link>
-          <Link to="/account">
+          <Link to="/account" onClick={toggleSidebar}>
             <SidebarItem
               className={
                 "my-2" +
@@ -168,6 +175,7 @@ const Sidebar = ({ children }) => {
           </Link>
           <SidebarItem
             onClick={() => {
+              toggleSidebar();
               setIsModalOpen(true);
             }}
             onMouseEnter={() => {
