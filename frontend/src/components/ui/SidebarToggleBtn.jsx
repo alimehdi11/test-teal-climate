@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
-import { DataContext } from '../../contexts/DataContext';
+import React, { useContext } from "react";
+import { DataContext } from "../../contexts/DataContext";
 
 const SidebarToggleBtn = () => {
-    const { toggleSidebar, isSidebarOpen } = useContext(DataContext);
-    return (
+  const { toggleSidebar, isSidebarOpen } = useContext(DataContext);
+  return (
     <button
       onClick={toggleSidebar}
       className="flex gap-1 flex-col justify-center items-center md:hidden focus:outline-none"
@@ -25,6 +25,6 @@ const SidebarToggleBtn = () => {
       />
     </button>
   );
-}
+};
 
-export default SidebarToggleBtn
+export default SidebarToggleBtn;

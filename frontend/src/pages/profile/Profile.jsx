@@ -51,7 +51,7 @@ const Profile = () => {
               </Button>
             }
           />
-    
+
           {showPeriodForm && (
             <PeriodForm setShowPeriodForm={setShowPeriodForm} />
           )}

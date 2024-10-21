@@ -15,7 +15,7 @@ const EeioSidebar = ({ productOrIndustry, setProductOrIndustry }) => {
         onClick={() => {
           toggleSidebar();
           setProductOrIndustry("Industry");
-        } }
+        }}
       >
         Industry
       </SidebarItem>
@@ -27,8 +27,7 @@ const EeioSidebar = ({ productOrIndustry, setProductOrIndustry }) => {
         }
         onClick={() => {
           toggleSidebar();
-          setProductOrIndustry("Product")
-        
+          setProductOrIndustry("Product");
         }}
       >
         Product

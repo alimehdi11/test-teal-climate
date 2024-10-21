@@ -125,7 +125,7 @@ const SubscriptionSettings = () => {
       <Main>
         <>
           <div className="mb-5 flex gap-3 ">
-            <SidebarToggleBtn/>
+            <SidebarToggleBtn />
             <h1 className="font-extrabold text-2xl">Setting</h1>
           </div>
           <div className="bg-white p-6 rounded-md">

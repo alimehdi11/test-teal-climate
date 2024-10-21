@@ -45,7 +45,7 @@ const Dashboard = () => {
       <Sidebar></Sidebar>
       <Main>
         <div ref={pdfRef}>
-          <Topbar/>
+          <Topbar />
           <CarbonEmissionsAnalytics />
           <WorldMap />
           <Top10EmissionsTable />

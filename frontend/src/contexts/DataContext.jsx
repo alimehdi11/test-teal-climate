@@ -11,7 +11,7 @@ const DataProvider = ({ children }) => {
   const { user } = useContext(UserContext);
   const [isLoding, setIsLoding] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -87,7 +87,9 @@ const DataProvider = ({ children }) => {
   return isLoding ? (
     <Loader />
   ) : (
-    <DataContext.Provider value={{ data, setData ,isSidebarOpen,toggleSidebar}}>
+    <DataContext.Provider
+      value={{ data, setData, isSidebarOpen, toggleSidebar }}
+    >
       {children}
     </DataContext.Provider>
   );
