@@ -107,29 +107,25 @@ const WorldMap = () => {
 
   return (
     showMap && (
-      <div className="p-4 flex flex-col lg:flex-row gap-4 mt-4 rounded-md bg-white">
-        {/* Emissions bar */}
-        <div className="flex items-start">
-          <h3
-            className="lg:mt-0"
-            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-          >
+      <div className=" gap-4 mt-4 rounded-md  relative">
+        <div className="flex flex-col items-start space-y-0 absolute z-[9] left-8 top-8 ">
+          <h3 className="text-lg font-semibold mb-1">
             Location wise Emissions
           </h3>
-          <div className="flex flex-col justify-between min-h-[300px]">
-            <span className="rotate-90">0%</span>
-            <span className="rotate-90">100%</span>
+          <div className="flex justify-between max-w-[300px] w-full text-sm text-gray-600 font-semibold">
+            <span>0%</span>
+            <span>100%</span>
           </div>
           <div
-            className="w-[15px] rounded-[100px] min-h-[300px]"
             style={{
               background:
-                "linear-gradient(180deg, #FFECAA 0%, #FFC700 32.07%, #FFA400 64.04%, #FF6B00 100%)",
+                "linear-gradient(90deg, #FFECAA 0%, #FFC700 32%, #FFA400 64%, #FF6B00 100%)",
             }}
+            className="max-w-[300px] w-full bg-gray-200 h-4 rounded-full"
           ></div>
         </div>
         <MapContainer
-          className="w-full h-full min-h-[300px] bg-white md:min-h-[600px] rounded-lg lg:flex-2"
+          className="w-full h-[300px] bg-white md:h-[600px] rounded-lg lg:flex-2 "
           center={[50, 0]}
           zoom={2}
           zoomControl={false}
