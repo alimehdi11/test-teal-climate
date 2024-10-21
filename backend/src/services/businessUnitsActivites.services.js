@@ -194,7 +194,7 @@ const createActivity = async (req, res) => {
           level2,
           level3,
           level4,
-          level5,
+          // level5, ==> removing delibratly
           unitOfMeasurement,
         },
       });
@@ -416,6 +416,7 @@ const createEeioActivity = async (req, res) => {
     };
     payload.continent = businessUnit.continent;
     payload.country = businessUnit.country;
+    // return res.status(200).json(payload);
     let eeioRecords;
     eeioRecords = await Eeio.findAll({
       where: {
@@ -426,6 +427,8 @@ const createEeioActivity = async (req, res) => {
         country: payload.country,
       },
     });
+    // return res.status(200).json(eeioRecords);
+
     // If eeio records not found for given continent and country
     if (eeioRecords.length === 0) {
       const countryMaskRecord = await CountryMask.findOne({
@@ -434,6 +437,7 @@ const createEeioActivity = async (req, res) => {
           country: payload.country,
         },
       });
+      // return res.status(200).json(countryMaskRecord);
       // Find eeio records for given countryMask
       eeioRecords = await Eeio.findAll({
         where: {
@@ -444,6 +448,18 @@ const createEeioActivity = async (req, res) => {
           country: countryMaskRecord.countryMask,
         },
       });
+      if (eeioRecords.length === 0) {
+        return res
+          .status(404)
+          .json({ error: "Eeio record not found for given data" });
+      }
+      // return res.status(200).json({
+      //   productOrIndustry,
+      //   level1,
+      //   sector,
+      //   continent: countryMaskRecord.continent,
+      //   country: countryMaskRecord.countryMask,
+      // });
     }
     let CO2e = 0;
     let CO2e_of_CO2 = 0;
@@ -470,8 +486,6 @@ const createEeioActivity = async (req, res) => {
         CO2e_of_other = eeioRecord.greenHouseGasEmissionFactor * quantity;
       }
     });
-    payload.exioBaseCode = eeioRecords[0].exioBaseCode;
-    payload.reference = eeioRecords[0].reference;
     payload.CO2e = CO2e;
     payload.CO2e_of_CO2 = CO2e_of_CO2;
     payload.CO2e_of_CH4 = CO2e_of_CH4;
@@ -540,11 +554,11 @@ const updateEeioActivityById = async (req, res) => {
         },
       });
     }
-    let CO2e = "";
-    let CO2e_of_CO2 = "";
-    let CO2e_of_CH4 = "";
-    let CO2e_of_N2O = "";
-    let CO2e_of_other = "";
+    let CO2e = 0;
+    let CO2e_of_CO2 = 0;
+    let CO2e_of_CH4 = 0;
+    let CO2e_of_N2O = 0;
+    let CO2e_of_other = 0;
     const greenHouseGasValues = [
       "kg CO2e",
       "kg CO2e of CO2",
@@ -565,8 +579,6 @@ const updateEeioActivityById = async (req, res) => {
         CO2e_of_other = eeioRecord.greenHouseGasEmissionFactor * quantity;
       }
     });
-    payload.exioBaseCode = eeioRecords[0].exioBaseCode;
-    payload.reference = eeioRecords[0].reference;
     payload.CO2e = CO2e;
     payload.CO2e_of_CO2 = CO2e_of_CO2;
     payload.CO2e_of_CH4 = CO2e_of_CH4;

@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import Input from "../../components/ui/Input";
 import { DataContext } from "../../contexts/DataContext";
 import EeioSidebar from "./EeioSidebar";
-import DropdownMenu from "../../components/DropdownMenu";
 import SidebarItem from "../../components/SidebarItem";
 import { useDebounce } from "../../hooks/useDebounce";
 
@@ -63,63 +62,53 @@ const ActivitiesSidebar = ({
 
   return (
     <>
-      <DropdownMenu
-        children={
-          <>
-            {["Scope 1", "Scope 2", "Scope 3"].map((scope) => (
-              <SidebarItem
-                key={scope}
-                className={
-                  scope === selectedScope
-                    ? "bg-tc-indigo-light text-tc-blue"
-                    : ""
-                }
-                onClick={(e) => {
-                  setIsReitSelected(false);
-                  setIsSpendBaseScope3Selected(false);
-                  setSelectedScope(e.target.innerText);
-                  setIsScopeSelected(true);
-                }}
-              >
-                {scope}
-              </SidebarItem>
-            ))}
-            <hr className="border-t-[2px]" />
-            <SidebarItem
-              className={
-                isSpendBaseScope3Selected
-                  ? "bg-tc-indigo-light text-tc-blue"
-                  : ""
-              }
-              onClick={() => {
-                setIsReitSelected(false);
-                setSelectedScope("");
-                setSelectedLevel("");
-                setIsSpendBaseScope3Selected(true);
-                setIsScopeSelected(false);
-              }}
-            >
-              Spend Base Scope 3
-            </SidebarItem>
-            <SidebarItem
-              className={
-                isReitSelected ? "bg-tc-indigo-light text-tc-blue" : ""
-              }
-              onClick={() => {
-                toggleSidebar();
-                setSelectedScope("");
-                setSelectedLevel("");
-                setIsSpendBaseScope3Selected(false);
-                setIsReitSelected(true);
-                setIsScopeSelected(false);
-              }}
-            >
-              Real State Scope 3
-            </SidebarItem>
-            <hr className="border-t-[2px]" />
-          </>
-        }
-      />
+      <div className="flex flex-col gap-y-2 mt-2">
+        {["Scope 1", "Scope 2", "Scope 3"].map((scope) => (
+          <SidebarItem
+            key={scope}
+            className={
+              scope === selectedScope ? "bg-tc-indigo-light text-tc-blue" : ""
+            }
+            onClick={(e) => {
+              setIsReitSelected(false);
+              setIsSpendBaseScope3Selected(false);
+              setSelectedScope(e.target.innerText);
+              setIsScopeSelected(true);
+            }}
+          >
+            {scope}
+          </SidebarItem>
+        ))}
+        <hr className="border-t-[2px]" />
+        <SidebarItem
+          className={
+            isSpendBaseScope3Selected ? "bg-tc-indigo-light text-tc-blue" : ""
+          }
+          onClick={() => {
+            setIsReitSelected(false);
+            setSelectedScope("");
+            setSelectedLevel("");
+            setIsSpendBaseScope3Selected(true);
+            setIsScopeSelected(false);
+          }}
+        >
+          Spend Base Scope 3
+        </SidebarItem>
+        <SidebarItem
+          className={isReitSelected ? "bg-tc-indigo-light text-tc-blue" : ""}
+          onClick={() => {
+            toggleSidebar();
+            setSelectedScope("");
+            setSelectedLevel("");
+            setIsSpendBaseScope3Selected(false);
+            setIsReitSelected(true);
+            setIsScopeSelected(false);
+          }}
+        >
+          Real State Scope 3
+        </SidebarItem>
+        <hr className="border-t-[2px]" />
+      </div>
       {selectedScope && level1.length > 0 && (
         <div className="my-2">
           {/* Search query input */}

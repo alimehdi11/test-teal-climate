@@ -11,6 +11,7 @@ const WorldMap = () => {
     businessUnitsActivitiesForSelectedPeriod,
     setBusinessUnitsActivitiesForSelectedPeriod,
   ] = useState([]);
+  const [showMap, setShowMap] = useState(true);
   const { selectedPeriod } = usePeriod();
 
   const fetchBusinessUnitsActivities = async () => {
@@ -73,10 +74,21 @@ const WorldMap = () => {
         emissionsValue += businessUnitActivity.CO2e;
       }
     });
+    // converting emissionsValue to "tonnes unit"\
+    emissionsValue = Number((emissionsValue / 1000).toFixed(2));
     const tooltipContent = emissionsValue
       ? `<strong>${country}</strong> : ${emissionsValue}`
       : `<strong>${country}</strong>`;
     layer.bindTooltip(tooltipContent);
+  };
+
+  const filterBusinessUnitsActivitiesForSelectedPeriod = async () => {
+    let filterdBusinessUnitsActivities = businessUnitsActivities.filter(
+      (activity) => {
+        return activity.businessUnit.period.id === Number(selectedPeriod);
+      }
+    );
+    setBusinessUnitsActivitiesForSelectedPeriod(filterdBusinessUnitsActivities);
   };
 
   useEffect(() => {
@@ -85,23 +97,16 @@ const WorldMap = () => {
 
   useEffect(() => {
     if (businessUnitsActivities.length > 0 && selectedPeriod) {
-      setBusinessUnitsActivitiesForSelectedPeriod([]);
-      const filterBusinessUnitsActivitiesForSelectedPeriod = async () => {
-        let filterdBusinessUnitsActivities = businessUnitsActivities.filter(
-          (activity) => {
-            return activity.businessUnit.period.id === Number(selectedPeriod);
-          }
-        );
-        setBusinessUnitsActivitiesForSelectedPeriod(
-          filterdBusinessUnitsActivities
-        );
-      };
-      setTimeout(filterBusinessUnitsActivitiesForSelectedPeriod, 100);
+      setShowMap(false);
+      filterBusinessUnitsActivitiesForSelectedPeriod();
+      setTimeout(() => {
+        setShowMap(true);
+      });
     }
   }, [businessUnitsActivities, selectedPeriod]);
 
   return (
-    businessUnitsActivitiesForSelectedPeriod.length > 0 && (
+    showMap && (
       <div className="p-4 flex flex-col lg:flex-row gap-4 mt-4 rounded-md bg-white">
         {/* Emissions bar */}
         <div className="flex items-start">
@@ -133,7 +138,7 @@ const WorldMap = () => {
           touchZoom={false}
           dragging={false}
           attributionControl={false}
-         style={{zIndex:1}}
+          style={{ zIndex: 1 }}
         >
           <GeoJSON
             data={worldMapJson}

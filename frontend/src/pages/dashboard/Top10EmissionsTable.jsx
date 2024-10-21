@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from "react";
-import { UserContext } from "../../contexts/UserContext.jsx";
+import { useState, useEffect } from "react";
 import {
   TableContainer,
   Table,
@@ -13,7 +12,6 @@ import { request } from "../../utils/request.js";
 
 const Top10EmissionsTable = () => {
   const [userTop10Emissions, setUserTop10Emissions] = useState([]);
-  const { user } = useContext(UserContext);
 
   const fetchUserTop10Emissions = async () => {
     try {
@@ -79,7 +77,9 @@ const Top10EmissionsTable = () => {
               <TableCell>{item.level4 || "-"}</TableCell>
               <TableCell>{item.unitOfMeasurement || "-"}</TableCell>
               <TableCell>{item.quantity || "-"}</TableCell>
-              <TableCell>{item.CO2e?.toFixed(2) || "-"}</TableCell>
+              <TableCell>
+                {item.CO2e ? Number((item.CO2e / 1000).toFixed(2)) : "-"}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

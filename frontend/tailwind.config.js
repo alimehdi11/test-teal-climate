@@ -7,6 +7,7 @@ export default {
       colors: {
         "tc-input-border": "#475569",
         "tc-background": "rgba(247, 248, 250, 1)",
+        "tc-background-95": "rgba(247, 248, 250, 0.95)",
         "tc-sidebar-heading": "rgba(8,36,49,0.5)",
         "tc-black": "rgba(39, 50, 64, 1)",
         "tc-input-background": "rgba(247, 248, 250, 1)",
@@ -45,6 +46,7 @@ export default {
       },
       fontFamily: {
         "sf-pro-display": "SF Pro Display",
+        poppins: ["Poppins"],
       },
     },
   },

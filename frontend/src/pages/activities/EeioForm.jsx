@@ -101,6 +101,7 @@ const EeioForm = ({
       quantity,
       month,
     };
+    return console.table(payload);
     await request(
       `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?eeio=true`,
       "POST",

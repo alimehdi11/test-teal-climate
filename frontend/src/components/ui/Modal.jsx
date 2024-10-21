@@ -7,13 +7,13 @@ const Modal = ({ isModalOpen, setIsModalOpen, setIsConfirm, message }) => {
 
   return (
     <div
-      className={`bg-tc-background fixed z-[999999] top-0 left-0 right-0 bottom-0 text-black flex justify-center items-center ${
+      className={`bg-tc-background-95 fixed z-[999999] top-0 left-0 right-0 bottom-0 text-black flex justify-center items-center ${
         !isModalOpen && "hidden"
       }`}
     >
-      <div className="bg-white w-[40%] max-w-[400px] min-w-[350px] rounded-lg flex justify-center items-center font-poppins flex-col gap-3 opacity-100 py-8">
-        {message}
-        <div className="flex gap-2">
+      <div className="bg-white w-[40%] max-w-[400px] min-w-[350px] rounded-lg font-poppins py-8 border">
+        <p className="text-center mb-6">{message}</p>
+        <div className="flex gap-2 justify-center">
           <Button type="button" className="w-28" onClick={closeModal}>
             No
           </Button>
@@ -22,6 +22,10 @@ const Modal = ({ isModalOpen, setIsModalOpen, setIsConfirm, message }) => {
             className="w-28"
             onClick={() => {
               setIsConfirm(true);
+              closeModal();
+            }}
+            style={{
+              backgroundColor: "rgb(239 68 68 / 1)",
             }}
           >
             Yes
@@ -33,4 +37,3 @@ const Modal = ({ isModalOpen, setIsModalOpen, setIsConfirm, message }) => {
 };
 
 export default Modal;
-export {};

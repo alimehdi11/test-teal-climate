@@ -75,7 +75,6 @@ const ActivitiesTable = ({
               "Unit Of Measurement",
               "Month",
               "Level1 Category",
-              "Exio Base Code",
               "Country",
               "Continent",
               "Sector",
@@ -112,10 +111,7 @@ const ActivitiesTable = ({
             ].map((item, index) => (
               <TableHead key={index}>{item}</TableHead>
             ))}
-            <TableHead
-              key="Actions"
-              className="bg-tc-blue sticky right-0  shadow-xl"
-            >
+            <TableHead key="Actions" className="bg-tc-blue sticky right-0">
               Actions
             </TableHead>
           </TableRow>
@@ -146,7 +142,6 @@ const ActivitiesTable = ({
               <TableCell>
                 {businessUnitActivity.level1Category || "-"}
               </TableCell>
-              <TableCell>{businessUnitActivity.exioBaseCode || "-"}</TableCell>
               <TableCell>{businessUnitActivity.country || "-"}</TableCell>
               <TableCell>{businessUnitActivity.continent || "-"}</TableCell>
               <TableCell>{businessUnitActivity.sector || "-"}</TableCell>

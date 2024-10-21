@@ -98,11 +98,11 @@ const BusinessUnitActivity = sequelize.define(
       allowNull: false,
       defaultValue: 0,
     },
-    exioBaseCode: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: "",
-    },
+    // exioBaseCode: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    //   defaultValue: "",
+    // },
     country: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -119,11 +119,6 @@ const BusinessUnitActivity = sequelize.define(
       defaultValue: "",
     },
     productOrIndustry: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: "",
-    },
-    reference: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "",

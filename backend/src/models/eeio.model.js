@@ -30,22 +30,6 @@ const Eeio = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    // level2: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
-    // level3: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
-    // level4: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
-    // level5: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
     sector: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -58,18 +42,10 @@ const Eeio = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    // perEuro: {
-    //   type: DataTypes.FLOAT,
-    //   allowNull: false,
-    // },
     greenHouseGasEmissionFactor: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    // reference: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
   },
   {
     timestamps: false,
