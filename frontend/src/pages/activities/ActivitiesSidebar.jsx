@@ -23,7 +23,6 @@ const ActivitiesSidebar = ({
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 200);
   const { activities } = useContext(DataContext).data;
-
   const filterLevel1 = (selectedScope) => {
     let level1 = activities
       ?.filter((item) => item.scope === selectedScope)
@@ -59,7 +58,6 @@ const ActivitiesSidebar = ({
       );
     }
   }, [debouncedSearchQuery]);
-
   return (
     <>
       <div className="flex flex-col gap-y-2 mt-2">

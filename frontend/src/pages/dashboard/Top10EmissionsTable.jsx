@@ -56,9 +56,7 @@ const Top10EmissionsTable = () => {
               "Level 4",
               "uom",
               "Quantity",
-              <>
-                kg CO<span style={{ fontSize: "0.6em" }}>2</span>e
-              </>,
+              "Tones",
             ].map((item, index) => (
               <TableHead key={index}>{item}</TableHead>
             ))}
