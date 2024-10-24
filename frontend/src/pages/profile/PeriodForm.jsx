@@ -5,10 +5,11 @@ import Button from "../../components/ui/Button";
 import { toast } from "react-toastify";
 import { api } from "../../../api/index.js";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
+import { useState } from "react";
 
 const PeriodForm = ({ setShowPeriodForm }) => {
   const { setPeriods } = usePeriod();
-
+  const [startPeriodDate, setStartPeriodDate] = useState("");
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -32,9 +33,9 @@ const PeriodForm = ({ setShowPeriodForm }) => {
   const handleCancel = () => {
     setShowPeriodForm(false);
   };
-  // const handleUpdate = (event) => {
-  //   event.preventDefault();
-  // };
+  const handleStartDateChange = (event) => {
+    setStartPeriodDate(event.target.value);
+  };
 
   return (
     <form
@@ -45,11 +46,16 @@ const PeriodForm = ({ setShowPeriodForm }) => {
       <div className="flex max-sm:flex-col gap-4">
         <FormControl className="flex-1">
           <Label>Start period date</Label>
-          <Input type="date" name="startPeriodDate" />
+          <Input
+            type="date"
+            name="startPeriodDate"
+            value={startPeriodDate}
+            onChange={handleStartDateChange}
+          />
         </FormControl>
         <FormControl className="flex-1">
           <Label>End period date</Label>
-          <Input type="date" name="endPeriodDate" />
+          <Input type="date" name="endPeriodDate" min={startPeriodDate} />
         </FormControl>
       </div>
       {/* Buttons */}

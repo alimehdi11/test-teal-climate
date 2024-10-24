@@ -531,6 +531,22 @@ const ActivitiesForm2 = ({
     if (!isFormInitializing) {
       setUnitOfMeasurement(undefined);
       setQuantity("");
+      console.table({
+        id,
+        selectedScope,
+        selectedLevel,
+        month,
+        businessUnitId,
+        level1Category,
+        level2,
+        level3,
+        level4,
+        level5,
+        unitOfMeasurement,
+        quantity,
+        marketBasedQuantity,
+        marketBasedEmissionFactor,
+      });
     }
     if (
       selectedLevel == "Business travel- air" ||
@@ -540,6 +556,8 @@ const ActivitiesForm2 = ({
         setUnitOfMeasurementOptions(["passenger-mile", "passenger.km"]);
         setQuantity(airportsDistance);
       }
+    } else if (level5 === "marketBased") {
+      return;
     } else {
       fetchActivities(
         api.activities.getAllActivities,
@@ -583,7 +601,10 @@ const ActivitiesForm2 = ({
             // setMarketBasedUnitOfEmissionFactor(
             //   bussinessUnitActivity.unitOfMeasurement
             // );
-            // setMarketBasedQuantity(bussinessUnitActivity.quantity);
+            setMarketBasedQuantity(bussinessUnitActivity.marketBasedQuantity);
+            setMarketBasedEmissionFactor(
+              bussinessUnitActivity.marketBasedEmissionFactor
+            );
           }
         });
     }
@@ -604,8 +625,7 @@ const ActivitiesForm2 = ({
       unitOfMeasurement !== undefined &&
       quantity &&
       marketBasedQuantity &&
-      marketBasedEmissionFactor &&
-      marketBasedUnitOfEmissionFactor
+      marketBasedEmissionFactor
     ) {
       setIsFormInitializing(false);
     }
@@ -621,7 +641,6 @@ const ActivitiesForm2 = ({
     month,
     marketBasedQuantity,
     marketBasedEmissionFactor,
-    marketBasedUnitOfEmissionFactor,
   ]);
 
   /**

@@ -98,11 +98,6 @@ const BusinessUnitActivity = sequelize.define(
       allowNull: false,
       defaultValue: 0,
     },
-    // exioBaseCode: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    //   defaultValue: "",
-    // },
     country: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -163,6 +158,16 @@ const BusinessUnitActivity = sequelize.define(
       allowNull: false,
       defaultValue: "",
     },
+    marketBasedQuantity: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    marketBasedEmissionFactor: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
   },
   {
     tableName: "businessUnitsActivities",
@@ -174,5 +179,5 @@ BusinessUnitActivity.belongsTo(BusinessUnit, {
   as: "businessUnit",
   onDelete: "CASCADE",
 });
-
+// BusinessUnitActivity.sync({ alter: true });
 export { BusinessUnitActivity };

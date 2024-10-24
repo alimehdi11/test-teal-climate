@@ -84,6 +84,8 @@ const createActivity = async (req, res) => {
       level5,
       unitOfMeasurement,
       quantity,
+      marketBasedQuantity,
+      marketBasedEmissionFactor,
     };
     if (scope === "Scope 2" && level5 === "marketBased") {
       const activityRecord = await Activity.findOne({
@@ -295,6 +297,8 @@ const updateActivityById = async (req, res) => {
       level5,
       unitOfMeasurement,
       quantity,
+      marketBasedQuantity,
+      marketBasedEmissionFactor,
     };
     if (scope === "Scope 2" && level5 === "marketBased") {
       const activityRecord = await Activity.findOne({
