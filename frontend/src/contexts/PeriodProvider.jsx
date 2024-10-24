@@ -15,35 +15,51 @@ const PeriodProvider = ({ children }) => {
       return [];
     }
     const months = [
-      "january",
-      "february",
-      "march",
-      "april",
-      "may",
-      "june",
-      "july",
-      "august",
-      "september",
-      "october",
-      "november",
-      "december",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     const [periodStartData, periodEndData] = currentPeriod.period.split("-");
     const periodStartMonthIndex = new Date(periodStartData.trim()).getMonth();
     const periodEndMonthIndex = new Date(periodEndData.trim()).getMonth();
-    let monthsFromPeriod = [];
-    if (periodStartMonthIndex <= periodEndMonthIndex) {
-      monthsFromPeriod = months.slice(
-        periodStartMonthIndex,
-        periodEndMonthIndex + 1
-      );
-    } else {
-      monthsFromPeriod = [
-        ...months.slice(periodStartMonthIndex),
-        ...months.slice(0, periodEndMonthIndex + 1),
-      ];
+    let monthsArray = [];
+    let currentDate = new Date(periodStartData);
+    let end = new Date(periodEndData);
+
+    // Loop from the start date to the end date
+    while (currentDate <= end) {
+      // Get the full month name and year
+      const month = currentDate.toLocaleString("default", { month: "long" });
+      const year = currentDate.getFullYear();
+
+      monthsArray.push(`${month} - ${year}`);
+
+      // Move to the next month
+      currentDate.setMonth(currentDate.getMonth() + 1);
     }
-    return monthsFromPeriod;
+    return monthsArray;
+    // let monthsFromPeriod = [];
+    // if (periodStartMonthIndex <= periodEndMonthIndex) {
+    //   monthsFromPeriod = months.slice(
+    //     periodStartMonthIndex,
+    //     periodEndMonthIndex + 1
+    //   );
+    // } else {
+    //   monthsFromPeriod = [
+    //     ...months.slice(periodStartMonthIndex),
+    //     ...months.slice(0, periodEndMonthIndex + 1),
+    //   ];
+    // }
+    // return monthsFromPeriod;
   };
 
   useEffect(() => {
