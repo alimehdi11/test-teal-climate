@@ -32,9 +32,9 @@ const PeriodForm = ({ setShowPeriodForm }) => {
   const handleCancel = () => {
     setShowPeriodForm(false);
   };
-  const handleUpdate = (event) => {
-    event.preventDefault();
-  };
+  // const handleUpdate = (event) => {
+  //   event.preventDefault();
+  // };
 
   return (
     <form
@@ -42,7 +42,7 @@ const PeriodForm = ({ setShowPeriodForm }) => {
       className="flex flex-col gap-y-3 bg-white rounded-md p-6"
     >
       <h3 className="m-0 mb-4 font-extrabold text-2xl">Add Period</h3>
-      <div className="flex gap-4">
+      <div className="flex max-sm:flex-col gap-4">
         <FormControl className="flex-1">
           <Label>Start period date</Label>
           <Input type="date" name="startPeriodDate" />
@@ -53,11 +53,11 @@ const PeriodForm = ({ setShowPeriodForm }) => {
         </FormControl>
       </div>
       {/* Buttons */}
-      <div className="flex flex-col mt-4 gap-4 md:flex-row self-end">
-        <Button type="button" className="flex-1" onClick={handleCancel}>
+      <div className="flex gap-4 justify-end mt-4 ">
+        <Button type="button" className="" onClick={handleCancel}>
           Cancel
         </Button>
-        <Button type="submit" className="flex-1">
+        <Button type="submit" className="">
           Add
         </Button>
       </div>
