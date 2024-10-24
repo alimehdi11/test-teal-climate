@@ -51,8 +51,26 @@ const createActivity = async (req, res) => {
       level5,
       unitOfMeasurement,
       quantity,
+      marketBasedQuantity, // This will only availabe for "Scope 2"-"marketBased"
       marketBasedEmissionFactor, // This will only availabe for "Scope 2"-"marketBased"
+      marketBasedUnitOfEmissionFactor, // This will only availabe for "Scope 2"-"marketBased"
     } = req.body;
+    // console.log({
+    //   scope,
+    //   level1,
+    //   month,
+    //   businessUnitId,
+    //   level1Category,
+    //   level2,
+    //   level3,
+    //   level4,
+    //   level5,
+    //   unitOfMeasurement,
+    //   quantity,
+    //   marketBasedQuantity,
+    //   marketBasedEmissionFactor,
+    //   marketBasedUnitOfEmissionFactor,
+    // });
     let payload = {
       userId: req.user.id,
       scope,
@@ -66,11 +84,30 @@ const createActivity = async (req, res) => {
       level5,
       unitOfMeasurement,
       quantity,
-      marketBasedEmissionFactor,
     };
     if (scope === "Scope 2" && level5 === "marketBased") {
-      const CO2e = payload.quantity * payload.marketBasedEmissionFactor;
-      delete payload.marketBasedEmissionFactor;
+      const activityRecord = await Activity.findOne({
+        where: {
+          scope,
+          level1,
+          level2,
+          level3,
+          level4,
+          // level5, ==> removing delibratly
+          // unitOfMeasurement, ==> removing delibratly
+        },
+      });
+      if (!activityRecord) {
+        return res
+          .status(400)
+          .json({ success: false, error: "No data found for marketBased" });
+      }
+      // Market based emissions = ((Location based quantity - Market based quantity) x Location based emission factor) + (Market based quantity x Market based emission factor)
+      const CO2e =
+        (quantity - marketBasedQuantity) *
+          activityRecord.greenHouseGasEmissionFactor +
+        marketBasedQuantity * marketBasedEmissionFactor;
+      payload.unitOfMeasurement = marketBasedUnitOfEmissionFactor;
       await BusinessUnitActivity.create({ ...payload, CO2e });
       return res.status(200).json({ message: "Activity created sucessfully" });
     } else if (
@@ -135,6 +172,7 @@ const createActivity = async (req, res) => {
         payload.quantity = Number((payload.quantity * 1.60934).toFixed(4));
       }
       payload = calculateActivityGHGEmissions(activityRecords, payload);
+      // return res.status(200).json(payload);
     } else if (
       [
         "Electricity",
@@ -224,8 +262,26 @@ const updateActivityById = async (req, res) => {
       level5,
       unitOfMeasurement,
       quantity,
+      marketBasedQuantity, // This will only availabe for "Scope 2"-"marketBased"
       marketBasedEmissionFactor, // This will only availabe for "Scope 2"-"marketBased"
+      marketBasedUnitOfEmissionFactor, // This will only availabe for "Scope 2"-"marketBased"
     } = req.body;
+    // console.log({
+    //   scope,
+    //   level1,
+    //   month,
+    //   businessUnitId,
+    //   level1Category,
+    //   level2,
+    //   level3,
+    //   level4,
+    //   level5,
+    //   unitOfMeasurement,
+    //   quantity,
+    //   marketBasedQuantity,
+    //   marketBasedEmissionFactor,
+    //   marketBasedUnitOfEmissionFactor,
+    // });
     let payload = {
       userId: req.user.id,
       scope,
@@ -239,11 +295,30 @@ const updateActivityById = async (req, res) => {
       level5,
       unitOfMeasurement,
       quantity,
-      marketBasedEmissionFactor,
     };
     if (scope === "Scope 2" && level5 === "marketBased") {
-      const CO2e = payload.quantity * payload.marketBasedEmissionFactor;
-      delete payload.marketBasedEmissionFactor;
+      const activityRecord = await Activity.findOne({
+        where: {
+          scope,
+          level1,
+          level2,
+          level3,
+          level4,
+          // level5, ==> removing delibratly
+          // unitOfMeasurement, ==> removing delibratly
+        },
+      });
+      if (!activityRecord) {
+        return res
+          .status(400)
+          .json({ success: false, error: "No data found for marketBased" });
+      }
+      // Market based emissions = ((Location based quantity - Market based quantity) x Location based emission factor) + (Market based quantity x Market based emission factor)
+      const CO2e =
+        (quantity - marketBasedQuantity) *
+          activityRecord.greenHouseGasEmissionFactor +
+        marketBasedQuantity * marketBasedEmissionFactor;
+      payload.unitOfMeasurement = marketBasedUnitOfEmissionFactor;
       await BusinessUnitActivity.update(
         { ...payload, CO2e },
         {
@@ -374,11 +449,12 @@ const updateActivityById = async (req, res) => {
           level2,
           level3,
           level4,
-          level5,
+          // level5, ==> removing delibratly
           unitOfMeasurement,
         },
       });
       payload = calculateActivityGHGEmissions(activityRecords, payload);
+      console.log(payload);
     }
     await BusinessUnitActivity.update(payload, {
       where: {

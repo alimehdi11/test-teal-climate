@@ -161,23 +161,7 @@ const ActivitiesForm2 = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.table({
-    //   scope: selectedScope,
-    //   level1: selectedLevel,
-    //   businessUnitId,
-    //   level1Category,
-    //   level2,
-    //   level3,
-    //   level4,
-    //   level5,
-    //   unitOfMeasurement,
-    //   quantity,
-    //   month,
-    //   marketBasedQuantity,
-    //   marketBasedEmissionFactor,
-    //   marketBasedUnitOfEmissionFactor,
-    // });
-    // return;
+
     if (
       !month ||
       !businessUnitId ||
@@ -203,6 +187,7 @@ const ActivitiesForm2 = ({
         return toast.warn("Please fill all fields");
       }
     }
+
     const payload = {
       scope: selectedScope,
       level1: selectedLevel,
@@ -216,8 +201,7 @@ const ActivitiesForm2 = ({
       quantity,
       month,
     };
-    console.log(payload);
-    // return console.table(payload);
+
     if (id) {
       if (!marketBased) {
         const { success, message } =
@@ -235,15 +219,18 @@ const ActivitiesForm2 = ({
         }
       }
       if (selectedScope === "Scope 2" && marketBased) {
-        const payload2 = { ...payload };
-        payload2.unitOfMeasurement = marketBasedUnitOfEmissionFactor;
-        payload2.quantity = marketBasedQuantity;
-        payload2.marketBasedEmissionFactor = marketBasedEmissionFactor;
-        payload2.level5 = "marketBased";
+        const marketBasedPayload2 = { ...payload, level5: "marketBased" };
+        // Adding 3 more properties to payload
+        marketBasedPayload2.marketBasedQuantity = marketBasedQuantity;
+        marketBasedPayload2.marketBasedEmissionFactor =
+          marketBasedEmissionFactor;
+        marketBasedPayload2.marketBasedUnitOfEmissionFactor =
+          marketBasedUnitOfEmissionFactor;
+
         const { success, message } =
           await api.businessUnitsActivities.updateBusinessUnitActivityById(
             id,
-            payload2
+            marketBasedPayload2
           );
         if (success) {
           toast.success(message);
@@ -266,14 +253,17 @@ const ActivitiesForm2 = ({
       }
 
       if (selectedScope === "Scope 2" && marketBased) {
-        const payload2 = { ...payload };
-        payload2.unitOfMeasurement = marketBasedUnitOfEmissionFactor;
-        payload2.quantity = marketBasedQuantity;
-        payload2.marketBasedEmissionFactor = marketBasedEmissionFactor;
-        payload2.level5 = "marketBased";
+        const marketBasedPayload2 = { ...payload, level5: "marketBased" };
+        // Adding 3 more properties to payload
+        marketBasedPayload2.marketBasedQuantity = marketBasedQuantity;
+        marketBasedPayload2.marketBasedEmissionFactor =
+          marketBasedEmissionFactor;
+        marketBasedPayload2.marketBasedUnitOfEmissionFactor =
+          marketBasedUnitOfEmissionFactor;
+
         const { success, message } =
           await api.businessUnitsActivities.createBusinessUnitActivity(
-            payload2
+            marketBasedPayload2
           );
         if (success) {
           toast.success(message);
@@ -467,11 +457,13 @@ const ActivitiesForm2 = ({
       );
       // Determining level4
       if (distanceInMiles < 300) {
-        setLevel4Options(["Air Travel - Short Haul"]);
+        setLevel4Options(["Air Travel - Short Haul (< 300 miles)"]);
       } else if (distanceInMiles >= 300 && distanceInMiles < 2300) {
-        setLevel4Options(["Air Travel - Medium Haul"]);
+        setLevel4Options([
+          "Air Travel - Medium Haul (>= 300 miles, < 2300 miles)",
+        ]);
       } else if (distanceInMiles >= 2300) {
-        setLevel4Options(["Air Travel - Long Haul"]);
+        setLevel4Options(["Air Travel - Long Haul (>= 2300 miles)"]);
       }
       setAirportsDistance(distanceInMiles);
     } else if (level3 !== undefined && specialLevel.includes(selectedLevel)) {
@@ -588,10 +580,10 @@ const ActivitiesForm2 = ({
           setSelectedPeriod(bussinessUnitActivity.businessUnit.period.id);
           if (bussinessUnitActivity.level5 === "marketBased") {
             setMarketBased(true);
-            setMarketBasedUnitOfEmissionFactor(
-              bussinessUnitActivity.unitOfMeasurement
-            );
-            setMarketBasedQuantity(bussinessUnitActivity.quantity);
+            // setMarketBasedUnitOfEmissionFactor(
+            //   bussinessUnitActivity.unitOfMeasurement
+            // );
+            // setMarketBasedQuantity(bussinessUnitActivity.quantity);
           }
         });
     }
