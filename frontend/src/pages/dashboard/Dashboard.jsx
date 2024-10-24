@@ -39,7 +39,6 @@ const Dashboard = () => {
       pdf.save("invoice.pdf");
     });
   };
-
   return (
     <>
       <Sidebar></Sidebar>

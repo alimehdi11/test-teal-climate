@@ -14,6 +14,9 @@ import Account from "./pages/Account.jsx";
 import AccountEdit from "./pages/AccountEdit.jsx";
 import ForgetPassword from "./pages/ForgetPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import ReportPage1 from "./pages/report/ReportPage1.jsx";
+import ReportPage2 from "./pages/report/ReportPage2.jsx";
+import ReportPage3 from "./pages/report/ReportPage3.jsx";
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/reportpage1" element={<ReportPage1 />} />
+        <Route path="/reportpage2" element={<ReportPage2 />} />
+        <Route path="/reportpage3" element={<ReportPage3 />} />
         <Route path="/login" element={<Login />} />
         <Route path="/plans" element={<SubscriptionPlans />} />
         <Route path="/subscribe" element={<Checkout />} />

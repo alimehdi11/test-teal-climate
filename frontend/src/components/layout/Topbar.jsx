@@ -1,7 +1,12 @@
 import React from "react";
 import PeriodSelector from "../PeriodSelector";
 import SidebarToggleBtn from "../ui/SidebarToggleBtn";
+import { useLocation } from "react-router-dom";
+import Report from "../../pages/report/Report";
+import Button from "../ui/Button";
 const Topbar = ({ title, comp }) => {
+  const { pathname } = useLocation();
+  let showPdfButton = pathname === "/dashboard";
   return (
     <div className="mb-5 flex justify-between items-center flex-wrap-reverse gap-3">
       <div className="flex gap-3">
