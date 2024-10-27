@@ -90,7 +90,7 @@ const ActivitiesSidebar = ({
             setIsScopeSelected(false);
           }}
         >
-          Spend Base Scope 3
+          Spend based scope 3
         </SidebarItem>
         <SidebarItem
           className={isReitSelected ? "bg-tc-indigo-light text-tc-blue" : ""}
@@ -103,7 +103,7 @@ const ActivitiesSidebar = ({
             setIsScopeSelected(false);
           }}
         >
-          Real State Scope 3
+          Real estate scope 3
         </SidebarItem>
         <hr className="border-t-[2px]" />
       </div>

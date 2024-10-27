@@ -54,6 +54,7 @@ const ActivitiesForm2 = ({
   const navigate = useNavigate();
 
   const possibleLevel2Labels = {
+    Bioenergy: "Bioenergy fuel type",
     "Refrigerant and other": "Refrigerant and other gas category",
     "Passenger vehicles": "Passenger vehicle category",
     "Delivery vehicles": "Delivery vehicle category",
@@ -699,13 +700,13 @@ const ActivitiesForm2 = ({
           </Select>
         </FormControl>
         <FormControl className="flex-1 relative">
-          <Label>Level 1 category</Label>
+          <Label>Scope category</Label>
           <SearchableSelect
             data={level1CategoriesOptions}
             item={level1Category}
             setItem={setLevel1Category}
-            text={"Select level 1 category"}
-            placeholder={"Search level 1 category"}
+            text={"Select scope category"}
+            placeholder={"Search scope category"}
           />
         </FormControl>
         <FormControl className="flex-1 relative">
@@ -714,8 +715,8 @@ const ActivitiesForm2 = ({
             data={level2Options}
             item={level2}
             setItem={setLevel2}
-            text={"Select level 2 category"}
-            placeholder={"Search Level 2 category"}
+            text={`Select ${(possibleLevel2Labels[selectedLevel] || "fuel type").toLowerCase()}`}
+            placeholder={`Search ${(possibleLevel2Labels[selectedLevel] || "fuel type").toLowerCase()}`}
           />
         </FormControl>
         {!specialLevel.includes(selectedLevel) && (
@@ -725,8 +726,8 @@ const ActivitiesForm2 = ({
               data={level3Options}
               item={level3}
               setItem={setLevel3}
-              text={"Select level 3 category"}
-              placeholder={"Search level 3 category"}
+              text={`Select ${(possibleLevel3Labels[selectedLevel] || "fuel name").toLowerCase()}`}
+              placeholder={`Search ${(possibleLevel3Labels[selectedLevel] || "fuel name").toLowerCase()}`}
             />
           </FormControl>
         )}
