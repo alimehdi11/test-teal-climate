@@ -159,11 +159,16 @@ const BusinessUnitActivity = sequelize.define(
       defaultValue: "",
     },
     marketBasedQuantity: {
-      type: DataTypes.STRING,
+      type: DataTypes.FLOAT,
       allowNull: false,
-      defaultValue: "",
+      defaultValue: 0,
     },
     marketBasedEmissionFactor: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    marketBasedUnitOfEmissionFactor: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "",

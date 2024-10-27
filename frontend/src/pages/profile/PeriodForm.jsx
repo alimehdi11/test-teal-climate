@@ -55,7 +55,12 @@ const PeriodForm = ({ setShowPeriodForm }) => {
         </FormControl>
         <FormControl className="flex-1">
           <Label>End period date</Label>
-          <Input type="date" name="endPeriodDate" min={startPeriodDate} />
+          <Input
+            type="date"
+            name="endPeriodDate"
+            min={startPeriodDate}
+            disabled={!startPeriodDate}
+          />
         </FormControl>
       </div>
       {/* Buttons */}

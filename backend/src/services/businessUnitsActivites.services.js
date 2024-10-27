@@ -60,6 +60,122 @@ const calculateActivityGHGEmissions = (
   };
 };
 
+const handleScope2MarketBased = async (payload, res) => {
+  let activityRecord;
+  let CO2e;
+  let businessUnitRecord;
+  let country;
+  let region;
+  let emissionFactor;
+  let locationBasedQuantity = payload.quantity;
+  let marketBasedQuantity = payload.marketBasedQuantity;
+  let marketBasedEmissionFactor = payload.marketBasedEmissionFactor;
+  const { scope, level1, level2, level3, level4, unitOfMeasurement } = payload;
+  switch (level1) {
+    case "Heat and steam":
+      activityRecord = await Activity.findOne({
+        where: {
+          scope,
+          level1,
+          level2,
+          ...(level1 === "Heat and steam" && { level3 }),
+          ...(level1 === "Heat and steam" && { level4 }),
+          // level5, ==> removing delibratly
+          // unitOfMeasurement, ==> removing delibratly
+        },
+      });
+      if (!activityRecord) {
+        return res
+          .status(404)
+          .json({ success: false, error: "No data found for marketBased" });
+      }
+      // Market based emissions = ((Location based quantity - Market based quantity) x Emission factor) + (Market based quantity x Market based emission factor)
+      emissionFactor = activityRecord.greenHouseGasEmissionFactor;
+      CO2e =
+        (locationBasedQuantity - marketBasedQuantity) * emissionFactor +
+        marketBasedQuantity * marketBasedEmissionFactor;
+      break;
+    case "Electricity":
+      businessUnitRecord = await BusinessUnit.findOne({
+        where: { id: payload.businessUnitId },
+      });
+      country = businessUnitRecord.country;
+      region = businessUnitRecord.region;
+      activityRecord = await Activity.findOne({
+        where: {
+          scope,
+          level1,
+          level2,
+          level3: country,
+          level4: region,
+          // level5, ==> excluding deliberately
+          unitOfMeasurement,
+        },
+      });
+      if (!activityRecord) {
+        return res.status(404).json({
+          success: false,
+          error: "No electricity emission factor found for the country/region",
+        });
+      }
+      emissionFactor = activityRecord.greenHouseGasEmissionFactor;
+      CO2e =
+        (locationBasedQuantity - marketBasedQuantity) * emissionFactor +
+        marketBasedQuantity * marketBasedEmissionFactor;
+      break;
+    case "Passenger Evs":
+    case "Delivery Evs":
+      const electricVehicleRecord = await ElectricVehicle.findOne({
+        where: {
+          scope,
+          level1,
+          level2,
+          level3,
+          level4,
+          // level5, ==> excluding deliberately
+          unitOfMeasurement,
+        },
+      });
+      businessUnitRecord = await BusinessUnit.findOne({
+        where: { id: payload.businessUnitId },
+      });
+      country = businessUnitRecord.country;
+      region = businessUnitRecord.region;
+      activityRecord = await Activity.findOne({
+        where: {
+          scope,
+          level1: "Electricity",
+          level2: "Electricity generated",
+          level3: country,
+          level4: region,
+          // level5, ==> excluding deliberately
+          unitOfMeasurement: "kWh",
+        },
+      });
+      if (!activityRecord) {
+        return res.status(404).json({
+          success: false,
+          error: "No electricity emission factor found for the country/region",
+        });
+      }
+      emissionFactor = activityRecord.greenHouseGasEmissionFactor;
+      const locationBasedEVConsumption =
+        locationBasedQuantity *
+        electricVehicleRecord.electricityConsumptionPerUnit;
+      const marketBasedEVConsumption =
+        marketBasedQuantity *
+        electricVehicleRecord.electricityConsumptionPerUnit;
+      // Market based emissions = ((Location based consumption - Market based consumption) x Emission factor)+ (Market based consumption x Market based emission factor)
+      CO2e =
+        (locationBasedEVConsumption - marketBasedEVConsumption) *
+          emissionFactor +
+        marketBasedEVConsumption * marketBasedEmissionFactor;
+      break;
+  }
+  await BusinessUnitActivity.create({ ...payload, CO2e });
+  return res.status(200).json({ message: "Activity created sucessfully" });
+};
+
 const createActivity = async (req, res) => {
   try {
     const {
@@ -109,150 +225,10 @@ const createActivity = async (req, res) => {
       quantity,
       marketBasedQuantity,
       marketBasedEmissionFactor,
+      marketBasedUnitOfEmissionFactor,
     };
     if (scope === "Scope 2" && level5 === "marketBased") {
-      let activityRecord;
-      let CO2e;
-      let businessUnitRecord;
-      let country;
-      let region;
-      let emissionFactor;
-      let locationBasedQuantity;
-      let marketBasedQuantity;
-      let marketBasedEmissionFactor;
-      switch (level1) {
-        case "Heat and steam":
-          activityRecord = await Activity.findOne({
-            where: {
-              scope,
-              level1,
-              level2,
-              ...(level1 === "Heat and steam" && { level3 }),
-              ...(level1 === "Heat and steam" && { level4 }),
-              // level5, ==> removing delibratly
-              // unitOfMeasurement, ==> removing delibratly
-            },
-          });
-          if (!activityRecord) {
-            return res
-              .status(400)
-              .json({ success: false, error: "No data found for marketBased" });
-          }
-          // Market based emissions = ((Location based quantity - Market based quantity) x Location based emission factor) + (Market based quantity x Market based emission factor)
-          CO2e =
-            (quantity - marketBasedQuantity) *
-              activityRecord.greenHouseGasEmissionFactor +
-            marketBasedQuantity * marketBasedEmissionFactor;
-          payload.unitOfMeasurement = marketBasedUnitOfEmissionFactor;
-          await BusinessUnitActivity.create({ ...payload, CO2e });
-          return res
-            .status(200)
-            .json({ message: "Activity created sucessfully" });
-          break;
-        case "Electricity":
-          businessUnitRecord = await BusinessUnit.findOne({
-            where: { id: businessUnitId },
-          });
-          country = businessUnitRecord.country;
-          region = businessUnitRecord.region;
-          activityRecord = await Activity.findOne({
-            where: {
-              scope,
-              level1,
-              level2,
-              level3: country,
-              level4: region,
-              // level5, ==> excluding deliberately
-              unitOfMeasurement,
-            },
-          });
-          if (!activityRecord) {
-            return res.status(200).json({
-              message:
-                "No electricity emission factor found for the country/region",
-            });
-          }
-          emissionFactor = activityRecord.greenHouseGasEmissionFactor;
-          locationBasedQuantity = payload.quantity;
-          marketBasedQuantity = payload.marketBasedQuantity;
-          marketBasedEmissionFactor = payload.marketBasedEmissionFactor;
-          CO2e =
-            (locationBasedQuantity - marketBasedQuantity) * emissionFactor +
-            marketBasedQuantity * marketBasedEmissionFactor;
-          payload.unitOfMeasurement = marketBasedUnitOfEmissionFactor;
-          await BusinessUnitActivity.create({ ...payload, CO2e });
-          return res
-            .status(200)
-            .json({ message: "Activity created sucessfully" });
-          break;
-        case "Passenger Evs":
-        case "Delivery Evs":
-          // businessUnitRecord = await BusinessUnit.findOne({
-          //   where: { id: businessUnitId },
-          // });
-          // country = businessUnitRecord.country;
-          // region = businessUnitRecord.region;
-          // console.log({
-          //   scope,
-          //   level1,
-          //   level2,
-          //   level3: country,
-          //   level4: region,
-          //   // level5, ==> excluding deliberately
-          //   unitOfMeasurement,
-          // });
-          // activityRecord = await Activity.findOne({
-          //   where: {
-          //     scope,
-          //     level1,
-          //     level2,
-          //     level3: country,
-          //     level4: region,
-          //     // level5, ==> excluding deliberately
-          //     unitOfMeasurement,
-          //   },
-          // });
-          // if (!activityRecord) {
-          //   return res.status(200).json({
-          //     message:
-          //       "No electricity emission factor found for the country/region",
-          //   });
-          // }
-          const electricVehicleRecord = await ElectricVehicle.findOne({
-            where: {
-              scope,
-              level1,
-              level2,
-              level3,
-              level4,
-              // level5, ==> excluding deliberately
-              unitOfMeasurement,
-            },
-          });
-
-          emissionFactor = payload.marketBasedEmissionFactor;
-          locationBasedQuantity = payload.quantity;
-          marketBasedQuantity = payload.marketBasedQuantity;
-          marketBasedEmissionFactor = payload.marketBasedEmissionFactor;
-          const locationBasedEVConsumption =
-            locationBasedQuantity *
-            electricVehicleRecord.electricityConsumptionPerUnit;
-          const marketBasedEVConsumption =
-            marketBasedQuantity *
-            electricVehicleRecord.electricityConsumptionPerUnit;
-
-          // Market based emissions = ((Location based consumption - Market based consumption) x Emission factor)+ (Market based consumption x Market based emission factor)
-          CO2e =
-            (locationBasedEVConsumption - marketBasedEVConsumption) *
-              emissionFactor +
-            marketBasedEVConsumption * emissionFactor;
-          payload.unitOfMeasurement = marketBasedUnitOfEmissionFactor;
-          await BusinessUnitActivity.create({ ...payload, CO2e });
-          return res
-            .status(200)
-            .json({ message: "Activity created sucessfully" });
-          break;
-      }
+      return handleScope2MarketBased(payload, res);
     } else if (
       scope === "Scope 2" &&
       (level1 === "Passenger Evs" || level1 === "Delivery Evs")

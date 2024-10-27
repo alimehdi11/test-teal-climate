@@ -162,7 +162,11 @@ const ActivitiesTable = ({
               <TableCell>{businessUnitActivity.region || "-"}</TableCell>
               <TableCell>{businessUnitActivity.assetType || "-"}</TableCell>
               <TableCell>{businessUnitActivity.year || "-"}</TableCell>
-              <TableCell>{businessUnitActivity.quantity || "-"}</TableCell>
+              <TableCell>
+                {businessUnitActivity.level5 === "marketBased"
+                  ? businessUnitActivity.marketBasedQuantity
+                  : businessUnitActivity.quantity || "-"}
+              </TableCell>
               <TableCell>
                 {businessUnitActivity.CO2e === 0
                   ? "-"

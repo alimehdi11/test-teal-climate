@@ -531,22 +531,6 @@ const ActivitiesForm2 = ({
     if (!isFormInitializing) {
       setUnitOfMeasurement(undefined);
       setQuantity("");
-      console.table({
-        id,
-        selectedScope,
-        selectedLevel,
-        month,
-        businessUnitId,
-        level1Category,
-        level2,
-        level3,
-        level4,
-        level5,
-        unitOfMeasurement,
-        quantity,
-        marketBasedQuantity,
-        marketBasedEmissionFactor,
-      });
     }
     if (
       selectedLevel == "Business travel- air" ||
@@ -598,9 +582,9 @@ const ActivitiesForm2 = ({
           setSelectedPeriod(bussinessUnitActivity.businessUnit.period.id);
           if (bussinessUnitActivity.level5 === "marketBased") {
             setMarketBased(true);
-            // setMarketBasedUnitOfEmissionFactor(
-            //   bussinessUnitActivity.unitOfMeasurement
-            // );
+            setMarketBasedUnitOfEmissionFactor(
+              bussinessUnitActivity.marketBasedUnitOfEmissionFactor
+            );
             setMarketBasedQuantity(bussinessUnitActivity.marketBasedQuantity);
             setMarketBasedEmissionFactor(
               bussinessUnitActivity.marketBasedEmissionFactor
@@ -611,6 +595,22 @@ const ActivitiesForm2 = ({
   }, [id]);
 
   useEffect(() => {
+    // console.table({
+    //   id,
+    //   selectedScope,
+    //   selectedLevel,
+    //   month,
+    //   businessUnitId,
+    //   level1Category,
+    //   level2,
+    //   level3,
+    //   level4,
+    //   level5,
+    //   unitOfMeasurement,
+    //   quantity,
+    //   marketBasedQuantity,
+    //   marketBasedEmissionFactor,
+    // });
     if (
       id &&
       selectedScope &&
@@ -630,15 +630,17 @@ const ActivitiesForm2 = ({
       setIsFormInitializing(false);
     }
   }, [
+    selectedScope,
+    selectedLevel,
+    month,
     businessUnitId,
     level1Category,
     level2,
     level3,
     level4,
     level5,
-    quantity,
     unitOfMeasurement,
-    month,
+    quantity,
     marketBasedQuantity,
     marketBasedEmissionFactor,
   ]);
