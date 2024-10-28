@@ -5,6 +5,7 @@ import { BusinessUnit } from "../models/businessUnit.model.js";
 import { Reit } from "../models/reit.model.js";
 import { Activity } from "../models/activity.model.js";
 import { ElectricVehicle } from "../models/electricVehicle.model.js";
+import { Period } from "../models/period.model.js";
 
 const calculateActivityGHGEmissions = (
   records,
@@ -347,6 +348,55 @@ const createActivity = async (req, res) => {
         }
       }
       payload = calculateActivityGHGEmissions(activityRecords, payload);
+    } else if (
+      scope === "Scope 3" &&
+      (level1 === "Electricity TandD for passenger EVs" ||
+        level1 === "Electricity TandD for delivery Evs")
+    ) {
+      /**
+       *  Formula:
+       *  Distance travelled in km/miles (quantity)
+       *  x Electricity consumption per km/miles (fetch from electricVehicle table)
+       *  x Electricity emission factor of the country & region (fetch country/region from businessUnits table based on businessUnitId after that filter emission factors from activities based on Electricity and country/region)
+       */
+      const electricVehicleRecord = await ElectricVehicle.findOne({
+        where: {
+          scope,
+          level1,
+          level2,
+          level3,
+          level4,
+          // level5, ==> excluding deliberately
+          unitOfMeasurement,
+        },
+      });
+      if (!electricVehicleRecord) {
+        return res
+          .status(404)
+          .json({ error: "Electric vehicle record not found" });
+      }
+      const totalElectricityConsumption =
+        payload.quantity * electricVehicleRecord.electricityConsumptionPerUnit;
+      const businessUnitRecord = await BusinessUnit.findOne({
+        where: { id: businessUnitId },
+      });
+      const { country, region } = businessUnitRecord;
+      const activityRecords = await Activity.findAll({
+        where: {
+          scope,
+          level1: "Electricity",
+          level2: "Electricity T&D",
+          level3: country,
+          level4: region,
+          // level5, ==> excluding deliberately
+          unitOfMeasurement: "kWh",
+        },
+      });
+      payload = calculateActivityGHGEmissions(
+        activityRecords,
+        payload,
+        totalElectricityConsumption
+      );
     } else {
       const activityRecords = await Activity.findAll({
         where: {
@@ -837,9 +887,27 @@ const createReitActivity = async (req, res) => {
       assetClass,
       year,
       unitOfMeasurement,
-      CO2e: reitRecord.greenHouseGasEmissionFactor * Number(quantity),
       reit: true,
     };
+    const businessUnit = await BusinessUnit.findByPk(businessUnitId, {
+      include: {
+        model: Period,
+        as: "period",
+      },
+    });
+    const { period } = businessUnit.period;
+    const [startPeriodDate, endPeriodDate] = period.split(" - ");
+    const startDate = new Date(startPeriodDate);
+    const endDate = new Date(endPeriodDate);
+    const differenceInTime = endDate - startDate;
+    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+    const differenceInDays = differenceInTime / millisecondsPerDay;
+    // REIT emission = (emission factor / 365) x (period end date - period start date) x quantity in m2
+    const CO2e =
+      (reitRecord.greenHouseGasEmissionFactor / 365) *
+      differenceInDays *
+      payload.quantity;
+    payload.CO2e = CO2e;
     await BusinessUnitActivity.create(payload);
     return res
       .status(200)

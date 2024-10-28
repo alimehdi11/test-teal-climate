@@ -876,7 +876,6 @@ const ActivitiesForm2 = ({
         <Button type="submit">{id ? "Edit" : "Add"}</Button>
       </div>
     </form>
-    // Give me 5
   );
 };
 

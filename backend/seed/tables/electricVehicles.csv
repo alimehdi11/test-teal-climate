@@ -61,3 +61,65 @@ Scope 2,Delivery Evs,Vans,Class III (1.74 to 3.5 tonnes),Battery Electric Vehicl
 Scope 2,Delivery Evs,Vans,Average (up to 3.5 tonnes),Battery Electric Vehicle,tonne.km,kWh,1.17196
 Scope 2,Delivery Evs,Vans,Average (up to 3.5 tonnes),Battery Electric Vehicle,km,kWh,0.32748
 Scope 2,Delivery Evs,Vans,Average (up to 3.5 tonnes),Battery Electric Vehicle,miles,kWh,0.52702
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Mini,Battery Electric Vehicle,km,kWh,0.19718
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Mini,Battery Electric Vehicle,miles,kWh,0.31733
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Supermini,Plug-in Hybrid Electric Vehicle,km,kWh,0.14398
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Supermini,Battery Electric Vehicle,km,kWh,0.21827
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Supermini,Plug-in Hybrid Electric Vehicle,miles,kWh,0.23171
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Supermini,Battery Electric Vehicle,miles,kWh,0.35127
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Lower medium,Plug-in Hybrid Electric Vehicle,km,kWh,0.10393
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Lower medium,Battery Electric Vehicle,km,kWh,0.23367
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Lower medium,Plug-in Hybrid Electric Vehicle,miles,kWh,0.16725
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Lower medium,Battery Electric Vehicle,miles,kWh,0.37606
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Upper medium,Plug-in Hybrid Electric Vehicle,km,kWh,0.10575
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Upper medium,Battery Electric Vehicle,km,kWh,0.24419
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Upper medium,Plug-in Hybrid Electric Vehicle,miles,kWh,0.17019
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Upper medium,Battery Electric Vehicle,miles,kWh,0.39298
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Executive,Plug-in Hybrid Electric Vehicle,km,kWh,0.09942
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Executive,Battery Electric Vehicle,km,kWh,0.22256
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Executive,Plug-in Hybrid Electric Vehicle,miles,kWh,0.16
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Executive,Battery Electric Vehicle,miles,kWh,0.35817
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Luxury,Plug-in Hybrid Electric Vehicle,km,kWh,0.11084
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Luxury,Battery Electric Vehicle,km,kWh,0.25949
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Luxury,Plug-in Hybrid Electric Vehicle,miles,kWh,0.17838
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Luxury,Battery Electric Vehicle,miles,kWh,0.4176
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Sports,Plug-in Hybrid Electric Vehicle,km,kWh,0.07978
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Sports,Battery Electric Vehicle,km,kWh,0.37155
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Sports,Plug-in Hybrid Electric Vehicle,miles,kWh,0.12839
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Sports,Battery Electric Vehicle,miles,kWh,0.59795
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Dual purpose 4X4,Plug-in Hybrid Electric Vehicle,km,kWh,0.14377
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Dual purpose 4X4,Battery Electric Vehicle,km,kWh,0.27107
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Dual purpose 4X4,Plug-in Hybrid Electric Vehicle,miles,kWh,0.23138
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),Dual purpose 4X4,Battery Electric Vehicle,miles,kWh,0.43625
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),MPV,Plug-in Hybrid Electric Vehicle,km,kWh,0.18861
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),MPV,Battery Electric Vehicle,km,kWh,0.3532
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),MPV,Plug-in Hybrid Electric Vehicle,miles,kWh,0.30353
+Scope 3,Electricity TandD for passenger EVs,Cars (by market segment),MPV,Battery Electric Vehicle,miles,kWh,0.56841
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Small car,Plug-in Hybrid Electric Vehicle,km,kWh,0.14398
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Small car,Battery Electric Vehicle,km,kWh,0.21456
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Small car,Plug-in Hybrid Electric Vehicle,miles,kWh,0.23171
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Small car,Battery Electric Vehicle,miles,kWh,0.34531
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Medium car,Plug-in Hybrid Electric Vehicle,km,kWh,0.10484
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Medium car,Battery Electric Vehicle,km,kWh,0.23412
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Medium car,Plug-in Hybrid Electric Vehicle,miles,kWh,0.16873
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Medium car,Battery Electric Vehicle,miles,kWh,0.37678
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Large car,Plug-in Hybrid Electric Vehicle,km,kWh,0.13694
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Large car,Battery Electric Vehicle,km,kWh,0.25762
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Large car,Plug-in Hybrid Electric Vehicle,miles,kWh,0.22038
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Large car,Battery Electric Vehicle,miles,kWh,0.4146
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Average car,Plug-in Hybrid Electric Vehicle,km,kWh,0.12473
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Average car,Battery Electric Vehicle,km,kWh,0.24363
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Average car,Plug-in Hybrid Electric Vehicle,miles,kWh,0.20073
+Scope 3,Electricity TandD for passenger EVs,Cars (by size),Average car,Battery Electric Vehicle,miles,kWh,0.39208
+Scope 3,Electricity TandD for delivery Evs,Vans,Class I (up to 1.305 tonnes),Battery Electric Vehicle,tonne.km,kWh,0.81243
+Scope 3,Electricity TandD for delivery Evs,Vans,Class I (up to 1.305 tonnes),Battery Electric Vehicle,km,kWh,0.17115
+Scope 3,Electricity TandD for delivery Evs,Vans,Class I (up to 1.305 tonnes),Battery Electric Vehicle,miles,kWh,0.27544
+Scope 3,Electricity TandD for delivery Evs,Vans,Class II (1.305 to 1.74 tonnes),Battery Electric Vehicle,tonne.km,kWh,1.17922
+Scope 3,Electricity TandD for delivery Evs,Vans,Class II (1.305 to 1.74 tonnes),Battery Electric Vehicle,km,kWh,0.26395
+Scope 3,Electricity TandD for delivery Evs,Vans,Class II (1.305 to 1.74 tonnes),Battery Electric Vehicle,miles,kWh,0.42479
+Scope 3,Electricity TandD for delivery Evs,Vans,Class III (1.74 to 3.5 tonnes),Battery Electric Vehicle,tonne.km,kWh,1.16453
+Scope 3,Electricity TandD for delivery Evs,Vans,Class III (1.74 to 3.5 tonnes),Battery Electric Vehicle,km,kWh,0.39925
+Scope 3,Electricity TandD for delivery Evs,Vans,Class III (1.74 to 3.5 tonnes),Battery Electric Vehicle,miles,kWh,0.64253
+Scope 3,Electricity TandD for delivery Evs,Vans,Average (up to 3.5 tonnes),Battery Electric Vehicle,tonne.km,kWh,1.17196
+Scope 3,Electricity TandD for delivery Evs,Vans,Average (up to 3.5 tonnes),Battery Electric Vehicle,km,kWh,0.32748
+Scope 3,Electricity TandD for delivery Evs,Vans,Average (up to 3.5 tonnes),Battery Electric Vehicle,miles,kWh,0.52702
