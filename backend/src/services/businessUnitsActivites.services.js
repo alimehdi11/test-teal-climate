@@ -971,16 +971,35 @@ const updateReitActivityById = async (req, res) => {
       userId: req.user.id,
       businessUnitId,
       scope: "Scope 3",
+      level1Category: "Investments",
       unitOfMeasurement,
-      quantity,
+      quantity: Number(quantity),
       country,
       stateOrRegion,
       assetClass,
       year,
       unitOfMeasurement,
-      CO2e: reitRecord.greenHouseGasEmissionFactor * quantity,
       reit: true,
     };
+    const businessUnit = await BusinessUnit.findByPk(businessUnitId, {
+      include: {
+        model: Period,
+        as: "period",
+      },
+    });
+    const { period } = businessUnit.period;
+    const [startPeriodDate, endPeriodDate] = period.split(" - ");
+    const startDate = new Date(startPeriodDate);
+    const endDate = new Date(endPeriodDate);
+    const differenceInTime = endDate - startDate;
+    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+    const differenceInDays = differenceInTime / millisecondsPerDay;
+    // REIT emission = (emission factor / 365) x (period end date - period start date) x quantity in m2
+    const CO2e =
+      (reitRecord.greenHouseGasEmissionFactor / 365) *
+      differenceInDays *
+      payload.quantity;
+    payload.CO2e = CO2e;
     await BusinessUnitActivity.update(payload, { where: { id } });
     return res
       .status(200)
