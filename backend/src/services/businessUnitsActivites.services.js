@@ -173,8 +173,7 @@ const handleScope2MarketBased = async (payload, res) => {
         marketBasedEVConsumption * marketBasedEmissionFactor;
       break;
   }
-  await BusinessUnitActivity.create({ ...payload, CO2e });
-  return res.status(200).json({ message: "Activity created sucessfully" });
+  return CO2e;
 };
 
 const createActivity = async (req, res) => {
@@ -229,7 +228,7 @@ const createActivity = async (req, res) => {
       marketBasedUnitOfEmissionFactor,
     };
     if (scope === "Scope 2" && level5 === "marketBased") {
-      return handleScope2MarketBased(payload, res);
+      payload.CO2e = await handleScope2MarketBased(payload, res);
     } else if (
       scope === "Scope 2" &&
       (level1 === "Passenger Evs" || level1 === "Delivery Evs")
@@ -470,39 +469,10 @@ const updateActivityById = async (req, res) => {
       quantity,
       marketBasedQuantity,
       marketBasedEmissionFactor,
+      marketBasedUnitOfEmissionFactor,
     };
     if (scope === "Scope 2" && level5 === "marketBased") {
-      const activityRecord = await Activity.findOne({
-        where: {
-          scope,
-          level1,
-          level2,
-          level3,
-          level4,
-          // level5, ==> removing delibratly
-          // unitOfMeasurement, ==> removing delibratly
-        },
-      });
-      if (!activityRecord) {
-        return res
-          .status(400)
-          .json({ success: false, error: "No data found for marketBased" });
-      }
-      // Market based emissions = ((Location based quantity - Market based quantity) x Location based emission factor) + (Market based quantity x Market based emission factor)
-      const CO2e =
-        (quantity - marketBasedQuantity) *
-          activityRecord.greenHouseGasEmissionFactor +
-        marketBasedQuantity * marketBasedEmissionFactor;
-      payload.unitOfMeasurement = marketBasedUnitOfEmissionFactor;
-      await BusinessUnitActivity.update(
-        { ...payload, CO2e },
-        {
-          where: {
-            id,
-          },
-        }
-      );
-      return res.status(200).json({ message: "Activity created sucessfully" });
+      payload.CO2e = await handleScope2MarketBased(payload, res);
     } else if (
       scope === "Scope 2" &&
       (level1 === "Passenger Evs" || level1 === "Delivery Evs")
@@ -524,7 +494,7 @@ const updateActivityById = async (req, res) => {
           unitOfMeasurement,
         },
       });
-      payload.quantity =
+      const totalElectricityConsumption =
         payload.quantity * electricVehicleRecord.electricityConsumptionPerUnit;
       const businessUnitRecord = await BusinessUnit.findOne({
         where: { id: businessUnitId },
@@ -537,11 +507,15 @@ const updateActivityById = async (req, res) => {
           level2: "Electricity generated",
           level3: country,
           level4: region,
-          level5,
-          unitOfMeasurement,
+          // level5, ==> excluding deliberately
+          unitOfMeasurement: "kWh",
         },
       });
-      payload = calculateActivityGHGEmissions(activityRecords, payload);
+      payload = calculateActivityGHGEmissions(
+        activityRecords,
+        payload,
+        totalElectricityConsumption
+      );
     } else if (
       scope === "Scope 3" &&
       (level1 === "Business travel- air" ||
@@ -616,6 +590,55 @@ const updateActivityById = async (req, res) => {
         }
       }
       payload = calculateActivityGHGEmissions(activityRecords, payload);
+    } else if (
+      scope === "Scope 3" &&
+      (level1 === "Electricity TandD for passenger EVs" ||
+        level1 === "Electricity TandD for delivery Evs")
+    ) {
+      /**
+       *  Formula:
+       *  Distance travelled in km/miles (quantity)
+       *  x Electricity consumption per km/miles (fetch from electricVehicle table)
+       *  x Electricity emission factor of the country & region (fetch country/region from businessUnits table based on businessUnitId after that filter emission factors from activities based on Electricity and country/region)
+       */
+      const electricVehicleRecord = await ElectricVehicle.findOne({
+        where: {
+          scope,
+          level1,
+          level2,
+          level3,
+          level4,
+          // level5, ==> excluding deliberately
+          unitOfMeasurement,
+        },
+      });
+      if (!electricVehicleRecord) {
+        return res
+          .status(404)
+          .json({ error: "Electric vehicle record not found" });
+      }
+      const totalElectricityConsumption =
+        payload.quantity * electricVehicleRecord.electricityConsumptionPerUnit;
+      const businessUnitRecord = await BusinessUnit.findOne({
+        where: { id: businessUnitId },
+      });
+      const { country, region } = businessUnitRecord;
+      const activityRecords = await Activity.findAll({
+        where: {
+          scope,
+          level1: "Electricity",
+          level2: "Electricity T&D",
+          level3: country,
+          level4: region,
+          // level5, ==> excluding deliberately
+          unitOfMeasurement: "kWh",
+        },
+      });
+      payload = calculateActivityGHGEmissions(
+        activityRecords,
+        payload,
+        totalElectricityConsumption
+      );
     } else {
       const activityRecords = await Activity.findAll({
         where: {
@@ -629,7 +652,6 @@ const updateActivityById = async (req, res) => {
         },
       });
       payload = calculateActivityGHGEmissions(activityRecords, payload);
-      console.log(payload);
     }
     await BusinessUnitActivity.update(payload, {
       where: {
