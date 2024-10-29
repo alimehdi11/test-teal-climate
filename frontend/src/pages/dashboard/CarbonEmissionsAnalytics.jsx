@@ -1,7 +1,6 @@
 import TC_PieChartWithPaddingAngle from "../../components/TC_PieChartWithPaddingAngle.jsx";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import TC_RadialBarChart from "../../components/TC_RadialBarChart.jsx";
-import { request } from "../../utils/request.js";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import { api } from "../../../api/index.js";
 import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
@@ -18,11 +17,14 @@ const CarbonEmissionsAnalytics = () => {
   ]);
 
   const calculateTotalC02e = () => {
-    const totalCO2e = businessUnitsActivities.reduce(
-      (accumulator, obj) => accumulator + obj.CO2e,
-      0
-    );
-    return totalCO2e / 1000; // kg CO2e
+    const totalCO2e = businessUnitsActivities.reduce((accumulator, obj) => {
+      // Total carbon emissions (CO2e) should not include "marketBased" emissions
+      if (obj.level5 === "marketBased") {
+        return accumulator;
+      }
+      return accumulator + obj.CO2e;
+    }, 0);
+    return totalCO2e / 1000; // "kg CO2e"
   };
 
   const calculateTotalC02eOfGivenScope = (scope) => {
