@@ -756,7 +756,7 @@ const ActivitiesForm2 = ({
             />
           </FormControl>
         )}
-        {!specialLevel.includes(selectedLevel) && (
+        {!specialLevel.includes(selectedLevel) && level3Options.length > 1 && (
           <FormControl className="flex-1 relative">
             <Label>{possibleLevel3Labels[selectedLevel] || "Fuel name"}</Label>
             <SearchableSelect
