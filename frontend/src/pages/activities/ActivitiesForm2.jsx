@@ -127,7 +127,7 @@ const ActivitiesForm2 = ({
       const queryString = "?" + new URLSearchParams(queryParams).toString();
       const options = await callback(queryString);
       if (options.length === 0) {
-        setOptions(options);
+        setOptions([]);
         setCurrentInputValue("");
       } else if (options.length > 0) {
         setOptions(options.map((item) => Object.values(item)[0]));
@@ -541,9 +541,11 @@ const ActivitiesForm2 = ({
         setUnitOfMeasurementOptions(["passenger-mile", "passenger.km"]);
         setQuantity(airportsDistance);
       }
-    } else if (level5 === "marketBased") {
-      return;
-    } else {
+    }
+    // else if (level5 === "marketBased" || level5 === "locationBased") {
+    //   return;
+    // }
+    else {
       fetchActivities(
         api.activities.getAllActivities,
         setUnitOfMeasurementOptions,
@@ -577,7 +579,18 @@ const ActivitiesForm2 = ({
           setLevel2(bussinessUnitActivity.level2);
           setLevel3(bussinessUnitActivity.level3);
           setLevel4(bussinessUnitActivity.level4);
-          setLevel5(bussinessUnitActivity.level5);
+          /**
+           * Only setting level5 value
+           * If the record's level5 is not equal to "locationBased" or "marketBased"
+           * Reason : "fetchActivities()" function sholud not break
+           * It sholud behave same in "add mode" and "edit mode"
+           * */
+          if (
+            bussinessUnitActivity.level5 !== "locationBased" &&
+            bussinessUnitActivity.level5 !== "marketBased"
+          ) {
+            setLevel5(bussinessUnitActivity.level5);
+          }
           setUnitOfMeasurement(bussinessUnitActivity.unitOfMeasurement);
           setQuantity(bussinessUnitActivity.quantity);
           setSelectedPeriod(bussinessUnitActivity.businessUnit.period.id);

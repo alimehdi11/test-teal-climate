@@ -99,7 +99,7 @@ const CarbonEmissionsAnalytics = () => {
         // Here we are excluding marketBased data(Scope 2)
         if (
           obj.level1Category === scopeCategory &&
-          obj.level5 !== "marketBased"
+          obj.level5 === "locationBased"
         ) {
           return accumulator + obj.CO2e;
         }
