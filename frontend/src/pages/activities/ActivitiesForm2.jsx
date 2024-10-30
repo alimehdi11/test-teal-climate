@@ -120,17 +120,25 @@ const ActivitiesForm2 = ({
     setOptions,
     previousInputValue,
     setCurrentInputValue,
-    queryParams = {}
+    queryParams = {},
+    setItem
   ) => {
     if (previousInputValue === undefined) return;
     try {
       const queryString = "?" + new URLSearchParams(queryParams).toString();
-      const options = await callback(queryString);
+      let options = await callback(queryString);
       if (options.length === 0) {
         setOptions([]);
         setCurrentInputValue("");
       } else if (options.length > 0) {
-        setOptions(options.map((item) => Object.values(item)[0]));
+        options = options.map((item) => Object.values(item)[0]);
+        setOptions(options);
+        // setItem is optional always check if it is passed or not
+        if (setItem) {
+          if (options.length === 1) {
+            setItem(options[0]);
+          }
+        }
       }
     } catch (error) {
       console.error("Failed to fetch activities:", error);
@@ -138,17 +146,20 @@ const ActivitiesForm2 = ({
   };
 
   const resetForm = () => {
-    // Reset form fields
     // setLevel1Category(undefined);
-    setLevel2(undefined);
-    setLevel3(undefined);
+    if (level2Options.length === 1) {
+      setLevel2(undefined);
+    }
+    if (level3Options.length === 1) {
+      setLevel3(undefined);
+      setLevel3Options([]);
+    }
     setLevel4(undefined);
     setLevel5(undefined);
     setUnitOfMeasurement(undefined);
     setQuantity("");
-    // Reset options arrays
     // setLevel2Options([]);
-    setLevel3Options([]);
+
     setLevel4Options([]);
     setLevel5Options([]);
     setUnitOfMeasurementOptions([]);
@@ -324,7 +335,7 @@ const ActivitiesForm2 = ({
     }
   }, [businessUnits]);
 
-  // Fetch "Level 1 Category" when business unit is selected
+  // Fetch "Level 1 Category" when selectedLevel is selected
   useEffect(() => {
     if (!isFormInitializing) {
       setLevel1Category(undefined);
@@ -342,7 +353,10 @@ const ActivitiesForm2 = ({
       fetchActivities(
         () => api.level1Categories.getAllLevel1Categories(selectedLevel),
         setlevel1CategoriesOptions,
-        selectedLevel
+        selectedLevel,
+        null,
+        null,
+        setLevel1Category
       );
     }
   }, [selectedLevel]);
@@ -384,7 +398,8 @@ const ActivitiesForm2 = ({
           level1: selectedLevel,
           column: "level2",
           distinct: "true",
-        }
+        },
+        setLevel2
       );
     }
   }, [level1Category]);
@@ -421,7 +436,8 @@ const ActivitiesForm2 = ({
           level2: level2,
           column: "level3",
           distinct: "true",
-        }
+        },
+        setLevel3
       );
     }
   }, [level2]);
@@ -482,7 +498,8 @@ const ActivitiesForm2 = ({
           level3: level3,
           column: "level4",
           distinct: "true",
-        }
+        },
+        setLevel4
       );
     }
   }, [level3]);
@@ -522,7 +539,8 @@ const ActivitiesForm2 = ({
           level4: level4,
           column: "level5",
           distinct: "true",
-        }
+        },
+        setLevel5
       );
     }
   }, [level4]);
@@ -722,16 +740,22 @@ const ActivitiesForm2 = ({
             placeholder={"Search scope category"}
           />
         </FormControl>
-        <FormControl className="flex-1 relative">
-          <Label>{possibleLevel2Labels[selectedLevel] || "Fuel type"}</Label>
-          <SearchableSelect
-            data={level2Options}
-            item={level2}
-            setItem={setLevel2}
-            text={`Select ${(possibleLevel2Labels[selectedLevel] || "fuel type").toLowerCase()}`}
-            placeholder={`Search ${(possibleLevel2Labels[selectedLevel] || "fuel type").toLowerCase()}`}
-          />
-        </FormControl>
+        {level2Options.length > 1 && (
+          <FormControl className="flex-1 relative">
+            <Label>{possibleLevel2Labels[selectedLevel] || "Fuel type"}</Label>
+            <SearchableSelect
+              data={level2Options}
+              item={level2}
+              setItem={setLevel2}
+              text={`Select ${(
+                possibleLevel2Labels[selectedLevel] || "fuel type"
+              ).toLowerCase()}`}
+              placeholder={`Search ${(
+                possibleLevel2Labels[selectedLevel] || "fuel type"
+              ).toLowerCase()}`}
+            />
+          </FormControl>
+        )}
         {!specialLevel.includes(selectedLevel) && (
           <FormControl className="flex-1 relative">
             <Label>{possibleLevel3Labels[selectedLevel] || "Fuel name"}</Label>
@@ -739,8 +763,12 @@ const ActivitiesForm2 = ({
               data={level3Options}
               item={level3}
               setItem={setLevel3}
-              text={`Select ${(possibleLevel3Labels[selectedLevel] || "fuel name").toLowerCase()}`}
-              placeholder={`Search ${(possibleLevel3Labels[selectedLevel] || "fuel name").toLowerCase()}`}
+              text={`Select ${(
+                possibleLevel3Labels[selectedLevel] || "fuel name"
+              ).toLowerCase()}`}
+              placeholder={`Search ${(
+                possibleLevel3Labels[selectedLevel] || "fuel name"
+              ).toLowerCase()}`}
             />
           </FormControl>
         )}

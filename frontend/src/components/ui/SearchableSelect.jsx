@@ -29,9 +29,9 @@ const SearchableSelect = ({ data = [], item, setItem, text, placeholder }) => {
       })
     );
     // Automatically select the only available item if there's just one
-    if (data.length === 1) {
-      setItem(data[0]);
-    }
+    // if (data.length === 1) {
+    //   setItem(data[0]);
+    // }
   }, [data]);
 
   useEffect(() => {
