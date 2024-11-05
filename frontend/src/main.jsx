@@ -7,14 +7,16 @@ import { PeriodProvider } from "./contexts/PeriodProvider.jsx";
 import "./global.css";
 import { Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EmissionContextProvider from "./contexts/EmissionsContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <React.StrictMode>
   <div className="bg-tc-background">
     <UserProvider>
       <DataProvider>
         <PeriodProvider>
-          <App />
+          <EmissionContextProvider>
+            <App />
+          </EmissionContextProvider>
         </PeriodProvider>
       </DataProvider>
     </UserProvider>
@@ -31,5 +33,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       }}
     />
   </div>
-  // </React.StrictMode>
 );

@@ -9,14 +9,16 @@ import {
   TableCell,
 } from "../../components/ui/Table.jsx";
 import { request } from "../../utils/request.js";
+import { usePeriod } from "./../../contexts/PeriodProvider.jsx";
 
 const Top10EmissionsTable = () => {
   const [userTop10Emissions, setUserTop10Emissions] = useState([]);
+  const { selectedPeriod } = usePeriod();
 
   const fetchUserTop10Emissions = async () => {
     try {
       const response = await request(
-        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?limit=10&sortByColumn=CO2e&sortOrder=DESC`,
+        `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?limit=10&sortByColumn=CO2e&sortOrder=DESC&periodId=${selectedPeriod}`,
         "GET"
       );
       if (!response.ok) {

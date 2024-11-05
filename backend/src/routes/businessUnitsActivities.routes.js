@@ -5,6 +5,7 @@ import {
   updateBusinessUnitActivityById,
   deleteBusinessUnitActivityById,
   getAllBusinessUnitsActivities,
+  getTop5BusinessUnitsEmissions
 } from "../controllers/businessUnitsActivities.controllers.js";
 import {
   isBusinessUnitActivityOwner,
@@ -18,6 +19,12 @@ businessUnitsActivitiesRouter.post(
   "/",
   isbusinessUnitIdBelongsToUser,
   createBusinessUnitActivity
+);
+
+// Get top 5 business units emissions
+businessUnitsActivitiesRouter.get(
+  "/top5BusinessUnitsEmissions",
+  getTop5BusinessUnitsEmissions
 );
 
 // Get a businessUnitActivity by given id

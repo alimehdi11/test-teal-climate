@@ -4,8 +4,10 @@ import "leaflet/dist/leaflet.css";
 import worldMapJson from "../../data/worldMap.json";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import { api } from "../../../api/index.js";
-
+import { useEmissionContext } from "../../contexts/EmissionsContext.jsx";
+import { toPng } from "html-to-image";
 const WorldMap = () => {
+  const { mapRef ,setMapImage} = useEmissionContext();
   const [businessUnitsActivities, setBusinessUnitsActivities] = useState([]);
   const [
     businessUnitsActivitiesForSelectedPeriod,
@@ -104,44 +106,48 @@ const WorldMap = () => {
       });
     }
   }, [businessUnitsActivities, selectedPeriod]);
+  
 
+ 
   return (
     showMap && (
-      <div className=" gap-4 mt-4 rounded-md  relative">
-        <div className="flex flex-col items-start space-y-0 absolute z-[9] left-8 top-8 ">
-          <h3 className="text-lg font-semibold mb-1">
-            Location wise Emissions
-          </h3>
-          <div className="flex justify-between max-w-[300px] w-full text-sm text-gray-600 font-semibold">
-            <span>0%</span>
-            <span>100%</span>
+      <div className="mt-4">
+        <div ref={mapRef} className="gap-4 rounded-md  relative">
+          <div className="flex flex-col items-start space-y-0 absolute z-[9] left-8 top-8 ">
+            <h3 className="text-lg font-semibold mb-1">
+              Location wise Emissions
+            </h3>
+            <div className="flex justify-between max-w-[300px] w-full text-sm text-gray-600 font-semibold">
+              <span>0%</span>
+              <span>100%</span>
+            </div>
+            <div
+              style={{
+                background:
+                  "linear-gradient(90deg, #FFECAA 0%, #FFC700 32%, #FFA400 64%, #FF6B00 100%)",
+              }}
+              className="max-w-[300px] w-full bg-gray-200 h-4 rounded-full"
+            ></div>
           </div>
-          <div
-            style={{
-              background:
-                "linear-gradient(90deg, #FFECAA 0%, #FFC700 32%, #FFA400 64%, #FF6B00 100%)",
-            }}
-            className="max-w-[300px] w-full bg-gray-200 h-4 rounded-full"
-          ></div>
+          <MapContainer
+            className="w-full h-[300px] bg-white md:h-[600px] rounded-lg lg:flex-2 "
+            center={[50, 0]}
+            zoom={2}
+            zoomControl={false}
+            scrollWheelZoom={false}
+            doubleClickZoom={false}
+            touchZoom={false}
+            dragging={false}
+            attributionControl={false}
+            style={{ zIndex: 1 }}
+          >
+            <GeoJSON
+              data={worldMapJson}
+              style={geoJsonStyle}
+              onEachFeature={onEachFeature}
+            />
+          </MapContainer>
         </div>
-        <MapContainer
-          className="w-full h-[300px] bg-white md:h-[600px] rounded-lg lg:flex-2 "
-          center={[50, 0]}
-          zoom={2}
-          zoomControl={false}
-          scrollWheelZoom={false}
-          doubleClickZoom={false}
-          touchZoom={false}
-          dragging={false}
-          attributionControl={false}
-          style={{ zIndex: 1 }}
-        >
-          <GeoJSON
-            data={worldMapJson}
-            style={geoJsonStyle}
-            onEachFeature={onEachFeature}
-          />
-        </MapContainer>
       </div>
     )
   );
