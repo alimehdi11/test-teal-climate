@@ -8,8 +8,7 @@
     "prod": "cross-env NODE_ENV=production node ./src/index.js",
     "init-db:prod": "cross-env NODE_ENV=production node ./seed/initializeDatabase.js",
     "test": "cross-env NODE_ENV=test node ./test/index.js",
-    "init-db:test": "cross-env NODE_ENV=test node ./seed/initializeDatabase.js",
-    "start": "npm run prod"
+    "init-db:test": "cross-env NODE_ENV=test node ./seed/initializeDatabase.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -27,8 +26,5 @@
   },
   "devDependencies": {
     "csv-parser": "^3.0.0"
-  },
-  "engines": {
-    "node": "20.x"
   }
 }

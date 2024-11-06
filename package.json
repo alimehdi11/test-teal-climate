@@ -11,7 +11,8 @@
     "start:both": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
     "prepare": "husky",
     "format": "npx prettier --write .",
-    "lint": "npx eslint --fix"
+    "lint": "npx eslint --fix",
+    "start": "cd backend && npm run prod"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
@@ -25,5 +26,8 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "3.2.5"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
