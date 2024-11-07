@@ -6,7 +6,7 @@ import "./../src/configs/env.configs.js";
 /**
  * ---------- Creating database ----------
  */
-import "./createDatabase.js";
+// import "./createDatabase.js";
 
 /**
  * ---------- Creating tables ----------
