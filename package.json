@@ -12,7 +12,8 @@
     "prepare": "husky",
     "format": "npx prettier --write .",
     "lint": "npx eslint --fix",
-    "start": "cd backend && npm run prod"
+    "start": "cd backend && npm run prod",
+    "start:dev": "cd backend && npm run dev"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
