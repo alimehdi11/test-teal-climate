@@ -1,37 +1,62 @@
 import { Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
-import reportPage2Img from "./ReportAssets/report-page2-img.png";
+import reportPageImg from "./ReportAssets/report-page2-img.png";
 import EmployeeIcon from "./ReportAssets/EmployeeIcon";
 import EmployeeRevenueIcon from "./ReportAssets/EmployeeRevenueIcon";
 import Briefcase from "./ReportAssets/Briefcase";
-const ReportPage2 = ({ charts }) => {
+const ReportPage2 = ({
+  charts,
+  scope3CategoriesCO2e,
+  totalCO2e,
+  totalScope1CO2e,
+  totalScope2CO2e,
+  totalScope3CO2e,
+  emissions,
+  reportIntroData,
+  emissionsCalculationsFunctions,
+}) => {
+  const { currentPeriod, companyName } = reportIntroData;
+  const {
+    calculateC02ePercentageOfGivenScopeCategory,
+    calculateC02ePercentageOfLocationBasedScopeCategory,
+  } = emissionsCalculationsFunctions;
   const { pieChart, scope1Chart, scope2Chart, scope3Chart } = charts;
   const emissionData = [
-    { label: "Scope 1", value: "2564.92", color: "bg_blue" },
-    { label: "Scope 2", value: "1500.00", color: "bg_green" },
-    { label: "Scope 3", value: "750.50", color: "bg_yellow" },
+    { label: "Scope 1", value: totalScope1CO2e.toFixed(2), color: "bg_blue" },
+    { label: "Scope 2", value: totalScope2CO2e.toFixed(2), color: "bg_green" },
+    { label: "Scope 3", value: totalScope3CO2e.toFixed(2), color: "bg_yellow" },
   ];
-  const Scope1Emissions = [
+  const scope1Emissions = [
     {
       title: "Stationary Combustion",
       color: "bg_blue",
+      value: calculateC02ePercentageOfGivenScopeCategory(
+        "Stationary combustion"
+      ),
     },
     {
       title: "Mobile Combustion",
       color: "bg_yellow",
+      value: calculateC02ePercentageOfGivenScopeCategory("Mobile combustion"),
     },
     {
       title: "Fugitive Emissions",
       color: "bg_red",
+      value: calculateC02ePercentageOfGivenScopeCategory("Fugitive emissions"),
     },
   ];
-  const Scope2Emissions = [
+  const scope2Emissions = [
     {
       title: "Purchased Electricity",
       color: "bg_blue",
+      value: calculateC02ePercentageOfLocationBasedScopeCategory(
+        "Purchased electricity"
+      ),
     },
     {
       title: "Heat & Steam",
       color: "bg_yellow",
+      value:
+        calculateC02ePercentageOfLocationBasedScopeCategory("Heat and steam"),
     },
   ];
 
@@ -53,21 +78,21 @@ const ReportPage2 = ({ charts }) => {
     { title: "Investments", color: "#FFA400" },
   ];
 
-  const emissions = [
+  const emissionsArr = [
     {
       icon: <EmployeeIcon />,
       title: "Emissions per Employee",
-      value: "300.00",
+      value: emissions.perEmployee,
     },
     {
       icon: <EmployeeRevenueIcon />,
       title: "Emissions per Revenue",
-      value: "300.00",
+      value: emissions.perRevenue,
     },
     {
       icon: <Briefcase />,
       title: "Emissions per Product",
-      value: "300.00",
+      value: emissions.perProduct,
     },
   ];
 
@@ -75,11 +100,12 @@ const ReportPage2 = ({ charts }) => {
     pageBox: {
       position: "absolute",
       top: 30,
-      left: 30,
+      left: 40,
       width: 532,
       height: 712,
       backgroundColor: "white",
       padding: 20,
+      borderRadius: 4,
     },
     h1: {
       fontWeight: 600,
@@ -129,10 +155,11 @@ const ReportPage2 = ({ charts }) => {
       position: "absolute",
       right: 20,
       top: 43,
+      borderRadius: 4,
     },
     hr: {
       position: "absolute",
-      top: 248,
+      top: 253,
       left: 0,
       width: "100%",
       height: "1px",
@@ -154,34 +181,52 @@ const ReportPage2 = ({ charts }) => {
       width: 74,
       height: 100,
     },
+    reportCounterStyles: {
+      flexDirection: "row",
+      position: "absolute",
+      bottom: 16,
+      right: 16,
+      fontSize: 10,
+      color: "#11111180",
+    },
+    bar1: {
+      width: "149px",
+      backgroundColor: "#197EC6",
+    },
+    bar2: {
+      width: "225px",
+      backgroundColor: "#00CC9C",
+    },
   });
   return (
     <Page
       size={["612", "792"]}
-      style={{ position: "relative", backgroundColor: "#E5E7EB" }}
+      style={{ position: "relative", backgroundColor: "#EDFAFF" }}
     >
-      <Image src={reportPage2Img} />
+      <Image src={reportPageImg} />
       <View style={styles.pageBox}>
         <View>
           <View style={{ width: 348 }}>
             <Text style={styles.h1}>Introduction</Text>
             <Text style={styles.text}>
-              This report provides an overview of Choco Lux Ltd. ‘s greenhouse
-              gas emissions. It is an integrated part of Choco Lux Ltd.’s
-              climate strategy. The core purpose of the report is to identify
-              key emission areas and seasonal spikes. These analytics serve as
+              This report provides an overview of {companyName} greenhouse gas
+              emissions. It is an integrated part of {companyName} climate
+              strategy. The core purpose of the report is to identify key
+              emission areas and seasonal spikes. These analytics serve as the
               basis for a comprehensive GHG emissions reduction plan. The total
-              emissions from Choco Lux Ltd.’s all business units during the
-              period: 1 January 2023 to 31 December, are 990 tonnes CO2e.
+              emissions from {companyName} all business units during the
+              period:{currentPeriod.period}, are {totalCO2e.toFixed(2)} tonnes
+              CO2e.
             </Text>
+
             <View style={styles.emissionBox}>
               <View>
                 <Text style={{ ...styles.h2, color: "#00CC9C", ...styles.my }}>
                   Total Emissions
                 </Text>
                 <Text style={{ ...styles.h1, fontSize: 18 }}>
-                  2564.92
-                  <Text style={styles.text}>CO2e</Text>
+                  {totalCO2e.toFixed(2)}
+                  <Text style={styles.text}> Tonnes CO2e</Text>
                 </Text>
                 <View style={{ flexDirection: "row", gap: 25, ...styles.my }}>
                   {emissionData.map((item, index) => (
@@ -198,7 +243,7 @@ const ReportPage2 = ({ charts }) => {
                       <View style={{ ...styles.h1, fontSize: 14 }}>
                         <Text>{item.value}</Text>
                         <Text style={{ ...styles.text, fontSize: 6 }}>
-                          CO2e
+                          Tonnes CO2e
                         </Text>
                       </View>
                     </View>
@@ -212,7 +257,7 @@ const ReportPage2 = ({ charts }) => {
           </View>
         </View>
         <View style={styles.emissionWithIconsBox}>
-          {emissions.map((emission, index) => (
+          {emissionsArr.map((emission, index) => (
             <View key={index}>
               <View style={styles.circleWithTitle}>
                 {emission.icon}
@@ -220,7 +265,7 @@ const ReportPage2 = ({ charts }) => {
               </View>
               <View style={{ ...styles.h1, fontSize: 14 }}>
                 <Text>{emission.value}</Text>
-                <Text style={{ ...styles.text, fontSize: 6 }}>CO2e</Text>
+                <Text style={{ ...styles.text, fontSize: 6 }}>Tonnes CO2e</Text>
               </View>
             </View>
           ))}
@@ -251,8 +296,8 @@ const ReportPage2 = ({ charts }) => {
                 }}
               >
                 <View>
-                  {Scope1Emissions.map((item) => (
-                    <View style={styles.circleWithTitle}>
+                  {scope1Emissions.map((item, index) => (
+                    <View style={styles.circleWithTitle} key={index}>
                       <View
                         style={{
                           ...styles.circle,
@@ -264,9 +309,9 @@ const ReportPage2 = ({ charts }) => {
                   ))}
                 </View>
                 <View>
-                  <Text style={styles.text}>10%</Text>
-                  <Text style={styles.text}>10%</Text>
-                  <Text style={styles.text}>10%</Text>
+                  <Text style={styles.text}>{scope1Emissions[0].value}%</Text>
+                  <Text style={styles.text}>{scope1Emissions[1].value}%</Text>
+                  <Text style={styles.text}>{scope1Emissions[2].value}%</Text>
                 </View>
               </View>
             </View>
@@ -297,8 +342,8 @@ const ReportPage2 = ({ charts }) => {
                 }}
               >
                 <View>
-                  {Scope2Emissions.map((item) => (
-                    <View style={styles.circleWithTitle}>
+                  {scope2Emissions.map((item, index) => (
+                    <View style={styles.circleWithTitle} key={index}>
                       <View
                         style={{
                           ...styles.circle,
@@ -310,8 +355,8 @@ const ReportPage2 = ({ charts }) => {
                   ))}
                 </View>
                 <View>
-                  <Text style={styles.text}>10%</Text>
-                  <Text style={styles.text}>10%</Text>
+                  <Text style={styles.text}>{scope2Emissions[0].value}%</Text>
+                  <Text style={styles.text}>{scope2Emissions[1].value}%</Text>
                 </View>
               </View>
             </View>
@@ -321,7 +366,7 @@ const ReportPage2 = ({ charts }) => {
           </View>
         </View>
         <View style={{ ...styles.hr, top: 380 }} />
-        <View style={{ position: "absolute", top: 390 }}>
+        <View style={{ position: "absolute", top: 400 }}>
           <Text style={styles.h1}>Scope 3 Emissions</Text>
           <View style={{ ...styles.text, color: "#111111B2" }}>
             <Text>
@@ -344,8 +389,8 @@ const ReportPage2 = ({ charts }) => {
               }}
             >
               <View>
-                {Scope3Emissions.map((item) => (
-                  <View style={styles.circleWithTitle}>
+                {Scope3Emissions.map((item, index) => (
+                  <View style={styles.circleWithTitle} key={index}>
                     <View
                       style={{
                         ...styles.circle,
@@ -357,31 +402,44 @@ const ReportPage2 = ({ charts }) => {
                 ))}
               </View>
               <View>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
-                <Text style={styles.text}>10%</Text>
+                {scope3CategoriesCO2e.map((item, index) => (
+                  <Text style={styles.text} key={index}>
+                    {item}%
+                  </Text>
+                ))}
               </View>
             </View>
-              {scope3Chart && (
-                <Image
-                  src={scope3Chart}
-                  style={{ ...styles.scopesChartStyles, height: "100%" ,marginLeft:20 }}
-                />
-              )}
+            {scope3Chart && (
+              <Image
+                src={scope3Chart}
+                style={{
+                  ...styles.scopesChartStyles,
+                  height: "100%",
+                  marginLeft: 20,
+                }}
+              />
+            )}
           </View>
         </View>
+      </View>
+      <View style={styles.reportCounterStyles}>
+        <Text>
+          {companyName && companyName + "."} Carbon Accounting Report |{" "}
+          <Text style={{ color: "#197EC6" }}>1</Text>
+        </Text>
+      </View>
+      <View
+        style={{
+          ...styles.headerBar,
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          flexDirection: "row",
+          height: "10px",
+        }}
+      >
+        <View style={styles.bar1}></View>
+        <View style={styles.bar2}></View>
       </View>
     </Page>
   );

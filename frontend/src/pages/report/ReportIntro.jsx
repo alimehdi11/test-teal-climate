@@ -1,11 +1,5 @@
-import React, { useEffect } from "react";
-import {
-  Page,
-  Text,
-  View,
-  Image,
-  StyleSheet,
-} from "@react-pdf/renderer";
+import React from "react";
+import { Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
 import reportIntroImg from "./ReportAssets/reportIntroImg.png";
 import TealClimateLogo1 from "./ReportAssets/TealClimateLogo1";
 import TealClimateLogo2 from "./ReportAssets/TealClimateLogo2";
@@ -62,7 +56,8 @@ const MyDocument = ({ reportIntroData }) => (
   <Page size={["612", "792"]} style={{ position: "relative" }}>
     <Image src={reportIntroImg} style={styles.image} />
     <View style={styles.header}>
-      <Text style={styles.title}>Choco Lux Ltd.</Text>
+      {!!reportIntroData.companyName && (<Text style={styles.title}>{reportIntroData.companyName}.</Text>)}
+
       <Text style={styles.subtitle}>
         Carbon Accounting Report {new Date().getFullYear()}
       </Text>

@@ -10,12 +10,12 @@ import Button from "../../components/ui/Button.jsx";
 import { api } from "../../../api/index.js";
 import { toast } from "react-toastify";
 import Topbar from "../../components/layout/Topbar.jsx";
+import { useEmissionContext } from "../../contexts/EmissionsContext.jsx";
 
 const Profile = () => {
-  const [businessUnits, setBusinessUnits] = useState([]);
+  const { emissionStates:{businessUnits, setBusinessUnits}} = useEmissionContext();
   const { selectedPeriod } = usePeriod();
   const [showPeriodForm, setShowPeriodForm] = useState(false);
-
   useEffect(() => {
     if (selectedPeriod) {
       (async () => {
