@@ -1,5 +1,5 @@
 import TC_PieChartWithPaddingAngle from "../../components/TC_PieChartWithPaddingAngle.jsx";
-import { useState, useEffect } from "react";
+import { useEffect, useContext } from "react";
 import TC_RadialBarChart from "../../components/TC_RadialBarChart.jsx";
 import { useEmissionContext } from "../../contexts/EmissionsContext.jsx";
 import { api } from "../../../api/index.js";
