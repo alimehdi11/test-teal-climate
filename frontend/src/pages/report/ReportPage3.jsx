@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     fontWeight: 600,
   },
   tableContainer1: {
-    width:492,
+    width: 492,
     position: "absolute",
     flexDirection: "column",
     gap: "10px",
@@ -180,9 +180,7 @@ const ReportPage3 = ({
           </View>
         </View>
         {/* <Image src={emissionsImage} style={styles.emissionsImage} /> */}
-        <View
-          style={{ ...styles.tableContainer1, top: 450, width: 512 }}
-        >
+        <View style={{ ...styles.tableContainer1, top: 450, width: 512 }}>
           <Text style={styles.heading}>
             Regional emissions heat map for Choco Lux Ltd.
           </Text>
@@ -193,7 +191,7 @@ const ReportPage3 = ({
       </View>
       <View style={styles.reportCounterStyles}>
         <Text>
-          {companyName && companyName+"."} Carbon Accounting Report |{" "}
+          {companyName && companyName + "."} Carbon Accounting Report |{" "}
           <Text style={{ color: "#197EC6" }}>2</Text>
         </Text>
       </View>

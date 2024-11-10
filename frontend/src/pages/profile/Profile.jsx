@@ -13,7 +13,9 @@ import Topbar from "../../components/layout/Topbar.jsx";
 import { useEmissionContext } from "../../contexts/EmissionsContext.jsx";
 
 const Profile = () => {
-  const { emissionStates:{businessUnits, setBusinessUnits}} = useEmissionContext();
+  const {
+    emissionStates: { businessUnits, setBusinessUnits },
+  } = useEmissionContext();
   const { selectedPeriod } = usePeriod();
   const [showPeriodForm, setShowPeriodForm] = useState(false);
   useEffect(() => {

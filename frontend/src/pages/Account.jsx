@@ -9,7 +9,7 @@ import SidebarToggleBtn from "../components/ui/SidebarToggleBtn.jsx";
 
 const Account = () => {
   const [userInfo, setUserInfo] = useState({});
-  
+
   const { user } = useContext(UserContext);
 
   const fetchUserById = async () => {

@@ -214,9 +214,8 @@ const ReportPage2 = ({
               strategy. The core purpose of the report is to identify key
               emission areas and seasonal spikes. These analytics serve as the
               basis for a comprehensive GHG emissions reduction plan. The total
-              emissions from {companyName} all business units during the
-              period:{currentPeriod.period}, are {totalCO2e.toFixed(2)} tonnes
-              CO2e.
+              emissions from {companyName} all business units during the period:
+              {currentPeriod.period}, are {totalCO2e.toFixed(2)} tonnes CO2e.
             </Text>
 
             <View style={styles.emissionBox}>
