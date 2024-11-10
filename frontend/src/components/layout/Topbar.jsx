@@ -16,7 +16,7 @@ const Topbar = ({ title, comp }) => {
     await captureMapImage();
     await delay(1000); // Wait for 1 second
     await navigate("/generatingreport");
-    await delay(1000); // Wait for another 1 second
+    await delay(1000); // Wait for another 1 secon
     await navigate("/report");
   };
 

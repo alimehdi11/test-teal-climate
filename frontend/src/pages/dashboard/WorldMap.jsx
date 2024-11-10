@@ -110,7 +110,7 @@ const WorldMap = () => {
   return (
     showMap && (
       <div className="mt-4">
-        <div ref={mapRef} className="gap-4 rounded-md  relative">
+        <div ref={mapRef} className="gap-4 rounded-md  relative ">
           <div className="flex flex-col items-start space-y-0 absolute z-[9] left-8 top-8 ">
             <h3 className="text-lg font-semibold mb-1">
               Location wise Emissions
@@ -128,7 +128,7 @@ const WorldMap = () => {
             ></div>
           </div>
           <MapContainer
-            className="w-full h-[300px] bg-white md:h-[600px] rounded-lg lg:flex-2 "
+            className="w-full h-[300px] bg-white md:h-[600px] rounded-lg lg:flex-2  "
             center={[50, 0]}
             zoom={2}
             zoomControl={false}

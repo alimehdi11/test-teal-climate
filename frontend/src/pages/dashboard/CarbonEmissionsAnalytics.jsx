@@ -1,122 +1,44 @@
 import TC_PieChartWithPaddingAngle from "../../components/TC_PieChartWithPaddingAngle.jsx";
 import { useState, useEffect } from "react";
 import TC_RadialBarChart from "../../components/TC_RadialBarChart.jsx";
-import { usePeriod } from "../../contexts/PeriodProvider.jsx";
+import { useEmissionContext } from "../../contexts/EmissionsContext.jsx";
 import { api } from "../../../api/index.js";
+import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
+import { UserContext } from "../../contexts/UserContext.jsx";
+import { request } from "../../utils/request.js";
 
 const CarbonEmissionsAnalytics = () => {
-  const [businessUnitsActivities, setBusinessUnitsActivities] = useState([]);
+  const { user } = useContext(UserContext);
   const { selectedPeriod } = usePeriod();
-  const [totalCO2e, setTotalCO2e] = useState(0);
-  const [totalScope1CO2e, setTotalScope1CO2e] = useState(0);
-  const [totalScope2CO2e, setTotalScope2CO2e] = useState(0);
-  const [totalScope3CO2e, setTotalScope3CO2e] = useState(0);
-  const [scope3CategoriesCO2e, set3ScopeCategoriesCO2e] = useState([
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  ]);
+  const { emissionsCalculationsFunctions, emissionStates } =
+    useEmissionContext();
+  const {
+    calculateTotalC02e,
+    calculateTotalC02eOfGivenScope,
+    calculateTotalC02eOfScope2,
+    calculateC02ePercentageOfGivenScope,
+    calculateC02ePercentageOfGivenScopeCategory,
+    calculateC02ePercentageOfScope2,
+    calculateC02ePercentageOfLocationBasedScopeCategory,
+  } = emissionsCalculationsFunctions;
 
-  const calculateTotalC02e = () => {
-    const totalCO2e = businessUnitsActivities.reduce((accumulator, obj) => {
-      // Total carbon emissions (CO2e) should not include "marketBased" emissions
-      if (obj.level5 === "marketBased") {
-        return accumulator;
-      }
-      return accumulator + obj.CO2e;
-    }, 0);
-    return totalCO2e / 1000; // "kg CO2e"
-  };
-
-  const calculateTotalC02eOfGivenScope = (scope) => {
-    const totalC02eOfGivenScope = businessUnitsActivities.reduce(
-      (accumulator, obj) => {
-        if (obj.scope === scope) {
-          return accumulator + obj.CO2e;
-        }
-        return accumulator;
-      },
-      0
-    );
-    return totalC02eOfGivenScope / 1000; // kg CO2e of given scope
-  };
-
-  const calculateC02ePercentageOfGivenScope = (scopeCO2e) => {
-    if (totalCO2e === 0) {
-      return 0;
-    }
-
-    return (((scopeCO2e * 1000) / (totalCO2e * 1000)) * 100).toFixed(2);
-  };
-
-  const calculateC02ePercentageOfGivenScopeCategory = (scopeCategory) => {
-    const totalC02eOfGivenScopeCategory = businessUnitsActivities.reduce(
-      (accumulator, obj) => {
-        if (obj.level1Category === scopeCategory) {
-          return accumulator + obj.CO2e;
-        }
-        return accumulator;
-      },
-      0
-    );
-
-    if (totalC02eOfGivenScopeCategory === 0) {
-      return totalC02eOfGivenScopeCategory;
-    } else {
-      return (
-        (totalC02eOfGivenScopeCategory / (totalCO2e * 1000)) *
-        100
-      ).toFixed(2);
-    }
-  };
-
-  const calculateTotalC02eOfScope2 = () => {
-    const totalC02eOfScope2 = businessUnitsActivities.reduce(
-      (accumulator, obj) => {
-        // Here we are excluding marketBased data(Scope 2)
-        if (obj.scope === "Scope 2" && obj.level5 !== "marketBased") {
-          return accumulator + obj.CO2e;
-        }
-        return accumulator;
-      },
-      0
-    );
-    return totalC02eOfScope2 / 1000; // kg CO2e of given scope
-  };
-
-  const calculateC02ePercentageOfScope2 = () => {
-    if (totalCO2e === 0) {
-      return 0;
-    }
-
-    return (((totalScope2CO2e * 1000) / (totalCO2e * 1000)) * 100).toFixed(2);
-  };
-
-  const calculateC02ePercentageOfLocationBasedScopeCategory = (
-    scopeCategory
-  ) => {
-    const totalC02eOfGivenScopeCategory = businessUnitsActivities.reduce(
-      (accumulator, obj) => {
-        // Here we are excluding marketBased data(Scope 2)
-        if (
-          obj.level1Category === scopeCategory &&
-          obj.level5 === "locationBased"
-        ) {
-          return accumulator + obj.CO2e;
-        }
-        return accumulator;
-      },
-      0
-    );
-
-    if (totalC02eOfGivenScopeCategory === 0) {
-      return totalC02eOfGivenScopeCategory;
-    } else {
-      return (
-        (totalC02eOfGivenScopeCategory / (totalCO2e * 1000)) *
-        100
-      ).toFixed(2);
-    }
-  };
+  const {
+    businessUnitsActivities,
+    setCompanyName,
+    setBusinessUnits,
+    setBusinessUnitsActivities,
+    totalCO2e,
+    setTotalCO2e,
+    totalScope1CO2e,
+    setTotalScope1CO2e,
+    totalScope2CO2e,
+    setTotalScope2CO2e,
+    totalScope3CO2e,
+    setTotalScope3CO2e,
+    scope3CategoriesCO2e,
+    setScope3CategoriesCO2e,
+  } = emissionStates;
 
   const calculateC02ePercentageOfMarketBasedScopeCategory = (scopeCategory) => {
     const totalC02eOfGivenScopeCategory = businessUnitsActivities.reduce(
@@ -178,6 +100,39 @@ const CarbonEmissionsAnalytics = () => {
     "bg-orange",
   ];
 
+  const fetchUserById = async () => {
+    try {
+      const url = `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}`;
+      const response = await request(url, "GET");
+      if (!response.ok) {
+        throw new Error(`${JSON.stringify(await response.json())}`);
+      }
+      const userInfo = await response.json();
+      setCompanyName(userInfo.companyName);
+    } catch (error) {
+      const errorMessage = JSON.parse(error.message).error;
+      console.log(errorMessage);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserById();
+  }, []);
+
+  useEffect(() => {
+    if (selectedPeriod) {
+      (async () => {
+        const { data, success, message } =
+          await api.businessUnits.getAllBusinessUnits(selectedPeriod);
+        if (success) {
+          setBusinessUnits(data);
+        } else {
+          toast.error(message);
+        }
+      })();
+    }
+  }, [selectedPeriod]);
+
   useEffect(() => {
     if (selectedPeriod) {
       (async () => {
@@ -206,6 +161,7 @@ const CarbonEmissionsAnalytics = () => {
       const totalScope1CO2e = calculateTotalC02eOfGivenScope("Scope 1");
       const totalScope2CO2e = calculateTotalC02eOfScope2();
       const totalScope3CO2e = calculateTotalC02eOfGivenScope("Scope 3");
+
       const scope3CategoriesCO2ePercentages = scope3Categories.map(
         (scopeCategory) =>
           calculateC02ePercentageOfGivenScopeCategory(scopeCategory)
@@ -214,7 +170,8 @@ const CarbonEmissionsAnalytics = () => {
       setTotalScope1CO2e(totalScope1CO2e);
       setTotalScope2CO2e(totalScope2CO2e);
       setTotalScope3CO2e(totalScope3CO2e);
-      set3ScopeCategoriesCO2e(scope3CategoriesCO2ePercentages);
+
+      setScope3CategoriesCO2e(scope3CategoriesCO2ePercentages);
     }
   }, [totalCO2e]);
 
