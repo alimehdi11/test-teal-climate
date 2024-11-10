@@ -73,7 +73,7 @@ const businessUnitsActivities = {
       return { message: errorMessage, success: false };
     }
   },
-  
+
   fetchTop10Emissions: async () => {
     let response;
     try {
@@ -92,7 +92,7 @@ const businessUnitsActivities = {
       return { message: errorMessage, success: false };
     }
   },
-  
+
   fetchTop5BusinessUnitsEmissions: async () => {
     let response;
     try {

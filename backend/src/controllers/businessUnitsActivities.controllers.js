@@ -174,12 +174,11 @@ const getTop5BusinessUnitsEmissions = async (req, res) => {
   }
 };
 
-
 export {
   createBusinessUnitActivity,
   getBusinessUnitActivityById,
   updateBusinessUnitActivityById,
   deleteBusinessUnitActivityById,
   getAllBusinessUnitsActivities,
-  getTop5BusinessUnitsEmissions
+  getTop5BusinessUnitsEmissions,
 };

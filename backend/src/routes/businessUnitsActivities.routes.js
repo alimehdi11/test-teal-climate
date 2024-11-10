@@ -5,7 +5,7 @@ import {
   updateBusinessUnitActivityById,
   deleteBusinessUnitActivityById,
   getAllBusinessUnitsActivities,
-  getTop5BusinessUnitsEmissions
+  getTop5BusinessUnitsEmissions,
 } from "../controllers/businessUnitsActivities.controllers.js";
 import {
   isBusinessUnitActivityOwner,

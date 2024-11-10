@@ -47,8 +47,9 @@ const Report = () => {
       setTop10Emissions(top10Emissions);
     })();
     (async () => {
-      const { data: {data } } =
-        await api.businessUnitsActivities.fetchTop5BusinessUnitsEmissions();
+      const {
+        data: { data },
+      } = await api.businessUnitsActivities.fetchTop5BusinessUnitsEmissions();
       console.log(data);
       // bussinessUnit
       // total emiisions

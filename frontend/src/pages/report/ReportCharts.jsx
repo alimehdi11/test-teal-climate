@@ -113,49 +113,50 @@ const ReportCharts = () => {
     scope2Chart: useRef(),
     scope3Chart: useRef(),
   });
- const captureImage = async (chartName) => {
-  if (chartRefs.current[chartName]?.current) {
-    try {
-      // Directly capture the image without any delay
-      const dataUrl = await toPng(chartRefs.current[chartName].current, {
-        pixelRatio: 3,
-      });
-      setCharts((prev) => ({ ...prev, [chartName]: dataUrl }));
-    } catch (error) {
-      console.error(`Error capturing image for ${chartName}:`, error);
+  const captureImage = async (chartName) => {
+    if (chartRefs.current[chartName]?.current) {
+      try {
+        // Directly capture the image without any delay
+        const dataUrl = await toPng(chartRefs.current[chartName].current, {
+          pixelRatio: 3,
+        });
+        setCharts((prev) => ({ ...prev, [chartName]: dataUrl }));
+      } catch (error) {
+        console.error(`Error capturing image for ${chartName}:`, error);
+      }
     }
-  }
-};
-
-useEffect(() => {
-  const captureAllCharts = async () => {
-    // Using Promise.all to capture images concurrently
-    await Promise.all(
-      Object.keys(chartRefs.current).map((chartName) => captureImage(chartName))
-    );
   };
 
-  captureAllCharts();
-}, [setCharts]);
+  useEffect(() => {
+    const captureAllCharts = async () => {
+      // Using Promise.all to capture images concurrently
+      await Promise.all(
+        Object.keys(chartRefs.current).map((chartName) =>
+          captureImage(chartName)
+        )
+      );
+    };
 
+    captureAllCharts();
+  }, [setCharts]);
 
   return (
     <>
-    <Loader/>
-    <div className="inline-block">
-      {/* Pie Chart */}
-      <div className="inline-block" ref={chartRefs.current.pieChart}>
-        <CircularPieChart />
-      </div>
-
-      {/* Stacked Bar Charts */}
-      {Emissions.map((emission, index) => (
-        <div key={index} ref={chartRefs.current[emission.name]}>
-          <StackedBarChart colors={emission.colors} keys={emission.keys} />
+      <Loader />
+      <div className="inline-block">
+        {/* Pie Chart */}
+        <div className="inline-block" ref={chartRefs.current.pieChart}>
+          <CircularPieChart />
         </div>
-      ))}
-    </div>
-      </>
+
+        {/* Stacked Bar Charts */}
+        {Emissions.map((emission, index) => (
+          <div key={index} ref={chartRefs.current[emission.name]}>
+            <StackedBarChart colors={emission.colors} keys={emission.keys} />
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

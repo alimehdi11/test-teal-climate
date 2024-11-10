@@ -1,4 +1,4 @@
-import { Svg, Path, Ellipse} from "@react-pdf/renderer";
+import { Svg, Path, Ellipse } from "@react-pdf/renderer";
 
 const TealClimateLogo1 = () => {
   return (

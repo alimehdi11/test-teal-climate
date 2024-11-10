@@ -16,7 +16,6 @@ const EmissionContextProvider = ({ children }) => {
     }
   };
 
-
   const contextValue = {
     mapImage,
     setMapImage,

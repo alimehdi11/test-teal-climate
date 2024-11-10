@@ -1,11 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Page,
-  Text,
-  View,
-  Image,
-  StyleSheet,
-} from "@react-pdf/renderer";
+import { Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
 import reportIntroImg from "./ReportAssets/reportIntroImg.png";
 import TealClimateLogo1 from "./ReportAssets/TealClimateLogo1";
 import TealClimateLogo2 from "./ReportAssets/TealClimateLogo2";

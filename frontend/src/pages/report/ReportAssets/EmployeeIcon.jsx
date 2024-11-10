@@ -1,5 +1,5 @@
-import { Path, Svg } from '@react-pdf/renderer';
-import React from 'react'
+import { Path, Svg } from "@react-pdf/renderer";
+import React from "react";
 
 const EmployeeIcon = () => {
   return (
@@ -16,6 +16,6 @@ const EmployeeIcon = () => {
       />
     </Svg>
   );
-}
+};
 
-export default EmployeeIcon
+export default EmployeeIcon;

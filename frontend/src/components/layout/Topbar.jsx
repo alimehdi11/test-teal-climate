@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import { useEmissionContext } from "../../contexts/EmissionsContext";
 const Topbar = ({ title, comp }) => {
-  const  [ isLoading,setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { captureMapImage } = useEmissionContext();

@@ -7,7 +7,7 @@ import { api } from "../../../api/index.js";
 import { useEmissionContext } from "../../contexts/EmissionsContext.jsx";
 import { toPng } from "html-to-image";
 const WorldMap = () => {
-  const { mapRef ,setMapImage} = useEmissionContext();
+  const { mapRef, setMapImage } = useEmissionContext();
   const [businessUnitsActivities, setBusinessUnitsActivities] = useState([]);
   const [
     businessUnitsActivitiesForSelectedPeriod,
@@ -106,9 +106,7 @@ const WorldMap = () => {
       });
     }
   }, [businessUnitsActivities, selectedPeriod]);
-  
 
- 
   return (
     showMap && (
       <div className="mt-4">

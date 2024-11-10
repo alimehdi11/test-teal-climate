@@ -14,14 +14,14 @@ import Account from "./pages/Account.jsx";
 import AccountEdit from "./pages/AccountEdit.jsx";
 import ForgetPassword from "./pages/ForgetPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
-import Report from './pages/report/Report'; 
+import Report from "./pages/report/Report";
 import ReportCharts from "./pages/report/ReportCharts.jsx";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/report" element={<Report/>} />
-        <Route path="/generatingreport" element={<ReportCharts/>} />
+        <Route path="/report" element={<Report />} />
+        <Route path="/generatingreport" element={<ReportCharts />} />
         <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />

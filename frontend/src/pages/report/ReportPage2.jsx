@@ -374,12 +374,16 @@ const ReportPage2 = ({ charts }) => {
                 <Text style={styles.text}>10%</Text>
               </View>
             </View>
-              {scope3Chart && (
-                <Image
-                  src={scope3Chart}
-                  style={{ ...styles.scopesChartStyles, height: "100%" ,marginLeft:20 }}
-                />
-              )}
+            {scope3Chart && (
+              <Image
+                src={scope3Chart}
+                style={{
+                  ...styles.scopesChartStyles,
+                  height: "100%",
+                  marginLeft: 20,
+                }}
+              />
+            )}
           </View>
         </View>
       </View>
