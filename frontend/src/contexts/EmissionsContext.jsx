@@ -195,7 +195,6 @@ const EmissionContextProvider = ({ children }) => {
     }
  
   }, [businessUnits, totalCO2e]);
-console.log(emissions)
   return (
     <EmissionContext.Provider value={contextValue}>
       {children}
