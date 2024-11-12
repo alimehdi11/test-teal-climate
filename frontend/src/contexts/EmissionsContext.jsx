@@ -185,15 +185,17 @@ const EmissionContextProvider = ({ children }) => {
         production += item.production;
         revenue += item.revenue;
       });
-
-      setEmissions({
-        perEmployee: (totalCO2e / noOfEmployees).toFixed(2),
-        perProduct: (totalCO2e / production).toFixed(2),
-        perRevenue: (totalCO2e / revenue).toFixed(2),
-      });
+      if (noOfEmployees || production || revenue) {
+        setEmissions({
+          perEmployee: (noOfEmployees ? totalCO2e / noOfEmployees:0).toFixed(2),
+          perProduct: (production ? totalCO2e / production : 0).toFixed(2),
+          perRevenue: (revenue ? totalCO2e / revenue : 0).toFixed(2),
+        });
+     }
     }
+ 
   }, [businessUnits, totalCO2e]);
-
+console.log(emissions)
   return (
     <EmissionContext.Provider value={contextValue}>
       {children}
