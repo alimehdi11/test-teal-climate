@@ -1,14 +1,14 @@
-import { request } from "../src/utils/request";
+import { request } from "../utils/request";
 
-const airports = {
-  getAllAirports: async () => {
+const activities = {
+  getAllActivities: async (queryParams) => {
     let response;
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/airports`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/activities${queryParams}`;
       const method = "GET";
       response = await request(url, method);
       if (!response.ok) {
-        throw new Error("Failed to getAllAirports");
+        throw new Error("Failed to getAllLevel1Categories");
       }
       return await response.json();
     } catch (error) {
@@ -20,4 +20,4 @@ const airports = {
   },
 };
 
-export { airports };
+export { activities };

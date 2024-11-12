@@ -12,7 +12,7 @@ import {
   TableRow,
   TableCell,
 } from "../../components/ui/Table.jsx";
-import { api } from "../../../api/index.js";
+import { api } from "../../api/index.js";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import Modal from "../../components/ui/Modal.jsx";
 import { useState } from "react";

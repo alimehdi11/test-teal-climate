@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import Loader from "../components/ui/Loader.jsx";
 import { request } from "../utils/request.js";
 import { UserContext } from "./UserContext.jsx";
-import { api } from "../../api/index.js";
+import { api } from "../api/index.js";
 
 const DataContext = createContext();
 

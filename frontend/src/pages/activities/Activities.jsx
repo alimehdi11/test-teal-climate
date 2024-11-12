@@ -7,7 +7,7 @@ import EeioForm from "./EeioForm.jsx";
 import ReitForm from "./ReitForm.jsx";
 import PeriodSelector from "../../components/PeriodSelector.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
-import { api } from "../../../api/index.js";
+import { api } from "../../api/index.js";
 import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
 import { useSearchParams, useParams } from "react-router-dom";
 import ActivitesForm from "./ActivitiesForm2.jsx";

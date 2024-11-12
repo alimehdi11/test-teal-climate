@@ -9,7 +9,7 @@ import Label from "../../components/ui/Label.jsx";
 import Select from "../../components/ui/Select.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
-import { api } from "../../../api/index.js";
+import { api } from "../../api/index.js";
 
 const PortfolioForm = ({ setBusinessUnits }) => {
   const [countriesData, setCountriesData] = useState([]);

@@ -13,7 +13,7 @@ import {
   TableCell,
 } from "../../components/ui/Table.jsx";
 import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
-import { api } from "../../../api/index.js";
+import { api } from "../../api/index.js";
 
 const ActivitiesTable = ({
   businessUnitsActivities,

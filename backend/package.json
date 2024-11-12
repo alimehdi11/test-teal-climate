@@ -6,13 +6,11 @@
     "dev": "cross-env NODE_ENV=development nodemon ./src/index.js",
     "init-db:dev": "cross-env NODE_ENV=development node ./seed/initializeDatabase.js",
     "prod": "cross-env NODE_ENV=production node ./src/index.js",
-    "init-db:prod": "cross-env NODE_ENV=production node ./seed/initializeDatabase.js",
-    "test": "cross-env NODE_ENV=test node ./test/index.js",
-    "init-db:test": "cross-env NODE_ENV=test node ./seed/initializeDatabase.js"
+    "init-db:prod": "cross-env NODE_ENV=production node ./seed/initializeDatabase.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
@@ -21,8 +19,7 @@
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.3",
-    "stripe": "^15.3.0",
-    "cross-env": "^7.0.3"
+    "stripe": "^15.3.0"
   },
   "devDependencies": {
     "csv-parser": "^3.0.0"

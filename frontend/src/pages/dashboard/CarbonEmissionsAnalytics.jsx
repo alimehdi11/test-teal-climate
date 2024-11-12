@@ -2,7 +2,7 @@ import TC_PieChartWithPaddingAngle from "../../components/TC_PieChartWithPadding
 import { useEffect, useContext } from "react";
 import TC_RadialBarChart from "../../components/TC_RadialBarChart.jsx";
 import { useEmissionContext } from "../../contexts/EmissionsContext.jsx";
-import { api } from "../../../api/index.js";
+import { api } from "../../api/index.js";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
 import { UserContext } from "../../contexts/UserContext.jsx";

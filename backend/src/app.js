@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import path from "path";
 import { authRouter } from "./routes/auth.routes.js";
 import { businessUnitsRouter } from "./routes/businessUnits.routes.js";
@@ -10,7 +9,6 @@ import { getAllCountries } from "./controllers/countries.controllers.js";
 import { isLoggedIn, isSubscribed } from "./middlewares/auth.middlewares.js";
 import { subscriptionsRouter } from "./routes/subscriptions.routes.js";
 import { stripeRouter } from "./routes/stripe.routes.js";
-// import { handleWebhookEvents } from "./controllers/webhook.controllers.js";
 import { airportsRouter } from "./routes/airports.routes.js";
 import { electricVehiclesRouter } from "./routes/electricVehicles.routes.js";
 import { eeiosRouter } from "./routes/eeios.routes.js";
@@ -23,13 +21,8 @@ const app = express();
 /**
  * ---------- App configs ----------
  */
-const corsOptions = {
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  origin: process.env.FRONTEND_ORIGIN,
-};
-app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.static(path.join(process.cwd(), "public")));
+app.use(express.static(path.join(process.cwd(), "../frontend", "dist")));
 
 /**
  * ---------- Routes ----------
@@ -65,14 +58,8 @@ app.use(
   isSubscribed,
   businessUnitsActivitiesRouter
 );
-// TODO : check webhook setup needed or not
-// app.post(
-//   "/api/webhook",
-//   express.raw({ type: "application/json" }),
-//   handleWebhookEvents
-// );
 app.get("*", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "public", "index.html"));
+  res.sendFile(path.join(process.cwd(), "../frontend", "dist", "index.html"));
 });
 /* ---------------------------------------------------------------------  */
 

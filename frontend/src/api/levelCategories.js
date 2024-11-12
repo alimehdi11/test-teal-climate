@@ -1,4 +1,4 @@
-import { request } from "../src/utils/request";
+import { request } from "../utils/request";
 
 const level1Categories = {
   getAllLevel1Categories: async (selectedLevel) => {

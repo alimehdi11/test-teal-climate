@@ -5,7 +5,7 @@ import ReportPage3 from "./ReportPage3";
 import { useEmissionContext } from "../../contexts/EmissionsContext";
 import { usePeriod } from "../../contexts/PeriodProvider";
 import { useEffect, useState } from "react";
-import { api } from "../../../api";
+import { api } from "../../api";
 import Loader from "../../components/ui/Loader";
 import { useNavigate } from "react-router-dom";
 

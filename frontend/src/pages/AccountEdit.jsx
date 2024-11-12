@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar.jsx";
 import Main from "../components/layout/Main.jsx";
 import SearchableSelect from "../components/ui/SearchableSelect.jsx";
-import { api } from "../../api/index.js";
+import { api } from "../api/index.js";
 
 const AccountEdit = () => {
   const { user } = useContext(UserContext);

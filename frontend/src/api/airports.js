@@ -1,14 +1,14 @@
-import { request } from "../src/utils/request";
+import { request } from "../utils/request";
 
-const countries = {
-  getCountries: async (queryParams) => {
+const airports = {
+  getAllAirports: async () => {
     let response;
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/countries${queryParams}`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/airports`;
       const method = "GET";
       response = await request(url, method);
       if (!response.ok) {
-        throw new Error("Failed to getCountries");
+        throw new Error("Failed to getAllAirports");
       }
       return await response.json();
     } catch (error) {
@@ -20,4 +20,4 @@ const countries = {
   },
 };
 
-export { countries };
+export { airports };

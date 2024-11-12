@@ -3,7 +3,7 @@ import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import worldMapJson from "../../data/worldMap.json";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
-import { api } from "../../../api/index.js";
+import { api } from "../../api/index.js";
 import { useEmissionContext } from "../../contexts/EmissionsContext.jsx";
 import { toPng } from "html-to-image";
 const WorldMap = () => {

@@ -4,7 +4,7 @@ import Label from "../../components/ui/Label";
 import SearchableSelect from "../../components/ui/SearchableSelect";
 import Select from "../../components/ui/Select";
 import { usePeriod } from "../../contexts/PeriodProvider";
-import { api } from "../../../api/index.js";
+import { api } from "../../api/index.js";
 import Input from "./../../components/ui/Input";
 import Button from "../../components/ui/Button.jsx";
 import { toast } from "react-toastify";

@@ -1,14 +1,14 @@
-import { request } from "../src/utils/request";
+import { request } from "../utils/request";
 
-const activities = {
-  getAllActivities: async (queryParams) => {
+const countries = {
+  getCountries: async (queryParams) => {
     let response;
     try {
-      const url = `${import.meta.env.VITE_API_BASE_URL}/activities${queryParams}`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/countries${queryParams}`;
       const method = "GET";
       response = await request(url, method);
       if (!response.ok) {
-        throw new Error("Failed to getAllLevel1Categories");
+        throw new Error("Failed to getCountries");
       }
       return await response.json();
     } catch (error) {
@@ -20,4 +20,4 @@ const activities = {
   },
 };
 
-export { activities };
+export { countries };

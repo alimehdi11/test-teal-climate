@@ -10,7 +10,7 @@ import Select from "../../components/ui/Select.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import SearchableSelect from "../../components/ui/SearchableSelect.jsx";
 import { filterBusinessUnitsActivitiesForSelectedPeriod } from "../../utils/helper.js";
-import { api } from "../../../api/index.js";
+import { api } from "../../api/index.js";
 
 const EeioForm = ({
   productOrIndustry,

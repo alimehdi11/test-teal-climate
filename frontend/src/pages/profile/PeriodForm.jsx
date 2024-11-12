@@ -3,7 +3,7 @@ import Input from "../../components/ui/Input";
 import Label from "../../components/ui/Label";
 import Button from "../../components/ui/Button";
 import { toast } from "react-toastify";
-import { api } from "../../../api/index.js";
+import { api } from "../../api/index.js";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import { useState } from "react";
 

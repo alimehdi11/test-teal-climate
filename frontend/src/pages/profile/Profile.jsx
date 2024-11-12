@@ -7,7 +7,7 @@ import Main from "../../components/layout/Main.jsx";
 import { usePeriod } from "../../contexts/PeriodProvider.jsx";
 import PeriodForm from "./PeriodForm.jsx";
 import Button from "../../components/ui/Button.jsx";
-import { api } from "../../../api/index.js";
+import { api } from "../../api/index.js";
 import { toast } from "react-toastify";
 import Topbar from "../../components/layout/Topbar.jsx";
 import { useEmissionContext } from "../../contexts/EmissionsContext.jsx";
