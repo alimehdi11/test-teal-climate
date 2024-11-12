@@ -1,12 +1,11 @@
-import { BusinessUnit } from "../models/businessUnit.model.js";
-import { BusinessUnitActivity } from "../models/businessUnitActivity.model.js";
 import { User } from "../models/user.model.js";
-import { Period } from "../models/period.model.js";
 
 const updateUserbyId = async (req, res) => {
   try {
     const { id } = req.params;
     const {
+      firstName,
+      lastName,
       companyName,
       country,
       primaryIndustry,
@@ -16,6 +15,8 @@ const updateUserbyId = async (req, res) => {
     } = req.body;
     const user = await User.findOne({ where: { id } });
     if (user) {
+      user.firstName = firstName;
+      user.lastName = lastName;
       user.companyName = companyName;
       user.country = country;
       user.primaryIndustry = primaryIndustry;

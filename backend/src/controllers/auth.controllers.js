@@ -15,7 +15,7 @@ import jwt from "jsonwebtoken";
 
 const registerUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { firstName, lastName, companyName, email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ error: "Invalid payload" });
@@ -30,7 +30,13 @@ const registerUser = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ email, password: hashedPassword });
+    const user = await User.create({
+      firstName,
+      lastName,
+      companyName,
+      email,
+      password: hashedPassword,
+    });
 
     await Subscription.create({ userId: user.id });
 
