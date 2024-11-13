@@ -101,19 +101,31 @@ const EeioForm = ({
       quantity,
       month,
     };
-    return console.table(payload);
-    await request(
-      `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?eeio=true`,
-      "POST",
-      payload
-    )
-      .then((response) => {
+    // return console.table(payload);
+
+    const createEeioAcitivity = async (payload) => {
+      let response;
+      try {
+        const url = `${import.meta.env.VITE_API_BASE_URL}/businessUnitsActivities?eeio=true`;
+        const method = "POST";
+        response = await request(url, method, payload);
         if (!response.ok) {
-          throw new Error();
+          throw new Error("Failed to fetchTop10Emissions");
         }
-        resetForm();
-      })
-      .then(async () => {
+        const data = await response.json();
+        return { success: true, data };
+      } catch (error) {
+        const { error: errorMessage } = await response.json();
+        console.error(error.message);
+        console.error(errorMessage);
+        return { message: errorMessage, success: false };
+      }
+    };
+    const { success, message } = await createEeioAcitivity(payload);
+    if (!success) {
+      return toast.error(message);
+    } else {
+      (async () => {
         toast.success("Data submitted successfully");
         const { success, message, data } =
           await api.businessUnitsActivities.getAllBusinessUnitsActivities();
@@ -124,11 +136,8 @@ const EeioForm = ({
         } else {
           toast.error(message);
         }
-      })
-      .catch((error) => {
-        toast.error("Error adding data");
-        console.error("Couldn't submit data", error);
-      });
+      })();
+    }
   };
 
   const handleUpdateData = async () => {
