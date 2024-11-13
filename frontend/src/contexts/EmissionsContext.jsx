@@ -187,13 +187,14 @@ const EmissionContextProvider = ({ children }) => {
       });
       if (noOfEmployees || production || revenue) {
         setEmissions({
-          perEmployee: (noOfEmployees ? totalCO2e / noOfEmployees:0).toFixed(2),
+          perEmployee: (noOfEmployees ? totalCO2e / noOfEmployees : 0).toFixed(
+            2
+          ),
           perProduct: (production ? totalCO2e / production : 0).toFixed(2),
           perRevenue: (revenue ? totalCO2e / revenue : 0).toFixed(2),
         });
-     }
+      }
     }
- 
   }, [businessUnits, totalCO2e]);
   return (
     <EmissionContext.Provider value={contextValue}>

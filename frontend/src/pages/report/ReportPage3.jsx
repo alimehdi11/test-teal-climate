@@ -174,10 +174,9 @@ const ReportPage3 = ({
                 <Text style={styles.td}>{item.businessUnit}</Text>
                 <Text style={styles.td}>{item.level1Category}</Text>
                 <Text style={styles.td}>{item.unitOfMeasurement}</Text>
-                {
-                  item.CO2e &&
-                <Text style={styles.td}>{item.CO2e.toFixed(2)}</Text>
-                }
+                {item.CO2e && (
+                  <Text style={styles.td}>{item.CO2e.toFixed(2)}</Text>
+                )}
               </View>
             ))}
           </View>
