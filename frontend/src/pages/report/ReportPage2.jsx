@@ -215,7 +215,7 @@ const ReportPage2 = ({
               emission areas and seasonal spikes. These analytics serve as the
               basis for a comprehensive GHG emissions reduction plan. The total
               emissions from {companyName} all business units during the period:
-              {currentPeriod.period}, are {totalCO2e.toFixed(2)} tonnes CO2e.
+              {currentPeriod?.period}, are {totalCO2e.toFixed(2)} tonnes CO2e.
             </Text>
 
             <View style={styles.emissionBox}>
