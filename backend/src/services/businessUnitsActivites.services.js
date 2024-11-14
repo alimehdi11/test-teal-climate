@@ -286,7 +286,7 @@ const createActivity = async (req, res) => {
           // level3, ==> excluding deliberately
           level4,
           level5,
-          unitOfMeasurement,
+          unitOfMeasurement: "passenger-mile",
         },
       });
       // convert distance to "km" if "unitOfMeasurement" is "passenger.km"
