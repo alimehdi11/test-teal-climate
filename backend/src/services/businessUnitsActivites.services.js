@@ -289,12 +289,12 @@ const createActivity = async (req, res) => {
           unitOfMeasurement: "passenger-mile",
         },
       });
+      payload = calculateActivityGHGEmissions(activityRecords, payload);
       // convert distance to "km" if "unitOfMeasurement" is "passenger.km"
       if (payload.unitOfMeasurement === "passenger.km") {
         // distanceInKm = distanceInMiles * 1.60934
         payload.quantity = Number((payload.quantity * 1.60934).toFixed(4));
       }
-      payload = calculateActivityGHGEmissions(activityRecords, payload);
       // return res.status(200).json(payload);
     } else if (
       [
