@@ -6,6 +6,7 @@ import {
   getSubscriptionFromStripe,
   // updateSubscriptionAtStripe,
   deleteSubscriptionAtStripe,
+  getPaymentMethodByIdFromStripe,
 } from "../controllers/stripe.controllers.js";
 
 const stripeRouter = express.Router();
@@ -28,6 +29,9 @@ stripeRouter.post("/subscriptions", createSubscriptionAtStripe);
 
 // Get subscription
 stripeRouter.get("/subscriptions/:subscriptionId", getSubscriptionFromStripe);
+
+// Get paymentMethod
+stripeRouter.get("/paymentMethods/:id", getPaymentMethodByIdFromStripe);
 
 // TODO: This should probably not be necessary
 // Update subscription

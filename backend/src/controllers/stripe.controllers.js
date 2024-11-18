@@ -108,6 +108,19 @@ const deleteSubscriptionAtStripe = async (req, res) => {
   }
 };
 
+const getPaymentMethodByIdFromStripe = async (req, res) => {
+  try {
+    const { id: paymentMethodId } = req.params;
+    if (!paymentMethodId) {
+      throw new Error("paymentMethodId is required");
+    }
+    const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
+    return res.send(paymentMethod);
+  } catch (error) {
+    return res.status(400).send({ error: { message: error.message } });
+  }
+};
+
 export {
   createCustomerAtStripe,
   createSubscriptionAtStripe,
@@ -115,4 +128,5 @@ export {
   getSubscriptionFromStripe,
   // updateSubscriptionAtStripe,
   deleteSubscriptionAtStripe,
+  getPaymentMethodByIdFromStripe,
 };
