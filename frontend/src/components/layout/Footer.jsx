@@ -2,9 +2,9 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="flex justify-between items-center border-t border-gray-300 px-4 py-3 text-sm text-gray-600 bg-gray-50 mx-5 p-10">
+    <footer className="flex justify-between max-[573px]:flex-col  gap-5  min-[574px]:items-center border-t border-gray-300 px-4 py-5 text-sm text-gray-600 bg-gray-50 mx-5 p-10">
       <div>&copy; 2024 Teal Climate</div>
-      <div className="flex space-x-4">
+      <div className="flex max-[573px]:flex-col gap-4 ">
         <a href="/terms" className="hover:underline">
           Terms & Conditions
         </a>

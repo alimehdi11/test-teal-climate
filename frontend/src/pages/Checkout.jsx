@@ -93,7 +93,7 @@ function Checkout() {
           </div>
         </div>
         <div className="flex-1 flex justify-center items-center p-10">
-          <div className="max-w-[400px] mx-auto border-solid border-gray-5 border-[1px] p-3 rounded">
+          <div className="max-w-[400px] ms-auto border-solid border-gray-5 border-[1px] p-3 rounded">
             {stripePromise && (
               <Elements
                 stripe={stripePromise}
