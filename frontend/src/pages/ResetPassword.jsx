@@ -108,7 +108,7 @@ const ResetPassword = () => {
           </FormControl>
           <Button
             type="submit"
-            className="my-5 mx-auto max-w-[220px] block w-[90%] flex justify-center items-center gap-2"
+            className="my-5 mx-auto max-w-[220px] w-[90%] flex justify-center items-center gap-2"
             disabled={loading}
           >
             {loading ? (
