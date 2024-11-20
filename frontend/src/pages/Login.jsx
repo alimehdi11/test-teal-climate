@@ -5,192 +5,149 @@ import { UserContext } from "../contexts/UserContext.jsx";
 import { setToken, isLoggedIn, decodeToken } from "../utils/auth.js";
 import Input from "../components/ui/Input.jsx";
 import Button from "../components/ui/Button.jsx";
-import { request } from "../utils/request.js";
-import Logo from "../components/ui/Logo.jsx";
 import FormControl from "../components/FormControl.jsx";
 import Label from "../components/ui/Label.jsx";
 import ErrorMessage from "../components/ErrorMessage.jsx";
 import { toast } from "react-toastify";
+import EyeIcon from "../assets/icons/EyeIcon.jsx";
+import { request } from "../utils/request.js";
+import VerticalLogo from "../components/ui/VerticalLogo.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
-  const [isUserNotLoggedIn, setIsUserNotLoggedIn] = useState(false);
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [emailError, setEmailError] = useState("");
-
-  const loginFormSchema = {
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
+  const LoginSchema = Yup.object({
+    email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string().required("Password is required"),
-  };
+  });
 
-  const inputValues = {
-    email,
-    password,
-  };
+  const handleChange = async (event) => {
+    const { name, value } = event.target;
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
 
-  const validator = async (key) => {
     try {
-      await loginFormSchema[key].validate(inputValues[key]);
-    } catch (error) {
-      switch (key) {
-        case "email":
-          setEmailError(error.message);
-          break;
-        case "password":
-          setPasswordError(error.message);
-          break;
-      }
-      /**
-       * Returning true if there is validation error
-       * To prevent from making network request for registering user
-       */
-      return true;
+      // Dynamically validate the field
+      await Yup.reach(LoginSchema, name).validate(value);
+
+      // Remove error for the field if validation passes
+      setErrors((prevState) => {
+        const newErrors = { ...prevState };
+        delete newErrors[name];
+        return newErrors;
+      });
+    } catch (err) {
+      // Set error if validation fails
+      setErrors((prevState) => ({ ...prevState, [name]: err.message }));
     }
-  };
-
-  const validateLoginForm = async () => {
-    let validateError = false;
-    const keys = Object.keys(loginFormSchema);
-    for (let key of keys) {
-      validateError = await validator(key);
-    }
-    return validateError;
-  };
-
-  const resetErrorMessages = () => {
-    setEmailError("");
-    setPasswordError("");
-  };
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
   };
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      event.preventDefault();
+      setErrors({});
+      
+      // Validate all fields
+      await LoginSchema.validate(formData, { abortEarly: false });
 
-      // 1. Reset error messages if preveiously occuredS
-      resetErrorMessages();
-
-      // 2. Validate input values
-      const validateError = await validateLoginForm();
-
-      // 3. Check if there are no validation errors
-      if (validateError) {
-        return;
-      }
-
-      // 4. Login user
-      const payload = { email, password };
+      // Make login request
       const response = await request(
         `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
         "POST",
-        payload
+        formData
       );
 
-      // 5. Check if user registerd succesfully
-      if (response.status !== 200) {
-        let responseData = await response.json();
-        throw new Error(responseData.error);
+      if (response.status === 200) {
+        const data = await response.json();
+        setToken(data.token);
+        userContext.updateUserContext(decodeToken(data.token));
+        navigate("/subscribe");
+      } else {
+        const error = await response.json();
+        throw new Error(error.error);
       }
-
-      // 6. Set JWT in localStorage
-      const responseData = await response.json();
-      setToken(responseData.token);
-
-      // 7. Update userContext with user data
-      const user = decodeToken(responseData.token);
-      userContext.updateUserContext(user);
-
-      // 7. Lastly navigate to subscription plans
-      navigate("/plans");
-    } catch (error) {
-      console.error("Error loging-in user");
-      console.error(error.message);
-      toast.error(error.message);
-      console.error(error);
+    } catch (err) {
+      if (err.inner) {
+        const validationErrors = err.inner.reduce((acc, cur) => {
+          acc[cur.path] = cur.message;
+          return acc;
+        }, {});
+        setErrors(validationErrors);
+      } else {
+        toast.error(err.message);
+      }
     }
   };
 
   useEffect(() => {
-    if (isLoggedIn()) {
-      navigate("/dashboard");
-    } else {
-      setIsUserNotLoggedIn(true);
-    }
+    if (isLoggedIn()) navigate("/dashboard");
   }, []);
 
   return (
-    isUserNotLoggedIn && (
-      <div className="flex flex-col justify-center items-center h-screen gap-y-3">
-        {/* Logo */}
-        <Logo />
-        {/* Form */}
-        <form
-          method="POST"
-          onSubmit={handleSubmit}
-          className="w-[350px] flex flex-col gap-y-3 bg-white p-6 rounded-md"
-        >
+    <div className="flex flex-col justify-center items-center h-screen gap-y-7">
+      {/* Logo */}
+      <VerticalLogo/>
+      <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[12px] border-tc-blue">
+        <h1 className="font-bold text-xl text-center">Welcome back!</h1>
+        <h1 className="text-center text-tc-green font-bold text-lg sm:text-xl mt-3 mb-7">
+          Sign in to Teal Climate
+        </h1>
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           {/* Email */}
           <FormControl>
-            <Label>Email</Label>
+            <Label>Email Address</Label>
             <Input
               type="email"
-              id="email"
               name="email"
-              value={email}
-              onChange={handleEmailChange}
+              placeholder="Enter email address"
+              value={formData.email}
+              onChange={handleChange}
+              className="border border-tc-green placeholder:text-zinc-400"
             />
-            {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
+            {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
           </FormControl>
           {/* Password */}
-          <FormControl>
+          <FormControl className="relative">
             <Label>Password</Label>
             <Input
-              type="password"
-              id="password"
+              type={showPassword ? "text" : "password"}
               name="password"
-              value={password}
-              onChange={handlePasswordChange}
+              placeholder="Enter password"
+              value={formData.password}
+              onChange={handleChange}
+              className="border border-tc-green placeholder:text-zinc-400"
             />
-            {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              <EyeIcon showPassword={showPassword} />
+            </button>
+            {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
           </FormControl>
-          <Button type="submit" className="!bg-tc-blue">
+          <Button type="submit" className="py-2 sm:w-52 mx-auto">
             Login
           </Button>
         </form>
-        {/* Signup link */}
-        <div>
-          Do not have an account?{" "}
-          <Link
-            to="/signup"
-            className="text-tc-blue hover:bg-slate-300 rounded p-1"
-          >
-            Signup
-          </Link>
-        </div>
-        {/* Reset Password link */}
-        <div>
-          <Link
-            to="/forget-password"
-            className="text-tc-blue hover:bg-slate-300 rounded p-1"
-          >
+        <div className="flex justify-between max-sm:flex-col">
+          <div className="flex flex-wrap items-center justify-center">
+            <p>Do not have an account?</p>
+            <Link
+              to="/signup"
+              className="text-tc-blue hover:bg-slate-300 rounded p-1"
+            >
+              Signup
+            </Link>
+          </div>
+          <Link to="/forget-password" className="text-center block my-5">
             Forget password?
           </Link>
         </div>
       </div>
-    )
+    </div>
   );
 };
 

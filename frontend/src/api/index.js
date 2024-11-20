@@ -5,6 +5,7 @@ import { level1Categories } from "./levelCategories.js";
 import { activities } from "./activities.js";
 import { airports } from "./airports.js";
 import { countries } from "./countries.js";
+import { stripe } from "./stripe.js";
 const api = {
   periods,
   businessUnits,
@@ -13,6 +14,7 @@ const api = {
   activities,
   airports,
   countries,
+  stripe
 };
 
 export { api };

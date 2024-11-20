@@ -2,15 +2,14 @@ import Payment from "./../components/Payment";
 import { useContext, useEffect, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { useLocation, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { getBearerToken, isLoggedIn, isSubscribed } from "./../utils/auth.js";
 import { UserContext } from "../contexts/UserContext";
-
+import VerticalLogo from "../components/ui/VerticalLogo.jsx";
 function Checkout() {
   const [stripePromise, setStripePromise] = useState(null);
-  const [selectedPlan, setSelectedPlan] = useState("");
-  const location = useLocation();
-  const [amount, setAmount] = useState("");
+  // const [selectedPlan, setSelectedPlan] = useState("basic");
+
 
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
@@ -33,24 +32,24 @@ function Checkout() {
     }
   }, []);
 
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const plan = queryParams.get("plan");
-    setSelectedPlan(plan);
-  }, []);
+  // useEffect(() => {
+  //   const queryParams = new URLSearchParams(location.search);
+  //   const plan = queryParams.get("plan");
+  //   // setSelectedPlan(plan);
+  // }, []);
 
-  useEffect(() => {
-    if (!selectedPlan) {
-      // Early return
-      return;
-    }
+  // useEffect(() => {
+  //   if (!selectedPlan) {
+  //     // Early return
+  //     return;
+  //   }
 
-    if (selectedPlan === "basic") {
-      setAmount(2000);
-    } else if (selectedPlan === "pro") {
-      setAmount(2500);
-    }
-  }, [selectedPlan]);
+  //   if (selectedPlan === "basic") {
+  //     setAmount(2000);
+  //   } else if (selectedPlan === "pro") {
+  //     setAmount(2500);
+  //   }
+  // }, [selectedPlan]);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/stripe/config`, {
@@ -62,24 +61,45 @@ function Checkout() {
     }).then(async (r) => {
       const { publishableKey } = await r.json();
       setStripePromise(loadStripe(publishableKey));
+    
     });
   }, []);
 
   return (
     <>
-      <div className="flex justify-center items-center min-h-[100vh] flex-col md:flex-row">
-        <div className="flex-1 flex-col min-h-[200px] flex justify-center items-center">
-          <h2 className="text-center">Selected Plan : {selectedPlan}</h2>
-          <h2 className="text-center">Amount: {amount}/month</h2>
+      <div className="flex justify-center items-center min-h-[90vh] flex-col lg:flex-row px-10 max-lg:py-10">
+        <div className="flex-1 ">
+          <div className="py-16 px-10 max-w-[550px] ms-auto text-center flex flex-col gap-6 shadow-xl border-t-[12px] border-tc-blue rounded-2xl">
+  <VerticalLogo/>
+            <p className="max-sm:text-sm">Subscribe to Teal Climate’s Basic Plan and unlock essential features.</p>
+            <div className="my-10">
+            <h1 className="font-semibold text-xl mb-4">Basic Plan</h1>
+            <div className="flex items-center justify-center gap-2">
+              <h1 className="text-3xl font-bold">$3500</h1>
+              <div className="text-xs">
+                <h2>USD/</h2>
+                <h2>month</h2>
+              </div>
+           </div>
+            </div>
+            <div className="flex justify-between">
+              <h1>Billed monthly</h1>
+              <h1>$3500 USD</h1>
+            </div>
+            <div className="flex justify-between font-semibold border-t pt-6 border-[#BAB5B5]">
+              <h1>Total</h1>
+              <h1>$3500 USD</h1>
+            </div>
+          </div>
         </div>
         <div className="flex-1 flex justify-center items-center p-10">
           <div className="max-w-[400px] mx-auto border-solid border-gray-5 border-[1px] p-3 rounded">
-            {selectedPlan && stripePromise && (
+            {stripePromise && (
               <Elements
                 stripe={stripePromise}
                 options={{ mode: "subscription", amount: 0, currency: "usd" }}
               >
-                <Payment selectedPlan={selectedPlan} />
+                <Payment  />
               </Elements>
             )}
           </div>

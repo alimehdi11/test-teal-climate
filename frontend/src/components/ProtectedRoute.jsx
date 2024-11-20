@@ -11,7 +11,7 @@ const ProtectedRoute = ({ Component }) => {
       if (isSubscribed()) {
         setIsLoggedInAndSubscribed(true);
       } else {
-        navigate("/plans");
+        navigate("/subscribe");
       }
     } else {
       deleteToken();

@@ -9,9 +9,7 @@ import SidebarToggleBtn from "../components/ui/SidebarToggleBtn.jsx";
 
 const Account = () => {
   const [userInfo, setUserInfo] = useState({});
-
   const { user } = useContext(UserContext);
-
   const fetchUserById = async () => {
     try {
       const url = `${import.meta.env.VITE_API_BASE_URL}/users/${user.id}`;
@@ -41,6 +39,12 @@ const Account = () => {
             <h1 className="font-extrabold text-2xl">Account</h1>
           </div>
           <div className="grid grid-cols-2 gap-4 bg-white p-6 rounded-md">
+            <div className="col-span-full">
+                  <div className="font-extrabold text-2xl">Name</div>
+                  <div className="text-[#929292] capitalize">
+                    {user.name || "N/A"}
+                  </div>
+                </div>
             <div>
               <h3 className="m-0 mb-4 font-extrabold text-2xl">Introduction</h3>
               <div className="grid gap-4">

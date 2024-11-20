@@ -5,24 +5,25 @@ import { request } from "./../utils/request.js";
 import { UserContext } from "./../contexts/UserContext.jsx";
 import Button from "../components/ui/Button.jsx";
 
-const Payment = ({ selectedPlan }) => {
+const Payment = () => {
   const stripe = useStripe();
   const elements = useElements();
   const [errorMessage, setErrorMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [priceId, setPriceId] = useState(false);
+  // const [priceId, setPriceId] = useState(false);
   const [subscriptionDetails, setSubscriptionDetails] = useState({});
   const { user } = useContext(UserContext);
-
-  useEffect(() => {
-    if (selectedPlan === "basic") {
-      // price_Id from stripe dashboard
-      setPriceId("price_1P8T2ORu2G1zaGnrQsEzNsIA");
-    } else if (selectedPlan === "pro") {
-      // price_Id from stripe dashboard
-      setPriceId("price_1P8T2iRu2G1zaGnr6p7EsGuX");
-    }
-  }, []);
+  // basic plan price id jo k humy stripe se mil rhi he manualy create krne k bad
+  const priceId = "price_1QMAOgRu2G1zaGnrbtKRi9dT";
+  // useEffect(() => {
+  //   if (selectedPlan === "basic") {
+  //     // price_Id from stripe dashboard
+  //     setPriceId("price_1P8T2ORu2G1zaGnrQsEzNsIA");
+  //   } else if (selectedPlan === "pro") {
+  //     // price_Id from stripe dashboard
+  //     setPriceId("price_1P8T2iRu2G1zaGnr6p7EsGuX");
+  //   }
+  // }, []);
 
   useEffect(() => {
     // Get subscription details from our database
@@ -203,6 +204,7 @@ const Payment = ({ selectedPlan }) => {
     const { error } = await stripe.confirmPayment({
       elements,
       clientSecret,
+      // base url
       confirmParams: {
         return_url: `${window.location.origin}/completion`,
       },
@@ -227,10 +229,10 @@ const Payment = ({ selectedPlan }) => {
         <Button
           disabled={isProcessing || !stripe || !elements}
           id="submit"
-          className="mt-4 mb-2 disabled:hover:bg-gray-200 disabled:hover:text-gray-700"
+          className="mt-4 mb-2 w-full disabled:hover:bg-gray-200 disabled:hover:text-gray-700"
         >
           <span id="button-text">
-            {isProcessing ? "Processing ... " : "Pay now"}
+            {isProcessing ? "Processing ... " : "Subscribe"}
           </span>
         </Button>
         {/* Show any error or success messages */}

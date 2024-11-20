@@ -5,7 +5,7 @@ const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState({});
-
+const [userTransictionDetails, setUserTransictionDetails] = useState({});
   const updateUserContext = (userObj) => {
     setUser(() => userObj);
   };
@@ -19,7 +19,7 @@ const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, updateUserContext }}>
+    <UserContext.Provider value={{ user, updateUserContext ,setUserTransictionDetails,userTransictionDetails}}>
       {children}
     </UserContext.Provider>
   );

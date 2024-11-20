@@ -43,6 +43,7 @@ const registerUser = async (req, res) => {
     const token = issueJWT({
       id: user.id,
       email: user.email,
+      name : `${user.firstName} ${user.lastName}`,
     });
 
     res.status(200).json({
@@ -96,6 +97,7 @@ const loginUser = async (req, res) => {
       id: user.id,
       email: user.email,
       subscribed: false,
+      name : `${user.firstName} ${user.lastName}`,
     };
 
     if (
