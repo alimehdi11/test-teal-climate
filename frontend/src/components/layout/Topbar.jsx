@@ -30,10 +30,21 @@ const Topbar = ({ title, comp }) => {
         {showPdfButton && (
           <Button
             onClick={handlePdfDownloader}
-            className={`${isLoading && "bg-[#00b386]"}`}
+            className={`mt-4 mb-2 w-full flex justify-center items-center gap-2 ${isLoading ? "bg-[#00b38c]" : "bg-[#00cc9c]"}`}
+            disabled={isLoading}
           >
-            {isLoading ? "Generating PDF..." : "Download PDF"}
+            <span className="flex items-center gap-2">
+              {isLoading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+                  Generating PDF...
+                </>
+              ) : (
+                "Download PDF"
+              )}
+            </span>
           </Button>
+
         )}
       </div>
       <div className="flex items-center flex-wrap gap-2">

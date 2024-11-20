@@ -15,6 +15,7 @@ import VerticalLogo from "../components/ui/VerticalLogo.jsx";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false)
   const userContext = useContext(UserContext);
 
   const [formData, setFormData] = useState({
@@ -76,6 +77,7 @@ const Signup = () => {
   };
 
   const handleSubmit = async (event) => {
+    setLoading(true);
     event.preventDefault();
     try {
       setErrors({});
@@ -108,6 +110,8 @@ const Signup = () => {
       } else {
         toast.error(err.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -126,7 +130,7 @@ const Signup = () => {
   return (
     <div className="flex flex-col justify-center items-center h-screen gap-y-7">
       {/* Logos */}
-    <VerticalLogo/>
+      <VerticalLogo />
       <div className="p-6 rounded-2xl max-w-[600px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[12px] border-[#197EC6]">
         <h1 className="text-center font-bold text-xl">Join us for sustainability!</h1>
         <h1 className="text-center text-tc-green font-bold text-lg sm:text-xl mt-3 mb-7">Create new Account</h1>
@@ -192,8 +196,19 @@ const Signup = () => {
           </div>
           {errors.agreeToTerms && <ErrorMessage className="-mt-3">{errors.agreeToTerms}</ErrorMessage>}
 
-          <Button type="submit" className="py-2 sm:w-52 mx-auto">
-            Sign Up
+          <Button
+            type="submit"
+            className={`my-5 mx-auto max-w-[220px] w-[90%] flex justify-center items-center gap-2 ${loading && "bg-[#00b38c]"}`}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+                signing up...
+              </>
+            ) : (
+              "Login"
+            )}
           </Button>
         </form>
 

@@ -226,15 +226,24 @@ const Payment = () => {
     <>
       <form id="payment-form" onSubmit={handleSubmit}>
         <PaymentElement id="payment-element" />
-        <Button
+    <Button
           disabled={isProcessing || !stripe || !elements}
-          id="submit"
-          className="mt-4 mb-2 w-full disabled:hover:bg-gray-200 disabled:hover:text-gray-700"
-        >
-          <span id="button-text">
-            {isProcessing ? "Processing ... " : "Subscribe"}
-          </span>
-        </Button>
+          id="subscribe-btn"
+          className={`mt-4 mb-2 w-full flex justify-center items-center gap-2 ${isProcessing && "bg-[#00b38c]"}`}
+          
+>
+  <span id="button-text" className="flex gap-2 items-center">
+    {isProcessing ? (
+      <>
+        <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+        Processing...
+      </>
+    ) : (
+      "Subscribe"
+    )}
+  </span>
+</Button>
+
         {/* Show any error or success messages */}
         {errorMessage && <div id="payment-message">{errorMessage}</div>}
       </form>

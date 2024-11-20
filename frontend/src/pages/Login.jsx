@@ -19,6 +19,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const LoginSchema = Yup.object({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -47,6 +48,7 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     try {
       setErrors({});
       
@@ -79,7 +81,9 @@ const Login = () => {
       } else {
         toast.error(err.message);
       }
-    }
+    }finally {
+        setLoading(false)
+      }
   };
 
   useEffect(() => {
@@ -128,8 +132,19 @@ const Login = () => {
             </button>
             {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
           </FormControl>
-          <Button type="submit" className="py-2 sm:w-52 mx-auto">
-            Login
+           <Button
+            type="submit"
+            className={`my-5 mx-auto max-w-[220px] w-[90%] flex justify-center items-center gap-2 ${loading && "bg-[#00b38c]"}`}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+                Logging...
+              </>
+            ) : (
+              "Login"
+            )}
           </Button>
         </form>
         <div className="flex justify-between max-sm:flex-col">
