@@ -134,9 +134,9 @@ const ResetPassword = () => {
         <div className="w-12 h-12 rounded-full bg-tc-green flex justify-center items-center mx-auto">
           <img src={lockIcon} alt="" />
         </div>
-        <h1 className="font-bold text-xl text-center my-4">Forgot password?</h1>
+        <h1 className="font-bold text-xl text-center my-4">Reset password</h1>
         <h1 className="text-center mb-7 text-sm">
-          No worries, we’ll send you a link to reset your password.
+          Enter the email associated with your account and <br /> we will send a reset link.
         </h1>
         <form method="POST" onSubmit={handleSubmit} className="">
           <FormControl>
@@ -179,27 +179,27 @@ const ResetPassword = () => {
         <div className="w-12 h-12 rounded-full bg-tc-green flex justify-center items-center mx-auto">
           <img src={messageIcon} alt="" />
         </div>
-        <h1 className="font-bold text-xl text-center my-4">Check your email</h1>
+        <h1 className="font-bold text-xl text-center my-4">Email sent</h1>
         <h1 className="text-center mb-7 text-sm leading-6">
-          We sent a password reset link to <br /> {email}
+          We sent a password reset link to : <br /> {email}
         </h1>
-        <a
+        {/* <a
           target="_blank"
           href="https://mail.google.com/mail/"
           className="my-5 mx-auto max-w-[220px] text-center block w-[90%] bg-tc-green text-white hover:opacity-95 font-medium py-3 px-4 rounded-md"
         >
           Go to your Email
-        </a>
+        </a> */}
 
         <h1 className="text-center mb-7 text-sm leading-6">
           Didn’t receive the email?  
           {resendEmailDetails.resendTime > 0 ? (
             <ErrorMessage className="text-red-500">
-              Please wait {resendEmailDetails.resendTime} seconds before you can resend.
+              Please wait refresh reset link
             </ErrorMessage>
           ) : (
-            <button className="text-tc-green ml-1" onClick={handleSubmit}>
-              Click to Resend
+            <button className="text-tc-blue underline ml-1" onClick={handleSubmit}>
+              Click to resend
             </button>
           )}
         </h1>
@@ -213,17 +213,19 @@ const ResetPassword = () => {
     <div className="flex flex-col justify-center items-center h-[90vh] gap-y-8">
       {/* Logo */}
       <VerticalLogo />
-      <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[12px] border-tc-blue">
+      <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[17px] border-tc-blue">
+          <Link to="/login" className="text-right mx-auto block">
+            <Button>
+            <div className="flex gap-2 justify-center">
+              <img src={backArrow} alt="" />
+              <span>Sign in</span>
+            </div>
+            </Button>
+          </Link>
         {forgetPasswordComps[currentStep - 1]}
 
         {/* Login link */}
         <div>
-          <Link to="/login" className="">
-            <div className="flex gap-2 justify-center">
-              <img src={backArrow} alt="" />
-              <span>Back to log in</span>
-            </div>
-          </Link>
         </div>
       </div>
     </div>

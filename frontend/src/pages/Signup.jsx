@@ -40,10 +40,10 @@ const Signup = () => {
       .matches(/[\W_]/, "Password must contain at least one special character")
       .required("Password is required"),
     firstName: Yup.string()
-      .min(3, "First name must be at least 3 characters")
+      .min(3, "At least 3 characters")
       .required("First name is required"),
     lastName: Yup.string()
-      .min(3, "Last name must be at least 3 characters")
+      .min(3, "At least 3 characters")
       .required("Last name is required"),
     companyName: Yup.string().required("Company name is required"),
     agreeToTerms: Yup.boolean()
@@ -120,9 +120,9 @@ const Signup = () => {
   }, []);
 
   const fields = [
-    { name: "firstName", label: "First Name" },
-    { name: "lastName", label: "Last Name" },
-    { name: "companyName", label: "Company Name" },
+    { name: "firstName", label: "First name" },
+    { name: "lastName", label: "Last name" },
+    { name: "companyName", label: "Company name" },
     { name: "email", label: "Email" },
     { name: "password", label: "Password" },
   ];
@@ -131,9 +131,8 @@ const Signup = () => {
     <div className="flex flex-col justify-center items-center h-screen gap-y-7">
       {/* Logos */}
       <VerticalLogo />
-      <div className="p-6 rounded-2xl max-w-[600px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[12px] border-[#197EC6]">
-        <h1 className="text-center font-bold text-xl">Join us for sustainability!</h1>
-        <h1 className="text-center text-tc-green font-bold text-lg sm:text-xl mt-3 mb-7">Create new Account</h1>
+      <div className="p-6 rounded-2xl max-w-[600px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[17px] border-[#197EC6]">
+        <h1 className="text-center font-bold text-lg sm:text-xl mt-3 mb-12">Create new account</h1>
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           {/* First Name and Last Name in one line */}
           <div className="flex flex-col sm:flex-row gap-4">
@@ -148,7 +147,7 @@ const Signup = () => {
                     value={formData[field.name]}
                     onChange={handleChange}
                     placeholder={`Enter ${field.label.toLowerCase()}`}
-                    className="border border-tc-green placeholder:text-zinc-400"
+                    className="placeholder:text-zinc-400 placeholder:italic"
                   />
                   {errors[field.name] && <ErrorMessage>{errors[field.name]}</ErrorMessage>}
                 </FormControl>
@@ -169,7 +168,7 @@ const Signup = () => {
                   placeholder={
                     field.name === "email" ? "abc@example.com" : `Enter ${field.label.toLowerCase()}`
                   }
-                  className="border border-tc-green placeholder:text-zinc-400"
+                  className="placeholder:text-zinc-400 placeholder:italic"
                 />
                 {field.name === "password" && (
                   <button type="button" onClick={() => setShowPassword(!showPassword)}>
@@ -191,7 +190,7 @@ const Signup = () => {
               className="h-5 w-5"
             />
             <label htmlFor="agreeToTerms" className="text-sm">
-              By signing up, I agree to the <span className="text-blue-500">Terms and Conditions</span>
+              By signing up, I agree to the <span className="text-blue-500 underline">Terms and Conditions</span>
             </label>
           </div>
           {errors.agreeToTerms && <ErrorMessage className="-mt-3">{errors.agreeToTerms}</ErrorMessage>}
@@ -207,15 +206,15 @@ const Signup = () => {
                 signing up...
               </>
             ) : (
-              "Login"
+              "Sign Up"
             )}
           </Button>
         </form>
 
         <div className="flex flex-wrap items-center justify-center mt-6">
-          <p>Already have an account? Sign in</p>
-          <Link to="/login" className="text-tc-blue hover:bg-slate-300 rounded p-1">
-            Sign In
+          <p>Already have an account?</p>
+          <Link to="/login" className="text-tc-blue underline hover:bg-slate-300 rounded p-1">
+            Sign in
           </Link>
         </div>
       </div>

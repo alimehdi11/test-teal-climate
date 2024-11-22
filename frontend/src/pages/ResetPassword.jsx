@@ -125,7 +125,7 @@ const ResetPassword = () => {
         <div>
           <Link to="/login" className="flex gap-2 justify-center">
             <img src={backArrow} alt="Back Arrow" />
-            <span>Back to log in</span>
+            <span>Back to sign in</span>
           </Link>
         </div>
       </div>

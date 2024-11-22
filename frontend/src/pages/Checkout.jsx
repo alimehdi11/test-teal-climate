@@ -6,6 +6,7 @@ import {  useNavigate } from "react-router-dom";
 import { getBearerToken, isLoggedIn, isSubscribed } from "./../utils/auth.js";
 import { UserContext } from "../contexts/UserContext";
 import VerticalLogo from "../components/ui/VerticalLogo.jsx";
+import Logo from "../components/ui/Logo.jsx";
 function Checkout() {
   const [stripePromise, setStripePromise] = useState(null);
   // const [selectedPlan, setSelectedPlan] = useState("basic");
@@ -69,14 +70,15 @@ function Checkout() {
     <>
       <div className="flex justify-center items-center min-h-[90vh] flex-col lg:flex-row px-10 max-lg:py-10">
         <div className="flex-1 ">
-          <div className="py-16 px-10 max-w-[550px] ms-auto text-center flex flex-col gap-6 shadow-xl border-t-[12px] border-tc-blue rounded-2xl">
-  <VerticalLogo/>
-            <p className="max-sm:text-sm">Subscribe to Teal Climate’s Basic Plan and unlock essential features.</p>
+          <div className="py-16 px-10 max-w-[550px] ms-auto text-center flex flex-col gap-6 shadow-xl border-t-[17px] border-tc-blue rounded-2xl">
+            {/* <VerticalLogo/> */}
+            <Logo/>
+            <p className="max-sm:text-sm">Essential carbon emission measurement.</p>
             <div className="my-10">
-            <h1 className="font-semibold text-xl mb-4">Basic Plan</h1>
+            <h1 className="font-semibold text-xl mb-4">Essential</h1>
             <div className="flex items-center justify-center gap-2">
               <h1 className="text-3xl font-bold">$3500</h1>
-              <div className="text-xs">
+              <div className="text-xs font-medium">
                 <h2>USD/</h2>
                 <h2>month</h2>
               </div>

@@ -94,22 +94,22 @@ const Login = () => {
     <div className="flex flex-col justify-center items-center h-screen gap-y-7">
       {/* Logo */}
       <VerticalLogo/>
-      <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[12px] border-tc-blue">
-        <h1 className="font-bold text-xl text-center">Welcome back!</h1>
-        <h1 className="text-center text-tc-green font-bold text-lg sm:text-xl mt-3 mb-7">
+      <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[17px] border-tc-blue">
+        <h1 className="font-bold text-xl text-center mt-6 mb-14">Welcome back to Teal Climate</h1>
+        {/* <h1 className="text-center text-tc-green font-bold text-lg sm:text-xl mt-3 mb-7">
           Sign in to Teal Climate
-        </h1>
-        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+        </h1> */}
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           {/* Email */}
           <FormControl>
-            <Label>Email Address</Label>
+            <Label>Email</Label>
             <Input
               type="email"
               name="email"
-              placeholder="Enter email address"
+              placeholder="Enter email"
               value={formData.email}
               onChange={handleChange}
-              className="border border-tc-green placeholder:text-zinc-400"
+              className="placeholder:text-zinc-400"
             />
             {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
           </FormControl>
@@ -122,7 +122,7 @@ const Login = () => {
               placeholder="Enter password"
               value={formData.password}
               onChange={handleChange}
-              className="border border-tc-green placeholder:text-zinc-400"
+              className="placeholder:text-zinc-400 "
             />
             <button
               type="button"
@@ -134,7 +134,7 @@ const Login = () => {
           </FormControl>
            <Button
             type="submit"
-            className={`my-5 mx-auto max-w-[220px] w-[90%] flex justify-center items-center gap-2 ${loading && "bg-[#00b38c]"}`}
+            className={`mt-5 mb-3 mx-auto max-w-[220px] w-[90%] flex justify-center items-center gap-2 ${loading && "bg-[#166EA7]"}`}
             disabled={loading}
           >
             {loading ? (
@@ -143,21 +143,21 @@ const Login = () => {
                 Logging...
               </>
             ) : (
-              "Login"
+              "Sign in"
             )}
           </Button>
         </form>
         <div className="flex justify-between max-sm:flex-col">
           <div className="flex flex-wrap items-center justify-center">
-            <p>Do not have an account?</p>
+            <p className="text-gray-400">Don't have an account?</p>
             <Link
               to="/signup"
-              className="text-tc-blue hover:bg-slate-300 rounded p-1"
+              className="text-tc-blue hover:bg-slate-300 rounded p-1 underline"
             >
-              Signup
+              Sign up
             </Link>
           </div>
-          <Link to="/forget-password" className="text-center block my-5">
+          <Link to="/forget-password" className="text-center text-tc-blue block my-5 underline">
             Forget password?
           </Link>
         </div>

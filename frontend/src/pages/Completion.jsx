@@ -49,20 +49,20 @@ function Completion() {
         {
           userTransictionDetails.status == "succeeded" ? (
             <>
-              <h1 className="font-bold text-xl my-20">All Done!</h1>
-              <div className="px-2 max-w-[550px] w-[90%] shadow-xl bg-[#E0F2FF] rounded-2xl text-sm">
+              <h1 className="font-bold text-xl my-20">Payment receipt</h1>
+              <div className="px-2 max-w-[550px] w-[90%] shadow-xl  rounded-2xl text-sm">
                 <img src={checkIcon} alt="" className="w-24 mx-auto -mt-12" />
-                <h1 className="text-center font-semibold mt-10 text-lg">Thanks for your payment!</h1>
+                <h1 className="text-center font-semibold mt-10 text-lg">Thanks for the payment</h1>
                 <hr className="border border-dashed border-zinc-400 my-10" />
                 <div className="mx-[3vmax] mb-16">
                   <div className="flex gap-2 items-center">
                     <img src={tealClimateLogo1} alt="" />
                     <div className="font-semibold">
-                      <h1>Basic Plan</h1>
-                      <p>Basic Plan $3500.00 USD billed every month</p>
+                      <h1>Essential</h1>
+                      <p>$3500.00 USD billed every month</p>
                     </div>
                   </div>
-                  <p className=" ml-2 mt-3">Payment: $3500.00 USD from <span className="capitalize">{user.name}</span></p>
+                  <p className=" ml-2 mt-10">Payment recived from <span className="capitalize">{user.name}</span></p>
                   <div className="flex flex-col gap-4 my-12 font-medium">
                     <div className="flex justify-between">
                       <h1>Date</h1>
@@ -79,7 +79,7 @@ function Completion() {
                   </div>
                   <div className="flex justify-between font-semibold border-t border-zinc-400 py-5">
                     <h1>Total</h1>
-                    <h1>$3500,00 USD</h1>
+                    <h1>$3500.00 USD</h1>
                   </div>
                 </div>
               </div>
