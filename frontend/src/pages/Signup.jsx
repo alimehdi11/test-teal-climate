@@ -10,12 +10,23 @@ import Label from "../components/ui/Label.jsx";
 import ErrorMessage from "../components/ErrorMessage.jsx";
 import { toast } from "react-toastify";
 import EyeIcon from "../assets/icons/EyeIcon.jsx";
+import crossIcon from "../assets/cross-icon.svg";
+import rightIcon from "../assets/right-icon.svg";
 import { request } from "../utils/request.js";
 import VerticalLogo from "../components/ui/VerticalLogo.jsx";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+    const [passwordFocused, setPasswordFocused] = useState(false);
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    hasLowercase: false,
+    hasUppercase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+    hasMinLength: false,
+  });
+
   const userContext = useContext(UserContext);
 
   const [formData, setFormData] = useState({
@@ -24,7 +35,7 @@ const Signup = () => {
     firstName: "",
     lastName: "",
     companyName: "",
-    agreeToTerms: false, // Checkbox state is part of the form data
+    agreeToTerms: false, // Checkbox state
   });
 
   const [errors, setErrors] = useState({});
@@ -34,10 +45,10 @@ const Signup = () => {
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters")
-      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
-      .matches(/\d/, "Password must contain at least one number")
-      .matches(/[\W_]/, "Password must contain at least one special character")
+      .matches(/[A-Z]/, "One uppercase letter")
+      .matches(/[a-z]/, "One lowercase letter")
+      .matches(/\d/, "One number")
+      .matches(/[\W_]/, "One special character")
       .required("Password is required"),
     firstName: Yup.string()
       .min(3, "At least 3 characters")
@@ -47,37 +58,39 @@ const Signup = () => {
       .required("Last name is required"),
     companyName: Yup.string().required("Company name is required"),
     agreeToTerms: Yup.boolean()
-      .oneOf([true], "You must agree to the terms and conditions.") // Validation for checkbox
+      .oneOf([true], "You must agree to the terms and conditions.") // Checkbox validation
       .required("You must agree to the terms and conditions."),
   });
 
-  const handleChange = async (event) => {
+  const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     const fieldValue = type === "checkbox" ? checked : value;
 
     setFormData((prevState) => ({ ...prevState, [name]: fieldValue }));
-
-    try {
-      // Validate individual field dynamically
-      await Yup.reach(SignupSchema, name).validate(fieldValue);
-
-      // Remove error for the field if validation passes
-      setErrors((prevState) => {
-        const newErrors = { ...prevState };
-        delete newErrors[name];
-        return newErrors;
-      });
-    } catch (err) {
-      // Set error message if validation fails
-      setErrors((prevState) => ({
-        ...prevState,
-        [name]: err.message,
-      }));
-    }
   };
+
+ const handlePasswordChange = (event) => {
+    const { value } = event.target;
+
+    setFormData((prevState) => ({ ...prevState, password: value }));
+
+    setPasswordCriteria({
+      hasLowercase: /[a-z]/.test(value),
+      hasUppercase: /[A-Z]/.test(value),
+      hasNumber: /\d/.test(value),
+      hasSpecialChar: /[\W_]/.test(value),
+      hasMinLength: value.length >= 8,
+    });
+  };
+
+  
 
   const handleSubmit = async (event) => {
     setLoading(true);
+    // if (errors.password) {
+      
+    // }
+    // errors.password && setPasswordFocused(true)
     event.preventDefault();
     try {
       setErrors({});
@@ -101,7 +114,7 @@ const Signup = () => {
       }
     } catch (err) {
       if (err.inner) {
-        // Validation errors
+        // Collect validation errors
         const validationErrors = err.inner.reduce((acc, cur) => {
           acc[cur.path] = cur.message;
           return acc;
@@ -126,12 +139,18 @@ const Signup = () => {
     { name: "email", label: "Email" },
     { name: "password", label: "Password" },
   ];
-
+const passwordErrors = [
+        { label: "One lowercase character", isValid: passwordCriteria.hasLowercase },
+        { label: "One uppercase character", isValid: passwordCriteria.hasUppercase },
+        { label: "One number", isValid: passwordCriteria.hasNumber },
+        { label: "One special character", isValid: passwordCriteria.hasSpecialChar },
+        { label: "Minimum 8 characters", isValid: passwordCriteria.hasMinLength },
+      ]
   return (
-    <div className="flex flex-col justify-center items-center h-screen gap-y-7">
+    <div className="flex flex-col justify-center items-center min-h-screen gap-y-7 py-10">
       {/* Logos */}
       <VerticalLogo />
-      <div className="p-6 rounded-2xl max-w-[600px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[17px] border-[#197EC6]">
+      <div className="p-6 rounded-2xl max-w-[600px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[17px] border-[#197EC6] bg-white">
         <h1 className="text-center font-bold text-lg sm:text-xl mt-3 mb-12">Create new account</h1>
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           {/* First Name and Last Name in one line */}
@@ -161,13 +180,23 @@ const Signup = () => {
               <FormControl key={field.name} className={field.name === "password" ? "relative" : ""}>
                 <Label>{field.label}</Label>
                 <Input
-                  type={field.name === "password" ? (showPassword ? "text" : "password") : field.name === "email" ? "email" : "text"}
+                  type={
+                    field.name === "password"
+                      ? showPassword
+                        ? "text"
+                        : "password"
+                      : field.name === "email"
+                      ? "email"
+                      : "text"
+                  }
+                     onFocus={() =>
+                    field.name === "password" && setPasswordFocused(true)
+                  }
+                  onBlur={() => field.name === "password" && setPasswordFocused(false)}
                   name={field.name}
                   value={formData[field.name]}
-                  onChange={handleChange}
-                  placeholder={
-                    field.name === "email" ? "abc@example.com" : `Enter ${field.label.toLowerCase()}`
-                  }
+                  onChange={field.name == "password" ? handlePasswordChange :handleChange}
+                  placeholder={`Enter ${field.label.toLowerCase()}`}
                   className="placeholder:text-zinc-400 placeholder:italic"
                 />
                 {field.name === "password" && (
@@ -175,9 +204,35 @@ const Signup = () => {
                     <EyeIcon showPassword={showPassword} />
                   </button>
                 )}
-                {errors[field.name] && <ErrorMessage>{errors[field.name]}</ErrorMessage>}
+             {
+
+  (field.name === "password" &&  passwordFocused || (field.name === "password" && errors.password)) && (
+    <div className="">
+      {passwordErrors.map((criterion, index) => (
+        <div
+          key={index}
+          className={`flex items-center gap-2 ${
+            criterion.isValid ? "text-green-500" : "text-red-500"
+          }`}
+        >
+          {/* <span> */}
+            {criterion.isValid ? (
+             <img src={rightIcon} alt="" className="w-5" />
+            ) : (
+             <img src={crossIcon} alt="" className="w-5"/>
+            )}
+          <span>{criterion.label}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+           
+                  {(errors[field.name] && field.name != "password" ) && <ErrorMessage>{errors[field.name]}</ErrorMessage>}
+          
               </FormControl>
-            ))}
+            ))
+          }
 
           {/* Terms and Conditions Checkbox */}
           <div className="flex items-center gap-2">
@@ -193,7 +248,7 @@ const Signup = () => {
               By signing up, I agree to the <span className="text-blue-500 underline">Terms and Conditions</span>
             </label>
           </div>
-          {errors.agreeToTerms && <ErrorMessage className="-mt-3">{errors.agreeToTerms}</ErrorMessage>}
+          {errors.agreeToTerms && <ErrorMessage className="-my-3">{errors.agreeToTerms}</ErrorMessage>}
 
           <Button
             type="submit"
@@ -203,7 +258,7 @@ const Signup = () => {
             {loading ? (
               <>
                 <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
-                signing up...
+                Signing up...
               </>
             ) : (
               "Sign Up"
@@ -211,7 +266,7 @@ const Signup = () => {
           </Button>
         </form>
 
-        <div className="flex flex-wrap items-center justify-center mt-6">
+        <div className="flex flex-wrap items-center justify-center mt-4">
           <p>Already have an account?</p>
           <Link to="/login" className="text-tc-blue underline hover:bg-slate-300 rounded p-1">
             Sign in

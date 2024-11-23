@@ -26,32 +26,17 @@ const Login = () => {
     password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
   });
 
-  const handleChange = async (event) => {
+  const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
-
-    try {
-      // Dynamically validate the field
-      await Yup.reach(LoginSchema, name).validate(value);
-
-      // Remove error for the field if validation passes
-      setErrors((prevState) => {
-        const newErrors = { ...prevState };
-        delete newErrors[name];
-        return newErrors;
-      });
-    } catch (err) {
-      // Set error if validation fails
-      setErrors((prevState) => ({ ...prevState, [name]: err.message }));
-    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     try {
-      setErrors({});
-      
+      setErrors({}); // Clear previous errors
+
       // Validate all fields
       await LoginSchema.validate(formData, { abortEarly: false });
 
@@ -73,17 +58,18 @@ const Login = () => {
       }
     } catch (err) {
       if (err.inner) {
+        // Collect validation errors
         const validationErrors = err.inner.reduce((acc, cur) => {
           acc[cur.path] = cur.message;
           return acc;
         }, {});
         setErrors(validationErrors);
       } else {
-        toast.error(err.message);
+        toast.error(err.message); // Display server-side errors
       }
-    }finally {
-        setLoading(false)
-      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -91,14 +77,11 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen gap-y-7">
+    <div className="flex flex-col justify-center items-center min-h-screen gap-y-7 py-10">
       {/* Logo */}
-      <VerticalLogo/>
-      <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[17px] border-tc-blue">
+      <VerticalLogo />
+      <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[17px] border-tc-blue bg-white">
         <h1 className="font-bold text-xl text-center mt-6 mb-14">Welcome back to Teal Climate</h1>
-        {/* <h1 className="text-center text-tc-green font-bold text-lg sm:text-xl mt-3 mb-7">
-          Sign in to Teal Climate
-        </h1> */}
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           {/* Email */}
           <FormControl>
@@ -109,7 +92,7 @@ const Login = () => {
               placeholder="Enter email"
               value={formData.email}
               onChange={handleChange}
-              className="placeholder:text-zinc-400"
+              className="placeholder:text-zinc-400 placeholder:italic"
             />
             {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
           </FormControl>
@@ -122,7 +105,7 @@ const Login = () => {
               placeholder="Enter password"
               value={formData.password}
               onChange={handleChange}
-              className="placeholder:text-zinc-400 "
+              className="placeholder:text-zinc-400 placeholder:italic"
             />
             <button
               type="button"
@@ -132,7 +115,7 @@ const Login = () => {
             </button>
             {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
           </FormControl>
-           <Button
+          <Button
             type="submit"
             className={`mt-5 mb-3 mx-auto max-w-[220px] w-[90%] flex justify-center items-center gap-2 ${loading && "bg-[#166EA7]"}`}
             disabled={loading}

@@ -32,7 +32,6 @@ const ResetPassword = () => {
     .matches(/\d/, "Password must contain at least one number")
     .matches(/[\W_]/, "Password must contain at least one special character")
     .required("Password is required");
-
   const handleChange = async (event) => {
     const { value } = event.target;
     setResetPassword(value);
@@ -77,10 +76,14 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-[90vh] gap-y-8">
+    <div className="flex flex-col justify-center items-center min-h-[90vh] gap-y-8 py-10">
       {/* Logo */}
       <VerticalLogo />
-      <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[12px] border-tc-blue">
+      <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[17px] bg-white border-tc-blue">
+          <Button onClick={()=>navigate("/login")} className="flex gap-1 justify-center ms-auto min-w-[120px]">
+              <img src={backArrow} alt="" />
+              <span>Sign in</span>
+          </Button>
         <div className="w-12 h-12 rounded-full bg-tc-green flex justify-center items-center mx-auto">
           <img src={keyIcon} alt="Key Icon" />
         </div>
@@ -96,7 +99,8 @@ const ResetPassword = () => {
               value={resetPassword}
               placeholder="Enter new password"
               onChange={handleChange}
-              className="border border-tc-green placeholder:text-zinc-400"
+              className="placeholder:text-zinc-400 placeholder:italic"
+              
             />
             <button
               type="button"
@@ -122,12 +126,6 @@ const ResetPassword = () => {
           </Button>
         </form>
         {/* Login link */}
-        <div>
-          <Link to="/login" className="flex gap-2 justify-center">
-            <img src={backArrow} alt="Back Arrow" />
-            <span>Back to sign in</span>
-          </Link>
-        </div>
       </div>
     </div>
   );

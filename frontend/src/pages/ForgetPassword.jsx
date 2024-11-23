@@ -144,19 +144,18 @@ const ResetPassword = () => {
             <Input
               type="email"
               placeholder="Enter your email"
-              className={`border ${emailError ? "border-red-500 outline-none" : "border-tc-green"
-                } placeholder:text-zinc-400 mt-1`}
+              className="placeholder:text-zinc-400 placeholder:italic mt-1"
               value={email}
               onChange={handleEmailChange}
               defaultFocus={true}
             />
             {emailError && (
-             <ErrorMessage>{emailError}</ErrorMessage>
+              <ErrorMessage>{emailError}</ErrorMessage>
             )}
           </FormControl>
           <Button
             type="submit"
-               className={`my-5 mx-auto max-w-[220px] w-[90%] flex justify-center items-center gap-2 ${loading && "bg-[#00b38c]"}`}
+            className={`my-5 mx-auto max-w-[220px] w-[90%] flex justify-center items-center gap-2 ${loading && "bg-[#00b38c]"}`}
             disabled={loading}
           >
             {loading ? (
@@ -192,7 +191,7 @@ const ResetPassword = () => {
         </a> */}
 
         <h1 className="text-center mb-7 text-sm leading-6">
-          Didn’t receive the email?  
+          Didn’t receive the email?
           {resendEmailDetails.resendTime > 0 ? (
             <ErrorMessage className="text-red-500">
               Please wait refresh reset link
@@ -210,18 +209,16 @@ const ResetPassword = () => {
   const forgetPasswordComps = [<Comp1 />, <Comp2 />];
 
   return (
-    <div className="flex flex-col justify-center items-center h-[90vh] gap-y-8">
+    <div className="flex flex-col justify-center items-center min-h-[90vh] gap-y-8 py-10">
       {/* Logo */}
       <VerticalLogo />
-      <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[17px] border-tc-blue">
-          <Link to="/login" className="text-right mx-auto block">
-            <Button>
-            <div className="flex gap-2 justify-center">
+      <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[17px] border-tc-blue bg-white">
+        <Link to="/login">
+           <Button onClick={()=>navigate("/login")} className="flex gap-1 justify-center ms-auto min-w-[120px]">
               <img src={backArrow} alt="" />
               <span>Sign in</span>
-            </div>
-            </Button>
-          </Link>
+          </Button>
+        </Link>
         {forgetPasswordComps[currentStep - 1]}
 
         {/* Login link */}

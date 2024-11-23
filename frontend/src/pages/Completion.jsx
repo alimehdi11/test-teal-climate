@@ -45,11 +45,11 @@ function Completion() {
 
   return (
     <>
-      <div className="flex flex-col  items-center min-h-[95vh]">
+      <div className="flex flex-col items-center min-h-[95vh] ">
         {
           userTransictionDetails.status == "succeeded" ? (
             <>
-              <h1 className="font-bold text-xl my-20">Payment receipt</h1>
+              <h1 className="font-bold text-xl my-16 bg-white">Payment receipt</h1>
               <div className="px-2 max-w-[550px] w-[90%] shadow-xl  rounded-2xl text-sm">
                 <img src={checkIcon} alt="" className="w-24 mx-auto -mt-12" />
                 <h1 className="text-center font-semibold mt-10 text-lg">Thanks for the payment</h1>

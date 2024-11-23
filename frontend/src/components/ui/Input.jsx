@@ -31,7 +31,7 @@ const Input = ({
   return (
     <input
       className={(
-        "h-11 rounded-md bg-tc-input-background p-2 w-full text-base placeholder:text-black " +
+        "h-11 rounded-md border bg-tc-input-background p-2 w-full text-base placeholder:text-black " +
         className
       ).trim()}
       type={type}

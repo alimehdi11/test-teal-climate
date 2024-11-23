@@ -70,7 +70,7 @@ function Checkout() {
     <>
       <div className="flex justify-center items-center min-h-[90vh] flex-col lg:flex-row px-10 max-lg:py-10">
         <div className="flex-1 ">
-          <div className="py-16 px-10 max-w-[550px] ms-auto text-center flex flex-col gap-6 shadow-xl border-t-[17px] border-tc-blue rounded-2xl">
+          <div className="py-16 px-10 max-w-[550px] ms-auto text-center flex flex-col gap-6 shadow-xl border-t-[17px] border-tc-blue rounded-2xl bg-white">
             {/* <VerticalLogo/> */}
             <Logo/>
             <p className="max-sm:text-sm">Essential carbon emission measurement.</p>
@@ -94,8 +94,8 @@ function Checkout() {
             </div>
           </div>
         </div>
-        <div className="flex-1 flex justify-center items-center p-10">
-          <div className="max-w-[400px] max-xl:ms-auto border-solid border-gray-5 border-[1px] p-3 rounded">
+        <div className="flex-1 flex justify-center items-center p-10 ">
+          <div className="max-w-[400px] max-xl:ms-auto border-solid border-gray-5 border-[1px] p-3 rounded bg-white">
             {stripePromise && (
               <Elements
                 stripe={stripePromise}
