@@ -20,11 +20,10 @@ const ResetPassword = () => {
   const [emailError, setEmailError] = useState("");
   const [loading, setLoading] = useState(false);
   const [resendEmailDetails, setResendEmailDetails] = useState({
-    resendAttempts: 0,
     resendTime: 0,
     debounce: false,
   });
-
+console.log(resendEmailDetails.resendTime)
   // Handle Resend Email logic
   const handleResendEmail = () => {
     if (currentStep === 2 && !resendEmailDetails.debounce) {
@@ -34,12 +33,11 @@ const ResetPassword = () => {
       }));
 
       // Increment the resend attempt count and add 30 seconds for each attempt
-      const updatedResendTime = 30 + resendEmailDetails.resendAttempts * 30;
+      const updatedResendTime = 30;
 
       // Update the state with new resend attempt count and resend time
       setResendEmailDetails((prevState) => ({
         ...prevState,
-        resendAttempts: prevState.resendAttempts + 1,
         resendTime: updatedResendTime,
         resendCooldown: true,
       }));
@@ -82,13 +80,7 @@ const ResetPassword = () => {
   // Handle input change with validation
   const handleEmailChange = (event) => {
     const value = event.target.value;
-    setEmail(value);
-
-    // Validate email on change
-    emailSchema
-      .validate(value)
-      .then(() => setEmailError("")) // Clear error if valid
-      .catch((err) => setEmailError(err.message)); // Set error message if invalid
+    setEmail(value);   
   };
 
   const handleSubmit = async (event) => {
@@ -100,6 +92,10 @@ const ResetPassword = () => {
     try {
       setLoading(true); // Start loading
       // Validate email before submission
+      emailSchema
+       .validate(email)
+       .then(() => setEmailError("")) // Clear error if valid
+       .catch((err) => setEmailError(err.message)); // Set error message if invalid
       await emailSchema.validate(email);
 
       const url = `${import.meta.env.VITE_API_BASE_URL}/auth/forget-password`;

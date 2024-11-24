@@ -4,17 +4,27 @@ import Label from "../components/ui/Label";
 import VerticalLogo from "../components/ui/VerticalLogo";
 import { useState } from "react";
 import Button from "../components/ui/Button";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import { request } from "../utils/request";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import keyIcon from "../assets/key-icon.svg";
 import backArrow from "../assets/back-arrow-icon.svg";
 import EyeIcon from "../assets/icons/EyeIcon";
-
+import rightIcon from "../assets/right-icon.svg"
+import crossIcon from "../assets/cross-icon.svg"
 const ResetPassword = () => {
   const [resetPassword, setResetPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    hasLowercase: false,
+    hasUppercase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+    hasMinLength: false,
+  });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState("");
   const location = useLocation();
@@ -32,17 +42,28 @@ const ResetPassword = () => {
     .matches(/\d/, "Password must contain at least one number")
     .matches(/[\W_]/, "Password must contain at least one special character")
     .required("Password is required");
-  const handleChange = async (event) => {
+
+  const handlePasswordChange = (event) => {
     const { value } = event.target;
+
     setResetPassword(value);
 
-    try {
-      await passwordSchema.validate(value);
-      setErrors(""); // Clear error if valid
-    } catch (error) {
-      setErrors(error.message); // Set validation error
-    }
+    setPasswordCriteria({
+      hasLowercase: /[a-z]/.test(value),
+      hasUppercase: /[A-Z]/.test(value),
+      hasNumber: /\d/.test(value),
+      hasSpecialChar: /[\W_]/.test(value),
+      hasMinLength: value.length >= 8,
+    });
   };
+
+  const passwordErrors = [
+    { label: "One lowercase character", isValid: passwordCriteria.hasLowercase },
+    { label: "One uppercase character", isValid: passwordCriteria.hasUppercase },
+    { label: "One number", isValid: passwordCriteria.hasNumber },
+    { label: "One special character", isValid: passwordCriteria.hasSpecialChar },
+    { label: "Minimum 8 characters", isValid: passwordCriteria.hasMinLength },
+  ]
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -80,10 +101,10 @@ const ResetPassword = () => {
       {/* Logo */}
       <VerticalLogo />
       <div className="p-6 rounded-2xl max-w-[550px] w-[90%] px-[2vmax] py-9 shadow-xl border-t-[17px] bg-white border-tc-blue">
-          <Button onClick={()=>navigate("/login")} className="flex gap-1 justify-center ms-auto min-w-[120px]">
-              <img src={backArrow} alt="" />
-              <span>Sign in</span>
-          </Button>
+        <Button onClick={() => navigate("/login")} className="flex gap-1 justify-center ms-auto min-w-[120px]">
+          <img src={backArrow} alt="" />
+          <span>Sign in</span>
+        </Button>
         <div className="w-12 h-12 rounded-full bg-tc-green flex justify-center items-center mx-auto">
           <img src={keyIcon} alt="Key Icon" />
         </div>
@@ -96,11 +117,15 @@ const ResetPassword = () => {
             <Label>New Password</Label>
             <Input
               type={showPassword ? "text" : "password"}
+              onFocus={() =>
+                setPasswordFocused(true)
+              }
+              onBlur={() => setPasswordFocused(false)}
               value={resetPassword}
               placeholder="Enter new password"
-              onChange={handleChange}
+              onChange={handlePasswordChange}
               className="placeholder:text-zinc-400 placeholder:italic"
-              
+
             />
             <button
               type="button"
@@ -108,7 +133,28 @@ const ResetPassword = () => {
             >
               <EyeIcon showPassword={showPassword} />
             </button>
-            {errors && <p className="text-red-500 text-sm mt-1">{errors}</p>}
+            {
+
+              (passwordFocused ||  errors.password ) && (
+                <div className="">
+                  {passwordErrors.map((criterion, index) => (
+                    <div
+                      key={index}
+                      className={`flex items-center gap-2 ${criterion.isValid ? "text-green-500" : "text-red-500"
+                        }`}
+                    >
+                      {/* <span> */}
+                      {criterion.isValid ? (
+                        <img src={rightIcon} alt="" className="w-5" />
+                      ) : (
+                        <img src={crossIcon} alt="" className="w-5" />
+                      )}
+                      <span>{criterion.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )
+            }
           </FormControl>
           <Button
             type="submit"
